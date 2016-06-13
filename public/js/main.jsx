@@ -51,10 +51,11 @@ var RegisterForm= React.createClass({
                 }),
                 credentials: 'same-origin'
         }).then(function(response) {
-            if(response.ok)
+            if(response.ok) {
                 this.handleClose();
-            else
-            {
+                window.location.href = '/';
+            }
+            else {
                 response.json()
                 .then(function(json) {
                     this.setState({
