@@ -1,5 +1,4 @@
 require('../css/styles.css');
-
 window.React = require('react');
 window.ReactDOM = require('react-dom');
 

@@ -1,12 +1,13 @@
 @extends('main')
-@section('slogan')
+@section('content')
 
 <script type="text/babel">
 
     ReactDOM.render(
     <div id="greeting">
-            <h1>Make a list of stuff to do.</h1>
-    <h1>Then do stuff.</h1>
+        <h1>Track time.</h1>
+        <h1>Create and send invoices.</h1>
+        <h1>Get money.</h1>
     </div>, document.getElementById('content'));
 </script>
 

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+//use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request as Request;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -37,7 +39,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware($this->guestMiddleware(), ['except' => 'logout']);
+        $this->middleware($this->guestMiddleware(), ['except' => ['logout']]);
     }
 
     /**
@@ -49,9 +51,10 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
+            'name' => 'required|max:255',
             'password' => 'required|min:6|confirmed',
+            'password_confirmation' => 'required|min:6'
         ]);
     }
 
@@ -64,9 +67,39 @@ class AuthController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'name' => $data['name'],
             'email' => $data['email'],
+            'name' => $data['name'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    /**
+ * Return response for ajax login
+ *
+ * @param \Illuminate\Support\Facades\Request $request
+ * @param \App\User
+ */
+    protected function authenticated(Request $request, $user)
+    {
+        if($request->wantsJson())
+            return response()->json(['ok' => true], 200);
+    }
+
+    /**
+     * Get the failed login response instance.
+     *
+     * @param \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        if($request->wantsJson())
+            return response()->json(['status' => 'Unauthorized', $this->loginUsername() => $this->getFailedLoginMessage(), 'password' => $this->getFailedLoginMessage()], 401);
+
+        return redirect()->back()
+            ->withInput($request->only($this->loginUsername(), 'remember'))
+            ->withErrors([
+                $this->loginUsername() => $this->getFailedLoginMessage(),
+            ]);
     }
 }

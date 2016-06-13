@@ -11,20 +11,27 @@
 |
 */
 
-Route::get('/', function () {
-    return view('slogan');
+
+Route::group(['middleware' => ['web']], function () {
+
+    Route::get('/', function () {
+        return
+            (Auth::check()) ? view('content') : view('slogan');
+    })->name('home');
+
+    // Authentication routes...
+    Route::post('auth/login', [
+        'uses' => 'Auth\AuthController@postLogin',
+        'as' => 'login']
+    );
+    Route::get('auth/logout', [
+        'uses' => 'Auth\AuthController@logout',
+        'as' => 'logout']
+    );
+
+    // Registration routes...
+    Route::post('auth/register', [
+        'uses' => 'Auth\AuthController@postRegister',
+        'as' => 'register']
+    );
 });
-
-Route::get('/login', function () {
-    return json_encode(['foo' => 'bar']);
-});
-
-
-// Authentication routes...
-Route::get('auth/login', 'Auth\AuthController@getLogin');
-Route::post('auth/login', 'Auth\AuthController@postLogin');
-Route::get('auth/logout', 'Auth\AuthController@getLogout');
-
-// Registration routes...
-Route::get('auth/register', 'Auth\AuthController@getRegister');
-Route::post('auth/register', 'Auth\AuthController@postRegister');
