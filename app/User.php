@@ -2,13 +2,17 @@
 
 namespace App;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 
-class User extends Authenticatable
+class User extends Model implements AuthenticatableContract
 {
-    /**
-     * The attributes that are mass assignable.
-     * @var array
-     */
-    protected $fillable = array('email', 'name', 'password');
+    use Authenticatable;
+
+    protected $fillable = ['email', 'name', 'password'];
+
+    public function customer() {
+        return $this->hasMany('App\Customer', 'id');
+    }
 }
