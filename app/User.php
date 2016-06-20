@@ -2,17 +2,18 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Model implements AuthenticatableContract
+class User extends Authenticatable
 {
-    use Authenticatable;
 
     protected $fillable = ['email', 'name', 'password'];
 
     public function customer() {
         return $this->hasMany('App\Customer', 'id');
+    }
+
+    public function profile() {
+        return $this->hasOne('App\Profile');
     }
 }

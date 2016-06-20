@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class BillableTypes extends Migration
+class CreateTrxTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,8 @@ class BillableTypes extends Migration
      */
     public function up()
     {
-        Schema::create('billable_types', function(Blueprint $table) {
-            $table->string('type', 50)->unique();
+        Schema::table('trx_types', function (Blueprint $table) {
+            $table->unique('type');
         });
     }
 
@@ -24,6 +24,8 @@ class BillableTypes extends Migration
      */
     public function down()
     {
-        Schema::drop('billable_types');
+        Schema::table('trx_types', function (Blueprint $table) {
+            //
+        });
     }
 }

@@ -1,28 +1,6 @@
 @extends('main')
 @section('content')
 
-<script type="text/babel">
-
-    ReactDOM.render(
-            <div id="greeting">
-                <h1>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                    Aliquam tincidunt mauris eu risus.
-                    Vestibulum auctor dapibus neque.
-                    Nunc dignissim risus id metus.
-                    Cras ornare tristique elit.
-                    Vivamus vestibulum nulla nec ante.
-                    Praesent placerat risus quis eros.
-                    Fusce pellentesque suscipit nibh.
-                    Integer vitae libero ac risus egestas placerat.
-                    Vestibulum commodo felis quis tortor.
-                    Ut aliquam sollicitudin leo.
-                    Cras iaculis ultricies nulla.
-                    Donec quis dui at dolor tempor interdum.
-                    Vivamus molestie gravida turpis.
-                    Fusce lobortis lorem at ipsum semper sagittis.
-                    Nam convallis pellentesque nisl.
-                    Integer malesuada commodo nulla.</h1>
-            </div>, document.getElementById('content'));
-</script>
+<script src="{{ URL::asset('js/content.jsx') }}" type="text/babel"></script>
 
 @endsection

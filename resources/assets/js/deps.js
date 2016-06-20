@@ -12,5 +12,15 @@ window.TextField = require('material-ui/lib/TextField');
 window.Divider = require('material-ui/lib/Divider');
 window.Dialog = require('material-ui/lib/Dialog');
 
+window.Toolbar = require('material-ui/lib/toolbar/toolbar');
+window.ToolbarGroup = require('material-ui/lib/toolbar/toolbar-group');
+window.ToolbarSeparator = require('material-ui/lib/toolbar/toolbar-separator');
+
+window.Paper = require('material-ui/lib/paper');
+window.Card = require('material-ui/lib/card/card');
+window.CardActions = require('material-ui/lib/card/card-actions');
+window.CardHeader = require('material-ui/lib/card/card-header');
+window.CardText = require('material-ui/lib/card/card-text');
+
 window.injectTapEventPlugin = require('react-tap-event-plugin');
 window.injectTapEventPlugin();

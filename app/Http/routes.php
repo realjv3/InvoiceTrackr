@@ -34,4 +34,9 @@ Route::group(['middleware' => ['web']], function () {
         'uses' => 'Auth\AuthController@postRegister',
         'as' => 'register']
     );
+
+    // Profile page
+    Route::get('profile/{$id?}', ['as' => 'profile', function($id = null) {
+        return view('profile');
+    }]);
 });

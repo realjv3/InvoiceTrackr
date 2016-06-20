@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Billables extends Migration
+class CreateCustTrxTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,16 +12,16 @@ class Billables extends Migration
      */
     public function up()
     {
-        Schema::create('billables', function(Blueprint $table) {
+        Schema::create('cust_trx', function (Blueprint $table) {
             $table->integer('custid')->unsigned();
             $table->string('type', 50);
-            $table->string('descr');
+            $table->decimal('amt', 10, 2);
             $table->timestamps();
         });
 
-        Schema::table('billables', function(Blueprint $table) {
+        Schema::table('cust_trx', function(Blueprint $table) {
             $table->foreign('custid')->references('id')->on('customers')->onDelete('cascade');
-            $table->foreign('type')->references('type')->on('billable_types');
+            $table->foreign('type')->references('type')->on('trx_types');
         });
     }
 
@@ -32,6 +32,6 @@ class Billables extends Migration
      */
     public function down()
     {
-        Schema::drop('billables');
+        Schema::drop('cust_trx');
     }
 }

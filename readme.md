@@ -1,4 +1,4 @@
-To do list Using React + MaterialUI front-end and Laravel backend. composer create-project laravel/laravel [target dir] --prefer-dist to install Laravel in your project directory; 
+Invoicing web app made with React + MaterialUI front-end and Laravel backend. composer create-project laravel/laravel [target dir] --prefer-dist to install Laravel in your project directory; 
 Then clone this repository into the project directory.
 
 To webpack assets if you want to develop: requires node.js installation which should include npm. Browse to application root. 

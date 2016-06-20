@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class TrxType extends Model
 {
-    //
+    protected $primaryKey = 'type';
 }

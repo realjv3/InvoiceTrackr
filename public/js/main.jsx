@@ -7,7 +7,6 @@ var RegisterForm= React.createClass({
     getInitialState: function() {
         return {
             open: false,
-            nameErr: '',
             emailErr: '',
             passwordErr: '',
             password_conf_Err: ''
@@ -19,7 +18,6 @@ var RegisterForm= React.createClass({
     handleClose: function() {
         this.setState({
             open: false,
-            nameErr: '',
             emailErr: '',
             passwordErr: '',
             password_conf_Err: ''
@@ -29,14 +27,12 @@ var RegisterForm= React.createClass({
         e.preventDefault();
 
         this.setState({
-            nameErr: '',
             emailErr: '',
             passwordErr: '',
             password_confErr: ''
         });
         var form = new FormData(document.getElementById('reg-form'));
         form.append('email', document.getElementById('rEmail').value);
-        form.append('name', document.getElementById('rName').value);
         form.append('password', document.getElementById('rPassword').value);
         form.append('password_confirmation', document.getElementById('rConfPassword').value);
         // @TODO fetch() browser support detection
@@ -60,7 +56,6 @@ var RegisterForm= React.createClass({
                 .then(function(json) {
                     this.setState({
                         emailErr: json.email,
-                        nameErr: json.name,
                         passwordErr: json.password,
                         password_confErr: json.password_confirmation
                     });
@@ -86,7 +81,6 @@ var RegisterForm= React.createClass({
             >
                 <form id='reg-form'>
                     <TextField id="rEmail" floatingLabelText="Email:" floatingLabelFixed={true} type="email" errorText={this.state.emailErr} /><br/>
-                    <TextField id="rName" floatingLabelText="Name:" floatingLabelFixed={true} errorText={this.state.nameErr} /><br/>
                     <TextField id="rPassword" floatingLabelText="Password:" floatingLabelFixed={true} type="password" errorText={this.state.passwordErr} /><br/>
                     <TextField id="rConfPassword" floatingLabelText="Confirm Password:" floatingLabelFixed={true} errorText={this.state.password_confErr} type="password"/>
                 </form>
@@ -200,21 +194,48 @@ var NavBar = React.createClass({
     },
     render: function() {
 
-        var loginlink= React.createElement(
-            'div',
-            {},
-            React.createElement(LoginMenu, {openRegForm: this.openRegForm}),
-            React.createElement(RegisterForm, {ref:"regform"}));
-        var logoutlink= React.createElement(FlatButton, {onClick: this.logout}, "Logout");
+        var loginoutlink = '';
+        if(!logged_in) {
+            loginoutlink= React.createElement(
+                'div',
+                {},
+                React.createElement(LoginMenu, {openRegForm: this.openRegForm}),
+                React.createElement(RegisterForm, {ref:"regform"}));
+        } else {
+            var logoutlink= React.createElement(FlatButton, {onClick: this.logout}, "Logout");
+            var name = (cur_user[0].profile.first) ? cur_user[0].profile.first : cur_user[0].email;
+            var user  = React.createElement('a', {href: window.location.href + 'profile'}, "Oh hello, " + name);
+            loginoutlink = React.createElement('div', {id: 'logout_link'}, user, logoutlink);
+        }
+
 
         return (
             <AppBar
                 ref="appbar"
                 title="Invoice this"
-                iconElementRight={(loggedin) ? logoutlink : loginlink}
+                iconElementRight={loginoutlink}
+                showMenuIconButton={false}
+                style={{background: '#BBDEFB'}}
             />
-        )
+        );
     }
 });
 
 ReactDOM.render(<NavBar />, document.getElementById('appbar'));
+
+var Footer = React.createClass({
+    render: function() {
+        return (
+            <Toolbar >
+                <ToolbarGroup id="footer_toolbar_group" style={{float: 'none'}}>
+                    <span><a href="http://github.com/realjv3" target="_blank">Created by John Verity</a></span>
+                    <img src="https://googledrive.com/host/0B1f8PNGaySaROGw3aXhHeFlodDg" style={{width: '26px', position: 'relative',top: '6px', margin: '0 -10px 0 5px'}}/>
+                    <ToolbarSeparator style={{float: 'none'}}/>
+                    <img src="https://googledrive.com/host/0B1f8PNGaySaRN2NQOURRdFpRT2M" style={{width: '45px', position: 'relative',top: '10px', margin: '0 0 0 5px'}}/>
+                    <span><a href="http://bipcot.org/" target="_blank">BipCot NoGov License</a></span>
+                </ToolbarGroup>
+            </Toolbar>
+        );
+    }
+});
+ReactDOM.render(<Footer />, document.getElementById('footer'));

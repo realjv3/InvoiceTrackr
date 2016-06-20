@@ -4,17 +4,68 @@
     font-family: 'Alegreya Sans', sans-serif;
     text-decoration: none;
 }
-a:visited {
-    color: inherit;
+
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    min-width: 381px;
+}
+
+a:visited, a {
+    color: black;
 }
 
 header {
     width: 100%;
 }
 
-#content {
+#logout_link {
+    margin: 1vw 0;
+    font-size: small;
+}
+
+#greeting {
     font-size: xx-large;
     text-align: center;
     padding-top: 33vh;
-    padding-bottom: 33vh;
+    padding-bottom: 30vh;
+}
+
+#main_area {
+    min-height: 69.4vh;
+    margin: 7vw;
+    padding: 3vw;
+}
+
+.cards {
+    margin: 0 0 25px 0;
+}
+
+footer {
+    bottom: 0;
+    position: relative;
+    width: 100%;
+    font-size: small;
+}
+
+#footer_toolbar_group {
+    float: none;
+    text-align: center;
+    top: 15px;
+}
+
+/**
+ * Rules for viewport's with widths < 510 px
+ */
+@media (max-width: 510px) {
+    #logout_link {
+        font-size: x-small;
+    }
+    
+    #main_area {
+        min-height: 70.9vh;
+    }
 }

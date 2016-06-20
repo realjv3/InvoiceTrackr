@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
-//use Illuminate\Support\Facades\Request;
+use App\Profile;
 use Illuminate\Http\Request as Request;
 use Validator;
 use App\Http\Controllers\Controller;
@@ -52,7 +52,6 @@ class AuthController extends Controller
     {
         return Validator::make($data, [
             'email' => 'required|email|max:255|unique:users',
-            'name' => 'required|max:255',
             'password' => 'required|min:6|confirmed',
             'password_confirmation' => 'required|min:6'
         ]);
@@ -66,19 +65,21 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'email' => $data['email'],
-            'name' => $data['name'],
             'password' => bcrypt($data['password']),
         ]);
+        $profile = new Profile(['user_id' => $user->id]);
+        $user->profile()->save($profile);
+        return $user;
     }
 
     /**
- * Return response for ajax login
- *
- * @param \Illuminate\Support\Facades\Request $request
- * @param \App\User
- */
+     * Return response for ajax login
+     *
+     * @param \Illuminate\Support\Facades\Request $request
+     * @param \App\User
+     */
     protected function authenticated(Request $request, $user)
     {
         if($request->wantsJson())
