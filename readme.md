@@ -1,3 +1,4 @@
+![alt tag](https://googledrive.com/host/0B1f8PNGaySaRVHVtRWdaNkkxWFE)
 Invoicing web app made with React + MaterialUI front-end and Laravel backend. composer create-project laravel/laravel [target dir] --prefer-dist to install Laravel in your project directory; 
 Then clone this repository into the project directory.
 
