@@ -24,12 +24,17 @@ class AppServiceProvider extends ServiceProvider
 
             //sharing Object cur_user
             if($logged_in) {
-                $user = Auth::user()->with('profile')->get();
+                $user = Auth::user()
+                    ->with('profile')
+                    ->get()
+                    ->filter(function($item) {
+                        return $item->email === Auth::user()->email;
+                    })
+                    ->first(); //so User instance is returned instead of collection
                 $cur_user = ($logged_in) ? $user->toJson() : 0;
                 $view->with('cur_user', $cur_user);
-            } else {
+            } else
                 $view->with('cur_user', 0);
-            }
         });
     }
 

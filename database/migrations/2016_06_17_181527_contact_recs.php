@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTrxTypesTable extends Migration
+class ContactRecs extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,8 @@ class CreateTrxTypesTable extends Migration
      */
     public function up()
     {
-        Schema::table('trx_types', function (Blueprint $table) {
-            $table->unique('type');
+        Schema::table('contact_recs', function (Blueprint $table) {
+            //
         });
     }
 
@@ -24,7 +24,7 @@ class CreateTrxTypesTable extends Migration
      */
     public function down()
     {
-        Schema::table('trx_types', function (Blueprint $table) {
+        Schema::table('contact_recs', function (Blueprint $table) {
             //
         });
     }

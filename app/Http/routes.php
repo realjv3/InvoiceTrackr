@@ -36,7 +36,10 @@ Route::group(['middleware' => ['web']], function () {
     );
 
     // Profile page
-    Route::get('profile/{$id?}', ['as' => 'profile', function($id = null) {
+    Route::get('profile', ['middleware' => 'auth', 'as' => 'profile', function($id = null) {
         return view('profile');
     }]);
+
+    // Profile save
+    Route::post('profile/save', 'ProfileController@save');
 });

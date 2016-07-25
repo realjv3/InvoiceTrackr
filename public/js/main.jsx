@@ -25,7 +25,6 @@ var RegisterForm= React.createClass({
     },
     handleSubmit: function(e) {
         e.preventDefault();
-
         this.setState({
             emailErr: '',
             passwordErr: '',
@@ -115,7 +114,7 @@ var LoginMenu= React.createClass({
             emailErr: '',
             passwordErr: ''
         });
-        var form = new FormData(document.getElementById('login-form'));
+        var form = new FormData(document.querySelector('login-form'));
         form.set('email', document.getElementById('lEmail').value);
         form.set('password', document.getElementById('lPassword').value);
         fetch('/auth/login', {
@@ -190,10 +189,9 @@ var NavBar = React.createClass({
         this.refs.regform.setState({open: true});
     },
     logout: function() {
-        window.location.href = 'auth/logout';
+        window.location.href = '/auth/logout';
     },
     render: function() {
-
         var loginoutlink = '';
         if(!logged_in) {
             loginoutlink= React.createElement(
@@ -203,16 +201,14 @@ var NavBar = React.createClass({
                 React.createElement(RegisterForm, {ref:"regform"}));
         } else {
             var logoutlink= React.createElement(FlatButton, {onClick: this.logout}, "Logout");
-            var name = (cur_user[0].profile.first) ? cur_user[0].profile.first : cur_user[0].email;
-            var user  = React.createElement('a', {href: window.location.href + 'profile'}, "Oh hello, " + name);
+            var name = (cur_user.profile.first) ? cur_user.profile.first : cur_user.email;
+            var user  = React.createElement('a', {href: window.location.origin + '/profile'}, "Oh hello, " + name);
             loginoutlink = React.createElement('div', {id: 'logout_link'}, user, logoutlink);
         }
-
-
         return (
             <AppBar
                 ref="appbar"
-                title="Invoice this"
+                title={<a href='/'>Invoice this</a>}
                 iconElementRight={loginoutlink}
                 showMenuIconButton={false}
                 style={{background: '#BBDEFB'}}

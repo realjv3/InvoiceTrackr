@@ -79,7 +79,7 @@ class AuthController extends Controller
      *
      * @param \Illuminate\Support\Facades\Request $request
      * @param \App\User
-     */
+     * @return Illuminate\Http\Response
     protected function authenticated(Request $request, $user)
     {
         if($request->wantsJson())
@@ -89,8 +89,8 @@ class AuthController extends Controller
     /**
      * Get the failed login response instance.
      *
-     * @param \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Illuminate\Http\Response
      */
     protected function sendFailedLoginResponse(Request $request)
     {

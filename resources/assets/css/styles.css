@@ -44,11 +44,16 @@ header {
     margin: 0 0 25px 0;
 }
 
+.profile_field {
+    margin-right: 10px;
+}
+
 footer {
     bottom: 0;
     position: relative;
     width: 100%;
     font-size: small;
+    margin-top: 10vh;
 }
 
 #footer_toolbar_group {
