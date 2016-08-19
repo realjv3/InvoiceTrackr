@@ -22,11 +22,18 @@ header {
     width: 100%;
 }
 
+/**
+ * Login Menu
+ */
+
 #logout_link {
     margin: 1vw 0;
     font-size: small;
 }
 
+/**
+ * Main Content Area
+ */
 #greeting {
     font-size: xx-large;
     text-align: center;
@@ -34,10 +41,14 @@ header {
     padding-bottom: 30vh;
 }
 
-#main_area {
+div.main_area {
     min-height: 69.4vh;
     margin: 7vw;
     padding: 3vw;
+}
+
+div.main_area, div.cards {
+    background: #F5F5F5 !important;
 }
 
 .cards {
@@ -47,6 +58,10 @@ header {
 .profile_field {
     margin-right: 10px;
 }
+
+/**
+ * Footer Area
+ */
 
 footer {
     bottom: 0;

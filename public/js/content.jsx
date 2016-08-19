@@ -4,8 +4,8 @@
 var Main_area = React.createClass({
     render: function() {
         return (
-            <Paper id="main_area">
-                <Card className="cards">
+            <Paper className="main_area">
+                <Card className="cards" initiallyExpanded={true} >
                     <CardHeader
                         title="Billables"
                         subtitle="Track Time & Expenses"
@@ -13,15 +13,63 @@ var Main_area = React.createClass({
                         showExpandableButton={true}
                         avatar="http://googledrive.com/host/0B1f8PNGaySaRS1JKektwMjBjRW8"
                         />
-                    <CardText expandable={true}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-                        Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-                        Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-                    </CardText>
+                    <form id="trx_form" className="trx_form" expandable={true}>
+                        <CardText style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            flexWrap: 'wrap'
+                        }}>
+                            <DatePicker
+                                autoOk={true}
+                                floatingLabelText="Date"
+                                floatingLabelFixed={true}
+                                floatingLabelStyle={{color: '#03A9F4'}}
+                                className="trx_entry_field"
+                            />
+                            <Autocomplete
+                                hintText="Customer"
+                                dataSource={['foo', 'bar']}
+                                floatingLabelText="Customer"
+                                floatingLabelFixed={true}
+                                floatingLabelStyle={{color: '#03A9F4'}}
+                                className="trx_entry_field"
+                            />
+                            <TextField
+                                floatingLabelText="Qty"
+                                floatingLabelFixed={true}
+                                floatingLabelStyle={{color: '#03A9F4'}}
+                                type="number"
+                                id="qty"
+                                min="0"
+                                style={{width:'50px'}}
+                                className="trx_entry_field"
+                            />
+                            <Autocomplete
+                                hintText="Billable"
+                                dataSource={['1', '2']}
+                                floatingLabelText="Billable"
+                                floatingLabelFixed={true}
+                                floatingLabelStyle={{color: '#03A9F4'}}
+                                className="trx_entry_field"
+                            />
+                            <TextField
+                                floatingLabelText="Amount"
+                                floatingLabelFixed={true}
+                                floatingLabelStyle={{color: '#03A9F4'}}
+                                underlineDisabledStyle={{color: '#03A9F4'}}
+                                underlineStyle={{color: '#03A9F4'}}
+                                id="amt"
+                                style={{width:'100px'}}
+                                value={"$ 0.00"}
+                                disabled={true}
+                                className="trx_entry_field"
+                            />
+                        </CardText>
+                    </form>
                     <CardActions expandable={true}>
-                        <FlatButton label="Action1" />
-                        <FlatButton label="Action2" />
+                        <FlatButton label="Enter Transaction" />
+                        <FlatButton label="Clear" onClick={function() {document.forms['trx_form'].reset()}}/>
                     </CardActions>
                 </Card>
                 <Card className="cards">
