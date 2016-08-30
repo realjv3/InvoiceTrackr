@@ -22,10 +22,10 @@ class AppServiceProvider extends ServiceProvider
             $logged_in = Auth::check();
             $view->with('logged_in', (($logged_in) ? $logged_in : 0));
 
-            //sharing Object cur_user
+            //sharing Object cur_user, including user's customers and their billables
             if($logged_in) {
                 $user = Auth::user()
-                    ->with('profile')
+                    ->with('profile', 'customer')
                     ->get()
                     ->filter(function($item) {
                         return $item->email === Auth::user()->email;

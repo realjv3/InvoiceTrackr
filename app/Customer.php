@@ -6,12 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
 {
+    protected $fillable = ['company', 'first', 'last', 'email'];
+
     public function user() {
         return $this->belongsTo('App\User', 'id');
-    }
-
-    public function contactrec() {
-        return $this->hasOne('App\ContactRec', 'custid');
     }
 
     public function billable() {

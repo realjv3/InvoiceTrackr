@@ -49,20 +49,47 @@ div.main_area {
 
 div.main_area, div.cards {
     background: #F5F5F5 !important;
-}
-
-.cards {
     margin: 0 0 25px 0;
 }
 
+/**
+ * Profile form
+ */
 .profile_field {
     margin-right: 10px;
 }
 
 /**
+ * Trx entry form
+ */
+form#trx_form {
+    display: flex;
+    justify-content: space-between;
+}
+
+/**
+ * Customer entry form
+ */
+form#cust_entry {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+/**
+ * Customer drop-down
+ */
+span.cust_icons {
+    position: relative;
+    bottom: 7px;
+}
+
+span.cust_icons .fa {
+    font-size: 17px !important;
+}
+
+/**
  * Footer Area
  */
-
 footer {
     bottom: 0;
     position: relative;

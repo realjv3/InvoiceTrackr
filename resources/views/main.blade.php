@@ -5,6 +5,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href='https://fonts.googleapis.com/css?family=Alegreya+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
     <link rel="icon" href="http://googledrive.com/host/0B1f8PNGaySaRX1ljSDcyajE0d28">
 
     <script src="{{ URL::asset('js/bundle.js') }}" type="text/javascript"></script>

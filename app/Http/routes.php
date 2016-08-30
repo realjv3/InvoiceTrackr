@@ -42,4 +42,11 @@ Route::group(['middleware' => ['web']], function () {
 
     // Profile save
     Route::post('profile/save', 'ProfileController@save');
+
+    // Customer save
+    Route::post('save_customer', 'CustomerController@save');
+    // Customer delete
+    Route::post('delete_customer', 'CustomerController@delete');
+    // Customer edit
+    Route::post('edit_customer', 'CustomerController@edit');
 });
