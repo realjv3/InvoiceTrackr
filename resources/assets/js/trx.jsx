@@ -1,8 +1,6 @@
 /**
  * Created by John on 8/22/2016.
- * This is the React class representing the Billables area of the main content component
- * It's children are the TrxEntry and TrxReport components
- * Called from content.blade.php
+ * React componenets for Trx tracking module
  */
 
 window.CustomerEntry = React.createClass({
