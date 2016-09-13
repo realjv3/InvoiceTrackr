@@ -26,6 +26,8 @@ window.ToolbarGroup = require('material-ui/lib/toolbar/toolbar-group');
 window.ToolbarSeparator = require('material-ui/lib/toolbar/toolbar-separator');
 
 window.Paper = require('material-ui/lib/paper');
+window.SaveIcon = require('material-ui/lib/svg-icons/content/save');
+window.CancelIcon = require('material-ui/lib/svg-icons/navigation/cancel');
 window.Snackbar = require('material-ui/lib/snackbar');
 
 window.Card = require('material-ui/lib/card/card');
@@ -49,10 +51,15 @@ require('../css/styles.css');
 /**
  * site nav and it's children, site footer
  */
-require('./main.jsx');
+require('./header_footer_comps.jsx');
+
+/**
+ * User and customer profile components Cust_entry
+ */
+require('./user_profile_comps.jsx');
 
 /**
  * Transaction tracking module
  */
-require('./trx.jsx');
+require('./trx_module_comps.jsx');
 

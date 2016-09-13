@@ -2,7 +2,6 @@
  * Created by John on 6/17/2016.
  * This is the main area component which contains Billables, Invoices and Reporting components
  */
-
 var Main_area = React.createClass({
     render: function() {
         return (

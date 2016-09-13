@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
             //sharing Object cur_user, including user's customers and their billables
             if($logged_in) {
                 $user = Auth::user()
-                    ->with('profile', 'customer')
+                    ->with('profile', 'customer.cust_profile')
                     ->get()
                     ->filter(function($item) {
                         return $item->email === Auth::user()->email;

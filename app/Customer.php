@@ -12,6 +12,10 @@ class Customer extends Model
         return $this->belongsTo('App\User', 'id');
     }
 
+    public function cust_profile() {
+        return $this->hasOne('App\Cust_profile', 'cust_id');
+    }
+
     public function billable() {
         return $this->hasMany('App\Billable', 'custid');
     }

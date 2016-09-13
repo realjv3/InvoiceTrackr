@@ -47,6 +47,6 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('save_customer', 'CustomerController@save');
     // Customer delete
     Route::post('delete_customer', 'CustomerController@delete');
-    // Customer edit
-    Route::post('edit_customer', 'CustomerController@edit');
+    // Customer read
+    Route::get('read_customer', 'CustomerController@read');
 });

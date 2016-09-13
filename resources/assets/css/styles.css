@@ -22,10 +22,16 @@ header {
     width: 100%;
 }
 
+fieldset {
+    margin: 5px;
+    padding: 20px;
+    border: solid 1px #E0DEDE;
+    backgroundColor: #F7FAF5;
+}
+
 /**
  * Login Menu
  */
-
 #logout_link {
     margin: 1vw 0;
     font-size: small;
@@ -34,11 +40,15 @@ header {
 /**
  * Main Content Area
  */
+div#content {
+    padding-bottom: 1vh;
+}
+
 #greeting {
     font-size: xx-large;
     text-align: center;
     padding-top: 33vh;
-    padding-bottom: 30vh;
+    padding-bottom: 8vh;
 }
 
 div.main_area {
@@ -57,6 +67,7 @@ div.main_area, div.cards {
  */
 .profile_field {
     margin-right: 10px;
+    padding-right: 10px;
 }
 
 /**
@@ -65,14 +76,6 @@ div.main_area, div.cards {
 form#trx_form {
     display: flex;
     justify-content: space-between;
-}
-
-/**
- * Customer entry form
- */
-form#cust_entry {
-    display: flex;
-    flex-flow: row wrap;
 }
 
 /**
@@ -95,7 +98,7 @@ footer {
     position: relative;
     width: 100%;
     font-size: small;
-    margin-top: 10vh;
+    margin-top: 12vh;
 }
 
 #footer_toolbar_group {

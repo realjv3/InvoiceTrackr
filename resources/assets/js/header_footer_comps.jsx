@@ -210,7 +210,7 @@ window.NavBar = React.createClass({
                 iconElementRight={loginoutlink}
                 showMenuIconButton={false}
                 style={{background: '#BBDEFB'}}
-                />
+            />
         );
     }
 });

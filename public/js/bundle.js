@@ -72,30 +72,42 @@
 	window.ToolbarSeparator = __webpack_require__(300);
 
 	window.Paper = __webpack_require__(242);
-	window.Snackbar = __webpack_require__(301);
+	window.SaveIcon = __webpack_require__(301);
+	window.CancelIcon = __webpack_require__(302);
+	window.Snackbar = __webpack_require__(303);
 
-	window.Card = __webpack_require__(303);
-	window.CardActions = __webpack_require__(307);
-	window.CardHeader = __webpack_require__(308);
-	window.CardText = __webpack_require__(316);
+	window.Card = __webpack_require__(305);
+	window.CardActions = __webpack_require__(309);
+	window.CardHeader = __webpack_require__(310);
+	window.CardText = __webpack_require__(318);
 
-	window.Table = __webpack_require__(317);
-	window.TableBody = __webpack_require__(317);
-	window.TableHeader = __webpack_require__(317);
-	window.TableHeaderColumn = __webpack_require__(317);
-	window.TableHeaderRow = __webpack_require__(317);
-	window.TableRow = __webpack_require__(317);
-	window.TableRowColumn = __webpack_require__(317);
+	window.Table = __webpack_require__(319);
+	window.TableBody = __webpack_require__(319);
+	window.TableHeader = __webpack_require__(319);
+	window.TableHeaderColumn = __webpack_require__(319);
+	window.TableHeaderRow = __webpack_require__(319);
+	window.TableRow = __webpack_require__(319);
+	window.TableRowColumn = __webpack_require__(319);
 
-	window.injectTapEventPlugin = __webpack_require__(329);
+	window.injectTapEventPlugin = __webpack_require__(331);
 	window.injectTapEventPlugin();
+
+	__webpack_require__(336);
+
+	/**
+	 * site nav and it's children, site footer
+	 */
+	__webpack_require__(340);
+
+	/**
+	 * User and customer profile components Cust_entry
+	 */
+	__webpack_require__(341);
 
 	/**
 	 * Transaction tracking module
 	 */
-	__webpack_require__(334);
-	__webpack_require__(338);
-	__webpack_require__(339);
+	__webpack_require__(342);
 
 /***/ },
 /* 1 */
@@ -39905,6 +39917,84 @@
 /* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactAddonsPureRenderMixin = __webpack_require__(192);
+
+	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
+
+	var _svgIcon = __webpack_require__(241);
+
+	var _svgIcon2 = _interopRequireDefault(_svgIcon);
+
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { default: obj };
+	}
+
+	var ContentSave = _react2.default.createClass({
+	  displayName: 'ContentSave',
+
+	  mixins: [_reactAddonsPureRenderMixin2.default],
+
+	  render: function render() {
+	    return _react2.default.createElement(_svgIcon2.default, this.props, _react2.default.createElement('path', { d: 'M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z' }));
+	  }
+	});
+
+	exports.default = ContentSave;
+	module.exports = exports['default'];
+
+/***/ },
+/* 302 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactAddonsPureRenderMixin = __webpack_require__(192);
+
+	var _reactAddonsPureRenderMixin2 = _interopRequireDefault(_reactAddonsPureRenderMixin);
+
+	var _svgIcon = __webpack_require__(241);
+
+	var _svgIcon2 = _interopRequireDefault(_svgIcon);
+
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { default: obj };
+	}
+
+	var NavigationCancel = _react2.default.createClass({
+	  displayName: 'NavigationCancel',
+
+	  mixins: [_reactAddonsPureRenderMixin2.default],
+
+	  render: function render() {
+	    return _react2.default.createElement(_svgIcon2.default, this.props, _react2.default.createElement('path', { d: 'M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z' }));
+	  }
+	});
+
+	exports.default = NavigationCancel;
+	module.exports = exports['default'];
+
+/***/ },
+/* 303 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
 	var _extends = Object.assign || function (target) {
@@ -39949,7 +40039,7 @@
 
 	var _contextPure2 = _interopRequireDefault(_contextPure);
 
-	var _styleResizable = __webpack_require__(302);
+	var _styleResizable = __webpack_require__(304);
 
 	var _styleResizable2 = _interopRequireDefault(_styleResizable);
 
@@ -40316,7 +40406,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 302 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40382,7 +40472,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 303 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40413,7 +40503,7 @@
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _cardExpandable = __webpack_require__(304);
+	var _cardExpandable = __webpack_require__(306);
 
 	var _cardExpandable2 = _interopRequireDefault(_cardExpandable);
 
@@ -40539,7 +40629,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 304 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40552,11 +40642,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _keyboardArrowUp = __webpack_require__(305);
+	var _keyboardArrowUp = __webpack_require__(307);
 
 	var _keyboardArrowUp2 = _interopRequireDefault(_keyboardArrowUp);
 
-	var _keyboardArrowDown = __webpack_require__(306);
+	var _keyboardArrowDown = __webpack_require__(308);
 
 	var _keyboardArrowDown2 = _interopRequireDefault(_keyboardArrowDown);
 
@@ -40671,7 +40761,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 305 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40710,7 +40800,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 306 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40749,7 +40839,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 307 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40854,7 +40944,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 308 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40877,11 +40967,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _styles = __webpack_require__(309);
+	var _styles = __webpack_require__(311);
 
 	var _styles2 = _interopRequireDefault(_styles);
 
-	var _avatar = __webpack_require__(315);
+	var _avatar = __webpack_require__(317);
 
 	var _avatar2 = _interopRequireDefault(_avatar);
 
@@ -41006,7 +41096,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 309 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41028,7 +41118,7 @@
 
 	var _spacing2 = _interopRequireDefault(_spacing);
 
-	var _themeManager = __webpack_require__(310);
+	var _themeManager = __webpack_require__(312);
 
 	var _themeManager2 = _interopRequireDefault(_themeManager);
 
@@ -41040,7 +41130,7 @@
 
 	var _typography2 = _interopRequireDefault(_typography);
 
-	var _lightRawTheme = __webpack_require__(311);
+	var _lightRawTheme = __webpack_require__(313);
 
 	var _lightRawTheme2 = _interopRequireDefault(_lightRawTheme);
 
@@ -41048,15 +41138,15 @@
 
 	var _lightBaseTheme2 = _interopRequireDefault(_lightBaseTheme);
 
-	var _darkRawTheme = __webpack_require__(312);
+	var _darkRawTheme = __webpack_require__(314);
 
 	var _darkRawTheme2 = _interopRequireDefault(_darkRawTheme);
 
-	var _darkBaseTheme = __webpack_require__(313);
+	var _darkBaseTheme = __webpack_require__(315);
 
 	var _darkBaseTheme2 = _interopRequireDefault(_darkBaseTheme);
 
-	var _themeDecorator = __webpack_require__(314);
+	var _themeDecorator = __webpack_require__(316);
 
 	var _themeDecorator2 = _interopRequireDefault(_themeDecorator);
 
@@ -41101,7 +41191,7 @@
 	};
 
 /***/ },
-/* 310 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41149,7 +41239,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 311 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41179,7 +41269,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 312 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41188,7 +41278,7 @@
 	  value: true
 	});
 
-	var _darkBaseTheme = __webpack_require__(313);
+	var _darkBaseTheme = __webpack_require__(315);
 
 	var _darkBaseTheme2 = _interopRequireDefault(_darkBaseTheme);
 
@@ -41209,7 +41299,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 313 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41256,7 +41346,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 314 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41298,7 +41388,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 315 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41491,7 +41581,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 316 */
+/* 318 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41591,7 +41681,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 317 */
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41601,31 +41691,31 @@
 	});
 	exports.TableRowColumn = exports.TableRow = exports.TableHeaderColumn = exports.TableHeader = exports.TableFooter = exports.TableBody = exports.Table = undefined;
 
-	var _table = __webpack_require__(318);
+	var _table = __webpack_require__(320);
 
 	var _table2 = _interopRequireDefault(_table);
 
-	var _tableBody = __webpack_require__(319);
+	var _tableBody = __webpack_require__(321);
 
 	var _tableBody2 = _interopRequireDefault(_tableBody);
 
-	var _tableFooter = __webpack_require__(325);
+	var _tableFooter = __webpack_require__(327);
 
 	var _tableFooter2 = _interopRequireDefault(_tableFooter);
 
-	var _tableHeader = __webpack_require__(326);
+	var _tableHeader = __webpack_require__(328);
 
 	var _tableHeader2 = _interopRequireDefault(_tableHeader);
 
-	var _tableHeaderColumn = __webpack_require__(327);
+	var _tableHeaderColumn = __webpack_require__(329);
 
 	var _tableHeaderColumn2 = _interopRequireDefault(_tableHeaderColumn);
 
-	var _tableRow = __webpack_require__(328);
+	var _tableRow = __webpack_require__(330);
 
 	var _tableRow2 = _interopRequireDefault(_tableRow);
 
-	var _tableRowColumn = __webpack_require__(324);
+	var _tableRowColumn = __webpack_require__(326);
 
 	var _tableRowColumn2 = _interopRequireDefault(_tableRowColumn);
 
@@ -41651,7 +41741,7 @@
 	};
 
 /***/ },
-/* 318 */
+/* 320 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41995,7 +42085,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 319 */
+/* 321 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42024,11 +42114,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _checkbox = __webpack_require__(320);
+	var _checkbox = __webpack_require__(322);
 
 	var _checkbox2 = _interopRequireDefault(_checkbox);
 
-	var _tableRowColumn = __webpack_require__(324);
+	var _tableRowColumn = __webpack_require__(326);
 
 	var _tableRowColumn2 = _interopRequireDefault(_tableRowColumn);
 
@@ -42490,7 +42580,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 320 */
+/* 322 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42513,7 +42603,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _enhancedSwitch = __webpack_require__(321);
+	var _enhancedSwitch = __webpack_require__(323);
 
 	var _enhancedSwitch2 = _interopRequireDefault(_enhancedSwitch);
 
@@ -42525,11 +42615,11 @@
 
 	var _transitions2 = _interopRequireDefault(_transitions);
 
-	var _checkBoxOutlineBlank = __webpack_require__(322);
+	var _checkBoxOutlineBlank = __webpack_require__(324);
 
 	var _checkBoxOutlineBlank2 = _interopRequireDefault(_checkBoxOutlineBlank);
 
-	var _checkBox = __webpack_require__(323);
+	var _checkBox = __webpack_require__(325);
 
 	var _checkBox2 = _interopRequireDefault(_checkBox);
 
@@ -42760,7 +42850,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 321 */
+/* 323 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -43219,7 +43309,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 322 */
+/* 324 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43258,7 +43348,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 323 */
+/* 325 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43297,7 +43387,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 324 */
+/* 326 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43490,7 +43580,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 325 */
+/* 327 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43513,7 +43603,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _tableRowColumn = __webpack_require__(324);
+	var _tableRowColumn = __webpack_require__(326);
 
 	var _tableRowColumn2 = _interopRequireDefault(_tableRowColumn);
 
@@ -43661,7 +43751,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 326 */
+/* 328 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43674,7 +43764,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _checkbox = __webpack_require__(320);
+	var _checkbox = __webpack_require__(322);
 
 	var _checkbox2 = _interopRequireDefault(_checkbox);
 
@@ -43682,7 +43772,7 @@
 
 	var _stylePropable2 = _interopRequireDefault(_stylePropable);
 
-	var _tableHeaderColumn = __webpack_require__(327);
+	var _tableHeaderColumn = __webpack_require__(329);
 
 	var _tableHeaderColumn2 = _interopRequireDefault(_tableHeaderColumn);
 
@@ -43888,7 +43978,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 327 */
+/* 329 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -44078,7 +44168,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 328 */
+/* 330 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -44376,22 +44466,22 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 329 */
+/* 331 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var defaultClickRejectionStrategy = __webpack_require__(330);
+	var defaultClickRejectionStrategy = __webpack_require__(332);
 
 	module.exports = function injectTapEventPlugin(strategyOverrides) {
 	  strategyOverrides = strategyOverrides || {};
 	  var shouldRejectClick = strategyOverrides.shouldRejectClick || defaultClickRejectionStrategy;
 
 	  __webpack_require__(31).injection.injectEventPluginsByName({
-	    "TapEventPlugin": __webpack_require__(331)(shouldRejectClick)
+	    "TapEventPlugin": __webpack_require__(333)(shouldRejectClick)
 	  });
 	};
 
 /***/ },
-/* 330 */
+/* 332 */
 /***/ function(module, exports) {
 
 	module.exports = function (lastTouchEvent, clickTimestamp) {
@@ -44401,7 +44491,7 @@
 	};
 
 /***/ },
-/* 331 */
+/* 333 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -44429,10 +44519,10 @@
 	var EventPluginUtils = __webpack_require__(33);
 	var EventPropagators = __webpack_require__(73);
 	var SyntheticUIEvent = __webpack_require__(87);
-	var TouchEventUtils = __webpack_require__(332);
+	var TouchEventUtils = __webpack_require__(334);
 	var ViewportMetrics = __webpack_require__(38);
 
-	var keyOf = __webpack_require__(333);
+	var keyOf = __webpack_require__(335);
 	var topLevelTypes = EventConstants.topLevelTypes;
 
 	var isStartish = EventPluginUtils.isStartish;
@@ -44548,7 +44638,7 @@
 	module.exports = createTapEventPlugin;
 
 /***/ },
-/* 332 */
+/* 334 */
 /***/ function(module, exports) {
 
 	/**
@@ -44593,7 +44683,7 @@
 	module.exports = TouchEventUtils;
 
 /***/ },
-/* 333 */
+/* 335 */
 /***/ function(module, exports) {
 
 	/**
@@ -44633,16 +44723,16 @@
 	module.exports = keyOf;
 
 /***/ },
-/* 334 */
+/* 336 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(335);
+	var content = __webpack_require__(337);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(337)(content, {});
+	var update = __webpack_require__(339)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -44659,21 +44749,21 @@
 	}
 
 /***/ },
-/* 335 */
+/* 337 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(336)();
+	exports = module.exports = __webpack_require__(338)();
 	// imports
 
 
 	// module
-	exports.push([module.id, "* {\r\n    padding: 0;\r\n    margin: 0;\r\n    font-family: 'Alegreya Sans', sans-serif;\r\n    text-decoration: none;\r\n}\r\n\r\nhtml {\r\n    height: 100%;\r\n}\r\n\r\nbody {\r\n    min-height: 100%;\r\n    min-width: 381px;\r\n}\r\n\r\na:visited, a {\r\n    color: black;\r\n}\r\n\r\nheader {\r\n    width: 100%;\r\n}\r\n\r\n/**\r\n * Login Menu\r\n */\r\n\r\n#logout_link {\r\n    margin: 1vw 0;\r\n    font-size: small;\r\n}\r\n\r\n/**\r\n * Main Content Area\r\n */\r\n#greeting {\r\n    font-size: xx-large;\r\n    text-align: center;\r\n    padding-top: 33vh;\r\n    padding-bottom: 30vh;\r\n}\r\n\r\ndiv.main_area {\r\n    min-height: 69.4vh;\r\n    margin: 7vw;\r\n    padding: 3vw;\r\n}\r\n\r\ndiv.main_area, div.cards {\r\n    background: #F5F5F5 !important;\r\n    margin: 0 0 25px 0;\r\n}\r\n\r\n/**\r\n * Profile form\r\n */\r\n.profile_field {\r\n    margin-right: 10px;\r\n}\r\n\r\n/**\r\n * Trx entry form\r\n */\r\nform#trx_form {\r\n    display: flex;\r\n    justify-content: space-between;\r\n}\r\n\r\n/**\r\n * Customer entry form\r\n */\r\nform#cust_entry {\r\n    display: flex;\r\n    flex-flow: row wrap;\r\n}\r\n\r\n/**\r\n * Customer drop-down\r\n */\r\nspan.cust_icons {\r\n    position: relative;\r\n    bottom: 7px;\r\n}\r\n\r\nspan.cust_icons .fa {\r\n    font-size: 17px !important;\r\n}\r\n\r\n/**\r\n * Footer Area\r\n */\r\nfooter {\r\n    bottom: 0;\r\n    position: relative;\r\n    width: 100%;\r\n    font-size: small;\r\n    margin-top: 10vh;\r\n}\r\n\r\n#footer_toolbar_group {\r\n    float: none;\r\n    text-align: center;\r\n    top: 15px;\r\n}\r\n\r\n/**\r\n * Rules for viewport's with widths < 510 px\r\n */\r\n@media (max-width: 510px) {\r\n    #logout_link {\r\n        font-size: x-small;\r\n    }\r\n    \r\n    #main_area {\r\n        min-height: 70.9vh;\r\n    }\r\n}", ""]);
+	exports.push([module.id, "* {\r\n    padding: 0;\r\n    margin: 0;\r\n    font-family: 'Alegreya Sans', sans-serif;\r\n    text-decoration: none;\r\n}\r\n\r\nhtml {\r\n    height: 100%;\r\n}\r\n\r\nbody {\r\n    min-height: 100%;\r\n    min-width: 381px;\r\n}\r\n\r\na:visited, a {\r\n    color: black;\r\n}\r\n\r\nheader {\r\n    width: 100%;\r\n}\r\n\r\nfieldset {\r\n    margin: 5px;\r\n    padding: 20px;\r\n    border: solid 1px #E0DEDE;\r\n    backgroundColor: #F7FAF5;\r\n}\r\n\r\n/**\r\n * Login Menu\r\n */\r\n#logout_link {\r\n    margin: 1vw 0;\r\n    font-size: small;\r\n}\r\n\r\n/**\r\n * Main Content Area\r\n */\r\ndiv#content {\r\n    padding-bottom: 1vh;\r\n}\r\n\r\n#greeting {\r\n    font-size: xx-large;\r\n    text-align: center;\r\n    padding-top: 33vh;\r\n    padding-bottom: 8vh;\r\n}\r\n\r\ndiv.main_area {\r\n    min-height: 69.4vh;\r\n    margin: 7vw;\r\n    padding: 3vw;\r\n}\r\n\r\ndiv.main_area, div.cards {\r\n    background: #F5F5F5 !important;\r\n    margin: 0 0 25px 0;\r\n}\r\n\r\n/**\r\n * Profile form\r\n */\r\n.profile_field {\r\n    margin-right: 10px;\r\n    padding-right: 10px;\r\n}\r\n\r\n/**\r\n * Trx entry form\r\n */\r\nform#trx_form {\r\n    display: flex;\r\n    justify-content: space-between;\r\n}\r\n\r\n/**\r\n * Customer drop-down\r\n */\r\nspan.cust_icons {\r\n    position: relative;\r\n    bottom: 7px;\r\n}\r\n\r\nspan.cust_icons .fa {\r\n    font-size: 17px !important;\r\n}\r\n\r\n/**\r\n * Footer Area\r\n */\r\nfooter {\r\n    bottom: 0;\r\n    position: relative;\r\n    width: 100%;\r\n    font-size: small;\r\n    margin-top: 12vh;\r\n}\r\n\r\n#footer_toolbar_group {\r\n    float: none;\r\n    text-align: center;\r\n    top: 15px;\r\n}\r\n\r\n/**\r\n * Rules for viewport's with widths < 510 px\r\n */\r\n@media (max-width: 510px) {\r\n    #logout_link {\r\n        font-size: x-small;\r\n    }\r\n    \r\n    #main_area {\r\n        min-height: 70.9vh;\r\n    }\r\n}", ""]);
 
 	// exports
 
 
 /***/ },
-/* 336 */
+/* 338 */
 /***/ function(module, exports) {
 
 	/*
@@ -44726,7 +44816,7 @@
 	};
 
 /***/ },
-/* 337 */
+/* 339 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -44978,12 +45068,12 @@
 
 
 /***/ },
-/* 338 */
+/* 340 */
 /***/ function(module, exports) {
 
 	/**
 	 * Here are the React components for Nav and it's children loginmenu and registration form,
-	 * and for the site footer. These componenets are bundled with webpack and called from
+	 * and for the site footer. These componenents are bundled with webpack and called from
 	 * main.blade.php
 	 */
 	window.RegisterForm = React.createClass({
@@ -45243,89 +45333,391 @@
 	});
 
 /***/ },
-/* 339 */
+/* 341 */
+/***/ function(module, exports) {
+
+	/**
+	 * Here are components for updating user and customer profiles
+	 */
+	window.States = React.createClass({
+	    displayName: 'States',
+
+	    getInitialState: function () {
+	        return { value: this.props.defaultValue, style: this.props.style };
+	    },
+	    handleChange: function (event, index, value) {
+	        //the SelectField component renders wierdly compared to it's surrounding TextInput components, hence having to dynamically change css
+	        var bottom = this.props.id == 'user_state' ? '0px' : '9px';
+	        this.setState({ value, style: { bottom: bottom, width: '50px', paddingRight: '10px' } });
+	    },
+	    render: function () {
+	        return React.createElement(
+	            SelectField,
+	            {
+	                value: this.state.value,
+	                onChange: this.handleChange,
+	                floatingLabelText: 'State',
+	                floatingLabelStyle: { color: 'black' },
+	                style: this.state.style,
+	                id: 'state',
+	                errorText: this.props.error
+	            },
+	            React.createElement(MenuItem, { value: 'AL', primaryText: 'AL' }),
+	            React.createElement(MenuItem, { value: 'AK', primaryText: 'AK' }),
+	            React.createElement(MenuItem, { value: 'AZ', primaryText: 'AZ' }),
+	            React.createElement(MenuItem, { value: 'AR', primaryText: 'AR' }),
+	            React.createElement(MenuItem, { value: 'CA', primaryText: 'CA' }),
+	            React.createElement(MenuItem, { value: 'CO', primaryText: 'CO' }),
+	            React.createElement(MenuItem, { value: 'CT', primaryText: 'CT' }),
+	            React.createElement(MenuItem, { value: 'DE', primaryText: 'DE' }),
+	            React.createElement(MenuItem, { value: 'FL', primaryText: 'FL' }),
+	            React.createElement(MenuItem, { value: 'GA', primaryText: 'GA' }),
+	            React.createElement(MenuItem, { value: 'HI', primaryText: 'HI' }),
+	            React.createElement(MenuItem, { value: 'ID', primaryText: 'ID' }),
+	            React.createElement(MenuItem, { value: 'IL', primaryText: 'IL' }),
+	            React.createElement(MenuItem, { value: 'IN', primaryText: 'IN' }),
+	            React.createElement(MenuItem, { value: 'IA', primaryText: 'IA' }),
+	            React.createElement(MenuItem, { value: 'KS', primaryText: 'KS' }),
+	            React.createElement(MenuItem, { value: 'KY', primaryText: 'KY' }),
+	            React.createElement(MenuItem, { value: 'LA', primaryText: 'LA' }),
+	            React.createElement(MenuItem, { value: 'ME', primaryText: 'ME' }),
+	            React.createElement(MenuItem, { value: 'MD', primaryText: 'MD' }),
+	            React.createElement(MenuItem, { value: 'MA', primaryText: 'MA' }),
+	            React.createElement(MenuItem, { value: 'MI', primaryText: 'MI' }),
+	            React.createElement(MenuItem, { value: 'MN', primaryText: 'MN' }),
+	            React.createElement(MenuItem, { value: 'MS', primaryText: 'MS' }),
+	            React.createElement(MenuItem, { value: 'MO', primaryText: 'MO' }),
+	            React.createElement(MenuItem, { value: 'MT', primaryText: 'MT' }),
+	            React.createElement(MenuItem, { value: 'NE', primaryText: 'NE' }),
+	            React.createElement(MenuItem, { value: 'NV', primaryText: 'NV' }),
+	            React.createElement(MenuItem, { value: 'NH', primaryText: 'NH' }),
+	            React.createElement(MenuItem, { value: 'NJ', primaryText: 'NJ' }),
+	            React.createElement(MenuItem, { value: 'NM', primaryText: 'NM' }),
+	            React.createElement(MenuItem, { value: 'NY', primaryText: 'NY' }),
+	            React.createElement(MenuItem, { value: 'NC', primaryText: 'NC' }),
+	            React.createElement(MenuItem, { value: 'ND', primaryText: 'ND' }),
+	            React.createElement(MenuItem, { value: 'OH', primaryText: 'OH' }),
+	            React.createElement(MenuItem, { value: 'OK', primaryText: 'OK' }),
+	            React.createElement(MenuItem, { value: 'OR', primaryText: 'OR' }),
+	            React.createElement(MenuItem, { value: 'PA', primaryText: 'PA' }),
+	            React.createElement(MenuItem, { value: 'RI', primaryText: 'RI' }),
+	            React.createElement(MenuItem, { value: 'SC', primaryText: 'SC' }),
+	            React.createElement(MenuItem, { value: 'SD', primaryText: 'SD' }),
+	            React.createElement(MenuItem, { value: 'TN', primaryText: 'TN' }),
+	            React.createElement(MenuItem, { value: 'TX', primaryText: 'TX' }),
+	            React.createElement(MenuItem, { value: 'UT', primaryText: 'UT' }),
+	            React.createElement(MenuItem, { value: 'VT', primaryText: 'VT' }),
+	            React.createElement(MenuItem, { value: 'VA', primaryText: 'VA' }),
+	            React.createElement(MenuItem, { value: 'WA', primaryText: 'WA' }),
+	            React.createElement(MenuItem, { value: 'WV', primaryText: 'WV' }),
+	            React.createElement(MenuItem, { value: 'WI', primaryText: 'WI' }),
+	            React.createElement(MenuItem, { value: 'WY', primaryText: 'WY' })
+	        );
+	    }
+	});
+
+	window.Profile = React.createClass({
+	    displayName: 'Profile',
+
+	    formfields: {
+	        company: '',
+	        first: '',
+	        last: '',
+	        email: '',
+	        addr1: '',
+	        addr2: '',
+	        city: '',
+	        state: '',
+	        zip: '',
+	        cell: '',
+	        office: ''
+	    },
+	    getInitialState: function () {
+	        return {
+	            formfields: this.formfields,
+	            message: '',
+	            open: false
+	        };
+	    },
+	    handleClose: function () {
+	        this.setState({ open: false });
+	    },
+	    handleSave: function (e) {
+	        e.preventDefault();
+	        var form = new FormData(document.getElementById('profile-form'));
+	        var fields = Object.keys(this.formfields);
+	        for (var i = 1; i < fields.length; i++) form.set(fields[i], document.getElementById(fields[i]).value);
+	        fetch('/profile/save', {
+	            method: 'POST',
+	            body: form,
+	            headers: { 'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', "Accept": "application/json" },
+	            credentials: 'same-origin'
+	        }).then(function (response) {
+	            if (!response.ok) {
+	                response.json().then(function (json) {
+	                    var newState = {};
+	                    for (var field in json) {
+	                        var key = field;
+	                        newState[key] = json[key];
+	                    }
+	                    this.setState({ formfields: newState });
+	                }.bind(this));
+	            } else {
+	                response.text().then(function (text) {
+	                    this.setState({ formfields: this.formfields, message: text, open: true });
+	                }.bind(this));
+	            }
+	        }.bind(this));
+	    },
+	    render: function () {
+	        return React.createElement(
+	            Paper,
+	            { id: 'profile', style: { position: 'relative', marginLeft: 'auto', marginRight: 'auto', maxWidth: '74vw', marginTop: '50px', padding: '50px', backgroundColor: '#F7FAF5' } },
+	            React.createElement(
+	                'form',
+	                { id: 'profile-form', onSubmit: this.handleSave },
+	                React.createElement(
+	                    'fieldset',
+	                    { style: { margin: '5px', padding: '20px', border: 'solid 1px #E0DEDE', backgroundColor: '#F7FAF5' } },
+	                    React.createElement(TextField, {
+	                        hintText: 'Company',
+	                        floatingLabelText: 'Company',
+	                        floatingLabelStyle: { color: 'black' },
+	                        className: 'profile_field',
+	                        name: 'company',
+	                        id: 'company',
+	                        errorText: this.state.formfields.company,
+	                        defaultValue: cur_user.profile.company
+	                    }),
+	                    React.createElement('br', null),
+	                    React.createElement(TextField, {
+	                        hintText: 'First',
+	                        floatingLabelText: 'First',
+	                        floatingLabelStyle: { color: 'black' },
+	                        className: 'profile_field',
+	                        name: 'first',
+	                        id: 'first',
+	                        errorText: this.state.formfields.first,
+	                        defaultValue: cur_user.profile.first
+	                    }),
+	                    React.createElement(TextField, {
+	                        hintText: 'Last',
+	                        floatingLabelText: 'Last',
+	                        floatingLabelStyle: { color: 'black' },
+	                        className: 'profile_field',
+	                        name: 'last',
+	                        id: 'last',
+	                        errorText: this.state.formfields.last,
+	                        defaultValue: cur_user.profile.last
+	                    }),
+	                    React.createElement('br', null),
+	                    React.createElement(TextField, {
+	                        hintText: 'Email',
+	                        floatingLabelText: 'Email',
+	                        floatingLabelStyle: { color: 'black' },
+	                        className: 'profile_field',
+	                        defaultdefaultValue: cur_user.email,
+	                        name: 'email',
+	                        id: 'email',
+	                        errorText: this.state.formfields.email,
+	                        defaultValue: cur_user.email
+	                    })
+	                ),
+	                React.createElement(
+	                    'fieldset',
+	                    { style: { margin: '5px', padding: '20px', border: 'solid 1px #E0DEDE', backgroundColor: '#F7FAF5' } },
+	                    React.createElement(TextField, {
+	                        style: { width: '300px' },
+	                        hintText: 'Address1',
+	                        floatingLabelText: 'Address1',
+	                        floatingLabelStyle: { color: 'black' },
+	                        className: 'profile_field',
+	                        name: 'addr1',
+	                        id: 'addr1',
+	                        errorText: this.state.formfields.address1,
+	                        defaultValue: cur_user.profile.address1
+	                    }),
+	                    React.createElement('br', null),
+	                    React.createElement(TextField, {
+	                        style: { width: '300px' },
+	                        hintText: 'Address2',
+	                        floatingLabelText: 'Address2',
+	                        floatingLabelStyle: { color: 'black' },
+	                        className: 'profile_field',
+	                        name: 'addr2',
+	                        id: 'addr2',
+	                        errorText: this.state.formfields.address2,
+	                        defaultValue: cur_user.profile.address2
+	                    }),
+	                    React.createElement('br', null),
+	                    React.createElement(
+	                        'span',
+	                        { style: { display: 'flex', alignItems: 'center', flexWrap: 'wrap' } },
+	                        React.createElement(TextField, {
+	                            hintText: 'City',
+	                            floatingLabelText: 'City',
+	                            floatingLabelStyle: { color: 'black' },
+	                            className: 'profile_field',
+	                            name: 'city',
+	                            id: 'city',
+	                            errorText: this.state.formfields.city,
+	                            defaultValue: cur_user.profile.city
+	                        }),
+	                        React.createElement(States, { error: this.state.formfields.state, id: 'user_state', style: { width: '50px', paddingRight: '10px' } }),
+	                        React.createElement(TextField, {
+	                            hintText: 'Zip',
+	                            style: { width: '100px' },
+	                            floatingLabelText: 'Zip',
+	                            floatingLabelStyle: { color: 'black' },
+	                            className: 'profile_field',
+	                            name: 'zip',
+	                            id: 'zip',
+	                            errorText: this.state.formfields.zip,
+	                            defaultValue: cur_user.profile.zip
+	                        }),
+	                        React.createElement('br', null)
+	                    ),
+	                    React.createElement(TextField, {
+	                        hintText: 'Cell',
+	                        floatingLabelText: 'Cell',
+	                        floatingLabelStyle: { color: 'black' },
+	                        className: 'profile_field',
+	                        name: 'cell',
+	                        id: 'cell',
+	                        errorText: this.state.formfields.cell,
+	                        defaultValue: cur_user.profile.cell
+	                    }),
+	                    React.createElement(TextField, {
+	                        hintText: 'Office',
+	                        floatingLabelText: 'Office',
+	                        floatingLabelStyle: { color: 'black' },
+	                        className: 'profile_field',
+	                        name: 'office',
+	                        id: 'office',
+	                        errorText: this.state.formfields.office,
+	                        defaultValue: cur_user.profile.office
+	                    })
+	                ),
+	                React.createElement(FlatButton, { secondary: true, label: 'Save', icon: React.createElement(SaveIcon, null), type: 'submit' }),
+	                React.createElement(FlatButton, { primary: true, label: 'Cancel', icon: React.createElement(CancelIcon, null), linkButton: true, href: '/' })
+	            ),
+	            React.createElement(Snackbar, { open: this.state.open, message: this.state.message, onRequestClose: this.handleClose, autoHideDuration: 3000 })
+	        );
+	    }
+	});
+
+/***/ },
+/* 342 */
 /***/ function(module, exports) {
 
 	/**
 	 * Created by John on 8/22/2016.
-	 * This is the React class representing the Billables area of the main content component
-	 * It's children are the TrxEntry and TrxReport components
-	 * Called from content.blade.php
+	 * React components for Trx tracking module
 	 */
 
 	window.CustomerEntry = React.createClass({
 	    displayName: 'CustomerEntry',
 
+	    formfields: {
+	        company: '',
+	        first: '',
+	        last: '',
+	        email: '',
+	        addr1: '',
+	        addr2: '',
+	        city: '',
+	        state: '',
+	        zip: '',
+	        cell: '',
+	        office: ''
+	    },
 	    getInitialState: function () {
 	        return {
 	            open: false,
 	            snackbarOpen: false,
-	            companyErr: '',
-	            firstErr: '',
-	            lastErr: '',
-	            emailErr: '',
-	            message: ''
+	            fields: JSON.parse(JSON.stringify(this.formfields)),
+	            errors: JSON.parse(JSON.stringify(this.formfields)),
+	            message: '',
+	            edit: false
 	        };
 	    },
 	    removeErrors: function () {
-	        this.setState({
-	            companyErr: '',
-	            firstErr: '',
-	            lastErr: '',
-	            emailErr: ''
-	        });
+	        this.setState({ errors: this.formfields });
 	    },
-	    handleOpen: function (chosen) {
-	        this.setState({ open: true, company: chosen });
+	    handleOpen: function (chosen, edit = false) {
+	        if (edit) {
+	            //if editing, chosen is an id, need to pre-fill form with chosen customer's data
+	            for (var i = 0; i < cur_user.customer.length; i++) {
+	                if (cur_user.customer[i].id == chosen) {
+	                    var customer = cur_user.customer[i];
+	                    break;
+	                }
+	            }
+	            this.setState({
+	                open: true,
+	                fields: {
+	                    id: customer.id,
+	                    company: customer.company,
+	                    first: customer.first,
+	                    last: customer.last,
+	                    email: customer.email,
+	                    addr1: customer.cust_profile.addr1,
+	                    addr2: customer.cust_profile.addr2,
+	                    city: customer.cust_profile.city,
+	                    state: customer.cust_profile.state,
+	                    zip: customer.cust_profile.zip,
+	                    cell: customer.cust_profile.cell,
+	                    office: customer.cust_profile.office
+	                },
+	                edit: edit
+	            });
+	        } else {
+	            //else if creating, chosen is a string, company field gets default value of input
+	            var tmp = this.state.fields;
+	            tmp.company = chosen;
+	            this.setState({ open: true, fields: tmp, edit: edit });
+	        }
 	    },
 	    handleClose: function () {
 	        this.removeErrors();
-	        this.setState({ open: false, snackbarOpen: false });
+	        this.setState({
+	            open: false,
+	            snackbarOpen: false,
+	            fields: JSON.parse(JSON.stringify(this.formfields)),
+	            errors: JSON.parse(JSON.stringify(this.formfields))
+	        });
 	    },
 	    handleSave: function (event) {
 	        this.removeErrors();
 	        event.preventDefault;
 	        var cust = new FormData();
-	        cust.append('company', document.forms['cust_entry'].elements[0].value);
-	        cust.append('first', document.forms['cust_entry'].elements[1].value);
-	        cust.append('last', document.forms['cust_entry'].elements[2].value);
-	        cust.append('email', document.forms['cust_entry'].elements[3].value);
-	        fetch('save_customer', {
+	        var fields = Object.keys(this.formfields);
+	        cust.set('id', this.state.fields.id);
+	        for (var i = 0; i < fields.length; i++) cust.set(fields[i], document.getElementById(fields[i]).value);
+	        fetch('save_customer?edit=' + this.state.edit, {
 	            method: 'post',
 	            body: cust,
 	            headers: { 'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' },
 	            credentials: 'same-origin'
 	        }).then(function (response) {
 	            if (response.ok) {
+	                //if save went ok, show Snackbar, update global cur_user & update the cust. drop-down
 	                response.json().then(function (json) {
-	                    cur_user.customer.push({
-	                        id: json.cust_id,
-	                        company: cust.get('company'),
-	                        first: cust.get('first'),
-	                        last: cust.get('last')
-	                    });
+	                    cur_user = JSON.parse(json.cur_user);
 	                    this.setState({ message: json.message, snackbarOpen: true });
 	                    this.props.updateCustomersDropDown();
 	                }.bind(this));
 	            } else {
+	                //flash errors into view
 	                response.json().then(function (errors) {
 	                    var keys = Object.keys(errors);
+	                    var fields = {};
 	                    for (var i = 0; i < keys.length; i++) {
-	                        switch (keys[i]) {
-	                            case 'company':
-	                                this.setState({ companyErr: errors.company });
-	                                break;
-	                            case 'first':
-	                                this.setState({ firstErr: errors.first });
-	                                break;
-	                            case 'last':
-	                                this.setState({ lastErr: errors.last });
-	                                break;
-	                            case 'email':
-	                                this.setState({ emailErr: errors.email });
-	                                break;
-	                        }
+	                        var key = keys[i],
+	                            val = errors[keys[i]];
+	                        fields[key] = val;
 	                    }
+	                    this.setState({ errors: fields });
 	                }.bind(this));
 	            }
 	        }.bind(this));
@@ -45338,41 +45730,142 @@
 	            label: 'Cancel',
 	            onTouchTap: this.handleClose
 	        })];
+	        var title = this.state.edit ? "Edit this customer." : "So this is a new customer. Nice.";
 	        return React.createElement(
 	            Dialog,
 	            {
-	                title: 'So this is a new customer. Nice.',
+	                title: title,
 	                actions: actions,
 	                modal: true,
-	                open: this.state.open
+	                open: this.state.open,
+	                bodyStyle: { overflow: 'auto' }
 	            },
 	            React.createElement(
 	                'form',
 	                { id: 'cust_entry' },
-	                React.createElement(TextField, {
-	                    floatingLabelText: 'Company',
-	                    floatingLabelFixed: true,
-	                    errorText: this.state.companyErr,
-	                    defaultValue: this.state.company
-	                }),
-	                React.createElement(TextField, {
-	                    floatingLabelText: 'First Name',
-	                    floatingLabelFixed: true,
-	                    errorText: this.state.firstErr
-	                }),
-	                React.createElement(TextField, {
-	                    floatingLabelText: 'Last Name',
-	                    floatingLabelFixed: true,
-	                    errorText: this.state.lastErr
-	                }),
-	                React.createElement(TextField, {
-	                    floatingLabelText: 'Email',
-	                    floatingLabelFixed: true,
-	                    type: 'email',
-	                    errorText: this.state.emailErr
-	                })
-	            ),
-	            React.createElement(Snackbar, { open: this.state.snackbarOpen, message: this.state.message, onRequestClose: this.handleClose, autoHideDuration: 3000 })
+	                React.createElement(
+	                    'fieldset',
+	                    null,
+	                    React.createElement(TextField, {
+	                        floatingLabelText: 'Company',
+	                        floatingLabelFixed: true,
+	                        hintText: 'Company',
+	                        errorText: this.state.errors.company,
+	                        id: 'company',
+	                        style: { width: 'initial' },
+	                        defaultValue: this.state.fields.company,
+	                        className: 'profile_field'
+	                    }),
+	                    React.createElement(TextField, {
+	                        floatingLabelText: 'First Name',
+	                        floatingLabelFixed: true,
+	                        hintText: 'First Name',
+	                        errorText: this.state.errors.first,
+	                        id: 'first',
+	                        style: { width: 'initial' },
+	                        defaultValue: this.state.fields.first,
+	                        className: 'profile_field'
+	                    }),
+	                    React.createElement(TextField, {
+	                        floatingLabelText: 'Last Name',
+	                        hintText: 'Last Name',
+	                        floatingLabelFixed: true,
+	                        errorText: this.state.errors.last,
+	                        id: 'last',
+	                        style: { width: 'initial' },
+	                        defaultValue: this.state.fields.last,
+	                        className: 'profile_field'
+	                    }),
+	                    React.createElement(TextField, {
+	                        floatingLabelText: 'Email',
+	                        hintText: 'Email',
+	                        floatingLabelFixed: true,
+	                        type: 'email',
+	                        errorText: this.state.errors.email,
+	                        id: 'email',
+	                        style: { width: 'initial' },
+	                        defaultValue: this.state.fields.email,
+	                        className: 'profile_field'
+	                    })
+	                ),
+	                React.createElement(
+	                    'fieldset',
+	                    null,
+	                    React.createElement(TextField, {
+	                        style: { width: '300px' },
+	                        hintText: 'Address1',
+	                        floatingLabelText: 'Address1',
+	                        hintText: 'Address1',
+	                        id: 'addr1',
+	                        style: { width: 'initial' },
+	                        defaultValue: this.state.fields.addr1,
+	                        errorText: this.state.errors.addr1,
+	                        className: 'profile_field'
+	                    }),
+	                    React.createElement('br', null),
+	                    React.createElement(TextField, {
+	                        style: { width: '300px' },
+	                        hintText: 'Address2',
+	                        floatingLabelText: 'Address2',
+	                        hintText: 'Address2',
+	                        id: 'addr2',
+	                        style: { width: 'initial' },
+	                        defaultValue: this.state.fields.addr2,
+	                        errorText: this.state.errors.addr2,
+	                        className: 'profile_field'
+	                    }),
+	                    React.createElement('br', null),
+	                    React.createElement(
+	                        'span',
+	                        { style: { paddingTop: '30px', paddingBottom: '30px' } },
+	                        React.createElement(TextField, {
+	                            floatingLabelText: 'City',
+	                            hintText: 'City',
+	                            id: 'city',
+	                            style: { width: 'initial' },
+	                            defaultValue: this.state.fields.city,
+	                            errorText: this.state.errors.city,
+	                            className: 'profile_field'
+	                        }),
+	                        React.createElement(States, {
+	                            defaultValue: this.state.fields.state,
+	                            error: this.state.errors.state,
+	                            className: 'profile_field',
+	                            style: { top: '31px', width: '50px', paddingRight: '10px' }
+	                        }),
+	                        React.createElement(TextField, {
+	                            hintText: 'Zip',
+	                            floatingLabelText: 'Zip',
+	                            className: 'profile_field',
+	                            id: 'zip',
+	                            style: { width: 'initial' },
+	                            defaultValue: this.state.fields.zip,
+	                            errorText: this.state.errors.zip,
+	                            className: 'profile_field'
+	                        })
+	                    ),
+	                    React.createElement('br', null),
+	                    React.createElement(TextField, {
+	                        hintText: 'Cell',
+	                        floatingLabelText: 'Cell',
+	                        id: 'cell',
+	                        style: { width: 'initial' },
+	                        defaultValue: this.state.fields.cell,
+	                        errorText: this.state.errors.cell,
+	                        className: 'profile_field'
+	                    }),
+	                    React.createElement(TextField, {
+	                        hintText: 'Office',
+	                        floatingLabelText: 'Office',
+	                        id: 'office',
+	                        style: { width: 'initial' },
+	                        defaultValue: this.state.fields.office,
+	                        errorText: this.state.errors.office,
+	                        className: 'profile_field'
+	                    })
+	                ),
+	                React.createElement(Snackbar, { open: this.state.snackbarOpen, message: this.state.message, onRequestClose: this.handleClose, autoHideDuration: 3000 })
+	            )
 	        );
 	    }
 	});
@@ -45390,7 +45883,7 @@
 	        this.setState({ open: false });
 	    },
 	    render: function () {
-	        const actions = [React.createElement(FlatButton, { label: 'Cancel', primary: true, onTouchTap: this.handleClose }), React.createElement(FlatButton, { label: 'Continue', primary: true, id: this.state.id, onClick: this.props.deleteCustomer })];
+	        const actions = [React.createElement(FlatButton, { label: 'Cancel', primary: true, onTouchTap: this.handleClose }), React.createElement(FlatButton, { label: 'Continue', primary: true, className: this.state.id, onClick: this.props.deleteCustomer })];
 
 	        return React.createElement(
 	            Dialog,
@@ -45424,8 +45917,22 @@
 	                    React.createElement(
 	                        'span',
 	                        { className: 'cust_icons' },
-	                        React.createElement(IconButton, { linkButton: true, className: 'edit_cust', id: cur_user.customer[i].id, iconClassName: 'fa fa-pencil', tooltip: 'Edit Customer', href: '#' }),
-	                        React.createElement(IconButton, { linkButton: true, className: 'del_cust', id: cur_user.customer[i].id, iconClassName: 'fa fa-trash-o', tooltip: 'Delete Customer', href: '#', onClick: this.showDelCustDialog })
+	                        React.createElement(IconButton, {
+	                            linkButton: true,
+	                            className: cur_user.customer[i].id.toString(),
+	                            iconClassName: 'fa fa-pencil',
+	                            tooltip: 'Edit Customer',
+	                            href: '#',
+	                            onClick: this.showCustEntry
+	                        }),
+	                        React.createElement(IconButton, {
+	                            linkButton: true,
+	                            className: cur_user.customer[i].id.toString(),
+	                            iconClassName: 'fa fa-trash-o',
+	                            tooltip: 'Delete Customer',
+	                            href: '#',
+	                            onClick: this.showDelCustDialog
+	                        })
 	                    )
 	                )
 	            };
@@ -45441,10 +45948,9 @@
 	    },
 	    deleteCustomer: function (event) {
 	        this.refs.del_cust_dialog.handleClose();
-	        var route = 'delete_customer';
 	        var body = new FormData();
-	        body.append('cust_id', event.currentTarget.id);
-	        fetch(route, { method: 'POST', headers: { 'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }, credentials: 'same-origin', body: body }).then(function (response) {
+	        body.append('cust_id', event.currentTarget.getAttribute('class'));
+	        fetch('delete_customer', { method: 'POST', headers: { 'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }, credentials: 'same-origin', body: body }).then(function (response) {
 	            if (response.ok) //Remove deleted customer from drop-down and show snackbar
 	                response.json().then(function (json) {
 	                    this.setState({ snackbarOpen: true, message: json.message });
@@ -45456,7 +45962,10 @@
 	        }.bind(this));
 	    },
 	    showDelCustDialog: function (event) {
-	        this.refs.del_cust_dialog.handleOpen(event.currentTarget.id);
+	        this.refs.del_cust_dialog.handleOpen(event.currentTarget.getAttribute('class'));
+	    },
+	    showCustEntry: function (event) {
+	        this.refs.cust_entry.handleOpen(event.currentTarget.getAttribute('class'), true);
 	    },
 	    render: function () {
 	        return React.createElement(
