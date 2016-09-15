@@ -8,13 +8,12 @@
     <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
     <link rel="icon" href="http://googledrive.com/host/0B1f8PNGaySaRX1ljSDcyajE0d28">
 
-    <script src="{{ URL::asset('js/bundle.js') }}" type="text/javascript"></script>
     <script>
         var _token = "{{ csrf_token() }}";
         var logged_in = {{$logged_in}};
         var cur_user = {!! $cur_user !!};
     </script>
-    <script src="{{ URL::asset('js/babel-core_5.8.34.js') }}"></script>
+    <script src="{{ URL::asset('js/babel-core_5.8.34.js') }}"></script> {{--Using babel here in dev because I don't want to webpack componenets currently being worked on--}}
 </head>
 
 <body>
@@ -24,7 +23,7 @@
         @yield('content')
     </div>
     <footer id="footer">
-        <script src="{{ URL::asset('js/main.jsx') }}" type="text/babel"></script>
+        @yield('scripts')
     </footer>
 </body>
 </html>

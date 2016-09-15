@@ -1,82 +1,33 @@
 /**
- * Here are components for updating user and customer profiles
+ * Global modules for all pages
  */
-window.States = React.createClass({
-    getInitialState: function() {
-        return ({value: this.props.defaultValue, style: this.props.style});
-    },
-    handleChange: function(event, index, value) {
-        //the SelectField component renders wierdly compared to it's surrounding TextInput components, hence having to dynamically change css
-        var bottom = (this.props.id == 'user_state') ? '0px' : '9px';
-        this.setState({value, style: {bottom: bottom, width: '50px', paddingRight: '10px'}});
-    },
-    render: function() {
-        return (
-            <SelectField
-                value={this.state.value}
-                onChange={this.handleChange}
-                floatingLabelText="State"
-                floatingLabelStyle={{color: 'black'}}
-                style={this.state.style}
-                id="state"
-                errorText={this.props.error}
-            >
-                <MenuItem value='AL' primaryText='AL' />
-                <MenuItem value='AK' primaryText='AK' />
-                <MenuItem value='AZ' primaryText="AZ" />
-                <MenuItem value='AR' primaryText="AR" />
-                <MenuItem value='CA' primaryText="CA" />
-                <MenuItem value='CO' primaryText="CO" />
-                <MenuItem value='CT' primaryText="CT" />
-                <MenuItem value='DE' primaryText="DE" />
-                <MenuItem value='FL' primaryText="FL" />
-                <MenuItem value='GA' primaryText="GA" />
-                <MenuItem value='HI' primaryText="HI" />
-                <MenuItem value='ID' primaryText="ID" />
-                <MenuItem value='IL' primaryText="IL" />
-                <MenuItem value='IN' primaryText="IN" />
-                <MenuItem value='IA' primaryText="IA" />
-                <MenuItem value='KS' primaryText="KS" />
-                <MenuItem value='KY' primaryText="KY" />
-                <MenuItem value='LA' primaryText="LA" />
-                <MenuItem value='ME' primaryText="ME" />
-                <MenuItem value='MD' primaryText="MD" />
-                <MenuItem value='MA' primaryText="MA" />
-                <MenuItem value='MI' primaryText="MI" />
-                <MenuItem value='MN' primaryText="MN" />
-                <MenuItem value='MS' primaryText="MS" />
-                <MenuItem value='MO' primaryText="MO" />
-                <MenuItem value='MT' primaryText="MT" />
-                <MenuItem value='NE' primaryText="NE" />
-                <MenuItem value='NV' primaryText="NV" />
-                <MenuItem value='NH' primaryText="NH" />
-                <MenuItem value='NJ' primaryText="NJ" />
-                <MenuItem value='NM' primaryText="NM" />
-                <MenuItem value='NY' primaryText="NY" />
-                <MenuItem value='NC' primaryText="NC" />
-                <MenuItem value='ND' primaryText="ND" />
-                <MenuItem value='OH' primaryText="OH" />
-                <MenuItem value='OK' primaryText="OK" />
-                <MenuItem value='OR' primaryText="OR" />
-                <MenuItem value='PA' primaryText="PA" />
-                <MenuItem value='RI' primaryText="RI" />
-                <MenuItem value='SC' primaryText="SC" />
-                <MenuItem value='SD' primaryText="SD" />
-                <MenuItem value='TN' primaryText="TN" />
-                <MenuItem value='TX' primaryText="TX" />
-                <MenuItem value='UT' primaryText="UT" />
-                <MenuItem value='VT' primaryText="VT" />
-                <MenuItem value='VA' primaryText="VA" />
-                <MenuItem value='WA' primaryText="WA" />
-                <MenuItem value='WV' primaryText="WV" />
-                <MenuItem value='WI' primaryText="WI" />
-                <MenuItem value='WY' primaryText="WY" />
-            </SelectField>
-        );
-    }
-});
+require('styles.css');
 
-window.Profile = React.createClass({
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
+
+import {NavBar, Footer} from 'header_footer.jsx';
+ReactDOM.render(<NavBar />, document.getElementById('appbar'));
+ReactDOM.render(<Footer />, document.getElementById('footer'));
+
+/**
+ * Local modules for this page
+ * Here are components for updating user profiles
+ */
+
+import FlatButton from 'material-ui/lib/flat-button';
+import Paper from 'material-ui/lib/paper';
+import TextField from 'material-ui/lib/TextField';
+import Snackbar from 'material-ui/lib/snackbar';
+import SaveIcon from 'material-ui/lib/svg-icons/content/save';
+import CancelIcon from 'material-ui/lib/svg-icons/navigation/cancel';
+
+import States from 'states.jsx';
+
+var Profile = React.createClass({
     formfields: {
         company: '',
         first: '',
@@ -251,3 +202,7 @@ window.Profile = React.createClass({
         );
     }
 });
+
+export {Profile as default };
+
+ReactDOM.render(<Profile />, document.getElementById('content'));

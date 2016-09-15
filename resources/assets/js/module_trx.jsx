@@ -3,7 +3,26 @@
  * React components for Trx tracking module
  */
 
-window.CustomerEntry = React.createClass({
+import React from 'react';
+
+import FlatButton from 'material-ui/lib/flat-button';
+import IconButton from 'material-ui/lib/icon-button';
+import Dialog from 'material-ui/lib/dialog';
+import TextField from 'material-ui/lib/TextField';
+import SelectField from 'material-ui/lib/SelectField';
+import MenuItem from 'material-ui/lib/menus/menu-item.js';
+import Autocomplete from 'material-ui/lib/auto-complete';
+import DatePicker from 'material-ui/lib/date-picker/date-picker';
+import Paper from 'material-ui/lib/paper';
+import Snackbar from 'material-ui/lib/snackbar';
+import Card from 'material-ui/lib/card/card';
+import CardActions from 'material-ui/lib/card/card-actions';
+import CardHeader from 'material-ui/lib/card/card-header';
+import CardText from 'material-ui/lib/card/card-text';
+
+import States from 'states.jsx';
+
+var CustomerEntry = React.createClass({
     formfields: {
         company: '',
         first: '',
@@ -73,7 +92,6 @@ window.CustomerEntry = React.createClass({
     },
     handleSave: function(event) {
         this.removeErrors();
-        event.preventDefault;
         var cust = new FormData();
         var fields = Object.keys(this.formfields);
         cust.set('id', this.state.fields.id);
@@ -97,10 +115,8 @@ window.CustomerEntry = React.createClass({
                 response.json().then(function(errors) {
                     var keys = Object.keys(errors);
                     var fields = {};
-                    for(var i = 0; i < keys.length; i++) {
-                        var key = keys[i], val = errors[keys[i]];
-                        fields[key] = val;
-                    }
+                    for(var i = 0; i < keys.length; i++)
+                        fields[keys[i]] = errors[keys[i]];
                     this.setState({errors: fields});
                 }.bind(this));
             }
@@ -246,7 +262,7 @@ window.CustomerEntry = React.createClass({
     }
 });
 
-window.DeleteCustomerDialog = React.createClass({
+var DeleteCustomerDialog = React.createClass({
     getInitialState: function() {
         return ({open: false});
     },
@@ -276,7 +292,7 @@ window.DeleteCustomerDialog = React.createClass({
     }
 });
 
-window.TrxEntry = React.createClass({
+var TrxEntry = React.createClass({
     getInitialState: function() {
         return {customers: this.initCustomers(), snackbarOpen: false, message: '', showDelCustDialog: false};
     },
@@ -347,7 +363,7 @@ window.TrxEntry = React.createClass({
     },
     render: function() {
         return (
-            <div>
+            <section>
                 <CustomerEntry ref="cust_entry" updateCustomersDropDown={this.updateCustomers} />
                 <DeleteCustomerDialog ref="del_cust_dialog" showDelCustDialog={this.showDelCustDialog} deleteCustomer={this.deleteCustomer} />
                 <form id="trx_form" className="trx_form" ref="trx_form" style={{flexWrap: 'wrap'}}>
@@ -370,7 +386,7 @@ window.TrxEntry = React.createClass({
                         autoComplete="off"
                         listStyle={{width: 'auto', minWidth: '400px'}}
                         onNewRequest={
-                            function(chosen, index) {
+                            function(chosen) {
                                 // check if customer is in database and get billables, else open cust_entry
                                 var exists = false;
                                 for(var i = 0; i < this.state.customers.length; i++) {
@@ -424,12 +440,12 @@ window.TrxEntry = React.createClass({
                     <FlatButton label="Clear" onClick={function() {document.forms['trx_form'].reset()}} style={{color: 'red'}} />
                     <Snackbar open={this.state.snackbarOpen} message={this.state.message} onRequestClose={this.handleClose} autoHideDuration={3000} />
                 </form>
-            </div>
+            </section>
         );
     }
 });
 
-window.Trx = React.createClass({
+var Trx = React.createClass({
     render: function() {
         return (
             <Card className="cards" initiallyExpanded={true}>
@@ -438,7 +454,7 @@ window.Trx = React.createClass({
                     subtitle="Track Time & Expenses"
                     actAsExpander={true}
                     showExpandableButton={true}
-                    avatar="http://googledrive.com/host/0B1f8PNGaySaRS1JKektwMjBjRW8"
+                    avatar="https://www.dropbox.com/s/4hw9njfnlkgttmf/clock-1.png?dl=1"
                     />
                 <CardText expandable={true} style={{
                         display: 'flex',
@@ -452,3 +468,5 @@ window.Trx = React.createClass({
         );
     }
 });
+
+export {Trx as default};

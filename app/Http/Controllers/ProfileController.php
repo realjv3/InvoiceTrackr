@@ -18,7 +18,7 @@ class ProfileController extends Controller
 
         //Validate
         $this->validate($request, [
-            'company' => 'max:255|alpha',
+            'company' => 'max:255',
             'first' => 'max:255|alpha',
             'last' => 'max:255|alpha',
             'email' => 'required|max:255|email|unique:users,email,'.$user->email.',email',

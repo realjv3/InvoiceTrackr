@@ -1,9 +1,24 @@
 /**
  * Here are the React components for Nav and it's children loginmenu and registration form,
- * and for the site footer. These componenents are bundled with webpack and called from
+ * and for the site footer. These components are bundled with webpack and called from
  * main.blade.php
  */
-window.RegisterForm= React.createClass({
+
+import React from 'react';
+
+import FlatButton from 'material-ui/lib/flat-button';
+import Dialog from 'material-ui/lib/dialog';
+import TextField from 'material-ui/lib/TextField';
+import Popover from 'material-ui/lib/popover/popover';
+import List from 'material-ui/lib/lists/list';
+import ListItem from 'material-ui/lib/lists/list-item';
+import Divider from 'material-ui/lib/divider';
+import AppBar from 'material-ui/lib/app-bar';
+import Toolbar from 'material-ui/lib/toolbar/toolbar';
+import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group';
+import ToolbarSeparator from 'material-ui/lib/toolbar/toolbar-separator';
+
+var RegisterForm = React.createClass({
 
     getInitialState: function() {
         return {
@@ -88,7 +103,8 @@ window.RegisterForm= React.createClass({
         );
     }
 });
-window.LoginMenu= React.createClass({
+
+var LoginMenu = React.createClass({
 
     getInitialState: function() {
         return {
@@ -182,7 +198,8 @@ window.LoginMenu= React.createClass({
 
     }
 });
-window.NavBar = React.createClass({
+
+var NavBar = React.createClass({
     openRegForm: function() {
         this.refs.regform.setState({open: true});
     },
@@ -215,19 +232,20 @@ window.NavBar = React.createClass({
     }
 });
 
-
-window.Footer = React.createClass({
+var Footer = React.createClass({
     render: function() {
         return (
             <Toolbar >
                 <ToolbarGroup id="footer_toolbar_group" style={{float: 'none'}}>
                     <span><a href="http://github.com/realjv3" target="_blank">Created by John Verity</a></span>
-                    <img src="https://googledrive.com/host/0B1f8PNGaySaROGw3aXhHeFlodDg" style={{width: '26px', position: 'relative',top: '6px', margin: '0 -10px 0 5px'}}/>
+                    <img src="https://www.dropbox.com/s/a9dssghwmtbfq8j/NoGodNoMasters_icon.png?dl=1" style={{width: '26px', position: 'relative',top: '6px', margin: '0 -10px 0 5px'}}/>
                     <ToolbarSeparator style={{float: 'none'}}/>
-                    <img src="https://googledrive.com/host/0B1f8PNGaySaRN2NQOURRdFpRT2M" style={{width: '45px', position: 'relative',top: '10px', margin: '0 0 0 5px'}}/>
+                    <img src="https://www.dropbox.com/s/46tmdwda5btqyzv/YellowOnBlackBipCotFlag-NO_QR-Code-small.png?dl=1" style={{width: '45px', position: 'relative',top: '10px', margin: '0 0 0 5px'}}/>
                     <span><a href="http://bipcot.org/" target="_blank">BipCot NoGov License</a></span>
                 </ToolbarGroup>
             </Toolbar>
         );
     }
 });
+
+export {NavBar, Footer}

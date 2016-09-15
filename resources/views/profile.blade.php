@@ -1,4 +1,5 @@
-@extends('main')
-@section('content')
-<script src="{{ URL::asset('js/profile.jsx') }}" type="text/babel"></script>
+@extends('header_footer')
+
+@section('scripts')
+    <script src="{{ URL::asset('js/profile.js') }}" type="text/javascript"></script>
 @endsection

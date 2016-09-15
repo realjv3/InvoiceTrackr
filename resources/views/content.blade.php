@@ -1,6 +1,5 @@
-@extends('main')
-@section('content')
+@extends('header_footer')
 
-<script src="{{ URL::asset('js/content.jsx') }}" type="text/babel"></script>
-
+@section('scripts')
+    <script src="{{ URL::asset('js/content.js') }}" type="text/javascript"></script>
 @endsection
