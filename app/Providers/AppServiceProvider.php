@@ -16,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //sharing user stuff with a bunch of views
-        view()->composer(['content', 'slogan', 'profile'], function(View $view) {
+        view()->composer(['root_views.content', 'root_views.slogan', 'root_views.profile'], function(View $view) {
 
             //sharing boolean logged_in
             $logged_in = Auth::check();

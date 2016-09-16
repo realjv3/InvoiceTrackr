@@ -1,5 +1,6 @@
 module.exports = {
     entry: {
+        landing: './resources/assets/js/root_cmpnts/landing.jsx',
         content: './resources/assets/js/root_cmpnts/content.jsx',
         profile: './resources/assets/js/root_cmpnts/user_profile.jsx',
     },

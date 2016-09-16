@@ -16,7 +16,7 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('/', function () {
         return
-            (Auth::check()) ? view('content') : view('slogan');
+            (Auth::check()) ? view('root_views.content') : view('root_views.slogan');
     })->name('home');
 
     // Authentication routes...
@@ -37,7 +37,7 @@ Route::group(['middleware' => ['web']], function () {
 
     // Profile page
     Route::get('profile', ['middleware' => 'auth', 'as' => 'profile', function($id = null) {
-        return view('profile');
+        return view('root_views.profile');
     }]);
 
     // Profile save

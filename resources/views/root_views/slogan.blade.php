@@ -7,3 +7,7 @@
         <h1>Get paid.</h1>
     </div>
 @endsection
+
+@section('scripts')
+    <script src="{{ URL::asset('js/landing.js') }}" type="text/javascript"></script>
+@endsection
