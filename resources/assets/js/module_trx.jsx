@@ -360,27 +360,32 @@ var TrxEntry = React.createClass({
         this.refs.cust_entry.handleOpen(event.currentTarget.getAttribute('class'), true);
     },
     doesCustExist: function(chosen) {
-        //var exists = false;
-        //var input = '';
-        //
-        //if (chosen typeof "string" chosen.target) {
-        //    if (chosen.target.value.length == 0) return;
-        //    input = chosen.target.value;
-        //} else
-        //    input = chosen;
-        //
-        //// check if customer is in database and get billables, else open cust_entry
-        //for(var i = 0; i < this.state.customers.length; i++) {
-        //    if(this.state.customers[i].text == input) {
-        //        exists = true;
-        //        break;
-        //    }
-        //}
-        //if(!exists) this.refs.cust_entry.handleOpen(input);
-        console.log(chosen);
+        var exists = false;
+        var input = '';
+        //Autocomplete selection calls this function with cust object when seleting from drop-down,
+        // need to return b/c customer obviously exists since customer was selected
+        if(chosen.custId) return;
+        //select, press enter or onBlur of cust field checks if cust exists
+        if (chosen instanceof FocusEvent) {
+            if (chosen.target.value.length == 0 || chosen.relatedTarget.nodeName == 'SPAN')
+                return;
+            input = chosen.target.value;
+        } else
+            input = chosen;
+
+        // check if customer is in database and get billables, else open cust_entry
+        for(var i = 0; i < this.state.customers.length; i++) {
+            if(this.state.customers[i].text == input) {
+                exists = true;
+                break;
+            }
+        }
+        if(!exists) this.refs.cust_entry.handleOpen(input);
     },
+    // AutoComplete not emitting onBlur, see git,therefore setting listener after render, old school
+    // https://github.com/callemall/material-ui/issues/2294 says onBlur is fixed, but it's not
     componentDidMount: function() {
-        document.getElementById('customer').addEventListener('onblur', this.doesCustExist);
+        document.getElementById('customer').addEventListener('blur', this.doesCustExist);
     },
     render: function() {
         return (
