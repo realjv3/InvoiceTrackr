@@ -1,4 +1,4 @@
-![alt tag](https://googledrive.com/host/0B1f8PNGaySaRVHVtRWdaNkkxWFE)
+![alt tag](https://www.dropbox.com/s/y1mija5xpu82w2m/invoicetrackr.png?dl=1)
 Invoicing web app made with React + MaterialUI front-end and Laravel backend. 
 
 Clone this repository into the project directory, then execute "composer install --no-dev" from command line.
