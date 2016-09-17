@@ -1,15 +1,9 @@
 ![alt tag](https://googledrive.com/host/0B1f8PNGaySaRVHVtRWdaNkkxWFE)
-Invoicing web app made with React + MaterialUI front-end and Laravel backend. composer create-project laravel/laravel [target dir] --prefer-dist to install Laravel in your project directory; 
-Then clone this repository into the project directory.
+Invoicing web app made with React + MaterialUI front-end and Laravel backend. 
 
-To webpack assets if you want to develop: requires node.js installation which should include npm. Browse to application root. 
-npm install material-ui //delete .babelrc once installed 
-npm install -g webpack 
-npm install webpack 
-npm install babel-loader babel-core 
-npm install babel-preset-react 
-npm install style-loader 
-npm install css-loader
+Clone this repository into the project directory, then execute "composer install --no-dev" from command line.
+Create a .env file for Laravel in app root directory.
 
-Running these commands will put these packages in node_modules directory and allow webpack to run with current webpack.config.js. 
-Run webpack to from app dir to create new bundle.js if you need to.
+If you want to develop, run "npm install --only=dev" to install webpack, react, mui, etc.
+The React components for the front end are in the /resources/assets/js folder.
+webpack.config.js is all set to bundle those React components and put them where they need to be (/public/js).

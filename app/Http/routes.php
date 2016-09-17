@@ -16,7 +16,7 @@ Route::group(['middleware' => ['web']], function () {
 
     Route::get('/', function () {
         return
-            (Auth::check()) ? view('root_views.content') : view('root_views.slogan');
+            (Auth::check()) ? view('root_views.content') : view('root_views.landing');
     })->name('home');
 
     // Authentication routes...

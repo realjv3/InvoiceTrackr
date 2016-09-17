@@ -101,12 +101,6 @@ footer {
     margin-top: 12vh;
 }
 
-#footer_toolbar_group {
-    float: none;
-    text-align: center;
-    top: 15px;
-}
-
 /**
  * Rules for viewport's with widths < 510 px
  */

@@ -5,20 +5,20 @@
 
 import React from 'react';
 
-import FlatButton from 'material-ui/lib/flat-button';
-import IconButton from 'material-ui/lib/icon-button';
-import Dialog from 'material-ui/lib/dialog';
-import TextField from 'material-ui/lib/TextField';
-import SelectField from 'material-ui/lib/SelectField';
-import MenuItem from 'material-ui/lib/menus/menu-item.js';
-import Autocomplete from 'material-ui/lib/auto-complete';
-import DatePicker from 'material-ui/lib/date-picker/date-picker';
-import Paper from 'material-ui/lib/paper';
-import Snackbar from 'material-ui/lib/snackbar';
-import Card from 'material-ui/lib/card/card';
-import CardActions from 'material-ui/lib/card/card-actions';
-import CardHeader from 'material-ui/lib/card/card-header';
-import CardText from 'material-ui/lib/card/card-text';
+import FlatButton from 'material-ui/FlatButton';
+import IconButton from 'material-ui/IconButton';
+import Dialog from 'material-ui/Dialog';
+import TextField from 'material-ui/TextField';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import Autocomplete from 'material-ui/AutoComplete';
+import DatePicker from 'material-ui/DatePicker';
+import Paper from 'material-ui/Paper';
+import Snackbar from 'material-ui/Snackbar';
+import Card from 'material-ui/Card/Card.js';
+import CardActions from 'material-ui/Card/CardActions.js';
+import CardHeader from 'material-ui/Card/CardHeader.js';
+import CardText from 'material-ui/Card/CardText.js';
 
 import States from 'states.jsx';
 
@@ -306,7 +306,6 @@ var TrxEntry = React.createClass({
                     <MenuItem primaryText={cur_user.customer[i].company} innerDivStyle={{display: 'flex', marginBottom: '9px'}} >
                         <span className="cust_icons" >
                             <IconButton
-                                linkButton={true}
                                 className={cur_user.customer[i].id.toString()}
                                 iconClassName="fa fa-pencil"
                                 tooltip="Edit Customer"
@@ -314,7 +313,6 @@ var TrxEntry = React.createClass({
                                 onClick={this.showCustEntry}
                                 />
                             <IconButton
-                                linkButton={true}
                                 className={cur_user.customer[i].id.toString()}
                                 iconClassName="fa fa-trash-o"
                                 tooltip="Delete Customer"
@@ -361,6 +359,29 @@ var TrxEntry = React.createClass({
     showCustEntry: function(event) {
         this.refs.cust_entry.handleOpen(event.currentTarget.getAttribute('class'), true);
     },
+    doesCustExist: function(chosen) {
+        //var exists = false;
+        //var input = '';
+        //
+        //if (chosen typeof "string" chosen.target) {
+        //    if (chosen.target.value.length == 0) return;
+        //    input = chosen.target.value;
+        //} else
+        //    input = chosen;
+        //
+        //// check if customer is in database and get billables, else open cust_entry
+        //for(var i = 0; i < this.state.customers.length; i++) {
+        //    if(this.state.customers[i].text == input) {
+        //        exists = true;
+        //        break;
+        //    }
+        //}
+        //if(!exists) this.refs.cust_entry.handleOpen(input);
+        console.log(chosen);
+    },
+    componentDidMount: function() {
+        document.getElementById('customer').addEventListener('onblur', this.doesCustExist);
+    },
     render: function() {
         return (
             <section>
@@ -382,22 +403,11 @@ var TrxEntry = React.createClass({
                         floatingLabelFixed={true}
                         floatingLabelStyle={{color: '#03A9F4'}}
                         className="trx_entry_field"
+                        id="customer"
                         filter={function filter(searchText, key) { return key.toLowerCase().includes(searchText.toLowerCase()); }}
                         autoComplete="off"
                         listStyle={{width: 'auto', minWidth: '400px'}}
-                        onNewRequest={
-                            function(chosen) {
-                                // check if customer is in database and get billables, else open cust_entry
-                                var exists = false;
-                                for(var i = 0; i < this.state.customers.length; i++) {
-                                    if(this.state.customers[i].text == chosen) {
-                                        exists = true;
-                                        break;
-                                    }
-                                }
-                                if(!exists) this.refs.cust_entry.handleOpen(chosen);
-                            }.bind(this)
-                        }
+                        onNewRequest={this.doesCustExist}
                         />
                     <TextField
                         floatingLabelText="Qty"

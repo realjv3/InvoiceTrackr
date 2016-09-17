@@ -4,19 +4,24 @@
  * main.blade.php
  */
 
+require('styles.css');
+
 import React from 'react';
 
-import FlatButton from 'material-ui/lib/flat-button';
-import Dialog from 'material-ui/lib/dialog';
-import TextField from 'material-ui/lib/TextField';
-import Popover from 'material-ui/lib/popover/popover';
-import List from 'material-ui/lib/lists/list';
-import ListItem from 'material-ui/lib/lists/list-item';
-import Divider from 'material-ui/lib/divider';
-import AppBar from 'material-ui/lib/app-bar';
-import Toolbar from 'material-ui/lib/toolbar/toolbar';
-import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group';
-import ToolbarSeparator from 'material-ui/lib/toolbar/toolbar-separator';
+import FlatButton from 'material-ui/FlatButton';
+import Dialog from 'material-ui/Dialog';
+import TextField from 'material-ui/TextField';
+import Popover from 'material-ui/Popover';
+import List from 'material-ui/List/List.js';
+import ListItem from 'material-ui/List/ListItem';
+import Divider from 'material-ui/Divider';
+import AppBar from 'material-ui/AppBar/AppBar';
+import Toolbar from 'material-ui/Toolbar/Toolbar';
+import ToolbarGroup from 'material-ui/Toolbar/ToolbarGroup';
+import ToolbarSeparator from 'material-ui/Toolbar/ToolbarSeparator';
+
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 var RegisterForm = React.createClass({
 
@@ -200,6 +205,10 @@ var LoginMenu = React.createClass({
 });
 
 var NavBar = React.createClass({
+    childContextTypes: {muiTheme: React.PropTypes.object.isRequired},
+    getChildContext: function() {
+        return {muiTheme: getMuiTheme(baseTheme)};
+    },
     openRegForm: function() {
         this.refs.regform.setState({open: true});
     },
@@ -233,10 +242,14 @@ var NavBar = React.createClass({
 });
 
 var Footer = React.createClass({
+    childContextTypes: {muiTheme: React.PropTypes.object.isRequired},
+    getChildContext: function() {
+        return {muiTheme: getMuiTheme(baseTheme)};
+    },
     render: function() {
         return (
-            <Toolbar >
-                <ToolbarGroup id="footer_toolbar_group" style={{float: 'none'}}>
+            <Toolbar style={{display: 'flex', justifyContent: 'space-around', height: '10vh'}} >
+                <ToolbarGroup style={{display: 'block'}}>
                     <span><a href="http://github.com/realjv3" target="_blank">Created by John Verity</a></span>
                     <img src="https://www.dropbox.com/s/a9dssghwmtbfq8j/NoGodNoMasters_icon.png?dl=1" style={{width: '26px', position: 'relative',top: '6px', margin: '0 -10px 0 5px'}}/>
                     <ToolbarSeparator style={{float: 'none'}}/>

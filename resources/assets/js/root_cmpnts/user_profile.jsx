@@ -1,7 +1,6 @@
 /**
  * Global modules for all pages
  */
-require('styles.css');
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -18,16 +17,23 @@ ReactDOM.render(<Footer />, document.getElementById('footer'));
  * Here are components for updating user profiles
  */
 
-import FlatButton from 'material-ui/lib/flat-button';
-import Paper from 'material-ui/lib/paper';
-import TextField from 'material-ui/lib/TextField';
-import Snackbar from 'material-ui/lib/snackbar';
-import SaveIcon from 'material-ui/lib/svg-icons/content/save';
-import CancelIcon from 'material-ui/lib/svg-icons/navigation/cancel';
+import FlatButton from 'material-ui/FlatButton';
+import Paper from 'material-ui/Paper';
+import TextField from 'material-ui/TextField';
+import Snackbar from 'material-ui/Snackbar';
+import SaveIcon from 'material-ui/svg-icons/content/save';
+import CancelIcon from 'material-ui/svg-icons/navigation/cancel';
+
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 import States from 'states.jsx';
 
 var Profile = React.createClass({
+    childContextTypes: {muiTheme: React.PropTypes.object.isRequired},
+    getChildContext: function() {
+        return {muiTheme: getMuiTheme(baseTheme)};
+    },
     formfields: {
         company: '',
         first: '',
@@ -119,7 +125,7 @@ var Profile = React.createClass({
                             floatingLabelText="Email"
                             floatingLabelStyle={{color:'black'}}
                             className="profile_field"
-                            defaultdefaultValue={cur_user.email}
+                            defaultValue={cur_user.email}
                             name="email"
                             id="email"
                             errorText={this.state.formfields.email}
@@ -195,7 +201,7 @@ var Profile = React.createClass({
                         />
                     </fieldset>
                     <FlatButton secondary={true} label="Save" icon={<SaveIcon />} type="submit" />
-                    <FlatButton primary={true} label="Cancel" icon={<CancelIcon />} linkButton={true} href="/" />
+                    <FlatButton primary={true} label="Cancel" icon={<CancelIcon />} href="/" />
                 </form>
                 <Snackbar open={this.state.open} message={this.state.message} onRequestClose={this.handleClose} autoHideDuration={3000} />
             </Paper>

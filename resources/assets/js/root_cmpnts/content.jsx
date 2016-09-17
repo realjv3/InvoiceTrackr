@@ -1,8 +1,6 @@
 /**
  * Global modules for all pages
  */
-require('styles.css');
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -17,16 +15,23 @@ ReactDOM.render(<Footer />, document.getElementById('footer'));
  * Local modules for this page
  * Main content area that contains trx, invoicing and reporting modules
  */
-import FlatButton from 'material-ui/lib/flat-button';
-import Paper from 'material-ui/lib/paper';
-import Card from 'material-ui/lib/card/card';
-import CardHeader from 'material-ui/lib/card/card-header';
-import CardText from 'material-ui/lib/card/card-text';
-import CardActions from 'material-ui/lib/card/card-actions';
+import FlatButton from 'material-ui/FlatButton';
+import Paper from 'material-ui/Paper';
+import Card from 'material-ui/Card/Card.js';
+import CardHeader from 'material-ui/Card/CardHeader.js';
+import CardText from 'material-ui/Card/CardText.js';
+import CardActions from 'material-ui/Card/CardActions.js';
 
 import Trx from 'module_trx.jsx';
 
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
 var Main_area = React.createClass({
+    childContextTypes: {muiTheme: React.PropTypes.object.isRequired},
+    getChildContext: function() {
+        return {muiTheme: getMuiTheme(baseTheme)};
+    },
     render: function() {
         return (
             <Paper className="main_area">
@@ -74,3 +79,5 @@ var Main_area = React.createClass({
 });
 
 ReactDOM.render(<Main_area />, document.getElementById('content'));
+
+

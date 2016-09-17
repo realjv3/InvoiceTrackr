@@ -1,7 +1,6 @@
 /**
  * Global modules for all pages
  */
-require('styles.css');
 
 import React from 'react';
 import ReactDOM from 'react-dom';

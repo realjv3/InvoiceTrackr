@@ -3,8 +3,8 @@
  */
 import React from 'react';
 
-import MenuItem from 'material-ui/lib/menus/menu-item.js';
-import SelectField from 'material-ui/lib/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import SelectField from 'material-ui/SelectField';
 
 var States = React.createClass({
     getInitialState: function() {
