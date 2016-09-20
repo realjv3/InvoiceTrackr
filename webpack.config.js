@@ -13,7 +13,15 @@ module.exports = {
         loaders: [
             { test: /\.css$/, loader: 'style-loader!css-loader' }, // use ! to chain loaders
             { test: /\.png$/, loader: "url-loader?limit=100000&mimetype=image/png" },
-            { test: /\.jsx|.js$/, loader: "babel-loader", query: {presets:['react', 'es2015']} }
+            {
+                test: /\.jsx$/,
+                loader: "babel",
+                query: {
+                    cacheDirectory: true,
+                    presets: ['es2015', 'react'],
+                    plugins: ['transform-class-properties'] //fixes babel not compiling arrow functions and static properties
+                }
+            }
         ]
     },
     resolve: {

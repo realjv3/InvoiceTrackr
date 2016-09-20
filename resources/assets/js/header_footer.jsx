@@ -8,6 +8,10 @@ require('styles.css');
 
 import React from 'react';
 
+import 'whatwg-fetch';
+import ES6Promise from 'es6-promise';
+ES6Promise.polyfill();
+
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
@@ -23,28 +27,32 @@ import ToolbarSeparator from 'material-ui/Toolbar/ToolbarSeparator';
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-var RegisterForm = React.createClass({
+class RegisterForm extends React.Component
+{
 
-    getInitialState: function() {
-        return {
+    constructor(props) {
+        super(props);
+        this.state = {
             open: false,
             emailErr: '',
             passwordErr: '',
             password_conf_Err: ''
         };
-    },
-    handleOpen: function() {
+    }
+
+    handleOpen = () => {
         this.setState({open: true});
-    },
-    handleClose: function() {
+    }
+
+    handleClose = () => {
         this.setState({
             open: false,
             emailErr: '',
             passwordErr: '',
             password_conf_Err: ''
         });
-    },
-    handleSubmit: function(e) {
+    }
+    handleSubmit = (e) => {
         e.preventDefault();
         this.setState({
             emailErr: '',
@@ -82,8 +90,8 @@ var RegisterForm = React.createClass({
                         }.bind(this));
                 }
             }.bind(this));
-    },
-    render: function() {
+    }
+    render() {
 
         const actions= [
                 <FlatButton label='Cancel' primary={true} onClick={this.handleClose}/>,
@@ -107,37 +115,42 @@ var RegisterForm = React.createClass({
             </Dialog>
         );
     }
-});
+}
 
-var LoginMenu = React.createClass({
+class LoginMenu extends React.Component
+{
 
-    getInitialState: function() {
-        return {
+    constructor(props) {
+        super(props);
+        this.state =  {
             open: false,
             emailErr: '',
             passwordErr: ''
         };
-    },
-    handleOpen: function(event) {
+    }
+
+    handleOpen = (event) => {
         event.preventDefault();
         this.setState({open: true, anchorEl: event.currentTarget});
-    },
-    handleClose: function() {
+    }
+
+    handleClose = () => {
         this.setState({
             open: false,
             emailErr: '',
             passwordErr: ''
         });
-    },
-    handleSubmit: function(e) {
+    }
+
+    handleSubmit = (e) => {
         e.preventDefault();
         this.setState({
             emailErr: '',
             passwordErr: ''
         });
         var form = new FormData(document.querySelector('login-form'));
-        form.set('email', document.getElementById('lEmail').value);
-        form.set('password', document.getElementById('lPassword').value);
+        form.append('email', document.getElementById('lEmail').value);
+        form.append('password', document.getElementById('lPassword').value);
         fetch('/auth/login', {
             method: 'POST',
             body: form,
@@ -162,12 +175,14 @@ var LoginMenu = React.createClass({
             }.bind(this)).catch(function (errors) {
                 console.log(errors);
             });
-    },
-    handleRegOpen: function() {
+    }
+
+    handleRegOpen = () => {
         this.props.openRegForm();
         this.handleClose();
-    },
-    render: function() {
+    }
+
+    render() {
         return (
             <div>
                 <FlatButton label="Login" onClick={this.handleOpen} style={{ top: '8px'}}/>
@@ -202,20 +217,28 @@ var LoginMenu = React.createClass({
         );
 
     }
-});
+}
 
-var NavBar = React.createClass({
-    childContextTypes: {muiTheme: React.PropTypes.object.isRequired},
-    getChildContext: function() {
+class NavBar extends React.Component
+{
+    constructor(props) {
+        super(props);
+    }
+
+    static childContextTypes = {muiTheme: React.PropTypes.object.isRequired};
+    getChildContext = () => {
         return {muiTheme: getMuiTheme(baseTheme)};
-    },
-    openRegForm: function() {
+    }
+
+    openRegForm = () => {
         this.refs.regform.setState({open: true});
-    },
-    logout: function() {
+    }
+
+    logout = () => {
         window.location.href = '/auth/logout';
-    },
-    render: function() {
+    }
+
+    render() {
         var loginoutlink = '';
         if(!logged_in) {
             loginoutlink= React.createElement(
@@ -239,14 +262,20 @@ var NavBar = React.createClass({
             />
         );
     }
-});
+}
 
-var Footer = React.createClass({
-    childContextTypes: {muiTheme: React.PropTypes.object.isRequired},
-    getChildContext: function() {
+class Footer extends React.Component
+{
+    constructor(props) {
+        super(props);
+    }
+
+    static childContextTypes = {muiTheme: React.PropTypes.object.isRequired};
+    getChildContext = () => {
         return {muiTheme: getMuiTheme(baseTheme)};
-    },
-    render: function() {
+    }
+
+    render() {
         return (
             <Toolbar style={{display: 'flex', justifyContent: 'space-around', height: '10vh'}} >
                 <ToolbarGroup style={{display: 'block'}}>
@@ -259,6 +288,6 @@ var Footer = React.createClass({
             </Toolbar>
         );
     }
-});
+}
 
 export {NavBar, Footer}

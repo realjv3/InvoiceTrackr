@@ -5,6 +5,10 @@
 
 import React from 'react';
 
+import 'whatwg-fetch';
+import ES6Promise from 'es6-promise';
+ES6Promise.polyfill();
+
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import Dialog from 'material-ui/Dialog';
@@ -22,22 +26,24 @@ import CardText from 'material-ui/Card/CardText.js';
 
 import States from 'states.jsx';
 
-var CustomerEntry = React.createClass({
-    formfields: {
-        company: '',
-        first: '',
-        last: '',
-        email: '',
-        addr1: '',
-        addr2: '',
-        city: '',
-        state: '',
-        zip: '',
-        cell: '',
-        office: ''
-    },
-    getInitialState: function() {
-        return {
+class CustomerEntry extends React.Component
+{
+    constructor(props) {
+        super(props);
+        this.formfields = {
+            company: '',
+            first: '',
+            last: '',
+            email: '',
+            addr1: '',
+            addr2: '',
+            city: '',
+            state: '',
+            zip: '',
+            cell: '',
+            office: ''
+        }
+        this.state = {
             open: false,
             snackbarOpen: false,
             fields: JSON.parse(JSON.stringify(this.formfields)),
@@ -45,11 +51,13 @@ var CustomerEntry = React.createClass({
             message: '',
             edit: false
         };
-    },
-    removeErrors: function() {
-        this.setState({errors: this.formfields})
-    },
-    handleOpen: function(chosen, edit = false) {
+    }
+
+    removeErrors = () => {
+        this.setState({errors: JSON.parse(JSON.stringify(this.formfields))});
+    };
+
+    handleOpen = (chosen, edit = false) => {
         if (edit) { //if editing, chosen is an id, need to pre-fill form with chosen customer's data
             for (var i = 0; i < cur_user.customer.length; i++) {
                 if(cur_user.customer[i].id == chosen) {
@@ -80,17 +88,18 @@ var CustomerEntry = React.createClass({
             tmp.company = chosen;
             this.setState({open: true, fields: tmp, edit: edit});
         }
-    },
-    handleClose: function() {
+    };
+
+    handleClose = () => {
         this.removeErrors();
         this.setState({
             open: false,
             snackbarOpen: false,
-            fields: JSON.parse(JSON.stringify(this.formfields)),
-            errors: JSON.parse(JSON.stringify(this.formfields))
+            fields: JSON.parse(JSON.stringify(this.formfields))
         });
-    },
-    handleSave: function(event) {
+    };
+
+    handleSave = () => {
         this.removeErrors();
         var cust = new FormData();
         var fields = Object.keys(this.formfields);
@@ -121,8 +130,9 @@ var CustomerEntry = React.createClass({
                 }.bind(this));
             }
         }.bind(this));
-    },
-    render: function() {
+    };
+
+    render() {
         const actions = [
             <FlatButton
                 label="Save Customer"
@@ -152,7 +162,6 @@ var CustomerEntry = React.createClass({
                             id="company"
                             style={{width: 'initial'}}
                             defaultValue={this.state.fields.company}
-                            className="profile_field"
                             />
                         <TextField
                             floatingLabelText="First Name"
@@ -162,7 +171,6 @@ var CustomerEntry = React.createClass({
                             id="first"
                             style={{width: 'initial'}}
                             defaultValue={this.state.fields.first}
-                            className="profile_field"
                             />
                         <TextField
                             floatingLabelText="Last Name"
@@ -172,7 +180,6 @@ var CustomerEntry = React.createClass({
                             id="last"
                             style={{width: 'initial'}}
                             defaultValue={this.state.fields.last}
-                            className="profile_field"
                             />
                         <TextField
                             floatingLabelText="Email"
@@ -183,7 +190,6 @@ var CustomerEntry = React.createClass({
                             id="email"
                             style={{width: 'initial'}}
                             defaultValue={this.state.fields.email}
-                            className="profile_field"
                             />
                     </fieldset>
                     <fieldset>
@@ -196,7 +202,6 @@ var CustomerEntry = React.createClass({
                             style={{width: 'initial'}}
                             defaultValue={this.state.fields.addr1}
                             errorText={this.state.errors.addr1}
-                            className="profile_field"
                             /><br />
                         <TextField
                             style={{ width: '300px'}}
@@ -207,7 +212,6 @@ var CustomerEntry = React.createClass({
                             style={{width: 'initial'}}
                             defaultValue={this.state.fields.addr2}
                             errorText={this.state.errors.addr2}
-                            className="profile_field"
                             /><br />
                         <span style={{paddingTop: '30px', paddingBottom: '30px'}}>
                             <TextField
@@ -217,7 +221,6 @@ var CustomerEntry = React.createClass({
                                 style={{width: 'initial'}}
                                 defaultValue={this.state.fields.city}
                                 errorText={this.state.errors.city}
-                                className="profile_field"
                                 />
                             <States
                                 defaultValue={this.state.fields.state}
@@ -233,7 +236,6 @@ var CustomerEntry = React.createClass({
                                 style={{width: 'initial'}}
                                 defaultValue={this.state.fields.zip}
                                 errorText={this.state.errors.zip}
-                                className="profile_field"
                                 />
                         </span><br />
                         <TextField
@@ -243,7 +245,6 @@ var CustomerEntry = React.createClass({
                             style={{width: 'initial'}}
                             defaultValue={this.state.fields.cell}
                             errorText={this.state.errors.cell}
-                            className="profile_field"
                             />
                         <TextField
                             hintText="Office"
@@ -252,7 +253,6 @@ var CustomerEntry = React.createClass({
                             style={{width: 'initial'}}
                             defaultValue={this.state.fields.office}
                             errorText={this.state.errors.office}
-                            className="profile_field"
                             />
                     </fieldset>
                     <Snackbar open={this.state.snackbarOpen} message={this.state.message} onRequestClose={this.handleClose} autoHideDuration={3000} />
@@ -260,19 +260,158 @@ var CustomerEntry = React.createClass({
             </Dialog>
         );
     }
-});
+}
 
-var DeleteCustomerDialog = React.createClass({
-    getInitialState: function() {
-        return ({open: false});
-    },
-    handleOpen: function(id) {
+class BillableEntry extends React.Component
+{
+    constructor(props) {
+        super(props);
+        this.formfields = {company: '', type: '', description: ''};
+        this.state = {
+            open: false,
+            snackbarOpen: false,
+            fields: JSON.parse(JSON.stringify(this.formfields)),
+            errors: JSON.parse(JSON.stringify(this.formfields)),
+            message: '',
+            edit: false
+        };
+    }
+
+    removeErrors = () => {
+        this.setState({errors: JSON.parse(JSON.stringify(this.formfields))})
+    }
+
+    handleOpen = (chosen, edit = false) => {
+        if (edit) { //if editing, chosen is an id, need to pre-fill form with chosen customer's data
+            for (var i = 0; i < cur_user.customer.length; i++) {
+                if(cur_user.customer[i].id == chosen) {
+                    var customer = cur_user.customer[i];
+                    break;
+                }
+            }
+            this.setState({
+                open: true,
+                fields: {
+                    company: '',
+                    type: '',
+                    description: ''
+                },
+                edit: edit
+            });
+        } else {//else if creating, chosen is a string, company field gets default value of input
+            var tmp = this.state.fields;
+            tmp.company = chosen;
+            this.setState({open: true, fields: tmp, edit: edit});
+        }
+    }
+
+    handleClose = () => {
+        this.removeErrors();
+        this.setState({
+            open: false,
+            //snackbarOpen: false,
+            fields: JSON.parse(JSON.stringify(this.formfields))
+        });
+    }
+
+    handleSave = () => {
+        this.removeErrors();
+        var billable = new FormData();
+        var fields = Object.keys(this.formfields);
+        billable.set('id', this.state.fields.id);
+        for(var i = 0; i < fields.length; i++)
+            billable.set(fields[i], document.getElementById(fields[i]).value);
+        fetch('save_billable?edit=' + this.state.edit , {
+            method: 'post',
+            body: billable,
+            headers: {'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'},
+            credentials: 'same-origin'
+        }).then(function(response) {
+            if(response.ok) {   //if save went ok, show Snackbar, update global cur_user & update the cust. drop-down
+                response.json().then(
+                    //function(json) {
+                    //    cur_user = JSON.parse(json.cur_user);
+                    //    this.setState({message: json.message, snackbarOpen: true});
+                    //    this.props.updateCustomersDropDown();
+                    //}.bind(this)
+                );
+            } else {    //flash errors into view
+                //response.json().then(function(errors) {
+                //    var keys = Object.keys(errors);
+                //    var fields = {};
+                //    for(var i = 0; i < keys.length; i++)
+                //        fields[keys[i]] = errors[keys[i]];
+                //    this.setState({errors: fields});
+                //}.bind(this));
+            }
+        }.bind(this));
+    }
+
+    render() {
+        const actions = [
+            <FlatButton
+                label="Save Customer"
+                onTouchTap={this.handleSave}
+                />,
+            <FlatButton
+                label="Cancel"
+                onTouchTap={this.handleClose}
+                />
+        ];
+        let title = (this.state.edit) ? "Edit this customer's billable item." : "So this is a new billable item for this customer. Nice.";
+        return (
+            <Dialog
+                title={title}
+                actions={actions}
+                modal={true}
+                open={this.state.open}
+                bodyStyle={{overflow: 'auto'}}
+                >
+                <form id="billable_entry">
+                    <fieldset>
+                        <TextField
+                            floatingLabelText="Company"
+                            floatingLabelFixed={true}
+                            hintText="Company"
+                            errorText={this.state.errors.company}
+                            id="company"
+                            style={{width: 'initial'}}
+                            defaultValue={this.state.fields.company}
+                        />
+                        <TextField
+                            floatingLabelText="Description"
+                            hintText="Description"
+                            floatingLabelFixed={true}
+                            type="text"
+                            errorText={this.state.errors.description}
+                            id="description"
+                            style={{width: 'initial'}}
+                            defaultValue={this.state.fields.description}
+                        />
+                    </fieldset>
+                    <Snackbar open={this.state.snackbarOpen} message={this.state.message} onRequestClose={this.handleClose} autoHideDuration={3000} />
+                </form>
+            </Dialog>
+        );
+    }
+}
+
+class DeleteCustomerDialog extends React.Component
+{
+    constructor(props) {
+        super(props);
+        this.state = {open: false};
+    }
+
+    handleOpen = (id) => {
         this.setState({open: true, id: id});
-    },
-    handleClose: function() {
+    }
+
+    handleClose = () => {
         this.setState({open: false});
-    },
-    render: function() {
+    }
+
+    render() {
         const actions= [
             <FlatButton label="Cancel" primary={true} onTouchTap={this.handleClose} />,
             <FlatButton label="Continue" primary={true} className={this.state.id} onClick={this.props.deleteCustomer} />
@@ -290,13 +429,21 @@ var DeleteCustomerDialog = React.createClass({
             </Dialog>
         );
     }
-});
+};
 
-var TrxEntry = React.createClass({
-    getInitialState: function() {
-        return {customers: this.initCustomers(), snackbarOpen: false, message: '', showDelCustDialog: false};
-    },
-    initCustomers: function() {
+class TrxEntry extends React.Component
+{
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            customers: this.initCustomers(),
+            snackbarOpen: false, message: '',
+            showDelCustDialog: false,
+            disableBillables: true
+        };
+    }
+    initCustomers = () => {
         var customers = [];
         for(var i = 0; i < cur_user.customer.length; i++) {
             var customer = {
@@ -310,7 +457,7 @@ var TrxEntry = React.createClass({
                                 iconClassName="fa fa-pencil"
                                 tooltip="Edit Customer"
                                 href="#"
-                                onClick={this.showCustEntry}
+                                onClick={this.editCust}
                                 />
                             <IconButton
                                 className={cur_user.customer[i].id.toString()}
@@ -326,14 +473,14 @@ var TrxEntry = React.createClass({
             customers.push(customer);
         }
         return customers;
-    },
-    updateCustomers: function() {
+    }
+    updateCustomers = () => {
         this.setState({customers: this.initCustomers()});
-    },
-    handleClose: function() {
+    }
+    handleClose = () => {
         this.setState({snackbarOpen: false});
-    },
-    deleteCustomer: function(event) {
+    }
+    deleteCustomer = (event) => {
         this.refs.del_cust_dialog.handleClose();
         var body = new FormData();
         body.append('cust_id', event.currentTarget.getAttribute('class'));
@@ -352,45 +499,77 @@ var TrxEntry = React.createClass({
                         this.updateCustomers();
                     }.bind(this));
             }.bind(this));
-    },
-    showDelCustDialog: function(event) {
+    }
+    showDelCustDialog = (event) => {
         this.refs.del_cust_dialog.handleOpen(event.currentTarget.getAttribute('class'));
-    },
-    showCustEntry: function(event) {
+    }
+    editCust = (event) => {
         this.refs.cust_entry.handleOpen(event.currentTarget.getAttribute('class'), true);
-    },
-    doesCustExist: function(chosen) {
-        var exists = false;
-        var input = '';
-        //Autocomplete selection calls this function with cust object when seleting from drop-down,
-        // need to return b/c customer obviously exists since customer was selected
-        if(chosen.custId) return;
-        //select, press enter or onBlur of cust field checks if cust exists
-        if (chosen instanceof FocusEvent) {
+    }
+    /**
+     * Auto-complete selection/onBlur calls this function with cust object when selecting from drop-down
+     * @param object/string chosen - customer/FocusEvent object or input string
+     * @return boolean true if customer exists
+     * @return boolean false if customer doesn't exist & opens CustomerEntry dialog
+     */
+    doesCustExist = (chosen) => {
+
+        if (chosen == '') return false;
+
+        let exists = false;
+        let input = '';
+        this.setState({disableBillables: true});
+
+        // Get input customer
+        if (chosen.custId) exists = true;  // selecting from customer drop-down
+        if (chosen instanceof FocusEvent) { // onBlur of customer field
             if (chosen.target.value.length == 0 || chosen.relatedTarget.nodeName == 'SPAN')
-                return;
+                return false;
             input = chosen.target.value;
-        } else
+        } else  // pressing enter in customer field
             input = chosen;
 
-        // check if customer is in database and get billables, else open cust_entry
-        for(var i = 0; i < this.state.customers.length; i++) {
-            if(this.state.customers[i].text == input) {
+        // check if customer is in database and get their billables, else open CustomerEntry dialog
+        for (var i = 0; i < this.state.customers.length; i++)
+            if (this.state.customers[i].text == input) {
                 exists = true;
                 break;
             }
+        if (exists) {
+            let custId = this.state.customers[i - 1].custId;
+            this.setState({disableBillables: false});
+            this.getBillables(custId);
+            return true;
+        } else {
+            this.refs.cust_entry.handleOpen(input);
+            return false;
         }
-        if(!exists) this.refs.cust_entry.handleOpen(input);
-    },
+    }
+    getBillables = (custId) => {
+        fetch('get_billables?id=' + custId , {
+            method: 'get',
+            headers: {'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'},
+            credentials: 'same-origin'
+        }).then(
+            (response) => {return response.json(); }
+        ).then(
+            (json) => { console.log(json); }
+        );
+    }
+    doesBillableExist = (chosen) => {
+        console.log(chosen);
+        this.refs.billables_entry.handleOpen();
+    }
     // AutoComplete not emitting onBlur, see git,therefore setting listener after render, old school
     // https://github.com/callemall/material-ui/issues/2294 says onBlur is fixed, but it's not
-    componentDidMount: function() {
+    componentDidMount = () => {
         document.getElementById('customer').addEventListener('blur', this.doesCustExist);
-    },
-    render: function() {
+    }
+    render() {
         return (
             <section>
                 <CustomerEntry ref="cust_entry" updateCustomersDropDown={this.updateCustomers} />
+                <BillableEntry ref="billables_entry" updateBillablesDropDown={this.updateCustomers} />
                 <DeleteCustomerDialog ref="del_cust_dialog" showDelCustDialog={this.showDelCustDialog} deleteCustomer={this.deleteCustomer} />
                 <form id="trx_form" className="trx_form" ref="trx_form" style={{flexWrap: 'wrap'}}>
                     <DatePicker
@@ -399,8 +578,8 @@ var TrxEntry = React.createClass({
                         floatingLabelFixed={true}
                         floatingLabelStyle={{color: '#03A9F4'}}
                         className="trx_entry_field"
-                        style={{width:'150px'}}
-                        />
+                        textFieldStyle={{width:'90px', marginRight: '10px'}}
+                    />
                     <Autocomplete
                         hintText="Customer"
                         dataSource= {this.state.customers}
@@ -409,11 +588,11 @@ var TrxEntry = React.createClass({
                         floatingLabelStyle={{color: '#03A9F4'}}
                         className="trx_entry_field"
                         id="customer"
-                        filter={function filter(searchText, key) { return key.toLowerCase().includes(searchText.toLowerCase()); }}
+                        filter={(searchText, key) => { return (key.toLowerCase().indexOf(searchText.toLowerCase()) >= 0); }}
                         autoComplete="off"
                         listStyle={{width: 'auto', minWidth: '400px'}}
                         onNewRequest={this.doesCustExist}
-                        />
+                    />
                     <TextField
                         floatingLabelText="Qty"
                         floatingLabelFixed={true}
@@ -423,7 +602,7 @@ var TrxEntry = React.createClass({
                         min="0"
                         style={{width:'50px'}}
                         className="trx_entry_field"
-                        />
+                    />
                     <Autocomplete
                         hintText="Billable"
                         dataSource={['1', '2']}
@@ -431,14 +610,10 @@ var TrxEntry = React.createClass({
                         floatingLabelFixed={true}
                         floatingLabelStyle={{color: '#03A9F4'}}
                         className="trx_entry_field"
-                        filter={function filter(searchText, key) { return key.toLowerCase().includes(searchText.toLowerCase()); }}
-                        onNewRequest={
-                            function(chosen, index) {
-                                console.log(chosen);
-                                console.log(index);
-                            }
-                        }
-                        />
+                        filter={(searchText, key) => { return (key.toLowerCase().indexOf(searchText.toLowerCase()) >= 0); }}
+                        onNewRequest={this.doesBillableExist}
+                        disabled={this.state.disableBillables}
+                    />
                     <TextField
                         floatingLabelText="Amount"
                         floatingLabelFixed={true}
@@ -450,18 +625,23 @@ var TrxEntry = React.createClass({
                         value={"$ 0.00"}
                         disabled={true}
                         className="trx_entry_field"
-                        />
+                    />
                     <FlatButton label="Save Transaction" style={{color: 'green'}} />
-                    <FlatButton label="Clear" onClick={function() {document.forms['trx_form'].reset()}} style={{color: 'red'}} />
+                    <FlatButton label="Clear" onClick={() => {document.forms['trx_form'].reset()}} style={{color: 'red'}} />
                     <Snackbar open={this.state.snackbarOpen} message={this.state.message} onRequestClose={this.handleClose} autoHideDuration={3000} />
                 </form>
             </section>
         );
     }
-});
+}
 
-var Trx = React.createClass({
-    render: function() {
+class Trx extends React.Component
+{
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
         return (
             <Card className="cards" initiallyExpanded={true}>
                 <CardHeader
@@ -482,6 +662,6 @@ var Trx = React.createClass({
             </Card>
         );
     }
-});
+}
 
 export {Trx as default};

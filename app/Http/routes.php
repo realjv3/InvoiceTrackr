@@ -49,4 +49,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('delete_customer', 'CustomerController@delete');
     // Customer read
     Route::get('read_customer', 'CustomerController@read');
+
+    // Get billables for a customer
+    Route::get('get_billables', 'BillablesController@get');
 });

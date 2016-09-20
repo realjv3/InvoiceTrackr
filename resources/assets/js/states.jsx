@@ -6,16 +6,20 @@ import React from 'react';
 import MenuItem from 'material-ui/MenuItem';
 import SelectField from 'material-ui/SelectField';
 
-var States = React.createClass({
-    getInitialState: function() {
-        return ({value: this.props.defaultValue, style: this.props.style});
-    },
-    handleChange: function(event, index, value) {
+class States extends React.Component
+{
+    constructor(props) {
+        super(props);
+        this.state = {value: this.props.defaultValue, style: this.props.style};
+    }
+
+    handleChange = (event, index, value) => {
         //the SelectField component renders wierdly compared to it's surrounding TextInput components, hence having to dynamically change css
         var bottom = (this.props.id == 'user_state') ? '0px' : '9px';
         this.setState({value, style: {bottom: bottom, width: '50px', paddingRight: '10px'}});
-    },
-    render: function() {
+    }
+
+    render() {
         return (
             <SelectField
                 value={this.state.value}
@@ -25,7 +29,7 @@ var States = React.createClass({
                 style={this.state.style}
                 id="state"
                 errorText={this.props.error}
-                >
+            >
                 <MenuItem value='AL' primaryText='AL' />
                 <MenuItem value='AK' primaryText='AK' />
                 <MenuItem value='AZ' primaryText="AZ" />
@@ -79,6 +83,6 @@ var States = React.createClass({
             </SelectField>
         );
     }
-});
+}
 
 export {States as default };

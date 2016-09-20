@@ -5,6 +5,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import 'whatwg-fetch';
+import ES6Promise from 'es6-promise';
+ES6Promise.polyfill();
+
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
@@ -29,12 +33,9 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 import States from 'states.jsx';
 
-var Profile = React.createClass({
-    childContextTypes: {muiTheme: React.PropTypes.object.isRequired},
-    getChildContext: function() {
-        return {muiTheme: getMuiTheme(baseTheme)};
-    },
-    formfields: {
+class Profile extends React.Component
+{
+    formfields = {
         company: '',
         first: '',
         last: '',
@@ -46,18 +47,27 @@ var Profile = React.createClass({
         zip: '',
         cell: '',
         office: ''
-    },
-    getInitialState: function() {
-        return({
+    };
+
+    constructor(props) {
+        super(props);
+        this.state = {
             formfields: this.formfields,
             message: '',
             open: false
-        });
-    },
-    handleClose: function() {
+        };
+    }
+
+    static childContextTypes = {muiTheme: React.PropTypes.object.isRequired};
+    getChildContext = () => {
+        return {muiTheme: getMuiTheme(baseTheme)};
+    }
+
+    handleClose = () => {
         this.setState({open: false});
-    },
-    handleSave: function(e) {
+    }
+
+    handleSave = (e) => {
         e.preventDefault();
         var form = new FormData(document.getElementById('profile-form'));
         var fields = Object.keys(this.formfields);
@@ -84,8 +94,9 @@ var Profile = React.createClass({
                 }.bind(this));
             }
         }.bind(this));
-    },
-    render: function() {
+    }
+
+    render() {
         return (
             <Paper id="profile" style={{position: 'relative', marginLeft: 'auto', marginRight: 'auto', maxWidth: '74vw', marginTop: '50px', padding: '50px', backgroundColor: '#F7FAF5'}}>
                 <form id="profile-form" onSubmit={this.handleSave}>
@@ -207,7 +218,7 @@ var Profile = React.createClass({
             </Paper>
         );
     }
-});
+}
 
 export {Profile as default };
 
