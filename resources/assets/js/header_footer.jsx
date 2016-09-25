@@ -24,8 +24,9 @@ import Toolbar from 'material-ui/Toolbar/Toolbar';
 import ToolbarGroup from 'material-ui/Toolbar/ToolbarGroup';
 import ToolbarSeparator from 'material-ui/Toolbar/ToolbarSeparator';
 
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider.js';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import {indigo100} from 'material-ui/styles/colors.js';
 
 class RegisterForm extends React.Component
 {
@@ -52,6 +53,7 @@ class RegisterForm extends React.Component
             password_conf_Err: ''
         });
     }
+
     handleSubmit = (e) => {
         e.preventDefault();
         this.setState({
@@ -91,6 +93,7 @@ class RegisterForm extends React.Component
                 }
             }.bind(this));
     }
+
     render() {
 
         const actions= [
@@ -108,9 +111,9 @@ class RegisterForm extends React.Component
                 contentStyle={style}
                 >
                 <form id='reg-form'>
-                    <TextField id="rEmail" floatingLabelText="Email:" floatingLabelFixed={true} type="email" errorText={this.state.emailErr} /><br/>
-                    <TextField id="rPassword" floatingLabelText="Password:" floatingLabelFixed={true} type="password" errorText={this.state.passwordErr} /><br/>
-                    <TextField id="rConfPassword" floatingLabelText="Confirm Password:" floatingLabelFixed={true} errorText={this.state.password_confErr} type="password"/>
+                    <TextField id="rEmail" floatingLabelText="Email" type="email" errorText={this.state.emailErr} /><br/>
+                    <TextField id="rPassword" floatingLabelText="Password" type="password" errorText={this.state.passwordErr} /><br/>
+                    <TextField id="rConfPassword" floatingLabelText="Confirm Password" errorText={this.state.password_confErr} type="password"/>
                 </form>
             </Dialog>
         );
@@ -227,7 +230,12 @@ class NavBar extends React.Component
 
     static childContextTypes = {muiTheme: React.PropTypes.object.isRequired};
     getChildContext = () => {
-        return {muiTheme: getMuiTheme(baseTheme)};
+        return {
+            muiTheme: getMuiTheme({
+                appBar: {color: indigo100},
+                textField: {hintColor: "rgba(0, 0, 0, 0.67)", disabledTextColor: "rgba(0, 0, 0, 0.4)"}
+            })
+        };
     }
 
     openRegForm = () => {
@@ -258,7 +266,6 @@ class NavBar extends React.Component
                 title={<a href='/'>InvoiceTrackr</a>}
                 iconElementRight={loginoutlink}
                 showMenuIconButton={false}
-                style={{background: '#BBDEFB'}}
             />
         );
     }
@@ -272,7 +279,7 @@ class Footer extends React.Component
 
     static childContextTypes = {muiTheme: React.PropTypes.object.isRequired};
     getChildContext = () => {
-        return {muiTheme: getMuiTheme(baseTheme)};
+        return {muiTheme: getMuiTheme({appBar: {color: '#3F51B5'}, textField: {hintColor: '#C5CAE9'}})};
     }
 
     render() {

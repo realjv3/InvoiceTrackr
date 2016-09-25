@@ -15,7 +15,7 @@ import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import Autocomplete from 'material-ui/AutoComplete';
+import AutoComplete from 'material-ui/AutoComplete';
 import DatePicker from 'material-ui/DatePicker';
 import Paper from 'material-ui/Paper';
 import Snackbar from 'material-ui/Snackbar';
@@ -30,6 +30,7 @@ class CustomerEntry extends React.Component
 {
     constructor(props) {
         super(props);
+        this.updateCustomersDropDown = React.PropTypes.func.isRequired;
         this.formfields = {
             company: '',
             first: '',
@@ -111,14 +112,20 @@ class CustomerEntry extends React.Component
             body: cust,
             headers: {'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'},
             credentials: 'same-origin'
-        }).then(function(response) {
+        }).then((response) => {
             if(response.ok) {   //if save went ok, show Snackbar, update global cur_user & update the cust. drop-down
                 response.json().then(
-                    function(json) {
+                    (json) => {
                         cur_user = JSON.parse(json.cur_user);
+                        for(var i = 0; i < cur_user.customer.length; i++) {
+                            if(cur_user.customer[i].company == this.state.fields.company) {
+                                cur_user.customer[i].selected = true;
+                                break;
+                            }
+                        }
                         this.setState({message: json.message, snackbarOpen: true});
                         this.props.updateCustomersDropDown();
-                    }.bind(this)
+                    }
                 );
             } else {    //flash errors into view
                 response.json().then(function(errors) {
@@ -129,7 +136,7 @@ class CustomerEntry extends React.Component
                     this.setState({errors: fields});
                 }.bind(this));
             }
-        }.bind(this));
+        });
     };
 
     render() {
@@ -137,12 +144,14 @@ class CustomerEntry extends React.Component
             <FlatButton
                 label="Save Customer"
                 onTouchTap={this.handleSave}
-                />,
+                style={{color: 'green'}}
+            />,
             <FlatButton
                 label="Cancel"
                 onTouchTap={this.handleClose}
-                />
-        ];
+                style={{color: 'red'}}
+            />
+        ], style = {width: 'initial', marginRight: '50px'};
         var title = (this.state.edit) ? "Edit this customer." : "So this is a new customer. Nice.";
         return (
             <Dialog
@@ -156,101 +165,92 @@ class CustomerEntry extends React.Component
                     <fieldset>
                         <TextField
                             floatingLabelText="Company"
-                            floatingLabelFixed={true}
-                            hintText="Company"
                             errorText={this.state.errors.company}
                             id="company"
-                            style={{width: 'initial'}}
+                            className="profile_field"
+                            style={style}
                             defaultValue={this.state.fields.company}
-                            />
+                        />
                         <TextField
                             floatingLabelText="First Name"
-                            floatingLabelFixed={true}
-                            hintText="First Name"
                             errorText={this.state.errors.first}
                             id="first"
-                            style={{width: 'initial'}}
+                            className="profile_field"
+                            style={style}
                             defaultValue={this.state.fields.first}
-                            />
+                        />
                         <TextField
                             floatingLabelText="Last Name"
-                            hintText="Last Name"
-                            floatingLabelFixed={true}
                             errorText={this.state.errors.last}
                             id="last"
-                            style={{width: 'initial'}}
+                            className="profile_field"
+                            style={style}
                             defaultValue={this.state.fields.last}
-                            />
+                        />
                         <TextField
                             floatingLabelText="Email"
-                            hintText="Email"
-                            floatingLabelFixed={true}
                             type="email"
                             errorText={this.state.errors.email}
                             id="email"
-                            style={{width: 'initial'}}
+                            className="profile_field"
+                            style={style}
                             defaultValue={this.state.fields.email}
-                            />
+                        />
                     </fieldset>
                     <fieldset>
                         <TextField
                             style={{ width: '300px'}}
-                            hintText="Address1"
                             floatingLabelText="Address1"
                             hintText="Address1"
                             id="addr1"
-                            style={{width: 'initial'}}
+                            style={style}
                             defaultValue={this.state.fields.addr1}
                             errorText={this.state.errors.addr1}
                             /><br />
                         <TextField
                             style={{ width: '300px'}}
-                            hintText="Address2"
                             floatingLabelText="Address2"
                             hintText="Address2"
                             id="addr2"
-                            style={{width: 'initial'}}
+                            style={style}
                             defaultValue={this.state.fields.addr2}
                             errorText={this.state.errors.addr2}
                             /><br />
                         <span style={{paddingTop: '30px', paddingBottom: '30px'}}>
                             <TextField
                                 floatingLabelText="City"
-                                hintText="City"
                                 id="city"
-                                style={{width: 'initial'}}
+                                className="profile_field"
+                                style={style}
                                 defaultValue={this.state.fields.city}
                                 errorText={this.state.errors.city}
-                                />
+                            />
                             <States
                                 defaultValue={this.state.fields.state}
                                 error={this.state.errors.state}
                                 className="profile_field"
-                                style={{top: '31px', width: '50px', paddingRight: '10px'}}
-                                />
+                                style={{top: '17px', width: '50px', paddingRight: '10px'}}
+                            />
                             <TextField
-                                hintText="Zip"
                                 floatingLabelText="Zip"
                                 className="profile_field"
                                 id="zip"
-                                style={{width: 'initial'}}
+                                style={style}
                                 defaultValue={this.state.fields.zip}
                                 errorText={this.state.errors.zip}
                                 />
                         </span><br />
                         <TextField
-                            hintText="Cell"
                             floatingLabelText="Cell"
                             id="cell"
-                            style={{width: 'initial'}}
+                            style={style}
                             defaultValue={this.state.fields.cell}
                             errorText={this.state.errors.cell}
                             />
                         <TextField
-                            hintText="Office"
                             floatingLabelText="Office"
                             id="office"
-                            style={{width: 'initial'}}
+                            style={style}
                             defaultValue={this.state.fields.office}
                             errorText={this.state.errors.office}
                             />
@@ -266,7 +266,8 @@ class BillableEntry extends React.Component
 {
     constructor(props) {
         super(props);
-        this.formfields = {company: '', type: '', description: ''};
+        this.formfields = {id: '', custid: '', customer: '', descr: '', type: '', unit: '', price: ''};
+        this.updateBillablesDropDown = React.PropTypes.func.isRequired;
         this.state = {
             open: false,
             snackbarOpen: false,
@@ -282,83 +283,97 @@ class BillableEntry extends React.Component
     }
 
     handleOpen = (chosen, edit = false) => {
+        //find out which customer is selected
+        for(var i = 0; i < cur_user.customer.length; i++)
+            if(cur_user.customer[i].selected) break;
+        var customer = cur_user.customer[i];
+
         if (edit) { //if editing, chosen is an id, need to pre-fill form with chosen customer's data
-            for (var i = 0; i < cur_user.customer.length; i++) {
-                if(cur_user.customer[i].id == chosen) {
-                    var customer = cur_user.customer[i];
+            for(i = 0; i < customer.billable.length; i++)
+                if(customer.billable[i].id == chosen) {
+                    let billbl = customer.billable[i], tmp = {};
+                    tmp.customer= customer.company;
+                    tmp.id = billbl.id;
+                    tmp.custid = customer.id;
+                    tmp.descr = billbl.descr;
+                    tmp.type = billbl.type;
+                    tmp.unit = billbl.unit;
+                    tmp.price = billbl.price;
+                    this.setState({open: true, fields: tmp, edit: edit, snackbarOpen: false});
                     break;
                 }
-            }
-            this.setState({
-                open: true,
-                fields: {
-                    company: '',
-                    type: '',
-                    description: ''
-                },
-                edit: edit
-            });
-        } else {//else if creating, chosen is a string, company field gets default value of input
-            var tmp = this.state.fields;
-            tmp.company = chosen;
-            this.setState({open: true, fields: tmp, edit: edit});
-        }
-    }
 
-    handleClose = () => {
-        this.removeErrors();
-        this.setState({
-            open: false,
-            //snackbarOpen: false,
-            fields: JSON.parse(JSON.stringify(this.formfields))
-        });
+        } else {//else if creating, chosen is a string, customer & descr get default value
+            let tmp = JSON.parse(JSON.stringify(this.state.fields));
+            tmp.custid= customer.id;
+            tmp.customer= customer.company;
+            tmp.descr = chosen;
+            this.setState({open: true, fields: tmp, edit: edit, snackbarOpen: false});
+        }
     }
 
     handleSave = () => {
         this.removeErrors();
         var billable = new FormData();
         var fields = Object.keys(this.formfields);
-        billable.set('id', this.state.fields.id);
-        for(var i = 0; i < fields.length; i++)
+        for(var i = 3; i < fields.length; i++)  //starting at 1 b/c don't want to include 'customer' field in FormData
             billable.set(fields[i], document.getElementById(fields[i]).value);
+        billable.set('id', this.state.fields.id);
+        billable.set('custid', this.state.fields.custid);
         fetch('save_billable?edit=' + this.state.edit , {
             method: 'post',
             body: billable,
             headers: {'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'},
             credentials: 'same-origin'
-        }).then(function(response) {
+        }).then((response) => {
             if(response.ok) {   //if save went ok, show Snackbar, update global cur_user & update the cust. drop-down
                 response.json().then(
-                    //function(json) {
-                    //    cur_user = JSON.parse(json.cur_user);
-                    //    this.setState({message: json.message, snackbarOpen: true});
-                    //    this.props.updateCustomersDropDown();
-                    //}.bind(this)
+                    (json) => {
+                        for(var i = 0; i < cur_user.customer.length; i++) {
+                            if(cur_user.customer[i].selected) break;
+                        }
+                        cur_user = JSON.parse(json.cur_user);
+                        cur_user.customer[i].selected = true;
+                        this.setState({message: json.message, snackbarOpen: true});
+                        this.props.updateBillablesDropDown();
+                    }
                 );
             } else {    //flash errors into view
-                //response.json().then(function(errors) {
-                //    var keys = Object.keys(errors);
-                //    var fields = {};
-                //    for(var i = 0; i < keys.length; i++)
-                //        fields[keys[i]] = errors[keys[i]];
-                //    this.setState({errors: fields});
-                //}.bind(this));
+                response.json().then((errors) => {
+                    var keys = Object.keys(errors);
+                    var fields = {};
+                    for(var i = 0; i < keys.length; i++)
+                        fields[keys[i]] = errors[keys[i]];
+                    this.setState({errors: fields});
+                });
             }
-        }.bind(this));
+        });
+    }
+
+    handleClose = () => {
+        this.removeErrors();
+        this.setState({
+            open: false,
+            snackbarOpen: false,
+            fields: JSON.parse(JSON.stringify(this.formfields))
+        });
     }
 
     render() {
+        let title = (this.state.edit) ? "Edit this customer's billable item." : "New billable item. Love it.";
+        var style = {width: '115px', marginRight: '30px', display: 'inline-block'};
         const actions = [
             <FlatButton
-                label="Save Customer"
+                label="Save Billable"
                 onTouchTap={this.handleSave}
-                />,
+                style={{color: 'green'}}
+            />,
             <FlatButton
                 label="Cancel"
                 onTouchTap={this.handleClose}
-                />
+                style={{color: 'red'}}
+            />
         ];
-        let title = (this.state.edit) ? "Edit this customer's billable item." : "So this is a new billable item for this customer. Nice.";
         return (
             <Dialog
                 title={title}
@@ -366,28 +381,64 @@ class BillableEntry extends React.Component
                 modal={true}
                 open={this.state.open}
                 bodyStyle={{overflow: 'auto'}}
-                >
+            >
                 <form id="billable_entry">
                     <fieldset>
                         <TextField
-                            floatingLabelText="Company"
-                            floatingLabelFixed={true}
-                            hintText="Company"
-                            errorText={this.state.errors.company}
-                            id="company"
-                            style={{width: 'initial'}}
-                            defaultValue={this.state.fields.company}
+                            floatingLabelText="Customer"
+                            errorText={this.state.errors.customer}
+                            id="customer"
+                            style={{marginRight: '30px', display: 'inline-block'}}
+                            defaultValue={this.state.fields.customer}
+                            disabled={true}
                         />
                         <TextField
                             floatingLabelText="Description"
-                            hintText="Description"
+                            hintText="What are you selling them?"
                             floatingLabelFixed={true}
                             type="text"
-                            errorText={this.state.errors.description}
-                            id="description"
-                            style={{width: 'initial'}}
-                            defaultValue={this.state.fields.description}
+                            errorText={this.state.errors.descr}
+                            id="descr"
+                            defaultValue={this.state.fields.descr}
+                            errorText={this.state.errors.descr}
+                            style={{display: 'inline-block'}}
                         />
+                        <div style={{display: 'flex'}}>
+                            <AutoComplete
+                                dataSource= {[{text: 'Service', value: 'service'}, {text: 'Product', value: 'product'}]}
+                                floatingLabelText="Type"
+                                hintText="product or service"
+                                id="type"
+                                searchText={this.state.fields.type}
+                                filter={(searchText, key) => { return (key.toLowerCase().indexOf(searchText.toLowerCase()) >= 0); }}
+                                textFieldStyle={style}
+                                listStyle={style}
+                                style={style}
+                                openOnFocus={true}
+                                errorText={this.state.errors.type}
+                            />
+                            <TextField
+                                floatingLabelText="Unit"
+                                hintText="hourly, pieces, etc."
+                                type="text"
+                                errorText={this.state.errors.unit}
+                                id="unit"
+                                defaultValue={this.state.fields.unit}
+                                style={style}
+                            />
+                            <TextField
+                                floatingLabelText="Price"
+                                hintText="Price per unit"
+                                type="number"
+                                min="0"
+                                step="any"
+                                errorText={this.state.errors.price}
+                                id="price"
+                                defaultValue={this.state.fields.price}
+                                style={style}
+
+                            />
+                        </div>
                     </fieldset>
                     <Snackbar open={this.state.snackbarOpen} message={this.state.message} onRequestClose={this.handleClose} autoHideDuration={3000} />
                 </form>
@@ -402,19 +453,16 @@ class DeleteCustomerDialog extends React.Component
         super(props);
         this.state = {open: false};
     }
-
     handleOpen = (id) => {
         this.setState({open: true, id: id});
     }
-
     handleClose = () => {
         this.setState({open: false});
     }
-
     render() {
         const actions= [
-            <FlatButton label="Cancel" primary={true} onTouchTap={this.handleClose} />,
-            <FlatButton label="Continue" primary={true} className={this.state.id} onClick={this.props.deleteCustomer} />
+            <FlatButton label="Cancel" primary={true} onTouchTap={this.handleClose} style={{color: 'red'}}/>,
+            <FlatButton label="Continue" primary={true} className={this.state.id} onClick={this.props.deleteCustomer} style={{color: 'green'}}/>
         ];
 
         return (
@@ -429,15 +477,47 @@ class DeleteCustomerDialog extends React.Component
             </Dialog>
         );
     }
-};
+}
+
+class DeleteBillablesDialog extends React.Component
+{
+    constructor(props) {
+        super(props);
+        this.state = {open: false};
+    }
+    handleOpen = (id) => {
+        this.setState({open: true, id: id});
+    }
+    handleClose = () => {
+        this.setState({open: false});
+    }
+    render() {
+        const actions= [
+            <FlatButton label="Cancel" primary={true} onTouchTap={this.handleClose} style={{color: 'red'}}/>,
+            <FlatButton label="Continue" primary={true} className={this.state.id} onClick={this.props.deleteBillable} style={{color: 'green'}}/>
+        ];
+
+        return (
+            <Dialog
+                title="Are you sure you want to do this?"
+                actions={actions}
+                modal={true}
+                open={this.state.open}
+                onRequest={this.handleClose}
+                >
+                Do you really want to permanently delete this billable item and all of the related transactions?
+            </Dialog>
+        );
+    }
+}
 
 class TrxEntry extends React.Component
 {
-
     constructor(props) {
         super(props);
         this.state = {
             customers: this.initCustomers(),
+            billables: [],
             snackbarOpen: false, message: '',
             showDelCustDialog: false,
             disableBillables: true
@@ -447,7 +527,6 @@ class TrxEntry extends React.Component
         var customers = [];
         for(var i = 0; i < cur_user.customer.length; i++) {
             var customer = {
-                custId: cur_user.customer[i].id,
                 text: cur_user.customer[i].company,
                 value: (
                     <MenuItem primaryText={cur_user.customer[i].company} innerDivStyle={{display: 'flex', marginBottom: '9px'}} >
@@ -458,14 +537,14 @@ class TrxEntry extends React.Component
                                 tooltip="Edit Customer"
                                 href="#"
                                 onClick={this.editCust}
-                                />
+                            />
                             <IconButton
                                 className={cur_user.customer[i].id.toString()}
                                 iconClassName="fa fa-trash-o"
                                 tooltip="Delete Customer"
                                 href="#"
                                 onClick={this.showDelCustDialog}
-                                />
+                            />
                         </span>
                     </MenuItem>
                 )
@@ -477,6 +556,42 @@ class TrxEntry extends React.Component
     updateCustomers = () => {
         this.setState({customers: this.initCustomers()});
     }
+    updateBillables = () => {
+        var billables = [];
+        for(var i = 0; i < cur_user.customer.length; i++) {
+            if(cur_user.customer[i].selected) {
+                if(!cur_user.customer[i].billable)
+                    return;
+                billables = cur_user.customer[i].billable.map((billable) => {
+                    return {
+                        text: billable.descr,
+                        value: (
+                            <MenuItem primaryText={billable.descr} innerDivStyle={{display: 'flex', marginBottom: '9px'}} >
+                                <span className="cust_icons" >
+                                    <IconButton
+                                        className={billable.id.toString()}
+                                        iconClassName="fa fa-pencil"
+                                        tooltip="Edit Billable"
+                                        href="#"
+                                        onClick={this.editBillable}
+                                    />
+                                    <IconButton
+                                        className={billable.id.toString()}
+                                        iconClassName="fa fa-trash-o"
+                                        tooltip="Delete Billable"
+                                        href="#"
+                                        onClick={this.showDelBillableDialog}
+                                    />
+                                </span>
+                            </MenuItem>
+                        )
+                    };
+                });
+            break;
+            }
+        }
+        this.setState({billables: billables});
+    }
     handleClose = () => {
         this.setState({snackbarOpen: false});
     }
@@ -487,144 +602,181 @@ class TrxEntry extends React.Component
         fetch(
             'delete_customer',
             {method: 'POST', headers: {'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'}, credentials: 'same-origin', body: body}
-        ).then(function(response) {
+        ).then((response) => {
                 if(response.ok) //Remove deleted customer from drop-down and show snackbar
-                    response.json().then(function(json) {
+                    response.json().then((json) => {
+                        cur_user = JSON.parse(json.cur_user);
                         this.setState({snackbarOpen: true, message: json.message});
-                        if(cur_user.customer.length)
-                            for(var i = 0; i < cur_user.customer.length; i++) {
-                                if(cur_user.customer[i].id == json.cust_id)
-                                    cur_user.customer.splice(i, 1);
-                            }
                         this.updateCustomers();
-                    }.bind(this));
-            }.bind(this));
+                    });
+            });
+    }
+    deleteBillable = (event) => {
+        this.refs.del_billables_dialog.handleClose();
+        var body = new FormData();
+        body.append('id', parseInt(event.currentTarget.getAttribute('class')));
+        fetch(
+            'delete_billable',
+            {method: 'POST', headers: {'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'}, credentials: 'same-origin', body: body}
+        ).then((response) => {
+            if(response.ok) //Remove deleted customer from drop-down and show snackbar
+                response.json().then((json) => {
+                    for(var i = 0; i < cur_user.customer.length; i++) {
+                        if(cur_user.customer[i].selected) break;
+                    }
+                    cur_user = JSON.parse(json.cur_user);
+                    cur_user.customer[i].selected = true;
+                    this.setState({snackbarOpen: true, message: json.message});
+                    this.updateBillables();
+                });
+        });
     }
     showDelCustDialog = (event) => {
         this.refs.del_cust_dialog.handleOpen(event.currentTarget.getAttribute('class'));
     }
+    showDelBillableDialog = (event) => {
+        this.refs.del_billables_dialog.handleOpen(event.currentTarget.getAttribute('class'));
+    }
     editCust = (event) => {
         this.refs.cust_entry.handleOpen(event.currentTarget.getAttribute('class'), true);
     }
+    editBillable = (event) => {
+        this.refs.billables_entry.handleOpen(event.currentTarget.getAttribute('class'), true);
+    }
     /**
      * Auto-complete selection/onBlur calls this function with cust object when selecting from drop-down
-     * @param object/string chosen - customer/FocusEvent object or input string
+     * @param object/string chosen - can be a FocusEvent or MenuItem object, or a string, on blur or select
      * @return boolean true if customer exists
      * @return boolean false if customer doesn't exist & opens CustomerEntry dialog
      */
     doesCustExist = (chosen) => {
-
-        if (chosen == '') return false;
-
         let exists = false;
         let input = '';
         this.setState({disableBillables: true});
 
         // Get input customer
-        if (chosen.custId) exists = true;  // selecting from customer drop-down
-        if (chosen instanceof FocusEvent) { // onBlur of customer field
-            if (chosen.target.value.length == 0 || chosen.relatedTarget.nodeName == 'SPAN')
-                return false;
-            input = chosen.target.value;
-        } else  // pressing enter in customer field
+        if (typeof chosen == 'string') { // pressing enter in customer
+            if (chosen == '') return false;
             input = chosen;
+        } else if(chosen.value) //selecting from customer drop-down - onNewRequest makes 2nd call
+            input = chosen.text;
+        else if (chosen instanceof FocusEvent) { // onBlur of customer/billables field (during select & tab & or click out)
+            if (chosen.target.value.length == 0 || !chosen.relatedTarget) return false;
+            if (chosen.relatedTarget.nodeName == 'SPAN') //selecting from customer drop-down - onBLur makes 1st call
+                return true;
+            input = chosen.target.value;
+        }
 
-        // check if customer is in database and get their billables, else open CustomerEntry dialog
-        for (var i = 0; i < this.state.customers.length; i++)
-            if (this.state.customers[i].text == input) {
+        // check if customer exists and get their billables for drop-down store, else open CustomerEntry/BillableEntry dialog
+        for (var i = 0; i < cur_user.customer.length; i++) {
+            cur_user.customer[i].selected = false;
+            if (cur_user.customer[i].company.toLowerCase().trim() == input.toLowerCase().trim()) {
+                cur_user.customer[i].selected = true;
                 exists = true;
                 break;
             }
+        }
         if (exists) {
-            let custId = this.state.customers[i - 1].custId;
             this.setState({disableBillables: false});
-            this.getBillables(custId);
+            this.updateBillables();
             return true;
         } else {
             this.refs.cust_entry.handleOpen(input);
             return false;
         }
     }
-    getBillables = (custId) => {
-        fetch('get_billables?id=' + custId , {
-            method: 'get',
-            headers: {'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'},
-            credentials: 'same-origin'
-        }).then(
-            (response) => {return response.json(); }
-        ).then(
-            (json) => { console.log(json); }
-        );
-    }
     doesBillableExist = (chosen) => {
-        console.log(chosen);
-        this.refs.billables_entry.handleOpen();
+        let exists = false;
+        let input = '';
+
+        // Get input billalbe
+        if (typeof chosen == 'string') { // pressing enter in billables
+            if (chosen == '') return false;
+            input = chosen;
+        } else if(chosen.value) //selecting from billables drop-down - onNewRequest makes 2nd call
+            input = chosen.text;
+        else if (chosen instanceof FocusEvent) { // onBlur of billables field (during select & tab & or click out)
+            if (chosen.target.value.length == 0 || !chosen.relatedTarget) return false;
+            if (chosen.relatedTarget.nodeName == 'SPAN') //selecting from billables drop-down - onBLur makes 1st call
+                return true;
+            input = chosen.target.value;
+        }
+
+        // check if customer exists and get their billables for drop-down store, else open CustomerEntry/BillableEntry dialog
+        for (var i = 0; i < cur_user.customer.length; i++) {
+            if (cur_user.customer[i].selected) {
+                let cust = cur_user.customer[i];
+                if(!cust.billable)
+                    exists = false;
+                else
+                    for (var j = 0; j < cust.billable.length; j++)
+                        if (cust.billable[j].descr.toLowerCase().trim() == input.toLowerCase().trim())
+                            exists = true;
+            }
+        }
+        if (exists) {
+            return true;
+        } else {
+            this.refs.billables_entry.handleOpen(input);
+            return false;
+        }
     }
     // AutoComplete not emitting onBlur, see git,therefore setting listener after render, old school
     // https://github.com/callemall/material-ui/issues/2294 says onBlur is fixed, but it's not
     componentDidMount = () => {
         document.getElementById('customer').addEventListener('blur', this.doesCustExist);
+        document.getElementById('billable').addEventListener('blur', this.doesBillableExist);
     }
     render() {
         return (
             <section>
                 <CustomerEntry ref="cust_entry" updateCustomersDropDown={this.updateCustomers} />
-                <BillableEntry ref="billables_entry" updateBillablesDropDown={this.updateCustomers} />
+                <BillableEntry ref="billables_entry" updateBillablesDropDown={this.updateBillables} />
                 <DeleteCustomerDialog ref="del_cust_dialog" showDelCustDialog={this.showDelCustDialog} deleteCustomer={this.deleteCustomer} />
-                <form id="trx_form" className="trx_form" ref="trx_form" style={{flexWrap: 'wrap'}}>
+                <DeleteBillablesDialog ref="del_billables_dialog" showDelCustDialog={this.showDelBillableDialog} deleteBillable={this.deleteBillable} />
+                <form id="trx_form" className="trx_form" ref="trx_form" >
                     <DatePicker
                         autoOk={true}
                         floatingLabelText="Date"
-                        floatingLabelFixed={true}
-                        floatingLabelStyle={{color: '#03A9F4'}}
                         className="trx_entry_field"
-                        textFieldStyle={{width:'90px', marginRight: '10px'}}
+                        style={{marginRight: '25px'}}
+                        textFieldStyle={{width:'90px'}}
                     />
-                    <Autocomplete
-                        hintText="Customer"
+                    <AutoComplete
                         dataSource= {this.state.customers}
                         floatingLabelText="Customer"
-                        floatingLabelFixed={true}
-                        floatingLabelStyle={{color: '#03A9F4'}}
                         className="trx_entry_field"
                         id="customer"
+                        style={{marginRight: '25px'}}
                         filter={(searchText, key) => { return (key.toLowerCase().indexOf(searchText.toLowerCase()) >= 0); }}
-                        autoComplete="off"
                         listStyle={{width: 'auto', minWidth: '400px'}}
                         onNewRequest={this.doesCustExist}
                     />
                     <TextField
                         floatingLabelText="Qty"
-                        floatingLabelFixed={true}
-                        floatingLabelStyle={{color: '#03A9F4'}}
+                        className="trx_entry_field"
                         type="number"
                         id="qty"
                         min="0"
-                        style={{width:'50px'}}
-                        className="trx_entry_field"
+                        style={{width:'50px', marginRight: '25px'}}
                     />
-                    <Autocomplete
-                        hintText="Billable"
-                        dataSource={['1', '2']}
+                    <AutoComplete
+                        dataSource={this.state.billables}
                         floatingLabelText="Billable"
-                        floatingLabelFixed={true}
-                        floatingLabelStyle={{color: '#03A9F4'}}
-                        className="trx_entry_field"
+                        id="billable"
+                        style={{marginRight: '25px'}}
                         filter={(searchText, key) => { return (key.toLowerCase().indexOf(searchText.toLowerCase()) >= 0); }}
                         onNewRequest={this.doesBillableExist}
                         disabled={this.state.disableBillables}
                     />
                     <TextField
                         floatingLabelText="Amount"
-                        floatingLabelFixed={true}
-                        floatingLabelStyle={{color: '#03A9F4'}}
                         underlineDisabledStyle={{color: '#03A9F4'}}
                         underlineStyle={{color: '#03A9F4'}}
                         id="amt"
-                        style={{width:'100px'}}
+                        style={{marginRight: '25px', width:'100px'}}
                         value={"$ 0.00"}
                         disabled={true}
-                        className="trx_entry_field"
                     />
                     <FlatButton label="Save Transaction" style={{color: 'green'}} />
                     <FlatButton label="Clear" onClick={() => {document.forms['trx_form'].reset()}} style={{color: 'red'}} />

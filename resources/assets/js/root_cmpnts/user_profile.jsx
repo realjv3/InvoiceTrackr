@@ -28,7 +28,6 @@ import Snackbar from 'material-ui/Snackbar';
 import SaveIcon from 'material-ui/svg-icons/content/save';
 import CancelIcon from 'material-ui/svg-icons/navigation/cancel';
 
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 import States from 'states.jsx';
@@ -60,7 +59,11 @@ class Profile extends React.Component
 
     static childContextTypes = {muiTheme: React.PropTypes.object.isRequired};
     getChildContext = () => {
-        return {muiTheme: getMuiTheme(baseTheme)};
+        return {
+            muiTheme: getMuiTheme({
+                textField: {hintColor: "rgba(0, 0, 0, 0.77)", disabledTextColor: "rgba(0, 0, 0, 0.4)"}
+            })
+        };
     }
 
     handleClose = () => {
@@ -102,9 +105,7 @@ class Profile extends React.Component
                 <form id="profile-form" onSubmit={this.handleSave}>
                     <fieldset style={{ margin: '5px', padding: '20px', border: 'solid 1px #E0DEDE', backgroundColor: '#F7FAF5'}}>
                         <TextField
-                            hintText="Company"
                             floatingLabelText="Company"
-                            floatingLabelStyle={{color:'black'}}
                             className="profile_field"
                             name="company"
                             id="company"
@@ -112,9 +113,7 @@ class Profile extends React.Component
                             defaultValue={cur_user.profile.company}
                         /><br />
                         <TextField
-                            hintText="First"
                             floatingLabelText="First"
-                            floatingLabelStyle={{color:'black'}}
                             className="profile_field"
                             name="first"
                             id="first"
@@ -122,9 +121,7 @@ class Profile extends React.Component
                             defaultValue={cur_user.profile.first}
                         />
                         <TextField
-                            hintText="Last"
                             floatingLabelText="Last"
-                            floatingLabelStyle={{color:'black'}}
                             className="profile_field"
                             name="last"
                             id="last"
@@ -132,9 +129,7 @@ class Profile extends React.Component
                             defaultValue={cur_user.profile.last}
                         /><br />
                         <TextField
-                            hintText="Email"
                             floatingLabelText="Email"
-                            floatingLabelStyle={{color:'black'}}
                             className="profile_field"
                             defaultValue={cur_user.email}
                             name="email"
@@ -146,9 +141,7 @@ class Profile extends React.Component
                     <fieldset style={{ margin: '5px', padding: '20px', border: 'solid 1px #E0DEDE', backgroundColor: '#F7FAF5'}}>
                         <TextField
                             style={{ width: '300px'}}
-                            hintText="Address1"
                             floatingLabelText="Address1"
-                            floatingLabelStyle={{color:'black'}}
                             className="profile_field"
                             name="addr1"
                             id="addr1"
@@ -157,9 +150,7 @@ class Profile extends React.Component
                         /><br />
                         <TextField
                             style={{ width: '300px'}}
-                            hintText="Address2"
                             floatingLabelText="Address2"
-                            floatingLabelStyle={{color:'black'}}
                             className="profile_field"
                             name="addr2"
                             id="addr2"
@@ -168,9 +159,7 @@ class Profile extends React.Component
                         /><br />
                     <span style={{display: 'flex', alignItems: 'center', flexWrap: 'wrap'}} >
                         <TextField
-                            hintText="City"
                             floatingLabelText="City"
-                            floatingLabelStyle={{color:'black'}}
                             className="profile_field"
                             name="city"
                             id="city"
@@ -179,10 +168,8 @@ class Profile extends React.Component
                         />
                         <States error={this.state.formfields.state} id="user_state" style={{width: '50px', paddingRight: '10px'}} />
                         <TextField
-                            hintText="Zip"
                             style={{width: '100px'}}
                             floatingLabelText="Zip"
-                            floatingLabelStyle={{color:'black'}}
                             className="profile_field"
                             name="zip"
                             id="zip"
@@ -191,9 +178,7 @@ class Profile extends React.Component
                         /><br />
                     </span>
                         <TextField
-                            hintText="Cell"
                             floatingLabelText="Cell"
-                            floatingLabelStyle={{color:'black'}}
                             className="profile_field"
                             name="cell"
                             id="cell"
@@ -201,9 +186,7 @@ class Profile extends React.Component
                             defaultValue={cur_user.profile.cell}
                         />
                         <TextField
-                            hintText="Office"
                             floatingLabelText="Office"
-                            floatingLabelStyle={{color:'black'}}
                             className="profile_field"
                             name="office"
                             id="office"
@@ -211,8 +194,8 @@ class Profile extends React.Component
                             defaultValue={cur_user.profile.office}
                         />
                     </fieldset>
-                    <FlatButton secondary={true} label="Save" icon={<SaveIcon />} type="submit" />
-                    <FlatButton primary={true} label="Cancel" icon={<CancelIcon />} href="/" />
+                    <FlatButton secondary={true} label="Save" icon={<SaveIcon />} type="submit" style={{color:'green'}}/>
+                    <FlatButton primary={true} label="Cancel" icon={<CancelIcon />} href="/"  style={{color:'red'}}/>
                 </form>
                 <Snackbar open={this.state.open} message={this.state.message} onRequestClose={this.handleClose} autoHideDuration={3000} />
             </Paper>

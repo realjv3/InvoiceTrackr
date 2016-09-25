@@ -50,6 +50,8 @@ Route::group(['middleware' => ['web']], function () {
     // Customer read
     Route::get('read_customer', 'CustomerController@read');
 
-    // Get billables for a customer
-    Route::get('get_billables', 'BillablesController@get');
+    // Save a billable for a customer
+    Route::post('save_billable', 'BillablesController@save');
+    // Delete billable
+    Route::post('delete_billable', 'BillablesController@delete');
 });

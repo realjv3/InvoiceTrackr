@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Customer;
 use App\Cust_profile;
+use App\Util\UtilFacade;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -50,16 +51,9 @@ class CustomerController extends Controller
         $cust->cust_profile()->updateOrCreate(array('cust_id' => $id), $cust_profile);
 
         //sharing Object cur_user, including user's customers and their billables
-        $user = $user
-            ->with('profile', 'customer.cust_profile')
-            ->get()
-            ->filter(function($item) {
-                return $item->email === Auth::user()->email;
-            })
-            ->first(); //so User instance is returned instead of collection
-        $cur_user = $user->toJson();
+        $cur_user = UtilFacade::get_user_data_for_view();
 
-        $message = ($_GET['edit'] == true) ? 'The customer was updated.' : 'The customer was added.';
+        $message = ($_GET['edit'] == 'true') ? 'The customer was updated.' : 'The customer was added.';
         return response()->json(['message' => $message, 'cur_user'=> $cur_user, 201]);
     }
 
@@ -69,7 +63,10 @@ class CustomerController extends Controller
      */
     public function delete() {
         Customer::destroy($_POST['cust_id']);
-        return response()->json(['message' => 'The customer was deleted.', 'cust_id' => $_POST['cust_id'], 201]);
+        //sharing Object cur_user, including user's customers and their billables
+        $cur_user = UtilFacade::get_user_data_for_view();
+
+        return response()->json(['message' => 'The customer was deleted.', 'cur_user' => $cur_user, 201]);
     }
 
     public function read(Request $request) {

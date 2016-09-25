@@ -25,7 +25,6 @@ class States extends React.Component
                 value={this.state.value}
                 onChange={this.handleChange}
                 floatingLabelText="State"
-                floatingLabelStyle={{color: 'black'}}
                 style={this.state.style}
                 id="state"
                 errorText={this.props.error}

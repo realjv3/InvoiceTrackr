@@ -24,13 +24,16 @@ import CardActions from 'material-ui/Card/CardActions.js';
 
 import Trx from 'module_trx.jsx';
 
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 var Main_area = React.createClass({
     childContextTypes: {muiTheme: React.PropTypes.object.isRequired},
     getChildContext: function() {
-        return {muiTheme: getMuiTheme(baseTheme)};
+        return {
+            muiTheme: getMuiTheme({
+                textField: {hintColor: "rgba(0, 0, 0, 0.67)", disabledTextColor: "rgba(0, 0, 0, 0.4)"}
+            })
+        };
     },
     render: function() {
         return (
@@ -59,7 +62,7 @@ var Main_area = React.createClass({
                     <CardHeader
                         title="Reports"
                         actAsExpander={true}
-                        showExpandableButton={true}
+                        showExpandableBu0tton={true}
                         avatar="https://www.dropbox.com/s/q4fou4u4qvx0z09/business-1.png?dl=1"
                         />
                     <CardText expandable={true}>

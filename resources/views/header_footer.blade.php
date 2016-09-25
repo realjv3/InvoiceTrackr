@@ -11,13 +11,11 @@
     <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
     <link rel="icon" href="http://googledrive.com/host/0B1f8PNGaySaRX1ljSDcyajE0d28">
 
-    <script>
+    <script type="text/javascript">
         var _token = "{{ csrf_token() }}";
         var logged_in = {{$logged_in}};
         var cur_user = {!! $cur_user !!};
     </script>
-    {{--<script src="{{ URL::asset('js/babel-core_5.8.34.js') }}"></script>--}} {{--Using babel here in dev because I don't want to webpack componenets currently being worked on--}}
-</head>
 
 <body>
     <header id="appbar"></header>
