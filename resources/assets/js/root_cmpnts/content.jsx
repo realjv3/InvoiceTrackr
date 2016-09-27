@@ -44,7 +44,6 @@ var Main_area = React.createClass({
                         title="Invoices"
                         subtitle="Cash rules everything around me"
                         actAsExpander={true}
-                        showExpandableButton={true}
                         avatar="https://www.dropbox.com/s/1x89klicik0olnk/money.png?dl=1"
                         />
                     <CardText expandable={true}>
@@ -62,7 +61,6 @@ var Main_area = React.createClass({
                     <CardHeader
                         title="Reports"
                         actAsExpander={true}
-                        showExpandableBu0tton={true}
                         avatar="https://www.dropbox.com/s/q4fou4u4qvx0z09/business-1.png?dl=1"
                         />
                     <CardText expandable={true}>

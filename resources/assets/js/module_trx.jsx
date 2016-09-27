@@ -800,7 +800,6 @@ class Trx extends React.Component
                     title="Billables"
                     subtitle="Track Time & Expenses"
                     actAsExpander={true}
-                    showExpandableButton={true}
                     avatar="https://www.dropbox.com/s/4hw9njfnlkgttmf/clock-1.png?dl=1"
                     />
                 <CardText expandable={true} style={{
