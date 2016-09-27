@@ -29,6 +29,7 @@ module.exports = {
             './node_modules',
             './resources/assets/js',
             './resources/assets/css',
+            './resources/assets/landing_animation',
         ]
     }
 };

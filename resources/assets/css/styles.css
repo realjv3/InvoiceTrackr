@@ -11,7 +11,7 @@ html {
 
 body {
     min-height: 100%;
-    min-width: 381px;
+    min-width: 375px;
 }
 
 a:visited, a {
@@ -40,26 +40,29 @@ fieldset {
 /**
  * Main Content Area
  */
-div#content {
-    padding-bottom: 1vh;
+#landing_animation {
+    position: relative;
+    height: 65vh;
+    margin: 4vw 0 0 13vw;
 }
 
+
 #greeting {
-    font-size: xx-large;
+    font-size: 1em;
     text-align: center;
     padding-top: 33vh;
-    padding-bottom: 8vh;
+    padding-bottom: 21.5vh;
+}
+
+div.main_area, div.cards {
+    background: #F5F5F5 !important;
+    margin: 0 0 4vw 0;
 }
 
 div.main_area {
     min-height: 69.4vh;
     margin: 7vw;
     padding: 3vw;
-}
-
-div.main_area, div.cards {
-    background: #F5F5F5 !important;
-    margin: 0 0 25px 0;
 }
 
 /**
@@ -99,7 +102,7 @@ footer {
     position: relative;
     width: 100%;
     font-size: small;
-    margin-top: 12vh;
+    margin-top: 5vh;
 }
 
 /**
