@@ -182,6 +182,7 @@ class Profile extends React.Component
                             className="profile_field"
                             name="cell"
                             id="cell"
+                            type="tel"
                             errorText={this.state.formfields.cell}
                             defaultValue={cur_user.profile.cell}
                         />
@@ -190,6 +191,7 @@ class Profile extends React.Component
                             className="profile_field"
                             name="office"
                             id="office"
+                            type="tel"
                             errorText={this.state.formfields.office}
                             defaultValue={cur_user.profile.office}
                         />

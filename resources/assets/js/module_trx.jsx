@@ -160,7 +160,7 @@ class CustomerEntry extends React.Component
                 modal={true}
                 open={this.state.open}
                 bodyStyle={{overflow: 'auto'}}
-                >
+            >
                 <form id="cust_entry">
                     <fieldset>
                         <TextField
@@ -243,6 +243,7 @@ class CustomerEntry extends React.Component
                         <TextField
                             floatingLabelText="Cell"
                             id="cell"
+                            type="tel"
                             style={style}
                             defaultValue={this.state.fields.cell}
                             errorText={this.state.errors.cell}
@@ -250,6 +251,7 @@ class CustomerEntry extends React.Component
                         <TextField
                             floatingLabelText="Office"
                             id="office"
+                            type="tel"
                             style={style}
                             defaultValue={this.state.fields.office}
                             errorText={this.state.errors.office}
@@ -259,6 +261,96 @@ class CustomerEntry extends React.Component
                 </form>
             </Dialog>
         );
+    }
+}
+
+class Qty extends React.Component
+{
+    constructor(props) {
+        super(props);
+        this.state = {
+            timer: 0,
+            time: '00:00:00',
+            showTimer: false
+        }
+    }
+
+    time = () => {
+        if(this.state.time == undefined) return;
+        if (this.state.timer) {
+            clearInterval(this.state.timer);
+            this.setState({timer: 0});
+        }
+        else {
+            let intId = setInterval(() => {
+                let cur = this.state.time.split(':');
+                let secs = (+cur[0]) * 60 * 60 + (+cur[1]) * 60 + (+cur[2]);
+                let val = new Date(null);
+                val.setSeconds(++secs);
+                this.setState({time: val.toISOString().substr(11,8)});
+            }, 1000);
+            this.setState({showTimer: true, timer: intId});
+        }
+    }
+
+    turnOffTimer = () => {
+        if (this.state.timer) {
+            clearInterval(this.state.timer);
+        }
+        this.setState({timer: 0, showTimer: false});
+    }
+
+    render() {
+        if (this.state.showTimer) {
+            return (
+                <span>
+                    <IconButton
+                        iconClassName="material-icons"
+                        style={{top: '7px', left: '7px', opacity: '0.5'}}
+                        tooltip="Track time"
+                        onClick={ () => {this.time(); }}
+                        onDoubleClick={ () => {this.turnOffTimer(); }}
+                    >
+                        timer
+                    </IconButton>
+                    <TextField
+                        floatingLabelText="Qty"
+                        floatingLabelFixed={true}
+                        className="trx_entry_field"
+                        type="text"
+                        min="0"
+                        step="any"
+                        style={{width: '100px', marginRight: '25px'}}
+                        value={this.state.time}
+                    />
+                </span>);
+        } else {
+            return (
+                <span>
+                    <IconButton
+                        iconClassName="material-icons"
+                        style={{top: '7px', left: '7px', opacity: '0.5'}}
+                        tooltip="Track time"
+                        onClick={ () => {
+                                    this.setState({timer: true});
+                                    this.time();
+                                }
+                            }
+                        >
+                        timer
+                    </IconButton>
+                    <TextField
+                        floatingLabelText="Qty"
+                        floatingLabelFixed={false}
+                        className="trx_entry_field"
+                        type="number"
+                        min="0"
+                        step="any"
+                        style={{width: '100px', marginRight: '25px'}}
+                    />
+                </span>
+            );
+        };
     }
 }
 
@@ -434,9 +526,8 @@ class BillableEntry extends React.Component
                                 step="any"
                                 errorText={this.state.errors.price}
                                 id="price"
-                                defaultValue={this.state.fields.price}
+                                defaultValue={(this.state.fields.price) ? parseInt(this.state.fields.price) : undefined}
                                 style={style}
-
                             />
                         </div>
                     </fieldset>
@@ -520,7 +611,7 @@ class TrxEntry extends React.Component
             billables: [],
             snackbarOpen: false, message: '',
             showDelCustDialog: false,
-            disableBillables: true
+            disableBillables: true,
         };
     }
     initCustomers = () => {
@@ -689,7 +780,7 @@ class TrxEntry extends React.Component
         let exists = false;
         let input = '';
 
-        // Get input billalbe
+        // Get input billable
         if (typeof chosen == 'string') { // pressing enter in billables
             if (chosen == '') return false;
             input = chosen;
@@ -712,6 +803,7 @@ class TrxEntry extends React.Component
                     for (var j = 0; j < cust.billable.length; j++)
                         if (cust.billable[j].descr.toLowerCase().trim() == input.toLowerCase().trim())
                             exists = true;
+                break;
             }
         }
         if (exists) {
@@ -752,14 +844,7 @@ class TrxEntry extends React.Component
                         listStyle={{width: 'auto', minWidth: '400px'}}
                         onNewRequest={this.doesCustExist}
                     />
-                    <TextField
-                        floatingLabelText="Qty"
-                        className="trx_entry_field"
-                        type="number"
-                        id="qty"
-                        min="0"
-                        style={{width:'50px', marginRight: '25px'}}
-                    />
+                    <Qty />
                     <AutoComplete
                         dataSource={this.state.billables}
                         floatingLabelText="Billable"
@@ -779,7 +864,7 @@ class TrxEntry extends React.Component
                         disabled={true}
                     />
                     <FlatButton label="Save Transaction" style={{color: 'green'}} />
-                    <FlatButton label="Clear" onClick={() => {document.forms['trx_form'].reset()}} style={{color: 'red'}} />
+                    <FlatButton label="Clear" type="reset" onClick={this.reset} style={{color: 'red'}} />
                     <Snackbar open={this.state.snackbarOpen} message={this.state.message} onRequestClose={this.handleClose} autoHideDuration={3000} />
                 </form>
             </section>

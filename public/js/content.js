@@ -1197,14 +1197,6 @@
 	  var source = null;
 	
 	  if (config != null) {
-	    if (process.env.NODE_ENV !== 'production') {
-	      process.env.NODE_ENV !== 'production' ? warning(
-	      /* eslint-disable no-proto */
-	      config.__proto__ == null || config.__proto__ === Object.prototype,
-	      /* eslint-enable no-proto */
-	      'React.createElement(...): Expected props argument to be a plain object. ' + 'Properties defined in its prototype chain will be ignored.') : void 0;
-	    }
-	
 	    if (hasValidRef(config)) {
 	      ref = config.ref;
 	    }
@@ -1305,14 +1297,6 @@
 	  var owner = element._owner;
 	
 	  if (config != null) {
-	    if (process.env.NODE_ENV !== 'production') {
-	      process.env.NODE_ENV !== 'production' ? warning(
-	      /* eslint-disable no-proto */
-	      config.__proto__ == null || config.__proto__ === Object.prototype,
-	      /* eslint-enable no-proto */
-	      'React.cloneElement(...): Expected props argument to be a plain object. ' + 'Properties defined in its prototype chain will be ignored.') : void 0;
-	    }
-	
 	    if (hasValidRef(config)) {
 	      // Silently steal the ref from the parent.
 	      ref = config.ref;
@@ -4415,7 +4399,7 @@
 	
 	'use strict';
 	
-	module.exports = '15.3.1';
+	module.exports = '15.3.2';
 
 /***/ },
 /* 33 */
@@ -5421,8 +5405,10 @@
 	function getFallbackBeforeInputChars(topLevelType, nativeEvent) {
 	  // If we are currently composing (IME) and using a fallback to do so,
 	  // try to extract the composed characters from the fallback object.
+	  // If composition event is available, we extract a string only at
+	  // compositionevent, otherwise extract it at fallback events.
 	  if (currentComposition) {
-	    if (topLevelType === topLevelTypes.topCompositionEnd || isFallbackCompositionEnd(topLevelType, nativeEvent)) {
+	    if (topLevelType === topLevelTypes.topCompositionEnd || !canUseCompositionEvent && isFallbackCompositionEnd(topLevelType, nativeEvent)) {
 	      var chars = currentComposition.getData();
 	      FallbackCompositionState.release(currentComposition);
 	      currentComposition = null;
@@ -7070,7 +7056,8 @@
 	
 	    if (event.preventDefault) {
 	      event.preventDefault();
-	    } else {
+	    } else if (typeof event.returnValue !== 'unknown') {
+	      // eslint-disable-line valid-typeof
 	      event.returnValue = false;
 	    }
 	    this.isDefaultPrevented = emptyFunction.thatReturnsTrue;
@@ -7333,7 +7320,7 @@
 	var doesChangeEventBubble = false;
 	if (ExecutionEnvironment.canUseDOM) {
 	  // See `handleChange` comment below
-	  doesChangeEventBubble = isEventSupported('change') && (!('documentMode' in document) || document.documentMode > 8);
+	  doesChangeEventBubble = isEventSupported('change') && (!document.documentMode || document.documentMode > 8);
 	}
 	
 	function manualDispatchChangeEvent(nativeEvent) {
@@ -7399,7 +7386,7 @@
 	  // deleting text, so we ignore its input events.
 	  // IE10+ fire input events to often, such when a placeholder
 	  // changes or when an input with a placeholder is focused.
-	  isInputEventSupported = isEventSupported('input') && (!('documentMode' in document) || document.documentMode > 11);
+	  isInputEventSupported = isEventSupported('input') && (!document.documentMode || document.documentMode > 11);
 	}
 	
 	/**
@@ -8652,12 +8639,6 @@
 	    endLifeCycleTimer(debugID, timerType);
 	    emitEvent('onEndLifeCycleTimer', debugID, timerType);
 	  },
-	  onError: function (debugID) {
-	    if (currentTimerDebugID != null) {
-	      endLifeCycleTimer(currentTimerDebugID, currentTimerType);
-	    }
-	    emitEvent('onError', debugID);
-	  },
 	  onBeginProcessingChildContext: function () {
 	    emitEvent('onBeginProcessingChildContext');
 	  },
@@ -9779,6 +9760,8 @@
 	    allowFullScreen: HAS_BOOLEAN_VALUE,
 	    allowTransparency: 0,
 	    alt: 0,
+	    // specifies target context for links with `preload` type
+	    as: 0,
 	    async: HAS_BOOLEAN_VALUE,
 	    autoComplete: 0,
 	    // autoFocus is polyfilled/normalized by AutoFocusUtils
@@ -9859,6 +9842,7 @@
 	    optimum: 0,
 	    pattern: 0,
 	    placeholder: 0,
+	    playsInline: HAS_BOOLEAN_VALUE,
 	    poster: 0,
 	    preload: 0,
 	    profile: 0,
@@ -10396,9 +10380,9 @@
 	  if (node.namespaceURI === DOMNamespaces.svg && !('innerHTML' in node)) {
 	    reusableSVGContainer = reusableSVGContainer || document.createElement('div');
 	    reusableSVGContainer.innerHTML = '<svg>' + html + '</svg>';
-	    var newNodes = reusableSVGContainer.firstChild.childNodes;
-	    for (var i = 0; i < newNodes.length; i++) {
-	      node.appendChild(newNodes[i]);
+	    var svgNode = reusableSVGContainer.firstChild;
+	    while (svgNode.firstChild) {
+	      node.appendChild(svgNode.firstChild);
 	    }
 	  } else {
 	    node.innerHTML = html;
@@ -11356,9 +11340,9 @@
 	  ReactDOMOption.postMountWrapper(inst);
 	}
 	
-	var setContentChildForInstrumentation = emptyFunction;
+	var setAndValidateContentChildDev = emptyFunction;
 	if (process.env.NODE_ENV !== 'production') {
-	  setContentChildForInstrumentation = function (content) {
+	  setAndValidateContentChildDev = function (content) {
 	    var hasExistingContent = this._contentDebugID != null;
 	    var debugID = this._debugID;
 	    // This ID represents the inlined child that has no backing instance:
@@ -11372,6 +11356,7 @@
 	      return;
 	    }
 	
+	    validateDOMNesting(null, String(content), this, this._ancestorInfo);
 	    this._contentDebugID = contentDebugID;
 	    if (hasExistingContent) {
 	      ReactInstrumentation.debugTool.onBeforeUpdateComponent(contentDebugID, content);
@@ -11546,7 +11531,7 @@
 	  this._flags = 0;
 	  if (process.env.NODE_ENV !== 'production') {
 	    this._ancestorInfo = null;
-	    setContentChildForInstrumentation.call(this, null);
+	    setAndValidateContentChildDev.call(this, null);
 	  }
 	}
 	
@@ -11646,7 +11631,7 @@
 	      if (parentInfo) {
 	        // parentInfo should always be present except for the top-level
 	        // component when server rendering
-	        validateDOMNesting(this._tag, this, parentInfo);
+	        validateDOMNesting(this._tag, null, this, parentInfo);
 	      }
 	      this._ancestorInfo = validateDOMNesting.updatedAncestorInfo(parentInfo, this._tag, this);
 	    }
@@ -11815,7 +11800,7 @@
 	        // TODO: Validate that text is allowed as a child of this node
 	        ret = escapeTextContentForBrowser(contentToUse);
 	        if (process.env.NODE_ENV !== 'production') {
-	          setContentChildForInstrumentation.call(this, contentToUse);
+	          setAndValidateContentChildDev.call(this, contentToUse);
 	        }
 	      } else if (childrenToUse != null) {
 	        var mountImages = this.mountChildren(childrenToUse, transaction, context);
@@ -11852,7 +11837,7 @@
 	      if (contentToUse != null) {
 	        // TODO: Validate that text is allowed as a child of this node
 	        if (process.env.NODE_ENV !== 'production') {
-	          setContentChildForInstrumentation.call(this, contentToUse);
+	          setAndValidateContentChildDev.call(this, contentToUse);
 	        }
 	        DOMLazyTree.queueText(lazyTree, contentToUse);
 	      } else if (childrenToUse != null) {
@@ -12084,7 +12069,7 @@
 	      if (lastContent !== nextContent) {
 	        this.updateTextContent('' + nextContent);
 	        if (process.env.NODE_ENV !== 'production') {
-	          setContentChildForInstrumentation.call(this, nextContent);
+	          setAndValidateContentChildDev.call(this, nextContent);
 	        }
 	      }
 	    } else if (nextHtml != null) {
@@ -12096,7 +12081,7 @@
 	      }
 	    } else if (nextChildren != null) {
 	      if (process.env.NODE_ENV !== 'production') {
-	        setContentChildForInstrumentation.call(this, null);
+	        setAndValidateContentChildDev.call(this, null);
 	      }
 	
 	      this.updateChildren(nextChildren, transaction, context);
@@ -12151,7 +12136,7 @@
 	    this._wrapperState = null;
 	
 	    if (process.env.NODE_ENV !== 'production') {
-	      setContentChildForInstrumentation.call(this, null);
+	      setAndValidateContentChildDev.call(this, null);
 	    }
 	  },
 	
@@ -13463,6 +13448,19 @@
 	  },
 	
 	  /**
+	   * Protect against document.createEvent() returning null
+	   * Some popup blocker extensions appear to do this:
+	   * https://github.com/facebook/react/issues/6887
+	   */
+	  supportsEventPageXY: function () {
+	    if (!document.createEvent) {
+	      return false;
+	    }
+	    var ev = document.createEvent('MouseEvent');
+	    return ev != null && 'pageX' in ev;
+	  },
+	
+	  /**
 	   * Listens to window scroll and resize events. We cache scroll values so that
 	   * application code can access them without triggering reflows.
 	   *
@@ -13475,7 +13473,7 @@
 	   */
 	  ensureScrollValueMonitoring: function () {
 	    if (hasEventPageXY === undefined) {
-	      hasEventPageXY = document.createEvent && 'pageX' in document.createEvent('MouseEvent');
+	      hasEventPageXY = ReactBrowserEventEmitter.supportsEventPageXY();
 	    }
 	    if (!hasEventPageXY && !isMonitoringScrollValue) {
 	      var refresh = ViewportMetrics.refreshScrollValues;
@@ -13776,7 +13774,7 @@
 	
 	function isControlled(props) {
 	  var usesChecked = props.type === 'checkbox' || props.type === 'radio';
-	  return usesChecked ? props.checked !== undefined : props.value !== undefined;
+	  return usesChecked ? props.checked != null : props.value != null;
 	}
 	
 	/**
@@ -15579,34 +15577,29 @@
 	  }
 	}
 	
-	function invokeComponentDidMountWithTimer() {
-	  var publicInstance = this._instance;
-	  if (this._debugID !== 0) {
-	    ReactInstrumentation.debugTool.onBeginLifeCycleTimer(this._debugID, 'componentDidMount');
-	  }
-	  publicInstance.componentDidMount();
-	  if (this._debugID !== 0) {
-	    ReactInstrumentation.debugTool.onEndLifeCycleTimer(this._debugID, 'componentDidMount');
-	  }
-	}
-	
-	function invokeComponentDidUpdateWithTimer(prevProps, prevState, prevContext) {
-	  var publicInstance = this._instance;
-	  if (this._debugID !== 0) {
-	    ReactInstrumentation.debugTool.onBeginLifeCycleTimer(this._debugID, 'componentDidUpdate');
-	  }
-	  publicInstance.componentDidUpdate(prevProps, prevState, prevContext);
-	  if (this._debugID !== 0) {
-	    ReactInstrumentation.debugTool.onEndLifeCycleTimer(this._debugID, 'componentDidUpdate');
-	  }
-	}
-	
 	function shouldConstruct(Component) {
 	  return !!(Component.prototype && Component.prototype.isReactComponent);
 	}
 	
 	function isPureComponent(Component) {
 	  return !!(Component.prototype && Component.prototype.isPureReactComponent);
+	}
+	
+	// Separated into a function to contain deoptimizations caused by try/finally.
+	function measureLifeCyclePerf(fn, debugID, timerType) {
+	  if (debugID === 0) {
+	    // Top-level wrappers (see ReactMount) and empty components (see
+	    // ReactDOMEmptyComponent) are invisible to hooks and devtools.
+	    // Both are implementation details that should go away in the future.
+	    return fn();
+	  }
+	
+	  ReactInstrumentation.debugTool.onBeginLifeCycleTimer(debugID, timerType);
+	  try {
+	    return fn();
+	  } finally {
+	    ReactInstrumentation.debugTool.onEndLifeCycleTimer(debugID, timerType);
+	  }
 	}
 	
 	/**
@@ -15700,6 +15693,8 @@
 	   * @internal
 	   */
 	  mountComponent: function (transaction, hostParent, hostContainerInfo, context) {
+	    var _this = this;
+	
 	    this._context = context;
 	    this._mountOrder = nextMountID++;
 	    this._hostParent = hostParent;
@@ -15789,7 +15784,11 @@
 	
 	    if (inst.componentDidMount) {
 	      if (process.env.NODE_ENV !== 'production') {
-	        transaction.getReactMountReady().enqueue(invokeComponentDidMountWithTimer, this);
+	        transaction.getReactMountReady().enqueue(function () {
+	          measureLifeCyclePerf(function () {
+	            return inst.componentDidMount();
+	          }, _this._debugID, 'componentDidMount');
+	        });
 	      } else {
 	        transaction.getReactMountReady().enqueue(inst.componentDidMount, inst);
 	      }
@@ -15813,35 +15812,26 @@
 	
 	  _constructComponentWithoutOwner: function (doConstruct, publicProps, publicContext, updateQueue) {
 	    var Component = this._currentElement.type;
-	    var instanceOrElement;
+	
 	    if (doConstruct) {
 	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onBeginLifeCycleTimer(this._debugID, 'ctor');
-	        }
-	      }
-	      instanceOrElement = new Component(publicProps, publicContext, updateQueue);
-	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onEndLifeCycleTimer(this._debugID, 'ctor');
-	        }
-	      }
-	    } else {
-	      // This can still be an instance in case of factory components
-	      // but we'll count this as time spent rendering as the more common case.
-	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onBeginLifeCycleTimer(this._debugID, 'render');
-	        }
-	      }
-	      instanceOrElement = Component(publicProps, publicContext, updateQueue);
-	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onEndLifeCycleTimer(this._debugID, 'render');
-	        }
+	        return measureLifeCyclePerf(function () {
+	          return new Component(publicProps, publicContext, updateQueue);
+	        }, this._debugID, 'ctor');
+	      } else {
+	        return new Component(publicProps, publicContext, updateQueue);
 	      }
 	    }
-	    return instanceOrElement;
+	
+	    // This can still be an instance in case of factory components
+	    // but we'll count this as time spent rendering as the more common case.
+	    if (process.env.NODE_ENV !== 'production') {
+	      return measureLifeCyclePerf(function () {
+	        return Component(publicProps, publicContext, updateQueue);
+	      }, this._debugID, 'render');
+	    } else {
+	      return Component(publicProps, publicContext, updateQueue);
+	    }
 	  },
 	
 	  performInitialMountWithErrorHandling: function (renderedElement, hostParent, hostContainerInfo, transaction, context) {
@@ -15850,11 +15840,6 @@
 	    try {
 	      markup = this.performInitialMount(renderedElement, hostParent, hostContainerInfo, transaction, context);
 	    } catch (e) {
-	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onError();
-	        }
-	      }
 	      // Roll back to checkpoint, handle error (which may add items to the transaction), and take a new checkpoint
 	      transaction.rollback(checkpoint);
 	      this._instance.unstable_handleError(e);
@@ -15875,17 +15860,19 @@
 	
 	  performInitialMount: function (renderedElement, hostParent, hostContainerInfo, transaction, context) {
 	    var inst = this._instance;
+	
+	    var debugID = 0;
+	    if (process.env.NODE_ENV !== 'production') {
+	      debugID = this._debugID;
+	    }
+	
 	    if (inst.componentWillMount) {
 	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onBeginLifeCycleTimer(this._debugID, 'componentWillMount');
-	        }
-	      }
-	      inst.componentWillMount();
-	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onEndLifeCycleTimer(this._debugID, 'componentWillMount');
-	        }
+	        measureLifeCyclePerf(function () {
+	          return inst.componentWillMount();
+	        }, debugID, 'componentWillMount');
+	      } else {
+	        inst.componentWillMount();
 	      }
 	      // When mounting, calls to `setState` by `componentWillMount` will set
 	      // `this._pendingStateQueue` without triggering a re-render.
@@ -15905,15 +15892,12 @@
 	    );
 	    this._renderedComponent = child;
 	
-	    var selfDebugID = 0;
-	    if (process.env.NODE_ENV !== 'production') {
-	      selfDebugID = this._debugID;
-	    }
-	    var markup = ReactReconciler.mountComponent(child, transaction, hostParent, hostContainerInfo, this._processChildContext(context), selfDebugID);
+	    var markup = ReactReconciler.mountComponent(child, transaction, hostParent, hostContainerInfo, this._processChildContext(context), debugID);
 	
 	    if (process.env.NODE_ENV !== 'production') {
-	      if (this._debugID !== 0) {
-	        ReactInstrumentation.debugTool.onSetChildren(this._debugID, child._debugID !== 0 ? [child._debugID] : []);
+	      if (debugID !== 0) {
+	        var childDebugIDs = child._debugID !== 0 ? [child._debugID] : [];
+	        ReactInstrumentation.debugTool.onSetChildren(debugID, childDebugIDs);
 	      }
 	    }
 	
@@ -15934,24 +15918,22 @@
 	    if (!this._renderedComponent) {
 	      return;
 	    }
+	
 	    var inst = this._instance;
 	
 	    if (inst.componentWillUnmount && !inst._calledComponentWillUnmount) {
 	      inst._calledComponentWillUnmount = true;
-	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onBeginLifeCycleTimer(this._debugID, 'componentWillUnmount');
-	        }
-	      }
+	
 	      if (safely) {
 	        var name = this.getName() + '.componentWillUnmount()';
 	        ReactErrorUtils.invokeGuardedCallback(name, inst.componentWillUnmount.bind(inst));
 	      } else {
-	        inst.componentWillUnmount();
-	      }
-	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onEndLifeCycleTimer(this._debugID, 'componentWillUnmount');
+	        if (process.env.NODE_ENV !== 'production') {
+	          measureLifeCyclePerf(function () {
+	            return inst.componentWillUnmount();
+	          }, this._debugID, 'componentWillUnmount');
+	        } else {
+	          inst.componentWillUnmount();
 	        }
 	      }
 	    }
@@ -16038,13 +16020,21 @@
 	  _processChildContext: function (currentContext) {
 	    var Component = this._currentElement.type;
 	    var inst = this._instance;
-	    if (process.env.NODE_ENV !== 'production') {
-	      ReactInstrumentation.debugTool.onBeginProcessingChildContext();
+	    var childContext;
+	
+	    if (inst.getChildContext) {
+	      if (process.env.NODE_ENV !== 'production') {
+	        ReactInstrumentation.debugTool.onBeginProcessingChildContext();
+	        try {
+	          childContext = inst.getChildContext();
+	        } finally {
+	          ReactInstrumentation.debugTool.onEndProcessingChildContext();
+	        }
+	      } else {
+	        childContext = inst.getChildContext();
+	      }
 	    }
-	    var childContext = inst.getChildContext && inst.getChildContext();
-	    if (process.env.NODE_ENV !== 'production') {
-	      ReactInstrumentation.debugTool.onEndProcessingChildContext();
-	    }
+	
 	    if (childContext) {
 	      !(typeof Component.childContextTypes === 'object') ? process.env.NODE_ENV !== 'production' ? invariant(false, '%s.getChildContext(): childContextTypes must be defined in order to use getChildContext().', this.getName() || 'ReactCompositeComponent') : _prodInvariant('107', this.getName() || 'ReactCompositeComponent') : void 0;
 	      if (process.env.NODE_ENV !== 'production') {
@@ -16139,15 +16129,11 @@
 	    // immediately reconciled instead of waiting for the next batch.
 	    if (willReceive && inst.componentWillReceiveProps) {
 	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onBeginLifeCycleTimer(this._debugID, 'componentWillReceiveProps');
-	        }
-	      }
-	      inst.componentWillReceiveProps(nextProps, nextContext);
-	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onEndLifeCycleTimer(this._debugID, 'componentWillReceiveProps');
-	        }
+	        measureLifeCyclePerf(function () {
+	          return inst.componentWillReceiveProps(nextProps, nextContext);
+	        }, this._debugID, 'componentWillReceiveProps');
+	      } else {
+	        inst.componentWillReceiveProps(nextProps, nextContext);
 	      }
 	    }
 	
@@ -16157,15 +16143,11 @@
 	    if (!this._pendingForceUpdate) {
 	      if (inst.shouldComponentUpdate) {
 	        if (process.env.NODE_ENV !== 'production') {
-	          if (this._debugID !== 0) {
-	            ReactInstrumentation.debugTool.onBeginLifeCycleTimer(this._debugID, 'shouldComponentUpdate');
-	          }
-	        }
-	        shouldUpdate = inst.shouldComponentUpdate(nextProps, nextState, nextContext);
-	        if (process.env.NODE_ENV !== 'production') {
-	          if (this._debugID !== 0) {
-	            ReactInstrumentation.debugTool.onEndLifeCycleTimer(this._debugID, 'shouldComponentUpdate');
-	          }
+	          shouldUpdate = measureLifeCyclePerf(function () {
+	            return inst.shouldComponentUpdate(nextProps, nextState, nextContext);
+	          }, this._debugID, 'shouldComponentUpdate');
+	        } else {
+	          shouldUpdate = inst.shouldComponentUpdate(nextProps, nextState, nextContext);
 	        }
 	      } else {
 	        if (this._compositeType === CompositeTypes.PureClass) {
@@ -16231,6 +16213,8 @@
 	   * @private
 	   */
 	  _performComponentUpdate: function (nextElement, nextProps, nextState, nextContext, transaction, unmaskedContext) {
+	    var _this2 = this;
+	
 	    var inst = this._instance;
 	
 	    var hasComponentDidUpdate = Boolean(inst.componentDidUpdate);
@@ -16245,15 +16229,11 @@
 	
 	    if (inst.componentWillUpdate) {
 	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onBeginLifeCycleTimer(this._debugID, 'componentWillUpdate');
-	        }
-	      }
-	      inst.componentWillUpdate(nextProps, nextState, nextContext);
-	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onEndLifeCycleTimer(this._debugID, 'componentWillUpdate');
-	        }
+	        measureLifeCyclePerf(function () {
+	          return inst.componentWillUpdate(nextProps, nextState, nextContext);
+	        }, this._debugID, 'componentWillUpdate');
+	      } else {
+	        inst.componentWillUpdate(nextProps, nextState, nextContext);
 	      }
 	    }
 	
@@ -16267,7 +16247,9 @@
 	
 	    if (hasComponentDidUpdate) {
 	      if (process.env.NODE_ENV !== 'production') {
-	        transaction.getReactMountReady().enqueue(invokeComponentDidUpdateWithTimer.bind(this, prevProps, prevState, prevContext), this);
+	        transaction.getReactMountReady().enqueue(function () {
+	          measureLifeCyclePerf(inst.componentDidUpdate.bind(inst, prevProps, prevState, prevContext), _this2._debugID, 'componentDidUpdate');
+	        });
 	      } else {
 	        transaction.getReactMountReady().enqueue(inst.componentDidUpdate.bind(inst, prevProps, prevState, prevContext), inst);
 	      }
@@ -16284,6 +16266,12 @@
 	    var prevComponentInstance = this._renderedComponent;
 	    var prevRenderedElement = prevComponentInstance._currentElement;
 	    var nextRenderedElement = this._renderValidatedComponent();
+	
+	    var debugID = 0;
+	    if (process.env.NODE_ENV !== 'production') {
+	      debugID = this._debugID;
+	    }
+	
 	    if (shouldUpdateReactComponent(prevRenderedElement, nextRenderedElement)) {
 	      ReactReconciler.receiveComponent(prevComponentInstance, nextRenderedElement, transaction, this._processChildContext(context));
 	    } else {
@@ -16296,15 +16284,12 @@
 	      );
 	      this._renderedComponent = child;
 	
-	      var selfDebugID = 0;
-	      if (process.env.NODE_ENV !== 'production') {
-	        selfDebugID = this._debugID;
-	      }
-	      var nextMarkup = ReactReconciler.mountComponent(child, transaction, this._hostParent, this._hostContainerInfo, this._processChildContext(context), selfDebugID);
+	      var nextMarkup = ReactReconciler.mountComponent(child, transaction, this._hostParent, this._hostContainerInfo, this._processChildContext(context), debugID);
 	
 	      if (process.env.NODE_ENV !== 'production') {
-	        if (this._debugID !== 0) {
-	          ReactInstrumentation.debugTool.onSetChildren(this._debugID, child._debugID !== 0 ? [child._debugID] : []);
+	        if (debugID !== 0) {
+	          var childDebugIDs = child._debugID !== 0 ? [child._debugID] : [];
+	          ReactInstrumentation.debugTool.onSetChildren(debugID, childDebugIDs);
 	        }
 	      }
 	
@@ -16326,17 +16311,14 @@
 	   */
 	  _renderValidatedComponentWithoutOwnerOrContext: function () {
 	    var inst = this._instance;
+	    var renderedComponent;
 	
 	    if (process.env.NODE_ENV !== 'production') {
-	      if (this._debugID !== 0) {
-	        ReactInstrumentation.debugTool.onBeginLifeCycleTimer(this._debugID, 'render');
-	      }
-	    }
-	    var renderedComponent = inst.render();
-	    if (process.env.NODE_ENV !== 'production') {
-	      if (this._debugID !== 0) {
-	        ReactInstrumentation.debugTool.onEndLifeCycleTimer(this._debugID, 'render');
-	      }
+	      renderedComponent = measureLifeCyclePerf(function () {
+	        return inst.render();
+	      }, this._debugID, 'render');
+	    } else {
+	      renderedComponent = inst.render();
 	    }
 	
 	    if (process.env.NODE_ENV !== 'production') {
@@ -16387,7 +16369,7 @@
 	    var publicComponentInstance = component.getPublicInstance();
 	    if (process.env.NODE_ENV !== 'production') {
 	      var componentName = component && component.getName ? component.getName() : 'a component';
-	      process.env.NODE_ENV !== 'production' ? warning(publicComponentInstance != null, 'Stateless function components cannot be given refs ' + '(See ref "%s" in %s created by %s). ' + 'Attempts to access this ref will fail.', ref, componentName, this.getName()) : void 0;
+	      process.env.NODE_ENV !== 'production' ? warning(publicComponentInstance != null || component._compositeType !== CompositeTypes.StatelessFunctional, 'Stateless function components cannot be given refs ' + '(See ref "%s" in %s created by %s). ' + 'Attempts to access this ref will fail.', ref, componentName, this.getName()) : void 0;
 	    }
 	    var refs = inst.refs === emptyObject ? inst.refs = {} : inst.refs;
 	    refs[ref] = publicComponentInstance;
@@ -17608,10 +17590,15 @@
 	
 	  var didWarn = {};
 	
-	  validateDOMNesting = function (childTag, childInstance, ancestorInfo) {
+	  validateDOMNesting = function (childTag, childText, childInstance, ancestorInfo) {
 	    ancestorInfo = ancestorInfo || emptyAncestorInfo;
 	    var parentInfo = ancestorInfo.current;
 	    var parentTag = parentInfo && parentInfo.tag;
+	
+	    if (childText != null) {
+	      process.env.NODE_ENV !== 'production' ? warning(childTag == null, 'validateDOMNesting: when childText is passed, childTag should be null') : void 0;
+	      childTag = '#text';
+	    }
 	
 	    var invalidParent = isTagValidWithParent(childTag, parentTag) ? null : parentInfo;
 	    var invalidAncestor = invalidParent ? null : findInvalidAncestorForTag(childTag, ancestorInfo);
@@ -17660,7 +17647,15 @@
 	      didWarn[warnKey] = true;
 	
 	      var tagDisplayName = childTag;
-	      if (childTag !== '#text') {
+	      var whitespaceInfo = '';
+	      if (childTag === '#text') {
+	        if (/\S/.test(childText)) {
+	          tagDisplayName = 'Text nodes';
+	        } else {
+	          tagDisplayName = 'Whitespace text nodes';
+	          whitespaceInfo = ' Make sure you don\'t have any extra whitespace between tags on ' + 'each line of your source code.';
+	        }
+	      } else {
 	        tagDisplayName = '<' + childTag + '>';
 	      }
 	
@@ -17669,7 +17664,7 @@
 	        if (ancestorTag === 'table' && childTag === 'tr') {
 	          info += ' Add a <tbody> to your code to match the DOM tree generated by ' + 'the browser.';
 	        }
-	        process.env.NODE_ENV !== 'production' ? warning(false, 'validateDOMNesting(...): %s cannot appear as a child of <%s>. ' + 'See %s.%s', tagDisplayName, ancestorTag, ownerInfo, info) : void 0;
+	        process.env.NODE_ENV !== 'production' ? warning(false, 'validateDOMNesting(...): %s cannot appear as a child of <%s>.%s ' + 'See %s.%s', tagDisplayName, ancestorTag, whitespaceInfo, ownerInfo, info) : void 0;
 	      } else {
 	        process.env.NODE_ENV !== 'production' ? warning(false, 'validateDOMNesting(...): %s cannot appear as a descendant of ' + '<%s>. See %s.', tagDisplayName, ancestorTag, ownerInfo) : void 0;
 	      }
@@ -17985,7 +17980,7 @@
 	      if (parentInfo) {
 	        // parentInfo should always be present except for the top-level
 	        // component when server rendering
-	        validateDOMNesting('#text', this, parentInfo);
+	        validateDOMNesting(null, this._stringText, this, parentInfo);
 	      }
 	    }
 	
@@ -19623,7 +19618,7 @@
 	      bubbled: keyOf({ onSelect: null }),
 	      captured: keyOf({ onSelectCapture: null })
 	    },
-	    dependencies: [topLevelTypes.topBlur, topLevelTypes.topContextMenu, topLevelTypes.topFocus, topLevelTypes.topKeyDown, topLevelTypes.topMouseDown, topLevelTypes.topMouseUp, topLevelTypes.topSelectionChange]
+	    dependencies: [topLevelTypes.topBlur, topLevelTypes.topContextMenu, topLevelTypes.topFocus, topLevelTypes.topKeyDown, topLevelTypes.topKeyUp, topLevelTypes.topMouseDown, topLevelTypes.topMouseUp, topLevelTypes.topSelectionChange]
 	  }
 	};
 	
@@ -43311,6 +43306,7 @@
 	                        _react2.default.createElement(_TextField2.default, {
 	                            floatingLabelText: 'Cell',
 	                            id: 'cell',
+	                            type: 'tel',
 	                            style: style,
 	                            defaultValue: this.state.fields.cell,
 	                            errorText: this.state.errors.cell
@@ -43318,6 +43314,7 @@
 	                        _react2.default.createElement(_TextField2.default, {
 	                            floatingLabelText: 'Office',
 	                            id: 'office',
+	                            type: 'tel',
 	                            style: style,
 	                            defaultValue: this.state.fields.office,
 	                            errorText: this.state.errors.office
@@ -43332,19 +43329,128 @@
 	    return CustomerEntry;
 	}(_react2.default.Component);
 	
-	var BillableEntry = function (_React$Component2) {
-	    _inherits(BillableEntry, _React$Component2);
+	var Qty = function (_React$Component2) {
+	    _inherits(Qty, _React$Component2);
+	
+	    function Qty(props) {
+	        _classCallCheck(this, Qty);
+	
+	        var _this2 = _possibleConstructorReturn(this, (Qty.__proto__ || Object.getPrototypeOf(Qty)).call(this, props));
+	
+	        _this2.time = function () {
+	            if (_this2.state.time == undefined) return;
+	            if (_this2.state.timer) {
+	                clearInterval(_this2.state.timer);
+	                _this2.setState({ timer: 0 });
+	            } else {
+	                var intId = setInterval(function () {
+	                    var cur = _this2.state.time.split(':');
+	                    var secs = +cur[0] * 60 * 60 + +cur[1] * 60 + +cur[2];
+	                    var val = new Date(null);
+	                    val.setSeconds(++secs);
+	                    _this2.setState({ time: val.toISOString().substr(11, 8) });
+	                }, 1000);
+	                _this2.setState({ showTimer: true, timer: intId });
+	            }
+	        };
+	
+	        _this2.turnOffTimer = function () {
+	            if (_this2.state.timer) {
+	                clearInterval(_this2.state.timer);
+	            }
+	            _this2.setState({ timer: 0, showTimer: false });
+	        };
+	
+	        _this2.state = {
+	            timer: 0,
+	            time: '00:00:00',
+	            showTimer: false
+	        };
+	        return _this2;
+	    }
+	
+	    _createClass(Qty, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this3 = this;
+	
+	            if (this.state.showTimer) {
+	                return _react2.default.createElement(
+	                    'span',
+	                    null,
+	                    _react2.default.createElement(
+	                        _IconButton2.default,
+	                        {
+	                            iconClassName: 'material-icons',
+	                            style: { top: '7px', left: '7px', opacity: '0.5' },
+	                            tooltip: 'Track time',
+	                            onClick: function onClick() {
+	                                _this3.time();
+	                            },
+	                            onDoubleClick: function onDoubleClick() {
+	                                _this3.turnOffTimer();
+	                            }
+	                        },
+	                        'timer'
+	                    ),
+	                    _react2.default.createElement(_TextField2.default, {
+	                        floatingLabelText: 'Qty',
+	                        floatingLabelFixed: true,
+	                        className: 'trx_entry_field',
+	                        type: 'text',
+	                        min: '0',
+	                        step: 'any',
+	                        style: { width: '100px', marginRight: '25px' },
+	                        value: this.state.time
+	                    })
+	                );
+	            } else {
+	                return _react2.default.createElement(
+	                    'span',
+	                    null,
+	                    _react2.default.createElement(
+	                        _IconButton2.default,
+	                        {
+	                            iconClassName: 'material-icons',
+	                            style: { top: '7px', left: '7px', opacity: '0.5' },
+	                            tooltip: 'Track time',
+	                            onClick: function onClick() {
+	                                _this3.setState({ timer: true });
+	                                _this3.time();
+	                            }
+	                        },
+	                        'timer'
+	                    ),
+	                    _react2.default.createElement(_TextField2.default, {
+	                        floatingLabelText: 'Qty',
+	                        floatingLabelFixed: false,
+	                        className: 'trx_entry_field',
+	                        type: 'number',
+	                        min: '0',
+	                        step: 'any',
+	                        style: { width: '100px', marginRight: '25px' }
+	                    })
+	                );
+	            };
+	        }
+	    }]);
+	
+	    return Qty;
+	}(_react2.default.Component);
+	
+	var BillableEntry = function (_React$Component3) {
+	    _inherits(BillableEntry, _React$Component3);
 	
 	    function BillableEntry(props) {
 	        _classCallCheck(this, BillableEntry);
 	
-	        var _this2 = _possibleConstructorReturn(this, (BillableEntry.__proto__ || Object.getPrototypeOf(BillableEntry)).call(this, props));
+	        var _this4 = _possibleConstructorReturn(this, (BillableEntry.__proto__ || Object.getPrototypeOf(BillableEntry)).call(this, props));
 	
-	        _this2.removeErrors = function () {
-	            _this2.setState({ errors: JSON.parse(JSON.stringify(_this2.formfields)) });
+	        _this4.removeErrors = function () {
+	            _this4.setState({ errors: JSON.parse(JSON.stringify(_this4.formfields)) });
 	        };
 	
-	        _this2.handleOpen = function (chosen) {
+	        _this4.handleOpen = function (chosen) {
 	            var edit = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 	
 	            //find out which customer is selected
@@ -43365,30 +43471,30 @@
 	                        tmp.type = billbl.type;
 	                        tmp.unit = billbl.unit;
 	                        tmp.price = billbl.price;
-	                        _this2.setState({ open: true, fields: tmp, edit: edit, snackbarOpen: false });
+	                        _this4.setState({ open: true, fields: tmp, edit: edit, snackbarOpen: false });
 	                        break;
 	                    }
 	                }
 	            } else {
 	                //else if creating, chosen is a string, customer & descr get default value
-	                var _tmp = JSON.parse(JSON.stringify(_this2.state.fields));
+	                var _tmp = JSON.parse(JSON.stringify(_this4.state.fields));
 	                _tmp.custid = customer.id;
 	                _tmp.customer = customer.company;
 	                _tmp.descr = chosen;
-	                _this2.setState({ open: true, fields: _tmp, edit: edit, snackbarOpen: false });
+	                _this4.setState({ open: true, fields: _tmp, edit: edit, snackbarOpen: false });
 	            }
 	        };
 	
-	        _this2.handleSave = function () {
-	            _this2.removeErrors();
+	        _this4.handleSave = function () {
+	            _this4.removeErrors();
 	            var billable = new FormData();
-	            var fields = Object.keys(_this2.formfields);
+	            var fields = Object.keys(_this4.formfields);
 	            for (var i = 3; i < fields.length; i++) {
 	                //starting at 1 b/c don't want to include 'customer' field in FormData
 	                billable.set(fields[i], document.getElementById(fields[i]).value);
-	            }billable.set('id', _this2.state.fields.id);
-	            billable.set('custid', _this2.state.fields.custid);
-	            fetch('save_billable?edit=' + _this2.state.edit, {
+	            }billable.set('id', _this4.state.fields.id);
+	            billable.set('custid', _this4.state.fields.custid);
+	            fetch('save_billable?edit=' + _this4.state.edit, {
 	                method: 'post',
 	                body: billable,
 	                headers: { 'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' },
@@ -43402,8 +43508,8 @@
 	                        }
 	                        cur_user = JSON.parse(json.cur_user);
 	                        cur_user.customer[i].selected = true;
-	                        _this2.setState({ message: json.message, snackbarOpen: true });
-	                        _this2.props.updateBillablesDropDown();
+	                        _this4.setState({ message: json.message, snackbarOpen: true });
+	                        _this4.props.updateBillablesDropDown();
 	                    });
 	                } else {
 	                    //flash errors into view
@@ -43412,32 +43518,32 @@
 	                        var fields = {};
 	                        for (var i = 0; i < keys.length; i++) {
 	                            fields[keys[i]] = errors[keys[i]];
-	                        }_this2.setState({ errors: fields });
+	                        }_this4.setState({ errors: fields });
 	                    });
 	                }
 	            });
 	        };
 	
-	        _this2.handleClose = function () {
-	            _this2.removeErrors();
-	            _this2.setState({
+	        _this4.handleClose = function () {
+	            _this4.removeErrors();
+	            _this4.setState({
 	                open: false,
 	                snackbarOpen: false,
-	                fields: JSON.parse(JSON.stringify(_this2.formfields))
+	                fields: JSON.parse(JSON.stringify(_this4.formfields))
 	            });
 	        };
 	
-	        _this2.formfields = { id: '', custid: '', customer: '', descr: '', type: '', unit: '', price: '' };
-	        _this2.updateBillablesDropDown = _react2.default.PropTypes.func.isRequired;
-	        _this2.state = {
+	        _this4.formfields = { id: '', custid: '', customer: '', descr: '', type: '', unit: '', price: '' };
+	        _this4.updateBillablesDropDown = _react2.default.PropTypes.func.isRequired;
+	        _this4.state = {
 	            open: false,
 	            snackbarOpen: false,
-	            fields: JSON.parse(JSON.stringify(_this2.formfields)),
-	            errors: JSON.parse(JSON.stringify(_this2.formfields)),
+	            fields: JSON.parse(JSON.stringify(_this4.formfields)),
+	            errors: JSON.parse(JSON.stringify(_this4.formfields)),
 	            message: '',
 	            edit: false
 	        };
-	        return _this2;
+	        return _this4;
 	    }
 	
 	    _createClass(BillableEntry, [{
@@ -43523,9 +43629,8 @@
 	                                step: 'any',
 	                                errorText: this.state.errors.price,
 	                                id: 'price',
-	                                defaultValue: this.state.fields.price,
+	                                defaultValue: this.state.fields.price ? parseInt(this.state.fields.price) : undefined,
 	                                style: style
-	
 	                            })
 	                        )
 	                    ),
@@ -43538,24 +43643,24 @@
 	    return BillableEntry;
 	}(_react2.default.Component);
 	
-	var DeleteCustomerDialog = function (_React$Component3) {
-	    _inherits(DeleteCustomerDialog, _React$Component3);
+	var DeleteCustomerDialog = function (_React$Component4) {
+	    _inherits(DeleteCustomerDialog, _React$Component4);
 	
 	    function DeleteCustomerDialog(props) {
 	        _classCallCheck(this, DeleteCustomerDialog);
 	
-	        var _this3 = _possibleConstructorReturn(this, (DeleteCustomerDialog.__proto__ || Object.getPrototypeOf(DeleteCustomerDialog)).call(this, props));
+	        var _this5 = _possibleConstructorReturn(this, (DeleteCustomerDialog.__proto__ || Object.getPrototypeOf(DeleteCustomerDialog)).call(this, props));
 	
-	        _this3.handleOpen = function (id) {
-	            _this3.setState({ open: true, id: id });
+	        _this5.handleOpen = function (id) {
+	            _this5.setState({ open: true, id: id });
 	        };
 	
-	        _this3.handleClose = function () {
-	            _this3.setState({ open: false });
+	        _this5.handleClose = function () {
+	            _this5.setState({ open: false });
 	        };
 	
-	        _this3.state = { open: false };
-	        return _this3;
+	        _this5.state = { open: false };
+	        return _this5;
 	    }
 	
 	    _createClass(DeleteCustomerDialog, [{
@@ -43580,24 +43685,24 @@
 	    return DeleteCustomerDialog;
 	}(_react2.default.Component);
 	
-	var DeleteBillablesDialog = function (_React$Component4) {
-	    _inherits(DeleteBillablesDialog, _React$Component4);
+	var DeleteBillablesDialog = function (_React$Component5) {
+	    _inherits(DeleteBillablesDialog, _React$Component5);
 	
 	    function DeleteBillablesDialog(props) {
 	        _classCallCheck(this, DeleteBillablesDialog);
 	
-	        var _this4 = _possibleConstructorReturn(this, (DeleteBillablesDialog.__proto__ || Object.getPrototypeOf(DeleteBillablesDialog)).call(this, props));
+	        var _this6 = _possibleConstructorReturn(this, (DeleteBillablesDialog.__proto__ || Object.getPrototypeOf(DeleteBillablesDialog)).call(this, props));
 	
-	        _this4.handleOpen = function (id) {
-	            _this4.setState({ open: true, id: id });
+	        _this6.handleOpen = function (id) {
+	            _this6.setState({ open: true, id: id });
 	        };
 	
-	        _this4.handleClose = function () {
-	            _this4.setState({ open: false });
+	        _this6.handleClose = function () {
+	            _this6.setState({ open: false });
 	        };
 	
-	        _this4.state = { open: false };
-	        return _this4;
+	        _this6.state = { open: false };
+	        return _this6;
 	    }
 	
 	    _createClass(DeleteBillablesDialog, [{
@@ -43622,15 +43727,15 @@
 	    return DeleteBillablesDialog;
 	}(_react2.default.Component);
 	
-	var TrxEntry = function (_React$Component5) {
-	    _inherits(TrxEntry, _React$Component5);
+	var TrxEntry = function (_React$Component6) {
+	    _inherits(TrxEntry, _React$Component6);
 	
 	    function TrxEntry(props) {
 	        _classCallCheck(this, TrxEntry);
 	
-	        var _this5 = _possibleConstructorReturn(this, (TrxEntry.__proto__ || Object.getPrototypeOf(TrxEntry)).call(this, props));
+	        var _this7 = _possibleConstructorReturn(this, (TrxEntry.__proto__ || Object.getPrototypeOf(TrxEntry)).call(this, props));
 	
-	        _this5.initCustomers = function () {
+	        _this7.initCustomers = function () {
 	            var customers = [];
 	            for (var i = 0; i < cur_user.customer.length; i++) {
 	                var customer = {
@@ -43646,14 +43751,14 @@
 	                                iconClassName: 'fa fa-pencil',
 	                                tooltip: 'Edit Customer',
 	                                href: '#',
-	                                onClick: _this5.editCust
+	                                onClick: _this7.editCust
 	                            }),
 	                            _react2.default.createElement(_IconButton2.default, {
 	                                className: cur_user.customer[i].id.toString(),
 	                                iconClassName: 'fa fa-trash-o',
 	                                tooltip: 'Delete Customer',
 	                                href: '#',
-	                                onClick: _this5.showDelCustDialog
+	                                onClick: _this7.showDelCustDialog
 	                            })
 	                        )
 	                    )
@@ -43663,11 +43768,11 @@
 	            return customers;
 	        };
 	
-	        _this5.updateCustomers = function () {
-	            _this5.setState({ customers: _this5.initCustomers() });
+	        _this7.updateCustomers = function () {
+	            _this7.setState({ customers: _this7.initCustomers() });
 	        };
 	
-	        _this5.updateBillables = function () {
+	        _this7.updateBillables = function () {
 	            var billables = [];
 	            for (var i = 0; i < cur_user.customer.length; i++) {
 	                if (cur_user.customer[i].selected) {
@@ -43686,14 +43791,14 @@
 	                                        iconClassName: 'fa fa-pencil',
 	                                        tooltip: 'Edit Billable',
 	                                        href: '#',
-	                                        onClick: _this5.editBillable
+	                                        onClick: _this7.editBillable
 	                                    }),
 	                                    _react2.default.createElement(_IconButton2.default, {
 	                                        className: billable.id.toString(),
 	                                        iconClassName: 'fa fa-trash-o',
 	                                        tooltip: 'Delete Billable',
 	                                        href: '#',
-	                                        onClick: _this5.showDelBillableDialog
+	                                        onClick: _this7.showDelBillableDialog
 	                                    })
 	                                )
 	                            )
@@ -43702,29 +43807,29 @@
 	                    break;
 	                }
 	            }
-	            _this5.setState({ billables: billables });
+	            _this7.setState({ billables: billables });
 	        };
 	
-	        _this5.handleClose = function () {
-	            _this5.setState({ snackbarOpen: false });
+	        _this7.handleClose = function () {
+	            _this7.setState({ snackbarOpen: false });
 	        };
 	
-	        _this5.deleteCustomer = function (event) {
-	            _this5.refs.del_cust_dialog.handleClose();
+	        _this7.deleteCustomer = function (event) {
+	            _this7.refs.del_cust_dialog.handleClose();
 	            var body = new FormData();
 	            body.append('cust_id', event.currentTarget.getAttribute('class'));
 	            fetch('delete_customer', { method: 'POST', headers: { 'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }, credentials: 'same-origin', body: body }).then(function (response) {
 	                if (response.ok) //Remove deleted customer from drop-down and show snackbar
 	                    response.json().then(function (json) {
 	                        cur_user = JSON.parse(json.cur_user);
-	                        _this5.setState({ snackbarOpen: true, message: json.message });
-	                        _this5.updateCustomers();
+	                        _this7.setState({ snackbarOpen: true, message: json.message });
+	                        _this7.updateCustomers();
 	                    });
 	            });
 	        };
 	
-	        _this5.deleteBillable = function (event) {
-	            _this5.refs.del_billables_dialog.handleClose();
+	        _this7.deleteBillable = function (event) {
+	            _this7.refs.del_billables_dialog.handleClose();
 	            var body = new FormData();
 	            body.append('id', parseInt(event.currentTarget.getAttribute('class')));
 	            fetch('delete_billable', { method: 'POST', headers: { 'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }, credentials: 'same-origin', body: body }).then(function (response) {
@@ -43735,32 +43840,32 @@
 	                        }
 	                        cur_user = JSON.parse(json.cur_user);
 	                        cur_user.customer[i].selected = true;
-	                        _this5.setState({ snackbarOpen: true, message: json.message });
-	                        _this5.updateBillables();
+	                        _this7.setState({ snackbarOpen: true, message: json.message });
+	                        _this7.updateBillables();
 	                    });
 	            });
 	        };
 	
-	        _this5.showDelCustDialog = function (event) {
-	            _this5.refs.del_cust_dialog.handleOpen(event.currentTarget.getAttribute('class'));
+	        _this7.showDelCustDialog = function (event) {
+	            _this7.refs.del_cust_dialog.handleOpen(event.currentTarget.getAttribute('class'));
 	        };
 	
-	        _this5.showDelBillableDialog = function (event) {
-	            _this5.refs.del_billables_dialog.handleOpen(event.currentTarget.getAttribute('class'));
+	        _this7.showDelBillableDialog = function (event) {
+	            _this7.refs.del_billables_dialog.handleOpen(event.currentTarget.getAttribute('class'));
 	        };
 	
-	        _this5.editCust = function (event) {
-	            _this5.refs.cust_entry.handleOpen(event.currentTarget.getAttribute('class'), true);
+	        _this7.editCust = function (event) {
+	            _this7.refs.cust_entry.handleOpen(event.currentTarget.getAttribute('class'), true);
 	        };
 	
-	        _this5.editBillable = function (event) {
-	            _this5.refs.billables_entry.handleOpen(event.currentTarget.getAttribute('class'), true);
+	        _this7.editBillable = function (event) {
+	            _this7.refs.billables_entry.handleOpen(event.currentTarget.getAttribute('class'), true);
 	        };
 	
-	        _this5.doesCustExist = function (chosen) {
+	        _this7.doesCustExist = function (chosen) {
 	            var exists = false;
 	            var input = '';
-	            _this5.setState({ disableBillables: true });
+	            _this7.setState({ disableBillables: true });
 	
 	            // Get input customer
 	            if (typeof chosen == 'string') {
@@ -43786,20 +43891,20 @@
 	                }
 	            }
 	            if (exists) {
-	                _this5.setState({ disableBillables: false });
-	                _this5.updateBillables();
+	                _this7.setState({ disableBillables: false });
+	                _this7.updateBillables();
 	                return true;
 	            } else {
-	                _this5.refs.cust_entry.handleOpen(input);
+	                _this7.refs.cust_entry.handleOpen(input);
 	                return false;
 	            }
 	        };
 	
-	        _this5.doesBillableExist = function (chosen) {
+	        _this7.doesBillableExist = function (chosen) {
 	            var exists = false;
 	            var input = '';
 	
-	            // Get input billalbe
+	            // Get input billable
 	            if (typeof chosen == 'string') {
 	                // pressing enter in billables
 	                if (chosen == '') return false;
@@ -43819,30 +43924,30 @@
 	                    var cust = cur_user.customer[i];
 	                    if (!cust.billable) exists = false;else for (var j = 0; j < cust.billable.length; j++) {
 	                        if (cust.billable[j].descr.toLowerCase().trim() == input.toLowerCase().trim()) exists = true;
-	                    }
+	                    }break;
 	                }
 	            }
 	            if (exists) {
 	                return true;
 	            } else {
-	                _this5.refs.billables_entry.handleOpen(input);
+	                _this7.refs.billables_entry.handleOpen(input);
 	                return false;
 	            }
 	        };
 	
-	        _this5.componentDidMount = function () {
-	            document.getElementById('customer').addEventListener('blur', _this5.doesCustExist);
-	            document.getElementById('billable').addEventListener('blur', _this5.doesBillableExist);
+	        _this7.componentDidMount = function () {
+	            document.getElementById('customer').addEventListener('blur', _this7.doesCustExist);
+	            document.getElementById('billable').addEventListener('blur', _this7.doesBillableExist);
 	        };
 	
-	        _this5.state = {
-	            customers: _this5.initCustomers(),
+	        _this7.state = {
+	            customers: _this7.initCustomers(),
 	            billables: [],
 	            snackbarOpen: false, message: '',
 	            showDelCustDialog: false,
 	            disableBillables: true
 	        };
-	        return _this5;
+	        return _this7;
 	    }
 	    /**
 	     * Auto-complete selection/onBlur calls this function with cust object when selecting from drop-down
@@ -43887,14 +43992,7 @@
 	                        listStyle: { width: 'auto', minWidth: '400px' },
 	                        onNewRequest: this.doesCustExist
 	                    }),
-	                    _react2.default.createElement(_TextField2.default, {
-	                        floatingLabelText: 'Qty',
-	                        className: 'trx_entry_field',
-	                        type: 'number',
-	                        id: 'qty',
-	                        min: '0',
-	                        style: { width: '50px', marginRight: '25px' }
-	                    }),
+	                    _react2.default.createElement(Qty, null),
 	                    _react2.default.createElement(_AutoComplete2.default, {
 	                        dataSource: this.state.billables,
 	                        floatingLabelText: 'Billable',
@@ -43916,9 +44014,7 @@
 	                        disabled: true
 	                    }),
 	                    _react2.default.createElement(_FlatButton2.default, { label: 'Save Transaction', style: { color: 'green' } }),
-	                    _react2.default.createElement(_FlatButton2.default, { label: 'Clear', onClick: function onClick() {
-	                            document.forms['trx_form'].reset();
-	                        }, style: { color: 'red' } }),
+	                    _react2.default.createElement(_FlatButton2.default, { label: 'Clear', type: 'reset', onClick: this.reset, style: { color: 'red' } }),
 	                    _react2.default.createElement(_Snackbar2.default, { open: this.state.snackbarOpen, message: this.state.message, onRequestClose: this.handleClose, autoHideDuration: 3000 })
 	                )
 	            );
@@ -43928,8 +44024,8 @@
 	    return TrxEntry;
 	}(_react2.default.Component);
 	
-	var Trx = function (_React$Component6) {
-	    _inherits(Trx, _React$Component6);
+	var Trx = function (_React$Component7) {
+	    _inherits(Trx, _React$Component7);
 	
 	    function Trx(props) {
 	        _classCallCheck(this, Trx);

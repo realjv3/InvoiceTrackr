@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC" rel="stylesheet" type="text/css">
 
     <link href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="icon" href="https://www.dropbox.com/s/1x89klicik0olnk/money.png?dl=1">
 
     <script type="text/javascript">
