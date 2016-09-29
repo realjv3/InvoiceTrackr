@@ -11,6 +11,7 @@ import React from 'react';
 import 'whatwg-fetch';
 import ES6Promise from 'es6-promise';
 ES6Promise.polyfill();
+import {showOverlay, hideOverlay} from 'util.jsx';
 
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
@@ -147,6 +148,7 @@ class LoginMenu extends React.Component
 
     handleSubmit = (e) => {
         e.preventDefault();
+        showOverlay();
         this.setState({
             emailErr: '',
             passwordErr: ''
@@ -168,12 +170,13 @@ class LoginMenu extends React.Component
                 else
                 {
                     response.json()
-                        .then(function(json) {
+                        .then((json) => {
+                            hideOverlay();
                             this.setState({
                                 emailErr: json.email,
                                 passwordErr: json.password
                             });
-                        }.bind(this));
+                        });
                 }
             }.bind(this)).catch(function (errors) {
                 console.log(errors);

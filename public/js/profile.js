@@ -22618,6 +22618,8 @@
 	
 	var _es6Promise2 = _interopRequireDefault(_es6Promise);
 	
+	var _util = __webpack_require__(/*! util.jsx */ 482);
+	
 	var _FlatButton = __webpack_require__(/*! material-ui/FlatButton */ 182);
 	
 	var _FlatButton2 = _interopRequireDefault(_FlatButton);
@@ -22811,6 +22813,7 @@
 	
 	        _this2.handleSubmit = function (e) {
 	            e.preventDefault();
+	            (0, _util.showOverlay)();
 	            _this2.setState({
 	                emailErr: '',
 	                passwordErr: ''
@@ -22824,16 +22827,19 @@
 	                headers: { 'X-CSRF-Token': _token, "Accept": "application/json" },
 	                credentials: 'same-origin'
 	            }).then(function (response) {
+	                var _this3 = this;
+	
 	                if (response.ok) {
 	                    this.handleClose();
 	                    window.location.href = '/';
 	                } else {
 	                    response.json().then(function (json) {
-	                        this.setState({
+	                        (0, _util.hideOverlay)();
+	                        _this3.setState({
 	                            emailErr: json.email,
 	                            passwordErr: json.password
 	                        });
-	                    }.bind(this));
+	                    });
 	                }
 	            }.bind(_this2)).catch(function (errors) {
 	                console.log(errors);
@@ -22912,9 +22918,9 @@
 	    function NavBar(props) {
 	        _classCallCheck(this, NavBar);
 	
-	        var _this3 = _possibleConstructorReturn(this, (NavBar.__proto__ || Object.getPrototypeOf(NavBar)).call(this, props));
+	        var _this4 = _possibleConstructorReturn(this, (NavBar.__proto__ || Object.getPrototypeOf(NavBar)).call(this, props));
 	
-	        _this3.getChildContext = function () {
+	        _this4.getChildContext = function () {
 	            return {
 	                muiTheme: (0, _getMuiTheme2.default)({
 	                    appBar: { color: _colors.indigo100 },
@@ -22923,15 +22929,15 @@
 	            };
 	        };
 	
-	        _this3.openRegForm = function () {
-	            _this3.refs.regform.setState({ open: true });
+	        _this4.openRegForm = function () {
+	            _this4.refs.regform.setState({ open: true });
 	        };
 	
-	        _this3.logout = function () {
+	        _this4.logout = function () {
 	            window.location.href = '/auth/logout';
 	        };
 	
-	        return _this3;
+	        return _this4;
 	    }
 	
 	    _createClass(NavBar, [{
@@ -22970,13 +22976,13 @@
 	    function Footer(props) {
 	        _classCallCheck(this, Footer);
 	
-	        var _this4 = _possibleConstructorReturn(this, (Footer.__proto__ || Object.getPrototypeOf(Footer)).call(this, props));
+	        var _this5 = _possibleConstructorReturn(this, (Footer.__proto__ || Object.getPrototypeOf(Footer)).call(this, props));
 	
-	        _this4.getChildContext = function () {
+	        _this5.getChildContext = function () {
 	            return { muiTheme: (0, _getMuiTheme2.default)({ appBar: { color: '#3F51B5' }, textField: { hintColor: '#C5CAE9' } }) };
 	        };
 	
-	        return _this4;
+	        return _this5;
 	    }
 	
 	    _createClass(Footer, [{
@@ -41817,7 +41823,7 @@
 	
 	
 	// module
-	exports.push([module.id, "* {\r\n    padding: 0;\r\n    margin: 0;\r\n    font-family: 'Alegreya Sans', sans-serif;\r\n    text-decoration: none;\r\n}\r\n\r\nhtml {\r\n    height: 100%;\r\n}\r\n\r\nbody {\r\n    min-height: 100%;\r\n    min-width: 375px;\r\n}\r\n\r\na:visited, a {\r\n    color: black;\r\n}\r\n\r\nheader {\r\n    width: 100%;\r\n}\r\n\r\nfieldset {\r\n    margin: 5px;\r\n    padding: 20px;\r\n    border: solid 1px #E0DEDE;\r\n    backgroundColor: #F7FAF5;\r\n}\r\n\r\n/**\r\n * Login Menu\r\n */\r\n#logout_link {\r\n    margin: 1vw 0;\r\n    font-size: small;\r\n}\r\n\r\n/**\r\n * Main Content Area\r\n */\r\n#landing_animation {\r\n    position: relative;\r\n    height: 65vh;\r\n    margin: 5vw 0 0 13vw;\r\n}\r\n\r\n\r\n#greeting {\r\n    font-size: 1em;\r\n    text-align: center;\r\n    padding-top: 33vh;\r\n    padding-bottom: 21.5vh;\r\n}\r\n\r\ndiv.main_area, div.cards {\r\n    background: #F5F5F5 !important;\r\n    margin: 0 0 4vw 0;\r\n}\r\n\r\ndiv.main_area {\r\n    min-height: 69.4vh;\r\n    margin: 7vw;\r\n    padding: 3vw;\r\n}\r\n\r\n/**\r\n * Profile form\r\n */\r\n.profile_field {\r\n    margin-right: 10px;\r\n    padding-right: 10px;\r\n    width: auto !important;\r\n}\r\n\r\n/**\r\n * Trx entry form\r\n */\r\nform#trx_form {\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n}\r\n\r\n/**\r\n * Customer drop-down\r\n */\r\nspan.cust_icons {\r\n    position: relative;\r\n    bottom: 7px;\r\n}\r\n\r\nspan.cust_icons .fa {\r\n    font-size: 17px !important;\r\n}\r\n\r\n/**\r\n * Footer Area\r\n */\r\nfooter {\r\n    bottom: 0;\r\n    position: relative;\r\n    width: 100%;\r\n    font-size: small;\r\n    margin-top: 5vh;\r\n}\r\n\r\n/**\r\n * Rules for viewport's with widths < 510 px\r\n */\r\n@media (max-width: 510px) {\r\n    #logout_link {\r\n        font-size: x-small;\r\n    }\r\n    \r\n    #main_area {\r\n        min-height: 70.9vh;\r\n    }\r\n}", ""]);
+	exports.push([module.id, "* {\r\n    padding: 0;\r\n    margin: 0;\r\n    font-family: 'Alegreya Sans', sans-serif;\r\n    text-decoration: none;\r\n}\r\n\r\nhtml {\r\n    height: 100%;\r\n}\r\n\r\nbody {\r\n    min-height: 100%;\r\n    min-width: 375px;\r\n}\r\n\r\na:visited, a {\r\n    color: black;\r\n}\r\n\r\nheader {\r\n    width: 100%;\r\n}\r\n\r\nfieldset {\r\n    margin: 5px;\r\n    padding: 20px;\r\n    border: solid 1px #E0DEDE;\r\n    backgroundColor: #F7FAF5;\r\n}\r\n\r\n/**\r\n * Login Menu\r\n */\r\n#logout_link {\r\n    margin: 1vw 0;\r\n    font-size: small;\r\n}\r\n\r\n/**\r\n * Main Content Area\r\n */\r\n#landing_animation {\r\n    position: relative;\r\n    height: 65vh;\r\n    margin: 5vw 0 0 13vw;\r\n}\r\n\r\n\r\n#greeting {\r\n    font-size: 1em;\r\n    text-align: center;\r\n    padding-top: 33vh;\r\n    padding-bottom: 21.5vh;\r\n}\r\n\r\ndiv.main_area, div.cards {\r\n    background: #F5F5F5 !important;\r\n    margin: 0 0 4vw 0;\r\n}\r\n\r\ndiv.main_area {\r\n    min-height: 69.4vh;\r\n    margin: 7vw;\r\n    padding: 3vw;\r\n}\r\n\r\n/**\r\n * Profile form\r\n */\r\n.profile_field {\r\n    margin-right: 10px;\r\n    padding-right: 10px;\r\n    width: auto !important;\r\n}\r\n\r\n/**\r\n * Trx entry form\r\n */\r\nform#trx_form {\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n}\r\n\r\n/**\r\n * Customer drop-down\r\n */\r\nspan.cust_icons {\r\n    position: relative;\r\n    bottom: 7px;\r\n}\r\n\r\nspan.cust_icons .fa {\r\n    font-size: 17px !important;\r\n}\r\n\r\n/**\r\n * Footer Area\r\n */\r\n\r\ndiv#loader {\r\n    border: 16px solid #f3f3f3; /* Light grey */\r\n    border-top: 16px solid #3498db; /* Blue */\r\n    border-radius: 50%;\r\n    width: 120px;\r\n    height: 120px;\r\n    animation: spin 2s linear infinite;\r\n    position: absolute;\r\n    top: 40vh;\r\n    left: 42.5vw;\r\n    z-index: 1200;\r\n    display: none;\r\n}\r\n\r\ndiv#overlay {\r\n    background: #b6b2b2;\r\n    display: none;\r\n    position: absolute;\r\n    top: 0;\r\n    right: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    opacity: 0.5;\r\n    z-index: 1100;\r\n}\r\n\r\n@keyframes spin {\r\n    0% { transform: rotate(0deg); }\r\n    100% { transform: rotate(360deg); }\r\n}\r\n\r\nfooter {\r\n    bottom: 0;\r\n    position: relative;\r\n    width: 100%;\r\n    font-size: small;\r\n    margin-top: 5vh;\r\n}\r\n\r\n/**\r\n * Rules for viewport's with widths < 510 px\r\n */\r\n@media (max-width: 510px) {\r\n    #logout_link {\r\n        font-size: x-small;\r\n    }\r\n    \r\n    #main_area {\r\n        min-height: 70.9vh;\r\n    }\r\n}\r\n\r\n@media (max-width: 768px) {\r\n    div#loader {\r\n        top: 40vh;\r\n        left: 36vw;\r\n    }\r\n}", ""]);
 	
 	// exports
 
@@ -45301,6 +45307,36 @@
 	NavigationCancel.muiName = 'SvgIcon';
 	
 	exports.default = NavigationCancel;
+
+/***/ },
+/* 478 */,
+/* 479 */,
+/* 480 */,
+/* 481 */,
+/* 482 */
+/*!**************************************!*\
+  !*** ./resources/assets/js/util.jsx ***!
+  \**************************************/
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	/**
+	 * Some helper functions
+	 */
+	
+	var showOverlay = exports.showOverlay = function showOverlay() {
+	    document.getElementById('loader').style.display = 'initial';
+	    document.getElementById('overlay').style.display = 'initial';
+	};
+	
+	var hideOverlay = exports.hideOverlay = function hideOverlay() {
+	    document.getElementById('loader').style.display = 'none';
+	    document.getElementById('overlay').style.display = 'none';
+	};
 
 /***/ }
 /******/ ]);

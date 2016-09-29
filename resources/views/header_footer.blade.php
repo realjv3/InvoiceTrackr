@@ -26,6 +26,11 @@
     <div id="content">
         @yield('content')
     </div>
+
+    <div id="overlay">
+        <div id="loader"></div>
+    </div>
+
     <footer id="footer">
         @yield('scripts')
     </footer>
