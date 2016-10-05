@@ -264,96 +264,6 @@ class CustomerEntry extends React.Component
     }
 }
 
-class Qty extends React.Component
-{
-    constructor(props) {
-        super(props);
-        this.state = {
-            timer: 0,
-            time: '00:00:00',
-            showTimer: false
-        }
-    }
-
-    time = () => {
-        if(this.state.time == undefined) return;
-        if (this.state.timer) {
-            clearInterval(this.state.timer);
-            this.setState({timer: 0});
-        }
-        else {
-            let intId = setInterval(() => {
-                let cur = this.state.time.split(':');
-                let secs = (+cur[0]) * 60 * 60 + (+cur[1]) * 60 + (+cur[2]);
-                let val = new Date(null);
-                val.setSeconds(++secs);
-                this.setState({time: val.toISOString().substr(11,8)});
-            }, 1000);
-            this.setState({showTimer: true, timer: intId});
-        }
-    }
-
-    turnOffTimer = () => {
-        if (this.state.timer) {
-            clearInterval(this.state.timer);
-        }
-        this.setState({timer: 0, showTimer: false});
-    }
-
-    render() {
-        if (this.state.showTimer) {
-            return (
-                <span>
-                    <IconButton
-                        iconClassName="material-icons"
-                        style={{top: '7px', left: '7px', opacity: '0.5'}}
-                        tooltip="Track time"
-                        onClick={ () => {this.time(); }}
-                        onDoubleClick={ () => {this.turnOffTimer(); }}
-                    >
-                        timer
-                    </IconButton>
-                    <TextField
-                        floatingLabelText="Qty"
-                        floatingLabelFixed={true}
-                        className="trx_entry_field"
-                        type="text"
-                        min="0"
-                        step="any"
-                        style={{width: '100px', marginRight: '25px'}}
-                        value={this.state.time}
-                    />
-                </span>);
-        } else {
-            return (
-                <span>
-                    <IconButton
-                        iconClassName="material-icons"
-                        style={{top: '7px', left: '7px', opacity: '0.5'}}
-                        tooltip="Track time"
-                        onClick={ () => {
-                                    this.setState({timer: true});
-                                    this.time();
-                                }
-                            }
-                        >
-                        timer
-                    </IconButton>
-                    <TextField
-                        floatingLabelText="Qty"
-                        floatingLabelFixed={false}
-                        className="trx_entry_field"
-                        type="number"
-                        min="0"
-                        step="any"
-                        style={{width: '100px', marginRight: '25px'}}
-                    />
-                </span>
-            );
-        };
-    }
-}
-
 class BillableEntry extends React.Component
 {
     constructor(props) {
@@ -602,6 +512,96 @@ class DeleteBillablesDialog extends React.Component
     }
 }
 
+class Qty extends React.Component
+{
+    constructor(props) {
+        super(props);
+        this.state = {
+            timerId: 0,
+            time: '00:00:00',
+            showTimer: false
+        }
+    }
+
+    time = () => {
+        if(this.state.time == undefined) return;
+        if (this.state.timerId) {
+            clearInterval(this.state.timerId);
+            this.setState({timerId: 0});
+        }
+        else {
+            let intId = setInterval(() => {
+                let cur = this.state.time.split(':');
+                let secs = (+cur[0]) * 60 * 60 + (+cur[1]) * 60 + (+cur[2]);
+                let val = new Date(null);
+                val.setSeconds(++secs);
+                this.setState({time: val.toISOString().substr(11,8)});
+            }, 1000);
+            this.setState({showTimer: true, timerId: intId});
+        }
+    }
+
+    turnOffTimer = () => {
+        if (this.state.timerId) {
+            clearInterval(this.state.timerId);
+        }
+        this.setState({timerId: 0, showTimer: false});
+    }
+
+    render() {
+        if (this.state.showTimer) {
+            return (
+                <span>
+                    <IconButton
+                        iconClassName="material-icons"
+                        style={{top: '7px', left: '7px', opacity: '0.5'}}
+                        tooltip="Track time"
+                        onClick={ () => {this.time(); }}
+                        onDoubleClick={ () => {this.turnOffTimer(); }}
+                        >
+                        timer
+                    </IconButton>
+                    <TextField
+                        floatingLabelText="Qty"
+                        floatingLabelFixed={true}
+                        id={this.props.id}
+                        type="text"
+                        min="0"
+                        step="any"
+                        style={{width: '100px', marginRight: '25px'}}
+                        value={this.state.time}
+                        />
+                </span>);
+        } else {
+            return (
+                <span>
+                    <IconButton
+                        iconClassName="material-icons"
+                        style={{top: '7px', left: '7px', opacity: '0.5'}}
+                        tooltip="Track time"
+                        onClick={ () => {
+                                    this.setState({timerId: true});
+                                    this.time();
+                                }
+                            }
+                        >
+                        timer
+                    </IconButton>
+                    <TextField
+                        floatingLabelText="Qty"
+                        floatingLabelFixed={false}
+                        id={this.props.id}
+                        type="number"
+                        min="0"
+                        step="any"
+                        style={{width: '100px', marginRight: '25px'}}
+                        />
+                </span>
+            );
+        };
+    }
+}
+
 class TrxEntry extends React.Component
 {
     constructor(props) {
@@ -813,11 +813,16 @@ class TrxEntry extends React.Component
             return false;
         }
     }
+    updateTotal = (event) => {
+
+        console.log(parseFloat(event.target.value));
+    }
     // AutoComplete not emitting onBlur, see git,therefore setting listener after render, old school
     // https://github.com/callemall/material-ui/issues/2294 says onBlur is fixed, but it's not
     componentDidMount = () => {
         document.getElementById('customer').addEventListener('blur', this.doesCustExist);
         document.getElementById('billable').addEventListener('blur', this.doesBillableExist);
+        document.getElementById('qty').addEventListener('blur', this.updateTotal);
     }
     render() {
         return (
@@ -830,21 +835,19 @@ class TrxEntry extends React.Component
                     <DatePicker
                         autoOk={true}
                         floatingLabelText="Date"
-                        className="trx_entry_field"
                         style={{marginRight: '25px'}}
                         textFieldStyle={{width:'90px'}}
                     />
                     <AutoComplete
                         dataSource= {this.state.customers}
                         floatingLabelText="Customer"
-                        className="trx_entry_field"
                         id="customer"
                         style={{marginRight: '25px'}}
                         filter={(searchText, key) => { return (key.toLowerCase().indexOf(searchText.toLowerCase()) >= 0); }}
                         listStyle={{width: 'auto', minWidth: '400px'}}
                         onNewRequest={this.doesCustExist}
                     />
-                    <Qty />
+                    <Qty id="qty"/>
                     <AutoComplete
                         dataSource={this.state.billables}
                         floatingLabelText="Billable"

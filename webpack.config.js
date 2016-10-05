@@ -1,3 +1,5 @@
+require('es6-promise').polyfill();
+
 module.exports = {
     entry: {
         landing: './resources/assets/js/root_cmpnts/landing.jsx',
@@ -14,7 +16,7 @@ module.exports = {
             { test: /\.css$/, loader: 'style-loader!css-loader' }, // use ! to chain loaders
             { test: /\.png$/, loader: "url-loader?limit=100000&mimetype=image/png" },
             {
-                test: /\.jsx$/,
+                test: [/\.jsx$/, /\.js$/],
                 loader: "babel",
                 query: {
                     cacheDirectory: true,

@@ -66,7 +66,6 @@ class RegisterForm extends React.Component
         form.append('email', document.getElementById('rEmail').value);
         form.append('password', document.getElementById('rPassword').value);
         form.append('password_confirmation', document.getElementById('rConfPassword').value);
-        // @TODO fetch() browser support detection
         fetch('/auth/register',
             {
                 method: 'POST',
@@ -162,13 +161,11 @@ class LoginMenu extends React.Component
             headers: {'X-CSRF-Token': _token, "Accept": "application/json"},
             credentials: 'same-origin'
         })
-            .then(function(response) {
-                if(response.ok){
+            .then((response) => {
+                if(response.ok) {
                     this.handleClose();
                     window.location.href = '/';
-                }
-                else
-                {
+                } else {
                     response.json()
                         .then((json) => {
                             hideOverlay();
@@ -178,7 +175,7 @@ class LoginMenu extends React.Component
                             });
                         });
                 }
-            }.bind(this)).catch(function (errors) {
+            }).catch(function (errors) {
                 console.log(errors);
             });
     }

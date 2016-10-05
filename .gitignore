@@ -6,3 +6,7 @@ Homestead.json
 .env
 .idea
 npm-debug.log
+.map
+invoice_this.sql
+nginx.conf
+.vagrant

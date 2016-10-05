@@ -29,9 +29,13 @@
     "url": "git+https://github.com/realjv3/invoicetrackr.git"
   },
   "author": "John Verity",
-  "license": "ISC",
+  "license": "Bipcot",
   "bugs": {
     "url": "https://github.com/realjv3/invoicetrackr/issues"
   },
-  "homepage": "https://github.com/realjv3/invoicetrackr#readme"
+  "homepage": "https://github.com/realjv3/invoicetrackr#readme",
+  "main": "webpack.config.js",
+  "directories": {
+    "test": "tests"
+  }
 }
