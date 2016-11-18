@@ -1,9 +1,4 @@
 <?php
-/**
- * Author: John
- * Date: 9/24/2016
- * Time: 4:13 PM
- */
 
 namespace App\Util;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +9,7 @@ class Util
 
         if(Auth::check()) {
             $user = Auth::user()
-            ->with('profile', 'customer.cust_profile', 'customer.billable')
+            ->with('profile', 'customer.cust_profile', 'customer.billable', 'customer.custtrx')
             ->get()
             ->filter(function($item) {
                 return $item->email === Auth::user()->email;

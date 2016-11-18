@@ -26,7 +26,7 @@ class States extends React.Component
                 onChange={this.handleChange}
                 floatingLabelText="State"
                 style={this.state.style}
-                id="state"
+                id={this.props.id}
                 errorText={this.props.error}
             >
                 <MenuItem value='AL' primaryText='AL' />

@@ -166,7 +166,7 @@ class Profile extends React.Component
                             errorText={this.state.formfields.city}
                             defaultValue={cur_user.profile.city}
                         />
-                        <States error={this.state.formfields.state} id="user_state" style={{width: '50px', paddingRight: '10px'}} />
+                        <States error={this.state.formfields.state} id="state" style={{width: '50px', paddingRight: '10px'}} />
                         <TextField
                             style={{width: '100px'}}
                             floatingLabelText="Zip"

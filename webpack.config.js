@@ -16,7 +16,7 @@ module.exports = {
             { test: /\.css$/, loader: 'style-loader!css-loader' }, // use ! to chain loaders
             { test: /\.png$/, loader: "url-loader?limit=100000&mimetype=image/png" },
             {
-                test: [/\.jsx$/, /\.js$/],
+                test: [/\.jsx$/],
                 loader: "babel",
                 query: {
                     cacheDirectory: true,

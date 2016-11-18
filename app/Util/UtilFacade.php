@@ -5,7 +5,7 @@
  * Time: 5:37 PM
  */
 
-namespace app\Util;
+namespace App\Util;
 
 use Illuminate\Support\Facades\Facade;
 

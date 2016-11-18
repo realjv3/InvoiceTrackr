@@ -80,8 +80,7 @@ Vagrant.configure("2") do |config|
     echo '#';
     sudo mkdir /var/www; cd /var/www;
     sudo git clone 'https://github.com/realjv3/invoicetrackr.git';
-    sudo chown -R vagrant:www-data /var/www/invoicetrackr;
-    sudo chmod -R 775 /var/www/invoicetrackr;
+    sudo chown -R www-data:www-data /var/www/invoicetrackr && sudo chmod -R 664 /var/www/invoicetrackr && sudo find /var/www/invoicetrackr -type d -exec chmod 775 {} \;
     sudo cp /vagrant/.env /var/www/invoicetrackr;
 
     echo '#';
@@ -124,7 +123,7 @@ Vagrant.configure("2") do |config|
     sudo php composer-setup.php --filename=composer;
     sudo mv composer /usr/bin;
     sudo unlink composer-setup.php;
-    sudo chown -R vagrant:www-data /var/www/invoicetrackr;
+    sudo chown -R www-data:www-data /var/www/invoicetrackr;
 
 
     echo '#';
@@ -141,8 +140,7 @@ Vagrant.configure("2") do |config|
     sudo npm install --only=dev;
     sudo composer install;
 
-    sudo chown -R vagrant:www-data /var/www/invoicetrackr;
-    sudo chmod -R 775 /var/www/invoicetrackr;
+    sudo chown -R www-data:www-data /var/www/invoicetrackr && sudo chmod -R 664 /var/www/invoicetrackr && sudo find /var/www/invoicetrackr -type d -exec chmod 775 {} \;
 
     echo '#';
     echo '###################### Installing xdebug ######################'
@@ -178,8 +176,8 @@ Vagrant.configure("2") do |config|
     echo '#';
     sudo echo "alias ls='ls -lAh'" >> /home/vagrant/.bashrc;
     sudo echo "cd /var/www/invoicetrackr" >> /home/vagrant/.bashrc;
-    sudo chown -R vagrant:www-data /var/www/invoicetrackr;
-    sudo chmod -R 775 /var/www/invoicetrackr;
+    sudo chown -R www-data:www-data /var/www/invoicetrackr && sudo chmod -R 664 /var/www/invoicetrackr && sudo find /var/www/invoicetrackr -type d -exec chmod 775 {} \;
+    sudo gpasswd -a vagrant www-data;
 
     # @TODO Install Mysql, create database, import table
     # sudo apt-get install -y mysql-server-5.5 mysql-client;

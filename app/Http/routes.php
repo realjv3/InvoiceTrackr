@@ -43,15 +43,16 @@ Route::group(['middleware' => ['web']], function () {
     // Profile save
     Route::post('profile/save', 'ProfileController@save');
 
-    // Customer save
+    // Customer crud
     Route::post('save_customer', 'CustomerController@save');
-    // Customer delete
     Route::post('delete_customer', 'CustomerController@delete');
-    // Customer read
     Route::get('read_customer', 'CustomerController@read');
 
-    // Save a billable for a customer
+    // Billable crud
     Route::post('save_billable', 'BillablesController@save');
-    // Delete billable
     Route::post('delete_billable', 'BillablesController@delete');
+
+    // Trx crud
+    Route::post('save_trx', 'CustTrxController@save');
+    Route::delete('del_trx/{trx_id}', 'CustTrxController@delete');
 });

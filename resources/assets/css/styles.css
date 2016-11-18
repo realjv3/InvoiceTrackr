@@ -3,6 +3,7 @@
     margin: 0;
     font-family: 'Alegreya Sans', sans-serif;
     text-decoration: none;
+    cursor: default;
 }
 
 html {
@@ -16,6 +17,7 @@ body {
 
 a:visited, a {
     color: black;
+    cursor: default;
 }
 
 header {
@@ -90,14 +92,40 @@ span.cust_icons {
     bottom: 7px;
 }
 
-span.cust_icons .fa {
+span.cust_icons .fa, span.trx_icons .fa {
     font-size: 17px !important;
+}
+
+/**
+ * Transactions Area
+ */
+table {
+    margin: 0 auto;
+}
+
+tr {
+    display: flex;
+    justify-content: space-around;
+}
+
+tr:hover {
+    background-color: #C5CAE9;
+}
+
+th, td {
+    width: 10vw;
+    text-align: center;
+    margin: 7px;
+}
+
+span.trx_icons {
+    position: relative;
+    bottom: 15px;
 }
 
 /**
  * Footer Area
  */
-
 div#loader {
     border: 16px solid #f3f3f3; /* Light grey */
     border-top: 16px solid #3498db; /* Blue */
