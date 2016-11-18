@@ -1039,6 +1039,7 @@ class TrxEntry extends React.Component
 class Trx extends React.Component
 {
     constructor(props) {
+        console.log('hi');
         super(props);
     }
     render() {
