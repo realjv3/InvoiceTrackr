@@ -762,7 +762,7 @@ class TrxEntry extends React.Component
         if(this.refs.trx_entry_billable.state.searchText != '') this.refs.trx_entry_billable.setState({searchText: ''});
         this.refs.trx_entry_descr.setState({hasValue: false});
         document.getElementById('trx_entry_descr').value = '';
-        document.getElementById('trx_entry_amt').value = '';
+        this.setState({amt: '$ 0.00'})
     }
     showDelCustDialog = (event) => {
         this.refs.del_cust_dialog.handleOpen(event.currentTarget.getAttribute('class'));

@@ -43388,7 +43388,7 @@
 	            if (_this7.refs.trx_entry_billable.state.searchText != '') _this7.refs.trx_entry_billable.setState({ searchText: '' });
 	            _this7.refs.trx_entry_descr.setState({ hasValue: false });
 	            document.getElementById('trx_entry_descr').value = '';
-	            document.getElementById('trx_entry_amt').value = '';
+	            _this7.setState({ amt: '$ 0.00' });
 	        };
 	
 	        _this7.showDelCustDialog = function (event) {
