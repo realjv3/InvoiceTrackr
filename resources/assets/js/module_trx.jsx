@@ -755,14 +755,14 @@ class TrxEntry extends React.Component
     }
     handleClear = () => {
         this.removeErrors();
-        document.getElementById('trx_entry_trxid').value = null;
-        document.getElementById('trx_entry_trxdt').value = null;
+        document.getElementById('trx_entry_trxid').value = '';
+        this.refs.trx_entry_trxdt.setState({date: ''});
         if(this.refs.trx_entry_customer.state.searchText != '') this.refs.trx_entry_customer.setState({searchText: ''});
         this.refs.trx_entry_qty.setState({val: ''});
         if(this.refs.trx_entry_billable.state.searchText != '') this.refs.trx_entry_billable.setState({searchText: ''});
         this.refs.trx_entry_descr.setState({hasValue: false});
-        document.getElementById('trx_entry_descr').value = null;
-        document.getElementById('trx_entry_amt').value = null;
+        document.getElementById('trx_entry_descr').value = '';
+        document.getElementById('trx_entry_amt').value = '';
     }
     showDelCustDialog = (event) => {
         this.refs.del_cust_dialog.handleOpen(event.currentTarget.getAttribute('class'));
@@ -1049,7 +1049,7 @@ class Trx extends React.Component
                     subtitle="Track Time & Expenses"
                     actAsExpander={true}
                     avatar="https://www.dropbox.com/s/4hw9njfnlkgttmf/clock-1.png?dl=1"
-                    />
+                />
                 <CardText expandable={true} style={{
                         display: 'flex',
                         flexDirection: 'row',
