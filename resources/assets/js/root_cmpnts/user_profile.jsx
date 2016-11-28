@@ -101,7 +101,7 @@ class Profile extends React.Component
 
     render() {
         return (
-            <Paper id="profile" style={{position: 'relative', marginLeft: 'auto', marginRight: 'auto', maxWidth: '74vw', marginTop: '50px', padding: '50px', backgroundColor: '#F7FAF5'}}>
+            <Paper id="profile">
                 <form id="profile-form" onSubmit={this.handleSave}>
                     <fieldset style={{ margin: '5px', padding: '20px', border: 'solid 1px #E0DEDE', backgroundColor: '#F7FAF5'}}>
                         <TextField
