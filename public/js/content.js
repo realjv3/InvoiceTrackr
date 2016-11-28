@@ -43275,6 +43275,7 @@
 	                        cur_user = JSON.parse(json.cur_user);
 	                        _this7.setState({ snackbarOpen: true, message: json.message });
 	                        _this7.updateCustomers();
+	                        _this7.handleClear();
 	                    });
 	            });
 	        };
@@ -43320,7 +43321,6 @@
 	                    response.json().then(function (json) {
 	                        cur_user = JSON.parse(json.cur_user);
 	                        _this7.doesCustExist(document.getElementById('trx_entry_customer').value);
-	                        _this7.handleClear();
 	                    });
 	                } else {
 	                    response.json().then(function (json) {
@@ -43369,7 +43369,7 @@
 	                if (response.ok) response.json().then(function (json) {
 	                    cur_user = JSON.parse(json.cur_user);
 	                    document.getElementById('trx_entry_trxid').value = null;
-	                    _this7.doesCustExist();
+	                    _this7.doesCustExist(document.getElementById('trx_entry_customer').value);
 	                });
 	            });
 	        };
@@ -43382,7 +43382,8 @@
 	        _this7.handleClear = function () {
 	            _this7.removeErrors();
 	            document.getElementById('trx_entry_trxid').value = '';
-	            _this7.refs.trx_entry_trxdt.setState({ date: '' });
+	            //this.refs.trx_entry_trxdt.setState({date: {}});
+	            //document.getElementById('trx_entry_trxdt').value = '';
 	            if (_this7.refs.trx_entry_customer.state.searchText != '') _this7.refs.trx_entry_customer.setState({ searchText: '' });
 	            _this7.refs.trx_entry_qty.setState({ val: '' });
 	            if (_this7.refs.trx_entry_billable.state.searchText != '') _this7.refs.trx_entry_billable.setState({ searchText: '' });
