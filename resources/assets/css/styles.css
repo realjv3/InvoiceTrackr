@@ -159,7 +159,7 @@ div#overlay {
 
 footer {
     bottom: 0;
-    position: relative;
+    position: absolute;
     width: 100%;
     font-size: small;
     margin-top: 5vh;
