@@ -648,6 +648,7 @@ class TrxEntry extends React.Component
                         cur_user = JSON.parse(json.cur_user);
                         this.setState({snackbarOpen: true, message: json.message});
                         this.updateCustomers();
+                        this.handleClear();
                     });
             });
     }
@@ -693,7 +694,6 @@ class TrxEntry extends React.Component
                 response.json().then((json) => {
                     cur_user = JSON.parse(json.cur_user);
                     this.doesCustExist(document.getElementById('trx_entry_customer').value);
-                    this.handleClear();
                 })
             } else {
                 response.json()
@@ -745,7 +745,7 @@ class TrxEntry extends React.Component
                 response.json().then((json) => {
                     cur_user = JSON.parse(json.cur_user);
                     document.getElementById('trx_entry_trxid').value = null;
-                    this.doesCustExist();
+                    this.doesCustExist(document.getElementById('trx_entry_customer').value);
                 });
         });
     }
@@ -756,7 +756,8 @@ class TrxEntry extends React.Component
     handleClear = () => {
         this.removeErrors();
         document.getElementById('trx_entry_trxid').value = '';
-        this.refs.trx_entry_trxdt.setState({date: ''});
+        //this.refs.trx_entry_trxdt.setState({date: {}});
+        //document.getElementById('trx_entry_trxdt').value = '';
         if(this.refs.trx_entry_customer.state.searchText != '') this.refs.trx_entry_customer.setState({searchText: ''});
         this.refs.trx_entry_qty.setState({val: ''});
         if(this.refs.trx_entry_billable.state.searchText != '') this.refs.trx_entry_billable.setState({searchText: ''});
