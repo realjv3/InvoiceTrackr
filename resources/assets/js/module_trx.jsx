@@ -723,13 +723,13 @@ class TrxEntry extends React.Component
         document.getElementById('trx_entry_trxid').value = trx.id;
         this.refs.trx_entry_trxdt.setState({date: new Date(new Date(trx.trxdt).getUTCFullYear(), new Date(trx.trxdt).getUTCMonth(), new Date(trx.trxdt).getUTCDate())});
         this.refs.trx_entry_customer.setState({searchText: cust.company});
-        document.getElementById('trx_entry_qty').value = (trx.amt / billable.price).toFixed(2);
+        this.refs.trx_entry_qty.setState({val: (trx.amt / billable.price).toFixed(2)});
         this.refs.trx_entry_billable.setState({searchText: billable.descr});
         if(trx.descr) {
             this.refs.trx_entry_descr.setState({hasValue: true});
             document.getElementById('trx_entry_descr').value = trx.descr;
         }
-        document.getElementById('trx_entry_amt').value = '$ ' + trx.amt;
+        this.setState({amt: '$ ' + trx.amt});
         // Hitting the save button will call this.handleSave()
     }
     handleDelete = (event) => {

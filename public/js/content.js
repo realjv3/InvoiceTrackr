@@ -43350,13 +43350,13 @@
 	            document.getElementById('trx_entry_trxid').value = trx.id;
 	            _this7.refs.trx_entry_trxdt.setState({ date: new Date(new Date(trx.trxdt).getUTCFullYear(), new Date(trx.trxdt).getUTCMonth(), new Date(trx.trxdt).getUTCDate()) });
 	            _this7.refs.trx_entry_customer.setState({ searchText: cust.company });
-	            document.getElementById('trx_entry_qty').value = (trx.amt / billable.price).toFixed(2);
+	            _this7.refs.trx_entry_qty.setState({ val: (trx.amt / billable.price).toFixed(2) });
 	            _this7.refs.trx_entry_billable.setState({ searchText: billable.descr });
 	            if (trx.descr) {
 	                _this7.refs.trx_entry_descr.setState({ hasValue: true });
 	                document.getElementById('trx_entry_descr').value = trx.descr;
 	            }
-	            document.getElementById('trx_entry_amt').value = '$ ' + trx.amt;
+	            _this7.setState({ amt: '$ ' + trx.amt });
 	            // Hitting the save button will call this.handleSave()
 	        };
 	
