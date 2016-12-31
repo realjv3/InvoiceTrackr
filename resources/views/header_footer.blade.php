@@ -19,7 +19,7 @@
         var logged_in = {{$logged_in}};
         var cur_user = {!! $cur_user !!};
     </script>
-
+</head>
 <body>
     <header id="appbar"></header>
 

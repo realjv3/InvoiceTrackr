@@ -28,7 +28,7 @@ class ProfileController extends Controller
             'zip' => 'max:12|alpha_dash',
             'cell' => 'max:20',
             'office' => 'max:20',
-            'state' => 'max:30|alpha',
+            'state' => 'max:2|alpha',
         ]);
 
         //Sanitize

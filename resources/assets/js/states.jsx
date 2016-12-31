@@ -1,5 +1,6 @@
 /**
  * U.S. State autoselect field for forms
+ * ref must be defined for parent components to get the value of States' SelectField
  */
 import React from 'react';
 
@@ -16,7 +17,7 @@ class States extends React.Component
     handleChange = (event, index, value) => {
         //the SelectField component renders wierdly compared to it's surrounding TextInput components, hence having to dynamically change css
         var bottom = (this.props.id == 'user_state') ? '0px' : '9px';
-        this.setState({value, style: {bottom: bottom, width: '50px', paddingRight: '10px'}});
+        this.setState({value: value, style: {bottom: bottom, width: '50px', paddingRight: '10px'}});
     }
 
     render() {
@@ -27,7 +28,6 @@ class States extends React.Component
                 floatingLabelText="State"
                 style={this.state.style}
                 id={this.props.id}
-                errorText={this.props.error}
             >
                 <MenuItem value='AL' primaryText='AL' />
                 <MenuItem value='AK' primaryText='AK' />
@@ -83,5 +83,4 @@ class States extends React.Component
         );
     }
 }
-
 export {States as default };

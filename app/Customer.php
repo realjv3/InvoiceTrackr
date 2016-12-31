@@ -23,4 +23,8 @@ class Customer extends Model
     public function custtrx() {
         return $this->hasMany('App\CustTrx', 'custid');
     }
+
+    public function invoice() {
+        return $this->hasMany('App\Invoice', 'custid');
+    }
 }

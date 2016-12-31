@@ -18,8 +18,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //sharing logged in user's data with a bunch of views
-        view()->composer(['root_views.content', 'root_views.landing', 'root_views.profile'], function(View $view) {
-
+        view()->composer([
+            'pages.landing',
+            'pages.trx',
+            'pages.profile',
+            'pages.invoices',
+            'pages.reports'
+        ], function(View $view) {
             //sharing boolean logged_in
             $logged_in = Auth::check();
             $view->with('logged_in', (($logged_in) ? $logged_in : 0));

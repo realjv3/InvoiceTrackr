@@ -2,9 +2,11 @@ require('es6-promise').polyfill();
 
 module.exports = {
     entry: {
-        landing: './resources/assets/js/root_cmpnts/landing.jsx',
-        content: './resources/assets/js/root_cmpnts/content.jsx',
-        profile: './resources/assets/js/root_cmpnts/user_profile.jsx',
+        landing: './resources/assets/js/pages/landing.jsx',
+        trx: './resources/assets/js/pages/trx.jsx',
+        invoices: './resources/assets/js/pages/invoices.jsx',
+        reports: './resources/assets/js/pages/reports.jsx',
+        profile: './resources/assets/js/pages/user_profile.jsx',
     },
     output: {
         path: './public/js',

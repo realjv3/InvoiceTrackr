@@ -42,7 +42,6 @@ class Profile extends React.Component
         addr1: '',
         addr2: '',
         city: '',
-        state: '',
         zip: '',
         cell: '',
         office: ''
@@ -76,6 +75,7 @@ class Profile extends React.Component
         var fields = Object.keys(this.formfields);
         for(var i = 1; i < fields.length; i++)
             form.set(fields[i], document.getElementById(fields[i]).value);
+        form.set('state', this.refs.user_state.state.value);
         fetch('/profile/save', {
             method: 'POST',
             body: form,
@@ -166,7 +166,7 @@ class Profile extends React.Component
                             errorText={this.state.formfields.city}
                             defaultValue={cur_user.profile.city}
                         />
-                        <States error={this.state.formfields.state} id="state" style={{width: '50px', paddingRight: '10px'}} />
+                        <States ref="user_state" defaultValue={cur_user.profile.state} style={{width: '50px', paddingRight: '10px'}} />
                         <TextField
                             style={{width: '100px'}}
                             floatingLabelText="Zip"

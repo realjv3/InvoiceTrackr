@@ -22,7 +22,7 @@ import CardHeader from 'material-ui/Card/CardHeader.js';
 import CardText from 'material-ui/Card/CardText.js';
 import CardActions from 'material-ui/Card/CardActions.js';
 
-import Trx from 'module_trx.jsx';
+//import Trx from 'module_trx.jsx';
 
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
@@ -38,41 +38,24 @@ var Main_area = React.createClass({
     render: function() {
         return (
             <Paper className="main_area">
-                <Trx />
-                <Card className="cards">
-                    <CardHeader
-                        title="Invoices"
-                        subtitle="Cash rules everything around me"
-                        actAsExpander={true}
-                        avatar="https://www.dropbox.com/s/1x89klicik0olnk/money.png?dl=1"
-                        />
-                    <CardText expandable={true}>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-                        Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-                        Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-                    </CardText>
-                    <CardActions expandable={true}>
-                        <FlatButton label="Action1" />
-                        <FlatButton label="Action2" />
-                    </CardActions>
-                </Card>
                 <Card className="cards">
                     <CardHeader
                         title="Reports"
-                        actAsExpander={true}
+                        subtitle="Keep an eye on things"
+                        actAsExpander={false}
                         avatar="https://www.dropbox.com/s/q4fou4u4qvx0z09/business-1.png?dl=1"
                         />
-                    <CardText expandable={true}>
+                    <CardText expandable={false} style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        flexWrap: 'nowrap'
+                    }}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                         Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
                         Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
                         Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
                     </CardText>
-                    <CardActions expandable={true}>
-                        <FlatButton label="Action1" />
-                        <FlatButton label="Action2" />
-                    </CardActions>
                 </Card>
             </Paper>
         );

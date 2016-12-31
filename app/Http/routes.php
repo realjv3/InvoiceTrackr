@@ -14,10 +14,21 @@
 
 Route::group(['middleware' => ['web']], function () {
 
+    // Page routes
     Route::get('/', function () {
         return
-            (Auth::check()) ? view('root_views.content') : view('root_views.landing');
+            (Auth::check()) ? view('pages.trx') : view('pages.landing');
     })->name('home');
+
+    Route::get('/invoices', function () {
+        return
+            (Auth::check()) ? view('pages.invoices') : view('pages.landing');
+    })->name('invoices');
+
+    Route::get('/reports', function () {
+        return
+            (Auth::check()) ? view('pages.reports') : view('pages.landing');
+    })->name('reports');
 
     // Authentication routes...
     Route::post('auth/login', [
@@ -37,7 +48,7 @@ Route::group(['middleware' => ['web']], function () {
 
     // Profile page
     Route::get('profile', ['middleware' => 'auth', 'as' => 'profile', function($id = null) {
-        return view('root_views.profile');
+        return view('pages.profile');
     }]);
 
     // Profile save
@@ -55,4 +66,7 @@ Route::group(['middleware' => ['web']], function () {
     // Trx crud
     Route::post('save_trx', 'CustTrxController@save');
     Route::delete('del_trx/{trx_id}', 'CustTrxController@delete');
+
+    // Invoices
+    Route::get('create_inv', 'InvoiceController@create');
 });

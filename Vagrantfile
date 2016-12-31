@@ -94,7 +94,7 @@ Vagrant.configure("2") do |config|
     echo '#';
     sudo apt-add-repository -y ppa:ondrej/php
     sudo apt-get update -y;
-    sudo apt-get install -y php7.0-fpm php7.0-mysql;
+    sudo apt-get install -y php7.0-fpm php7.0-mysql php7.0-gd;
 
     echo '#';
     echo '###################### Configuring nginx ######################'
@@ -176,7 +176,7 @@ Vagrant.configure("2") do |config|
     echo '#';
     sudo echo "alias ls='ls -lAh'" >> /home/vagrant/.bashrc;
     sudo echo "cd /var/www/invoicetrackr" >> /home/vagrant/.bashrc;
-    sudo chown -R www-data:www-data /var/www/invoicetrackr && sudo chmod -R 664 /var/www/invoicetrackr && sudo find /var/www/invoicetrackr -type d -exec chmod 775 {} \;
+    sudo chown -R vagrant:www-data /var/www/invoicetrackr && sudo chmod -R 664 /var/www/invoicetrackr && sudo find /var/www/invoicetrackr -type d -exec chmod 775 {} \;
     sudo gpasswd -a vagrant www-data;
 
     # @TODO Install Mysql, create database, import table

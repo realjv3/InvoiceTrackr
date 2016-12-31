@@ -25,7 +25,6 @@ import Toolbar from 'material-ui/Toolbar/Toolbar';
 import ToolbarGroup from 'material-ui/Toolbar/ToolbarGroup';
 import ToolbarSeparator from 'material-ui/Toolbar/ToolbarSeparator';
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider.js';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {indigo100} from 'material-ui/styles/colors.js';
 
@@ -222,6 +221,16 @@ class LoginMenu extends React.Component
     }
 }
 
+const NavMenu = () => {
+    return (
+        <List style={{display: 'flex', flexDirection: 'row'}}>
+            <ListItem href="/" primaryText="Transactions" rightIcon={ <img src="https://www.dropbox.com/s/4hw9njfnlkgttmf/clock-1.png?dl=1"/> } />
+            <ListItem href="/invoices" primaryText="Invoices" rightIcon={ <img src="https://www.dropbox.com/s/1x89klicik0olnk/money.png?dl=1"/> } />
+            <ListItem href="/reports" primaryText="Reports" rightIcon={ <img src="https://www.dropbox.com/s/q4fou4u4qvx0z09/business-1.png?dl=1"/> } />
+        </List>
+    );
+}
+
 class NavBar extends React.Component
 {
     constructor(props) {
@@ -247,25 +256,30 @@ class NavBar extends React.Component
     }
 
     render() {
-        var loginoutlink = '';
+        var loginoutlink = '', nav = '';
         if(!logged_in) {
             loginoutlink= React.createElement(
                 'div',
                 {},
                 React.createElement(LoginMenu, {openRegForm: this.openRegForm}),
-                React.createElement(RegisterForm, {ref:"regform"}));
+                React.createElement(RegisterForm, {ref:"regform"})
+            );
         } else {
             var logoutlink= React.createElement(FlatButton, {onClick: this.logout}, "Logout");
             var name = (cur_user.profile.first) ? cur_user.profile.first : cur_user.email;
             var user  = React.createElement('a', {href: window.location.origin + '/profile'}, "Oh hello, " + name);
             loginoutlink = React.createElement('div', {id: 'logout_link'}, user, logoutlink);
+            nav = <NavMenu />;
         }
         return (
             <AppBar
                 ref="appbar"
                 title={<a href='/'>InvoiceTrackr</a>}
-                iconElementRight={loginoutlink}
+                iconElementRight={(logged_in) ? nav : loginoutlink}
+                iconStyleRight={(logged_in) ? {marginTop: '0px !i', marginLeft: 'auto', marginRight: 'auto'} : {}}
                 showMenuIconButton={false}
+                children={(logged_in) ? loginoutlink : ''}
+                titleStyle={{flex: 'initial'}}
             />
         );
     }

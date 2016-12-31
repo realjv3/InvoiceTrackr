@@ -6,10 +6,15 @@ use Illuminate\Support\Facades\Auth;
 class Util
 {
     public function get_user_data_for_view() {
-
         if(Auth::check()) {
             $user = Auth::user()
-            ->with('profile', 'customer.cust_profile', 'customer.billable', 'customer.custtrx')
+            ->with(
+                'profile',
+                'customer.cust_profile',
+                'customer.billable',
+                'customer.custtrx',
+                'customer.invoice'
+            )
             ->get()
             ->filter(function($item) {
                 return $item->email === Auth::user()->email;

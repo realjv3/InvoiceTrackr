@@ -137,6 +137,31 @@ span.trx_icons {
 }
 
 /**
+ * Invoices and whatnot
+ */
+div#customer {
+    margin: 10px;
+}
+
+div#company {
+    margin: 10px;
+}
+
+table#inv_trx tr {
+    display: initial;
+}
+
+table#inv_trx tr:hover, table#inv_trx th:hover {
+    background-color: initial;
+}
+
+table#inv_trx th, table#inv_trx td {
+    width: 250px;
+    text-align: center;
+    margin: 7px;
+}
+
+/**
  * Footer Area
  */
 div#loader {
