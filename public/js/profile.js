@@ -88,15 +88,15 @@
 	
 	var _TextField2 = _interopRequireDefault(_TextField);
 	
-	var _Snackbar = __webpack_require__(/*! material-ui/Snackbar */ 413);
+	var _Snackbar = __webpack_require__(/*! material-ui/Snackbar */ 433);
 	
 	var _Snackbar2 = _interopRequireDefault(_Snackbar);
 	
-	var _save = __webpack_require__(/*! material-ui/svg-icons/content/save */ 418);
+	var _save = __webpack_require__(/*! material-ui/svg-icons/content/save */ 456);
 	
 	var _save2 = _interopRequireDefault(_save);
 	
-	var _cancel = __webpack_require__(/*! material-ui/svg-icons/navigation/cancel */ 419);
+	var _cancel = __webpack_require__(/*! material-ui/svg-icons/navigation/cancel */ 457);
 	
 	var _cancel2 = _interopRequireDefault(_cancel);
 	
@@ -104,7 +104,7 @@
 	
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
 	
-	var _states = __webpack_require__(/*! states.jsx */ 420);
+	var _states = __webpack_require__(/*! states.jsx */ 437);
 	
 	var _states2 = _interopRequireDefault(_states);
 	
@@ -148,7 +148,6 @@
 	            addr1: '',
 	            addr2: '',
 	            city: '',
-	            state: '',
 	            zip: '',
 	            cell: '',
 	            office: ''
@@ -172,7 +171,8 @@
 	            var fields = Object.keys(_this.formfields);
 	            for (var i = 1; i < fields.length; i++) {
 	                form.set(fields[i], document.getElementById(fields[i]).value);
-	            }fetch('/profile/save', {
+	            }form.set('state', _this.refs.user_state.state.value);
+	            fetch('/profile/save', {
 	                method: 'POST',
 	                body: form,
 	                headers: { 'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', "Accept": "application/json" },
@@ -284,7 +284,7 @@
 	                                errorText: this.state.formfields.city,
 	                                defaultValue: cur_user.profile.city
 	                            }),
-	                            _react2.default.createElement(_states2.default, { error: this.state.formfields.state, id: 'state', style: { width: '50px', paddingRight: '10px' } }),
+	                            _react2.default.createElement(_states2.default, { ref: 'user_state', defaultValue: cur_user.profile.state, style: { width: '50px', paddingRight: '10px' } }),
 	                            _react2.default.createElement(_TextField2.default, {
 	                                style: { width: '100px' },
 	                                floatingLabelText: 'Zip',
@@ -22665,10 +22665,6 @@
 	
 	var _ToolbarSeparator2 = _interopRequireDefault(_ToolbarSeparator);
 	
-	var _MuiThemeProvider = __webpack_require__(/*! material-ui/styles/MuiThemeProvider.js */ 272);
-	
-	var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
-	
 	var _getMuiTheme = __webpack_require__(/*! material-ui/styles/getMuiTheme */ 273);
 	
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
@@ -22913,10 +22909,10 @@
 	var NavMenu = function NavMenu() {
 	    return _react2.default.createElement(
 	        _List2.default,
-	        { id: 'main_nav' },
-	        _react2.default.createElement(_ListItem2.default, { className: 'main_nav_menu_item', primaryText: 'Transactions', rightIcon: _react2.default.createElement('img', { src: 'https://www.dropbox.com/s/4hw9njfnlkgttmf/clock-1.png?dl=1' }) }),
-	        _react2.default.createElement(_ListItem2.default, { className: 'main_nav_menu_item', primaryText: 'Invoices', rightIcon: _react2.default.createElement('img', { src: 'https://www.dropbox.com/s/1x89klicik0olnk/money.png?dl=1' }) }),
-	        _react2.default.createElement(_ListItem2.default, { className: 'main_nav_menu_item', primaryText: 'Reports', rightIcon: _react2.default.createElement('img', { src: 'https://www.dropbox.com/s/q4fou4u4qvx0z09/business-1.png?dl=1' }) })
+	        { style: { display: 'flex', flexDirection: 'row' } },
+	        _react2.default.createElement(_ListItem2.default, { href: '/', primaryText: 'Transactions', rightIcon: _react2.default.createElement('img', { src: 'https://www.dropbox.com/s/4hw9njfnlkgttmf/clock-1.png?dl=1' }) }),
+	        _react2.default.createElement(_ListItem2.default, { href: '/invoices', primaryText: 'Invoices', rightIcon: _react2.default.createElement('img', { src: 'https://www.dropbox.com/s/1x89klicik0olnk/money.png?dl=1' }) }),
+	        _react2.default.createElement(_ListItem2.default, { href: '/reports', primaryText: 'Reports', rightIcon: _react2.default.createElement('img', { src: 'https://www.dropbox.com/s/q4fou4u4qvx0z09/business-1.png?dl=1' }) })
 	    );
 	};
 	
@@ -22960,22 +22956,21 @@
 	                var name = cur_user.profile.first ? cur_user.profile.first : cur_user.email;
 	                var user = _react2.default.createElement('a', { href: window.location.origin + '/profile' }, "Oh hello, " + name);
 	                loginoutlink = _react2.default.createElement('div', { id: 'logout_link' }, user, logoutlink);
-	                nav = 'NavMenu';
+	                nav = _react2.default.createElement(NavMenu, null);
 	            }
-	            return _react2.default.createElement(
-	                _AppBar2.default,
-	                {
-	                    ref: 'appbar',
-	                    title: _react2.default.createElement(
-	                        'a',
-	                        { href: '/' },
-	                        'InvoiceTrackr'
-	                    ),
-	                    iconElementRight: loginoutlink,
-	                    showMenuIconButton: false
-	                },
-	                nav
-	            );
+	            return _react2.default.createElement(_AppBar2.default, {
+	                ref: 'appbar',
+	                title: _react2.default.createElement(
+	                    'a',
+	                    { href: '/' },
+	                    'InvoiceTrackr'
+	                ),
+	                iconElementRight: logged_in ? nav : loginoutlink,
+	                iconStyleRight: logged_in ? { marginTop: '0px !i', marginLeft: 'auto', marginRight: 'auto' } : {},
+	                showMenuIconButton: false,
+	                children: logged_in ? loginoutlink : '',
+	                titleStyle: { flex: 'initial' }
+	            });
 	        }
 	    }]);
 	
@@ -35114,70 +35109,7 @@
 	exports.default = ToolbarSeparator;
 
 /***/ },
-/* 272 */
-/*!**************************************************!*\
-  !*** ./~/material-ui/styles/MuiThemeProvider.js ***!
-  \**************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _getMuiTheme = __webpack_require__(/*! ./getMuiTheme */ 273);
-	
-	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var MuiThemeProvider = function (_Component) {
-	  _inherits(MuiThemeProvider, _Component);
-	
-	  function MuiThemeProvider() {
-	    _classCallCheck(this, MuiThemeProvider);
-	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(MuiThemeProvider).apply(this, arguments));
-	  }
-	
-	  _createClass(MuiThemeProvider, [{
-	    key: 'getChildContext',
-	    value: function getChildContext() {
-	      return {
-	        muiTheme: this.props.muiTheme || (0, _getMuiTheme2.default)()
-	      };
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return this.props.children;
-	    }
-	  }]);
-	
-	  return MuiThemeProvider;
-	}(_react.Component);
-	
-	MuiThemeProvider.propTypes = {
-	  children: _react.PropTypes.element,
-	  muiTheme: _react.PropTypes.object
-	};
-	MuiThemeProvider.childContextTypes = {
-	  muiTheme: _react.PropTypes.object.isRequired
-	};
-	exports.default = MuiThemeProvider;
-
-/***/ },
+/* 272 */,
 /* 273 */
 /*!*********************************************!*\
   !*** ./~/material-ui/styles/getMuiTheme.js ***!
@@ -41332,7 +41264,7 @@
 	
 	
 	// module
-	exports.push([module.id, "* {\r\n    padding: 0;\r\n    margin: 0;\r\n    font-family: 'Alegreya Sans', sans-serif;\r\n    text-decoration: none;\r\n    cursor: default;\r\n}\r\n\r\nhtml {\r\n    height: 100%;\r\n}\r\n\r\nbody {\r\n    min-height: 100%;\r\n    min-width: 375px;\r\n    position: relative;\r\n}\r\n\r\na:visited, a {\r\n    color: black;\r\n    cursor: default;\r\n}\r\n\r\nheader {\r\n    width: 100%;\r\n}\r\n\r\nfieldset {\r\n    margin: 5px;\r\n    padding: 20px;\r\n    border: solid 1px #E0DEDE;\r\n    backgroundColor: #F7FAF5;\r\n}\r\n\r\n/**\r\n * Login Menu\r\n */\r\n#logout_link {\r\n    margin: 1vw 0;\r\n    font-size: small;\r\n}\r\n\r\n/**\r\n * Main Content Area\r\n */\r\n#landing_animation {\r\n    position: relative;\r\n    height: 65vh;\r\n    margin: 5vw 0 0 13vw;\r\n}\r\n\r\n\r\n#greeting {\r\n    font-size: 1em;\r\n    text-align: center;\r\n    padding-top: 33vh;\r\n    padding-bottom: 21.5vh;\r\n}\r\n\r\ndiv#content {\r\n    min-height: 100%;\r\n}\r\n\r\ndiv.main_area, div.cards {\r\n    background: #F5F5F5 !important;\r\n    margin: 0 0 4vw 0;\r\n}\r\n\r\ndiv.main_area {\r\n    min-height: 69.4vh;\r\n    margin: 7vw;\r\n    padding: 3vw;\r\n}\r\n\r\n/**\r\n * Profile form\r\n */\r\n#profile {\r\n    position: relative;\r\n    margin: 50px auto;\r\n    max-width: 74vw;\r\n    padding: 50px;\r\n    background-color: #F7FAF5\r\n}\r\n\r\n.profile_field {\r\n    margin-right: 10px;\r\n    padding-right: 10px;\r\n    width: auto !important;\r\n}\r\n\r\n/**\r\n * Trx entry form\r\n */\r\nform#trx_form {\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n}\r\n\r\n/**\r\n * Customer drop-down\r\n */\r\nspan.cust_icons {\r\n    position: relative;\r\n    bottom: 7px;\r\n}\r\n\r\nspan.cust_icons .fa, span.trx_icons .fa {\r\n    font-size: 17px !important;\r\n}\r\n\r\n/**\r\n * Transactions Area\r\n */\r\ntable {\r\n    margin: 0 auto;\r\n}\r\n\r\ntr {\r\n    display: flex;\r\n    justify-content: space-around;\r\n}\r\n\r\ntr:hover {\r\n    background-color: #C5CAE9;\r\n}\r\n\r\nth, td {\r\n    width: 10vw;\r\n    text-align: center;\r\n    margin: 7px;\r\n}\r\n\r\nspan.trx_icons {\r\n    position: relative;\r\n    bottom: 15px;\r\n}\r\n\r\n/**\r\n * Footer Area\r\n */\r\ndiv#loader {\r\n    border: 16px solid #f3f3f3; /* Light grey */\r\n    border-top: 16px solid #3498db; /* Blue */\r\n    border-radius: 50%;\r\n    width: 120px;\r\n    height: 120px;\r\n    animation: spin 2s linear infinite;\r\n    position: absolute;\r\n    top: 40vh;\r\n    left: 42.5vw;\r\n    z-index: 1200;\r\n    display: none;\r\n}\r\n\r\ndiv#overlay {\r\n    background: #b6b2b2;\r\n    display: none;\r\n    position: absolute;\r\n    top: 0;\r\n    right: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    opacity: 0.5;\r\n    z-index: 1100;\r\n}\r\n\r\n@keyframes spin {\r\n    0% { transform: rotate(0deg); }\r\n    100% { transform: rotate(360deg); }\r\n}\r\n\r\nfooter {\r\n    height: 80px;\r\n    width: 100%;\r\n    font-size: small;\r\n}\r\n\r\n/**\r\n * Rules for viewport's with widths < 510 px\r\n */\r\n@media (max-width: 510px) {\r\n    #logout_link {\r\n        font-size: x-small;\r\n    }\r\n    \r\n    #main_area {\r\n        min-height: 70.9vh;\r\n    }\r\n}\r\n\r\n@media (max-width: 768px) {\r\n    div#loader {\r\n        top: 40vh;\r\n        left: 36vw;\r\n    }\r\n}", ""]);
+	exports.push([module.id, "* {\r\n    padding: 0;\r\n    margin: 0;\r\n    font-family: 'Alegreya Sans', sans-serif;\r\n    text-decoration: none;\r\n    cursor: default;\r\n}\r\n\r\nhtml {\r\n    height: 100%;\r\n}\r\n\r\nbody {\r\n    min-height: 100%;\r\n    min-width: 375px;\r\n    position: relative;\r\n}\r\n\r\na:visited, a {\r\n    color: black;\r\n    cursor: default;\r\n}\r\n\r\nheader {\r\n    width: 100%;\r\n}\r\n\r\nfieldset {\r\n    margin: 5px;\r\n    padding: 20px;\r\n    border: solid 1px #E0DEDE;\r\n    backgroundColor: #F7FAF5;\r\n}\r\n\r\n/**\r\n * Login Menu\r\n */\r\n#logout_link {\r\n    margin: 1vw 0;\r\n    font-size: small;\r\n}\r\n\r\n/**\r\n * Main Content Area\r\n */\r\n#landing_animation {\r\n    position: relative;\r\n    height: 65vh;\r\n    margin: 5vw 0 0 13vw;\r\n}\r\n\r\n\r\n#greeting {\r\n    font-size: 1em;\r\n    text-align: center;\r\n    padding-top: 33vh;\r\n    padding-bottom: 21.5vh;\r\n}\r\n\r\ndiv#content {\r\n    min-height: 100%;\r\n}\r\n\r\ndiv.main_area, div.cards {\r\n    background: #F5F5F5 !important;\r\n    margin: 0 0 4vw 0;\r\n}\r\n\r\ndiv.main_area {\r\n    min-height: 69.4vh;\r\n    margin: 7vw;\r\n    padding: 3vw;\r\n}\r\n\r\n/**\r\n * Profile form\r\n */\r\n#profile {\r\n    position: relative;\r\n    margin: 50px auto;\r\n    max-width: 74vw;\r\n    padding: 50px;\r\n    background-color: #F7FAF5\r\n}\r\n\r\n.profile_field {\r\n    margin-right: 10px;\r\n    padding-right: 10px;\r\n    width: auto !important;\r\n}\r\n\r\n/**\r\n * Trx entry form\r\n */\r\nform#trx_form {\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n}\r\n\r\n/**\r\n * Customer drop-down\r\n */\r\nspan.cust_icons {\r\n    position: relative;\r\n    bottom: 7px;\r\n}\r\n\r\nspan.cust_icons .fa, span.trx_icons .fa {\r\n    font-size: 17px !important;\r\n}\r\n\r\n/**\r\n * Transactions Area\r\n */\r\ntable {\r\n    margin: 0 auto;\r\n}\r\n\r\ntr {\r\n    display: flex;\r\n    justify-content: space-around;\r\n}\r\n\r\ntr:hover {\r\n    background-color: #C5CAE9;\r\n}\r\n\r\nth, td {\r\n    width: 10vw;\r\n    text-align: center;\r\n    margin: 7px;\r\n}\r\n\r\nspan.trx_icons {\r\n    position: relative;\r\n    bottom: 15px;\r\n}\r\n\r\n/**\r\n * Invoices and whatnot\r\n */\r\ndiv#customer {\r\n    margin: 10px;\r\n}\r\n\r\ndiv#company {\r\n    margin: 10px;\r\n}\r\n\r\ntable#inv_trx tr {\r\n    display: initial;\r\n}\r\n\r\ntable#inv_trx tr:hover, table#inv_trx th:hover {\r\n    background-color: initial;\r\n}\r\n\r\ntable#inv_trx th, table#inv_trx td {\r\n    width: 250px;\r\n    text-align: center;\r\n    margin: 7px;\r\n}\r\n\r\n/**\r\n * Footer Area\r\n */\r\ndiv#loader {\r\n    border: 16px solid #f3f3f3; /* Light grey */\r\n    border-top: 16px solid #3498db; /* Blue */\r\n    border-radius: 50%;\r\n    width: 120px;\r\n    height: 120px;\r\n    animation: spin 2s linear infinite;\r\n    position: absolute;\r\n    top: 40vh;\r\n    left: 42.5vw;\r\n    z-index: 1200;\r\n    display: none;\r\n}\r\n\r\ndiv#overlay {\r\n    background: #b6b2b2;\r\n    display: none;\r\n    position: absolute;\r\n    top: 0;\r\n    right: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    opacity: 0.5;\r\n    z-index: 1100;\r\n}\r\n\r\n@keyframes spin {\r\n    0% { transform: rotate(0deg); }\r\n    100% { transform: rotate(360deg); }\r\n}\r\n\r\nfooter {\r\n    height: 80px;\r\n    width: 100%;\r\n    font-size: small;\r\n}\r\n\r\n/**\r\n * Rules for viewport's with widths < 510 px\r\n */\r\n@media (max-width: 510px) {\r\n    #logout_link {\r\n        font-size: x-small;\r\n    }\r\n    \r\n    #main_area {\r\n        min-height: 70.9vh;\r\n    }\r\n}\r\n\r\n@media (max-width: 768px) {\r\n    div#loader {\r\n        top: 40vh;\r\n        left: 36vw;\r\n    }\r\n}", ""]);
 	
 	// exports
 
@@ -41659,1383 +41591,13 @@
 /* 410 */,
 /* 411 */,
 /* 412 */,
-/* 413 */
-/*!*****************************************!*\
-  !*** ./~/material-ui/Snackbar/index.js ***!
-  \*****************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = undefined;
-	
-	var _Snackbar = __webpack_require__(/*! ./Snackbar */ 414);
-	
-	var _Snackbar2 = _interopRequireDefault(_Snackbar);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	exports.default = _Snackbar2.default;
-
-/***/ },
-/* 414 */
-/*!********************************************!*\
-  !*** ./~/material-ui/Snackbar/Snackbar.js ***!
-  \********************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _simpleAssign = __webpack_require__(/*! simple-assign */ 185);
-	
-	var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _transitions = __webpack_require__(/*! ../styles/transitions */ 186);
-	
-	var _transitions2 = _interopRequireDefault(_transitions);
-	
-	var _ClickAwayListener = __webpack_require__(/*! ../internal/ClickAwayListener */ 415);
-	
-	var _ClickAwayListener2 = _interopRequireDefault(_ClickAwayListener);
-	
-	var _SnackbarBody = __webpack_require__(/*! ./SnackbarBody */ 416);
-	
-	var _SnackbarBody2 = _interopRequireDefault(_SnackbarBody);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	function getStyles(props, context, state) {
-	  var _context$muiTheme = context.muiTheme;
-	  var desktopSubheaderHeight = _context$muiTheme.baseTheme.spacing.desktopSubheaderHeight;
-	  var zIndex = _context$muiTheme.zIndex;
-	  var open = state.open;
-	
-	
-	  var styles = {
-	    root: {
-	      position: 'fixed',
-	      left: 0,
-	      display: 'flex',
-	      right: 0,
-	      bottom: 0,
-	      zIndex: zIndex.snackbar,
-	      visibility: open ? 'visible' : 'hidden',
-	      transform: open ? 'translate(0, 0)' : 'translate(0, ' + desktopSubheaderHeight + 'px)',
-	      transition: _transitions2.default.easeOut('400ms', 'transform') + ', ' + _transitions2.default.easeOut('400ms', 'visibility')
-	    }
-	  };
-	
-	  return styles;
-	}
-	
-	var Snackbar = function (_Component) {
-	  _inherits(Snackbar, _Component);
-	
-	  function Snackbar() {
-	    var _Object$getPrototypeO;
-	
-	    var _temp, _this, _ret;
-	
-	    _classCallCheck(this, Snackbar);
-	
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-	
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Snackbar)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.componentClickAway = function () {
-	      if (_this.timerTransitionId) {
-	        // If transitioning, don't close the snackbar.
-	        return;
-	      }
-	
-	      if (_this.props.open !== null && _this.props.onRequestClose) {
-	        _this.props.onRequestClose('clickaway');
-	      } else {
-	        _this.setState({ open: false });
-	      }
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
-	  }
-	
-	  _createClass(Snackbar, [{
-	    key: 'componentWillMount',
-	    value: function componentWillMount() {
-	      this.setState({
-	        open: this.props.open,
-	        message: this.props.message,
-	        action: this.props.action
-	      });
-	    }
-	  }, {
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      if (this.state.open) {
-	        this.setAutoHideTimer();
-	        this.setTransitionTimer();
-	      }
-	    }
-	  }, {
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps(nextProps) {
-	      var _this2 = this;
-	
-	      if (this.props.open && nextProps.open && (nextProps.message !== this.props.message || nextProps.action !== this.props.action)) {
-	        this.setState({
-	          open: false
-	        });
-	
-	        clearTimeout(this.timerOneAtTheTimeId);
-	        this.timerOneAtTheTimeId = setTimeout(function () {
-	          _this2.setState({
-	            message: nextProps.message,
-	            action: nextProps.action,
-	            open: true
-	          });
-	        }, 400);
-	      } else {
-	        var open = nextProps.open;
-	
-	        this.setState({
-	          open: open !== null ? open : this.state.open,
-	          message: nextProps.message,
-	          action: nextProps.action
-	        });
-	      }
-	    }
-	  }, {
-	    key: 'componentDidUpdate',
-	    value: function componentDidUpdate(prevProps, prevState) {
-	      if (prevState.open !== this.state.open) {
-	        if (this.state.open) {
-	          this.setAutoHideTimer();
-	          this.setTransitionTimer();
-	        } else {
-	          clearTimeout(this.timerAutoHideId);
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      clearTimeout(this.timerAutoHideId);
-	      clearTimeout(this.timerTransitionId);
-	      clearTimeout(this.timerOneAtTheTimeId);
-	    }
-	  }, {
-	    key: 'setAutoHideTimer',
-	
-	
-	    // Timer that controls delay before snackbar auto hides
-	    value: function setAutoHideTimer() {
-	      var _this3 = this;
-	
-	      var autoHideDuration = this.props.autoHideDuration;
-	
-	      if (autoHideDuration > 0) {
-	        clearTimeout(this.timerAutoHideId);
-	        this.timerAutoHideId = setTimeout(function () {
-	          if (_this3.props.open !== null && _this3.props.onRequestClose) {
-	            _this3.props.onRequestClose('timeout');
-	          } else {
-	            _this3.setState({ open: false });
-	          }
-	        }, autoHideDuration);
-	      }
-	    }
-	
-	    // Timer that controls delay before click-away events are captured (based on when animation completes)
-	
-	  }, {
-	    key: 'setTransitionTimer',
-	    value: function setTransitionTimer() {
-	      var _this4 = this;
-	
-	      this.timerTransitionId = setTimeout(function () {
-	        _this4.timerTransitionId = undefined;
-	      }, 400);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _props = this.props;
-	      var autoHideDuration = _props.autoHideDuration;
-	      var messageProp = _props.message;
-	      var onRequestClose = _props.onRequestClose;
-	      var onActionTouchTap = _props.onActionTouchTap;
-	      var style = _props.style;
-	      var bodyStyle = _props.bodyStyle;
-	
-	      var other = _objectWithoutProperties(_props, ['autoHideDuration', 'message', 'onRequestClose', 'onActionTouchTap', 'style', 'bodyStyle']);
-	
-	      var _state = this.state;
-	      var action = _state.action;
-	      var message = _state.message;
-	      var open = _state.open;
-	      var prepareStyles = this.context.muiTheme.prepareStyles;
-	
-	      var styles = getStyles(this.props, this.context, this.state);
-	
-	      return _react2.default.createElement(
-	        _ClickAwayListener2.default,
-	        { onClickAway: open && this.componentClickAway },
-	        _react2.default.createElement(
-	          'div',
-	          _extends({}, other, { style: prepareStyles((0, _simpleAssign2.default)(styles.root, style)) }),
-	          _react2.default.createElement(_SnackbarBody2.default, {
-	            open: open,
-	            message: message,
-	            action: action,
-	            style: bodyStyle,
-	            onActionTouchTap: onActionTouchTap
-	          })
-	        )
-	      );
-	    }
-	  }]);
-	
-	  return Snackbar;
-	}(_react.Component);
-	
-	Snackbar.propTypes = {
-	  /**
-	   * The label for the action on the snackbar.
-	   */
-	  action: _react.PropTypes.node,
-	  /**
-	   * The number of milliseconds to wait before automatically dismissing.
-	   * If no value is specified the snackbar will dismiss normally.
-	   * If a value is provided the snackbar can still be dismissed normally.
-	   * If a snackbar is dismissed before the timer expires, the timer will be cleared.
-	   */
-	  autoHideDuration: _react.PropTypes.number,
-	  /**
-	   * Override the inline-styles of the body element.
-	   */
-	  bodyStyle: _react.PropTypes.object,
-	  /**
-	   * The css class name of the root element.
-	   */
-	  className: _react.PropTypes.string,
-	  /**
-	   * The message to be displayed.
-	   *
-	   * (Note: If the message is an element or array, and the `Snackbar` may re-render while it is still open,
-	   * ensure that the same object remains as the `message` property if you want to avoid the `Snackbar` hiding and
-	   * showing again)
-	   */
-	  message: _react.PropTypes.node.isRequired,
-	  /**
-	   * Fired when the action button is touchtapped.
-	   *
-	   * @param {object} event Action button event.
-	   */
-	  onActionTouchTap: _react.PropTypes.func,
-	  /**
-	   * Fired when the `Snackbar` is requested to be closed by a click outside the `Snackbar`, or after the
-	   * `autoHideDuration` timer expires.
-	   *
-	   * Typically `onRequestClose` is used to set state in the parent component, which is used to control the `Snackbar`
-	   * `open` prop.
-	   *
-	   * The `reason` parameter can optionally be used to control the response to `onRequestClose`,
-	   * for example ignoring `clickaway`.
-	   *
-	   * @param {string} reason Can be:`"timeout"` (`autoHideDuration` expired) or: `"clickaway"`
-	   */
-	  onRequestClose: _react.PropTypes.func,
-	  /**
-	   * Controls whether the `Snackbar` is opened or not.
-	   */
-	  open: _react.PropTypes.bool.isRequired,
-	  /**
-	   * Override the inline-styles of the root element.
-	   */
-	  style: _react.PropTypes.object
-	};
-	Snackbar.contextTypes = {
-	  muiTheme: _react.PropTypes.object.isRequired
-	};
-	exports.default = Snackbar;
-
-/***/ },
-/* 415 */
-/*!*****************************************************!*\
-  !*** ./~/material-ui/internal/ClickAwayListener.js ***!
-  \*****************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _reactDom = __webpack_require__(/*! react-dom */ 34);
-	
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-	
-	var _events = __webpack_require__(/*! ../utils/events */ 192);
-	
-	var _events2 = _interopRequireDefault(_events);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var isDescendant = function isDescendant(el, target) {
-	  if (target !== null) {
-	    return el === target || isDescendant(el, target.parentNode);
-	  }
-	  return false;
-	};
-	
-	var clickAwayEvents = ['mouseup', 'touchend'];
-	var bind = function bind(callback) {
-	  return clickAwayEvents.forEach(function (event) {
-	    return _events2.default.on(document, event, callback);
-	  });
-	};
-	var unbind = function unbind(callback) {
-	  return clickAwayEvents.forEach(function (event) {
-	    return _events2.default.off(document, event, callback);
-	  });
-	};
-	
-	var ClickAwayListener = function (_Component) {
-	  _inherits(ClickAwayListener, _Component);
-	
-	  function ClickAwayListener() {
-	    var _Object$getPrototypeO;
-	
-	    var _temp, _this, _ret;
-	
-	    _classCallCheck(this, ClickAwayListener);
-	
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-	
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(ClickAwayListener)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.handleClickAway = function (event) {
-	      if (event.defaultPrevented) {
-	        return;
-	      }
-	
-	      // IE11 support, which trigger the handleClickAway even after the unbind
-	      if (_this.isCurrentlyMounted) {
-	        var el = _reactDom2.default.findDOMNode(_this);
-	
-	        if (document.documentElement.contains(event.target) && !isDescendant(el, event.target)) {
-	          _this.props.onClickAway(event);
-	        }
-	      }
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
-	  }
-	
-	  _createClass(ClickAwayListener, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      this.isCurrentlyMounted = true;
-	      if (this.props.onClickAway) {
-	        bind(this.handleClickAway);
-	      }
-	    }
-	  }, {
-	    key: 'componentDidUpdate',
-	    value: function componentDidUpdate(prevProps) {
-	      if (prevProps.onClickAway !== this.props.onClickAway) {
-	        unbind(this.handleClickAway);
-	        if (this.props.onClickAway) {
-	          bind(this.handleClickAway);
-	        }
-	      }
-	    }
-	  }, {
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      this.isCurrentlyMounted = false;
-	      unbind(this.handleClickAway);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return this.props.children;
-	    }
-	  }]);
-	
-	  return ClickAwayListener;
-	}(_react.Component);
-	
-	ClickAwayListener.propTypes = {
-	  children: _react.PropTypes.node,
-	  onClickAway: _react.PropTypes.any
-	};
-	exports.default = ClickAwayListener;
-
-/***/ },
-/* 416 */
-/*!************************************************!*\
-  !*** ./~/material-ui/Snackbar/SnackbarBody.js ***!
-  \************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.SnackbarBody = undefined;
-	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	var _simpleAssign = __webpack_require__(/*! simple-assign */ 185);
-	
-	var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _transitions = __webpack_require__(/*! ../styles/transitions */ 186);
-	
-	var _transitions2 = _interopRequireDefault(_transitions);
-	
-	var _withWidth = __webpack_require__(/*! ../utils/withWidth */ 417);
-	
-	var _withWidth2 = _interopRequireDefault(_withWidth);
-	
-	var _FlatButton = __webpack_require__(/*! ../FlatButton */ 183);
-	
-	var _FlatButton2 = _interopRequireDefault(_FlatButton);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-	
-	function getStyles(props, context) {
-	  var open = props.open;
-	  var width = props.width;
-	  var _context$muiTheme = context.muiTheme;
-	  var _context$muiTheme$bas = _context$muiTheme.baseTheme;
-	  var _context$muiTheme$bas2 = _context$muiTheme$bas.spacing;
-	  var desktopGutter = _context$muiTheme$bas2.desktopGutter;
-	  var desktopSubheaderHeight = _context$muiTheme$bas2.desktopSubheaderHeight;
-	  var fontFamily = _context$muiTheme$bas.fontFamily;
-	  var _context$muiTheme$sna = _context$muiTheme.snackbar;
-	  var backgroundColor = _context$muiTheme$sna.backgroundColor;
-	  var textColor = _context$muiTheme$sna.textColor;
-	  var actionColor = _context$muiTheme$sna.actionColor;
-	
-	
-	  var isSmall = width === _withWidth.SMALL;
-	
-	  var styles = {
-	    root: {
-	      fontFamily: fontFamily,
-	      backgroundColor: backgroundColor,
-	      padding: '0 ' + desktopGutter + 'px',
-	      height: desktopSubheaderHeight,
-	      lineHeight: desktopSubheaderHeight + 'px',
-	      borderRadius: isSmall ? 0 : 2,
-	      maxWidth: isSmall ? 'inherit' : 568,
-	      minWidth: isSmall ? 'inherit' : 288,
-	      flexGrow: isSmall ? 1 : 0,
-	      margin: 'auto'
-	    },
-	    content: {
-	      fontSize: 14,
-	      color: textColor,
-	      opacity: open ? 1 : 0,
-	      transition: open ? _transitions2.default.easeOut('500ms', 'opacity', '100ms') : _transitions2.default.easeOut('400ms', 'opacity')
-	    },
-	    action: {
-	      color: actionColor,
-	      float: 'right',
-	      marginTop: 6,
-	      marginRight: -16,
-	      marginLeft: desktopGutter,
-	      backgroundColor: 'transparent'
-	    }
-	  };
-	
-	  return styles;
-	}
-	
-	var SnackbarBody = exports.SnackbarBody = function SnackbarBody(props, context) {
-	  var open = props.open;
-	  var action = props.action;
-	  var message = props.message;
-	  var onActionTouchTap = props.onActionTouchTap;
-	  var style = props.style;
-	
-	  var other = _objectWithoutProperties(props, ['open', 'action', 'message', 'onActionTouchTap', 'style']);
-	
-	  var prepareStyles = context.muiTheme.prepareStyles;
-	
-	  var styles = getStyles(props, context);
-	
-	  var actionButton = action && _react2.default.createElement(_FlatButton2.default, {
-	    style: styles.action,
-	    label: action,
-	    onTouchTap: onActionTouchTap
-	  });
-	
-	  return _react2.default.createElement(
-	    'div',
-	    _extends({}, other, { style: prepareStyles((0, _simpleAssign2.default)(styles.root, style)) }),
-	    _react2.default.createElement(
-	      'div',
-	      { style: prepareStyles(styles.content) },
-	      _react2.default.createElement(
-	        'span',
-	        null,
-	        message
-	      ),
-	      actionButton
-	    )
-	  );
-	};
-	
-	SnackbarBody.propTypes = {
-	  /**
-	   * The label for the action on the snackbar.
-	   */
-	  action: _react.PropTypes.node,
-	  /**
-	   * The message to be displayed.
-	   *
-	   * (Note: If the message is an element or array, and the `Snackbar` may re-render while it is still open,
-	   * ensure that the same object remains as the `message` property if you want to avoid the `Snackbar` hiding and
-	   * showing again)
-	   */
-	  message: _react.PropTypes.node.isRequired,
-	  /**
-	   * Fired when the action button is touchtapped.
-	   *
-	   * @param {object} event Action button event.
-	   */
-	  onActionTouchTap: _react.PropTypes.func,
-	  /**
-	   * @ignore
-	   * Controls whether the `Snackbar` is opened or not.
-	   */
-	  open: _react.PropTypes.bool.isRequired,
-	  /**
-	   * Override the inline-styles of the root element.
-	   */
-	  style: _react.PropTypes.object,
-	  /**
-	   * @ignore
-	   * Width of the screen.
-	   */
-	  width: _react.PropTypes.number.isRequired
-	};
-	
-	SnackbarBody.contextTypes = {
-	  muiTheme: _react.PropTypes.object.isRequired
-	};
-	
-	exports.default = (0, _withWidth2.default)()(SnackbarBody);
-
-/***/ },
-/* 417 */
-/*!******************************************!*\
-  !*** ./~/material-ui/utils/withWidth.js ***!
-  \******************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.LARGE = exports.MEDIUM = exports.SMALL = undefined;
-	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	exports.default = withWidth;
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactEventListener = __webpack_require__(/*! react-event-listener */ 211);
-	
-	var _reactEventListener2 = _interopRequireDefault(_reactEventListener);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var SMALL = exports.SMALL = 1;
-	var MEDIUM = exports.MEDIUM = 2;
-	var LARGE = exports.LARGE = 3;
-	
-	function withWidth() {
-	  var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	  var _options$largeWidth = options.largeWidth;
-	  var largeWidth = _options$largeWidth === undefined ? 992 : _options$largeWidth;
-	  var _options$mediumWidth = options.mediumWidth;
-	  var mediumWidth = _options$mediumWidth === undefined ? 768 : _options$mediumWidth;
-	  var _options$resizeInterv = options.resizeInterval;
-	  var resizeInterval = _options$resizeInterv === undefined ? 166 : _options$resizeInterv;
-	
-	
-	  return function (MyComponent) {
-	    return function (_Component) {
-	      _inherits(WithWidth, _Component);
-	
-	      function WithWidth() {
-	        var _Object$getPrototypeO;
-	
-	        var _temp, _this, _ret;
-	
-	        _classCallCheck(this, WithWidth);
-	
-	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	          args[_key] = arguments[_key];
-	        }
-	
-	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(WithWidth)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.state = {
-	          /**
-	           * For the server side rendering,
-	           * let's set the width for the slower environment.
-	           */
-	          width: SMALL
-	        }, _this.handleResize = function () {
-	          clearTimeout(_this.deferTimer);
-	          _this.deferTimer = setTimeout(function () {
-	            _this.updateWidth();
-	          }, resizeInterval);
-	        }, _temp), _possibleConstructorReturn(_this, _ret);
-	      }
-	
-	      _createClass(WithWidth, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	          this.updateWidth();
-	        }
-	      }, {
-	        key: 'componentWillUnmount',
-	        value: function componentWillUnmount() {
-	          clearTimeout(this.deferTimer);
-	        }
-	      }, {
-	        key: 'updateWidth',
-	        value: function updateWidth() {
-	          var innerWidth = window.innerWidth;
-	          var width = void 0;
-	
-	          if (innerWidth >= largeWidth) {
-	            width = LARGE;
-	          } else if (innerWidth >= mediumWidth) {
-	            width = MEDIUM;
-	          } else {
-	            // innerWidth < 768
-	            width = SMALL;
-	          }
-	
-	          if (width !== this.state.width) {
-	            this.setState({
-	              width: width
-	            });
-	          }
-	        }
-	      }, {
-	        key: 'render',
-	        value: function render() {
-	          return _react2.default.createElement(
-	            _reactEventListener2.default,
-	            { target: 'window', onResize: this.handleResize },
-	            _react2.default.createElement(MyComponent, _extends({}, this.props, {
-	              width: this.state.width
-	            }))
-	          );
-	        }
-	      }]);
-	
-	      return WithWidth;
-	    }(_react.Component);
-	  };
-	}
-
-/***/ },
-/* 418 */
-/*!*************************************************!*\
-  !*** ./~/material-ui/svg-icons/content/save.js ***!
-  \*************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _pure = __webpack_require__(/*! recompose/pure */ 252);
-	
-	var _pure2 = _interopRequireDefault(_pure);
-	
-	var _SvgIcon = __webpack_require__(/*! ../../SvgIcon */ 261);
-	
-	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var ContentSave = function ContentSave(props) {
-	  return _react2.default.createElement(
-	    _SvgIcon2.default,
-	    props,
-	    _react2.default.createElement('path', { d: 'M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z' })
-	  );
-	};
-	ContentSave = (0, _pure2.default)(ContentSave);
-	ContentSave.displayName = 'ContentSave';
-	ContentSave.muiName = 'SvgIcon';
-	
-	exports.default = ContentSave;
-
-/***/ },
+/* 413 */,
+/* 414 */,
+/* 415 */,
+/* 416 */,
+/* 417 */,
+/* 418 */,
 /* 419 */
-/*!******************************************************!*\
-  !*** ./~/material-ui/svg-icons/navigation/cancel.js ***!
-  \******************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _pure = __webpack_require__(/*! recompose/pure */ 252);
-	
-	var _pure2 = _interopRequireDefault(_pure);
-	
-	var _SvgIcon = __webpack_require__(/*! ../../SvgIcon */ 261);
-	
-	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var NavigationCancel = function NavigationCancel(props) {
-	  return _react2.default.createElement(
-	    _SvgIcon2.default,
-	    props,
-	    _react2.default.createElement('path', { d: 'M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z' })
-	  );
-	};
-	NavigationCancel = (0, _pure2.default)(NavigationCancel);
-	NavigationCancel.displayName = 'NavigationCancel';
-	NavigationCancel.muiName = 'SvgIcon';
-	
-	exports.default = NavigationCancel;
-
-/***/ },
-/* 420 */
-/*!****************************************!*\
-  !*** ./resources/assets/js/states.jsx ***!
-  \****************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = undefined;
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _MenuItem = __webpack_require__(/*! material-ui/MenuItem */ 421);
-	
-	var _MenuItem2 = _interopRequireDefault(_MenuItem);
-	
-	var _SelectField = __webpack_require__(/*! material-ui/SelectField */ 426);
-	
-	var _SelectField2 = _interopRequireDefault(_SelectField);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * U.S. State autoselect field for forms
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
-	
-	
-	var States = function (_React$Component) {
-	    _inherits(States, _React$Component);
-	
-	    function States(props) {
-	        _classCallCheck(this, States);
-	
-	        var _this = _possibleConstructorReturn(this, (States.__proto__ || Object.getPrototypeOf(States)).call(this, props));
-	
-	        _this.handleChange = function (event, index, value) {
-	            //the SelectField component renders wierdly compared to it's surrounding TextInput components, hence having to dynamically change css
-	            var bottom = _this.props.id == 'user_state' ? '0px' : '9px';
-	            _this.setState({ value: value, style: { bottom: bottom, width: '50px', paddingRight: '10px' } });
-	        };
-	
-	        _this.state = { value: _this.props.defaultValue, style: _this.props.style };
-	        return _this;
-	    }
-	
-	    _createClass(States, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                _SelectField2.default,
-	                {
-	                    value: this.state.value,
-	                    onChange: this.handleChange,
-	                    floatingLabelText: 'State',
-	                    style: this.state.style,
-	                    id: this.props.id,
-	                    errorText: this.props.error
-	                },
-	                _react2.default.createElement(_MenuItem2.default, { value: 'AL', primaryText: 'AL' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'AK', primaryText: 'AK' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'AZ', primaryText: 'AZ' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'AR', primaryText: 'AR' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'CA', primaryText: 'CA' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'CO', primaryText: 'CO' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'CT', primaryText: 'CT' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'DE', primaryText: 'DE' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'FL', primaryText: 'FL' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'GA', primaryText: 'GA' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'HI', primaryText: 'HI' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'ID', primaryText: 'ID' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'IL', primaryText: 'IL' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'IN', primaryText: 'IN' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'IA', primaryText: 'IA' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'KS', primaryText: 'KS' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'KY', primaryText: 'KY' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'LA', primaryText: 'LA' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'ME', primaryText: 'ME' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'MD', primaryText: 'MD' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'MA', primaryText: 'MA' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'MI', primaryText: 'MI' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'MN', primaryText: 'MN' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'MS', primaryText: 'MS' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'MO', primaryText: 'MO' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'MT', primaryText: 'MT' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'NE', primaryText: 'NE' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'NV', primaryText: 'NV' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'NH', primaryText: 'NH' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'NJ', primaryText: 'NJ' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'NM', primaryText: 'NM' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'NY', primaryText: 'NY' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'NC', primaryText: 'NC' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'ND', primaryText: 'ND' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'OH', primaryText: 'OH' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'OK', primaryText: 'OK' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'OR', primaryText: 'OR' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'PA', primaryText: 'PA' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'RI', primaryText: 'RI' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'SC', primaryText: 'SC' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'SD', primaryText: 'SD' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'TN', primaryText: 'TN' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'TX', primaryText: 'TX' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'UT', primaryText: 'UT' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'VT', primaryText: 'VT' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'VA', primaryText: 'VA' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'WA', primaryText: 'WA' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'WV', primaryText: 'WV' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'WI', primaryText: 'WI' }),
-	                _react2.default.createElement(_MenuItem2.default, { value: 'WY', primaryText: 'WY' })
-	            );
-	        }
-	    }]);
-	
-	    return States;
-	}(_react2.default.Component);
-	
-	exports.default = States;
-
-/***/ },
-/* 421 */
-/*!*****************************************!*\
-  !*** ./~/material-ui/MenuItem/index.js ***!
-  \*****************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = undefined;
-	
-	var _MenuItem = __webpack_require__(/*! ./MenuItem */ 422);
-	
-	var _MenuItem2 = _interopRequireDefault(_MenuItem);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	exports.default = _MenuItem2.default;
-
-/***/ },
-/* 422 */
-/*!********************************************!*\
-  !*** ./~/material-ui/MenuItem/MenuItem.js ***!
-  \********************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _simpleAssign = __webpack_require__(/*! simple-assign */ 185);
-	
-	var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactDom = __webpack_require__(/*! react-dom */ 34);
-	
-	var _reactDom2 = _interopRequireDefault(_reactDom);
-	
-	var _shallowEqual = __webpack_require__(/*! recompose/shallowEqual */ 195);
-	
-	var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
-	
-	var _Popover = __webpack_require__(/*! ../Popover/Popover */ 226);
-	
-	var _Popover2 = _interopRequireDefault(_Popover);
-	
-	var _check = __webpack_require__(/*! ../svg-icons/navigation/check */ 423);
-	
-	var _check2 = _interopRequireDefault(_check);
-	
-	var _ListItem = __webpack_require__(/*! ../List/ListItem */ 245);
-	
-	var _ListItem2 = _interopRequireDefault(_ListItem);
-	
-	var _Menu = __webpack_require__(/*! ../Menu/Menu */ 424);
-	
-	var _Menu2 = _interopRequireDefault(_Menu);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var nestedMenuStyle = {
-	  position: 'relative'
-	};
-	
-	function getStyles(props, context) {
-	  var disabledColor = context.muiTheme.baseTheme.palette.disabledColor;
-	  var textColor = context.muiTheme.baseTheme.palette.textColor;
-	  var leftIndent = props.desktop ? 64 : 72;
-	  var sidePadding = props.desktop ? 24 : 16;
-	
-	  var styles = {
-	    root: {
-	      color: props.disabled ? disabledColor : textColor,
-	      cursor: props.disabled ? 'not-allowed' : 'pointer',
-	      lineHeight: props.desktop ? '32px' : '48px',
-	      fontSize: props.desktop ? 15 : 16,
-	      whiteSpace: 'nowrap'
-	    },
-	
-	    innerDivStyle: {
-	      paddingLeft: props.leftIcon || props.insetChildren || props.checked ? leftIndent : sidePadding,
-	      paddingRight: sidePadding,
-	      paddingBottom: 0,
-	      paddingTop: 0
-	    },
-	
-	    secondaryText: {
-	      float: 'right'
-	    },
-	
-	    leftIconDesktop: {
-	      margin: 0,
-	      left: 24,
-	      top: 4
-	    },
-	
-	    rightIconDesktop: {
-	      margin: 0,
-	      right: 24,
-	      top: 4,
-	      fill: context.muiTheme.menuItem.rightIconDesktopFill
-	    }
-	  };
-	
-	  return styles;
-	}
-	
-	var MenuItem = function (_Component) {
-	  _inherits(MenuItem, _Component);
-	
-	  function MenuItem() {
-	    var _Object$getPrototypeO;
-	
-	    var _temp, _this, _ret;
-	
-	    _classCallCheck(this, MenuItem);
-	
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-	
-	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(MenuItem)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.state = {
-	      open: false
-	    }, _this.cloneMenuItem = function (item) {
-	      return _react2.default.cloneElement(item, {
-	        onTouchTap: function onTouchTap(event) {
-	          if (!item.props.menuItems) {
-	            _this.handleRequestClose();
-	          }
-	
-	          if (item.props.onTouchTap) {
-	            item.props.onTouchTap(event);
-	          }
-	        }
-	      });
-	    }, _this.handleTouchTap = function (event) {
-	      event.preventDefault();
-	
-	      _this.setState({
-	        open: true,
-	        anchorEl: _reactDom2.default.findDOMNode(_this)
-	      });
-	
-	      if (_this.props.onTouchTap) {
-	        _this.props.onTouchTap(event);
-	      }
-	    }, _this.handleRequestClose = function () {
-	      _this.setState({
-	        open: false,
-	        anchorEl: null
-	      });
-	    }, _temp), _possibleConstructorReturn(_this, _ret);
-	  }
-	
-	  _createClass(MenuItem, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      this.applyFocusState();
-	    }
-	  }, {
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps(nextProps) {
-	      if (this.state.open && nextProps.focusState === 'none') {
-	        this.handleRequestClose();
-	      }
-	    }
-	  }, {
-	    key: 'shouldComponentUpdate',
-	    value: function shouldComponentUpdate(nextProps, nextState, nextContext) {
-	      return !(0, _shallowEqual2.default)(this.props, nextProps) || !(0, _shallowEqual2.default)(this.state, nextState) || !(0, _shallowEqual2.default)(this.context, nextContext);
-	    }
-	  }, {
-	    key: 'componentDidUpdate',
-	    value: function componentDidUpdate() {
-	      this.applyFocusState();
-	    }
-	  }, {
-	    key: 'componentWillUnmount',
-	    value: function componentWillUnmount() {
-	      if (this.state.open) {
-	        this.setState({
-	          open: false
-	        });
-	      }
-	    }
-	  }, {
-	    key: 'applyFocusState',
-	    value: function applyFocusState() {
-	      this.refs.listItem.applyFocusState(this.props.focusState);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _props = this.props;
-	      var checked = _props.checked;
-	      var children = _props.children;
-	      var desktop = _props.desktop;
-	      var disabled = _props.disabled;
-	      var focusState = _props.focusState;
-	      var innerDivStyle = _props.innerDivStyle;
-	      var insetChildren = _props.insetChildren;
-	      var leftIcon = _props.leftIcon;
-	      var menuItems = _props.menuItems;
-	      var rightIcon = _props.rightIcon;
-	      var secondaryText = _props.secondaryText;
-	      var style = _props.style;
-	      var animation = _props.animation;
-	      var value = _props.value;
-	
-	      var other = _objectWithoutProperties(_props, ['checked', 'children', 'desktop', 'disabled', 'focusState', 'innerDivStyle', 'insetChildren', 'leftIcon', 'menuItems', 'rightIcon', 'secondaryText', 'style', 'animation', 'value']);
-	
-	      var prepareStyles = this.context.muiTheme.prepareStyles;
-	
-	      var styles = getStyles(this.props, this.context);
-	      var mergedRootStyles = (0, _simpleAssign2.default)(styles.root, style);
-	      var mergedInnerDivStyles = (0, _simpleAssign2.default)(styles.innerDivStyle, innerDivStyle);
-	
-	      // Left Icon
-	      var leftIconElement = leftIcon ? leftIcon : checked ? _react2.default.createElement(_check2.default, null) : null;
-	      if (leftIconElement) {
-	        var mergedLeftIconStyles = desktop ? (0, _simpleAssign2.default)(styles.leftIconDesktop, leftIconElement.props.style) : leftIconElement.props.style;
-	        leftIconElement = _react2.default.cloneElement(leftIconElement, { style: mergedLeftIconStyles });
-	      }
-	
-	      // Right Icon
-	      var rightIconElement = void 0;
-	      if (rightIcon) {
-	        var mergedRightIconStyles = desktop ? (0, _simpleAssign2.default)(styles.rightIconDesktop, rightIcon.props.style) : rightIcon.props.style;
-	        rightIconElement = _react2.default.cloneElement(rightIcon, { style: mergedRightIconStyles });
-	      }
-	
-	      // Secondary Text
-	      var secondaryTextElement = void 0;
-	      if (secondaryText) {
-	        var secondaryTextIsAnElement = _react2.default.isValidElement(secondaryText);
-	        var mergedSecondaryTextStyles = secondaryTextIsAnElement ? (0, _simpleAssign2.default)(styles.secondaryText, secondaryText.props.style) : null;
-	
-	        secondaryTextElement = secondaryTextIsAnElement ? _react2.default.cloneElement(secondaryText, { style: mergedSecondaryTextStyles }) : _react2.default.createElement(
-	          'div',
-	          { style: prepareStyles(styles.secondaryText) },
-	          secondaryText
-	        );
-	      }
-	      var childMenuPopover = void 0;
-	      if (menuItems) {
-	        childMenuPopover = _react2.default.createElement(
-	          _Popover2.default,
-	          {
-	            animation: animation,
-	            anchorOrigin: { horizontal: 'right', vertical: 'top' },
-	            anchorEl: this.state.anchorEl,
-	            open: this.state.open,
-	            useLayerForClickAway: false,
-	            onRequestClose: this.handleRequestClose
-	          },
-	          _react2.default.createElement(
-	            _Menu2.default,
-	            { desktop: desktop, disabled: disabled, style: nestedMenuStyle },
-	            _react2.default.Children.map(menuItems, this.cloneMenuItem)
-	          )
-	        );
-	        other.onTouchTap = this.handleTouchTap;
-	      }
-	
-	      return _react2.default.createElement(
-	        _ListItem2.default,
-	        _extends({}, other, {
-	          disabled: disabled,
-	          innerDivStyle: mergedInnerDivStyles,
-	          insetChildren: insetChildren,
-	          leftIcon: leftIconElement,
-	          ref: 'listItem',
-	          rightIcon: rightIconElement,
-	          style: mergedRootStyles
-	        }),
-	        children,
-	        secondaryTextElement,
-	        childMenuPopover
-	      );
-	    }
-	  }]);
-	
-	  return MenuItem;
-	}(_react.Component);
-	
-	MenuItem.muiName = 'MenuItem';
-	MenuItem.propTypes = {
-	  /**
-	   * Override the default animation component used.
-	   */
-	  animation: _react.PropTypes.func,
-	  /**
-	   * If true, a left check mark will be rendered.
-	   */
-	  checked: _react.PropTypes.bool,
-	  /**
-	   * Elements passed as children to the underlying `ListItem`.
-	   */
-	  children: _react.PropTypes.node,
-	  /**
-	   * @ignore
-	   * If true, the menu item will render with compact desktop
-	   * styles.
-	   */
-	  desktop: _react.PropTypes.bool,
-	  /**
-	   * If true, the menu item will be disabled.
-	   */
-	  disabled: _react.PropTypes.bool,
-	  /**
-	   * The focus state of the menu item. This prop is used to set the focus
-	   * state of the underlying `ListItem`.
-	   */
-	  focusState: _react.PropTypes.oneOf(['none', 'focused', 'keyboard-focused']),
-	  /**
-	   * Override the inline-styles of the inner div.
-	   */
-	  innerDivStyle: _react.PropTypes.object,
-	  /**
-	   * If true, the children will be indented.
-	   * This is only needed when there is no `leftIcon`.
-	   */
-	  insetChildren: _react.PropTypes.bool,
-	  /**
-	   * The `SvgIcon` or `FontIcon` to be displayed on the left side.
-	   */
-	  leftIcon: _react.PropTypes.element,
-	  /**
-	   * `MenuItem` elements to nest within the menu item.
-	   */
-	  menuItems: _react.PropTypes.node,
-	  /**
-	   * Callback function fired when the menu item is touch-tapped.
-	   *
-	   * @param {object} event TouchTap event targeting the menu item.
-	   */
-	  onTouchTap: _react.PropTypes.func,
-	  /**
-	   * Can be used to render primary text within the menu item.
-	   */
-	  primaryText: _react.PropTypes.node,
-	  /**
-	   * The `SvgIcon` or `FontIcon` to be displayed on the right side.
-	   */
-	  rightIcon: _react.PropTypes.element,
-	  /**
-	   * Can be used to render secondary text within the menu item.
-	   */
-	  secondaryText: _react.PropTypes.node,
-	  /**
-	   * Override the inline-styles of the root element.
-	   */
-	  style: _react.PropTypes.object,
-	  /**
-	   * The value of the menu item.
-	   */
-	  value: _react.PropTypes.any
-	};
-	MenuItem.defaultProps = {
-	  checked: false,
-	  desktop: false,
-	  disabled: false,
-	  focusState: 'none',
-	  insetChildren: false
-	};
-	MenuItem.contextTypes = {
-	  muiTheme: _react.PropTypes.object.isRequired
-	};
-	exports.default = MenuItem;
-
-/***/ },
-/* 423 */
-/*!*****************************************************!*\
-  !*** ./~/material-ui/svg-icons/navigation/check.js ***!
-  \*****************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _pure = __webpack_require__(/*! recompose/pure */ 252);
-	
-	var _pure2 = _interopRequireDefault(_pure);
-	
-	var _SvgIcon = __webpack_require__(/*! ../../SvgIcon */ 261);
-	
-	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var NavigationCheck = function NavigationCheck(props) {
-	  return _react2.default.createElement(
-	    _SvgIcon2.default,
-	    props,
-	    _react2.default.createElement('path', { d: 'M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z' })
-	  );
-	};
-	NavigationCheck = (0, _pure2.default)(NavigationCheck);
-	NavigationCheck.displayName = 'NavigationCheck';
-	NavigationCheck.muiName = 'SvgIcon';
-	
-	exports.default = NavigationCheck;
-
-/***/ },
-/* 424 */
 /*!************************************!*\
   !*** ./~/material-ui/Menu/Menu.js ***!
   \************************************/
@@ -43067,7 +41629,7 @@
 	
 	var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
 	
-	var _ClickAwayListener = __webpack_require__(/*! ../internal/ClickAwayListener */ 415);
+	var _ClickAwayListener = __webpack_require__(/*! ../internal/ClickAwayListener */ 420);
 	
 	var _ClickAwayListener2 = _interopRequireDefault(_ClickAwayListener);
 	
@@ -43099,7 +41661,7 @@
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
-	var _menuUtils = __webpack_require__(/*! ./menuUtils */ 425);
+	var _menuUtils = __webpack_require__(/*! ./menuUtils */ 421);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -43763,7 +42325,129 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! (webpack)/~/node-libs-browser/~/process/browser.js */ 3)))
 
 /***/ },
-/* 425 */
+/* 420 */
+/*!*****************************************************!*\
+  !*** ./~/material-ui/internal/ClickAwayListener.js ***!
+  \*****************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _reactDom = __webpack_require__(/*! react-dom */ 34);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _events = __webpack_require__(/*! ../utils/events */ 192);
+	
+	var _events2 = _interopRequireDefault(_events);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var isDescendant = function isDescendant(el, target) {
+	  if (target !== null) {
+	    return el === target || isDescendant(el, target.parentNode);
+	  }
+	  return false;
+	};
+	
+	var clickAwayEvents = ['mouseup', 'touchend'];
+	var bind = function bind(callback) {
+	  return clickAwayEvents.forEach(function (event) {
+	    return _events2.default.on(document, event, callback);
+	  });
+	};
+	var unbind = function unbind(callback) {
+	  return clickAwayEvents.forEach(function (event) {
+	    return _events2.default.off(document, event, callback);
+	  });
+	};
+	
+	var ClickAwayListener = function (_Component) {
+	  _inherits(ClickAwayListener, _Component);
+	
+	  function ClickAwayListener() {
+	    var _Object$getPrototypeO;
+	
+	    var _temp, _this, _ret;
+	
+	    _classCallCheck(this, ClickAwayListener);
+	
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+	
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(ClickAwayListener)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.handleClickAway = function (event) {
+	      if (event.defaultPrevented) {
+	        return;
+	      }
+	
+	      // IE11 support, which trigger the handleClickAway even after the unbind
+	      if (_this.isCurrentlyMounted) {
+	        var el = _reactDom2.default.findDOMNode(_this);
+	
+	        if (document.documentElement.contains(event.target) && !isDescendant(el, event.target)) {
+	          _this.props.onClickAway(event);
+	        }
+	      }
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	  }
+	
+	  _createClass(ClickAwayListener, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.isCurrentlyMounted = true;
+	      if (this.props.onClickAway) {
+	        bind(this.handleClickAway);
+	      }
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate(prevProps) {
+	      if (prevProps.onClickAway !== this.props.onClickAway) {
+	        unbind(this.handleClickAway);
+	        if (this.props.onClickAway) {
+	          bind(this.handleClickAway);
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      this.isCurrentlyMounted = false;
+	      unbind(this.handleClickAway);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return this.props.children;
+	    }
+	  }]);
+	
+	  return ClickAwayListener;
+	}(_react.Component);
+	
+	ClickAwayListener.propTypes = {
+	  children: _react.PropTypes.node,
+	  onClickAway: _react.PropTypes.any
+	};
+	exports.default = ClickAwayListener;
+
+/***/ },
+/* 421 */
 /*!*****************************************!*\
   !*** ./~/material-ui/Menu/menuUtils.js ***!
   \*****************************************/
@@ -43804,7 +42488,1189 @@
 	}();
 
 /***/ },
-/* 426 */
+/* 422 */
+/*!*****************************************!*\
+  !*** ./~/material-ui/MenuItem/index.js ***!
+  \*****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = undefined;
+	
+	var _MenuItem = __webpack_require__(/*! ./MenuItem */ 423);
+	
+	var _MenuItem2 = _interopRequireDefault(_MenuItem);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = _MenuItem2.default;
+
+/***/ },
+/* 423 */
+/*!********************************************!*\
+  !*** ./~/material-ui/MenuItem/MenuItem.js ***!
+  \********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _simpleAssign = __webpack_require__(/*! simple-assign */ 185);
+	
+	var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(/*! react-dom */ 34);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	var _shallowEqual = __webpack_require__(/*! recompose/shallowEqual */ 195);
+	
+	var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
+	
+	var _Popover = __webpack_require__(/*! ../Popover/Popover */ 226);
+	
+	var _Popover2 = _interopRequireDefault(_Popover);
+	
+	var _check = __webpack_require__(/*! ../svg-icons/navigation/check */ 424);
+	
+	var _check2 = _interopRequireDefault(_check);
+	
+	var _ListItem = __webpack_require__(/*! ../List/ListItem */ 245);
+	
+	var _ListItem2 = _interopRequireDefault(_ListItem);
+	
+	var _Menu = __webpack_require__(/*! ../Menu/Menu */ 419);
+	
+	var _Menu2 = _interopRequireDefault(_Menu);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var nestedMenuStyle = {
+	  position: 'relative'
+	};
+	
+	function getStyles(props, context) {
+	  var disabledColor = context.muiTheme.baseTheme.palette.disabledColor;
+	  var textColor = context.muiTheme.baseTheme.palette.textColor;
+	  var leftIndent = props.desktop ? 64 : 72;
+	  var sidePadding = props.desktop ? 24 : 16;
+	
+	  var styles = {
+	    root: {
+	      color: props.disabled ? disabledColor : textColor,
+	      cursor: props.disabled ? 'not-allowed' : 'pointer',
+	      lineHeight: props.desktop ? '32px' : '48px',
+	      fontSize: props.desktop ? 15 : 16,
+	      whiteSpace: 'nowrap'
+	    },
+	
+	    innerDivStyle: {
+	      paddingLeft: props.leftIcon || props.insetChildren || props.checked ? leftIndent : sidePadding,
+	      paddingRight: sidePadding,
+	      paddingBottom: 0,
+	      paddingTop: 0
+	    },
+	
+	    secondaryText: {
+	      float: 'right'
+	    },
+	
+	    leftIconDesktop: {
+	      margin: 0,
+	      left: 24,
+	      top: 4
+	    },
+	
+	    rightIconDesktop: {
+	      margin: 0,
+	      right: 24,
+	      top: 4,
+	      fill: context.muiTheme.menuItem.rightIconDesktopFill
+	    }
+	  };
+	
+	  return styles;
+	}
+	
+	var MenuItem = function (_Component) {
+	  _inherits(MenuItem, _Component);
+	
+	  function MenuItem() {
+	    var _Object$getPrototypeO;
+	
+	    var _temp, _this, _ret;
+	
+	    _classCallCheck(this, MenuItem);
+	
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+	
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(MenuItem)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.state = {
+	      open: false
+	    }, _this.cloneMenuItem = function (item) {
+	      return _react2.default.cloneElement(item, {
+	        onTouchTap: function onTouchTap(event) {
+	          if (!item.props.menuItems) {
+	            _this.handleRequestClose();
+	          }
+	
+	          if (item.props.onTouchTap) {
+	            item.props.onTouchTap(event);
+	          }
+	        }
+	      });
+	    }, _this.handleTouchTap = function (event) {
+	      event.preventDefault();
+	
+	      _this.setState({
+	        open: true,
+	        anchorEl: _reactDom2.default.findDOMNode(_this)
+	      });
+	
+	      if (_this.props.onTouchTap) {
+	        _this.props.onTouchTap(event);
+	      }
+	    }, _this.handleRequestClose = function () {
+	      _this.setState({
+	        open: false,
+	        anchorEl: null
+	      });
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	  }
+	
+	  _createClass(MenuItem, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.applyFocusState();
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (this.state.open && nextProps.focusState === 'none') {
+	        this.handleRequestClose();
+	      }
+	    }
+	  }, {
+	    key: 'shouldComponentUpdate',
+	    value: function shouldComponentUpdate(nextProps, nextState, nextContext) {
+	      return !(0, _shallowEqual2.default)(this.props, nextProps) || !(0, _shallowEqual2.default)(this.state, nextState) || !(0, _shallowEqual2.default)(this.context, nextContext);
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate() {
+	      this.applyFocusState();
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      if (this.state.open) {
+	        this.setState({
+	          open: false
+	        });
+	      }
+	    }
+	  }, {
+	    key: 'applyFocusState',
+	    value: function applyFocusState() {
+	      this.refs.listItem.applyFocusState(this.props.focusState);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props;
+	      var checked = _props.checked;
+	      var children = _props.children;
+	      var desktop = _props.desktop;
+	      var disabled = _props.disabled;
+	      var focusState = _props.focusState;
+	      var innerDivStyle = _props.innerDivStyle;
+	      var insetChildren = _props.insetChildren;
+	      var leftIcon = _props.leftIcon;
+	      var menuItems = _props.menuItems;
+	      var rightIcon = _props.rightIcon;
+	      var secondaryText = _props.secondaryText;
+	      var style = _props.style;
+	      var animation = _props.animation;
+	      var value = _props.value;
+	
+	      var other = _objectWithoutProperties(_props, ['checked', 'children', 'desktop', 'disabled', 'focusState', 'innerDivStyle', 'insetChildren', 'leftIcon', 'menuItems', 'rightIcon', 'secondaryText', 'style', 'animation', 'value']);
+	
+	      var prepareStyles = this.context.muiTheme.prepareStyles;
+	
+	      var styles = getStyles(this.props, this.context);
+	      var mergedRootStyles = (0, _simpleAssign2.default)(styles.root, style);
+	      var mergedInnerDivStyles = (0, _simpleAssign2.default)(styles.innerDivStyle, innerDivStyle);
+	
+	      // Left Icon
+	      var leftIconElement = leftIcon ? leftIcon : checked ? _react2.default.createElement(_check2.default, null) : null;
+	      if (leftIconElement) {
+	        var mergedLeftIconStyles = desktop ? (0, _simpleAssign2.default)(styles.leftIconDesktop, leftIconElement.props.style) : leftIconElement.props.style;
+	        leftIconElement = _react2.default.cloneElement(leftIconElement, { style: mergedLeftIconStyles });
+	      }
+	
+	      // Right Icon
+	      var rightIconElement = void 0;
+	      if (rightIcon) {
+	        var mergedRightIconStyles = desktop ? (0, _simpleAssign2.default)(styles.rightIconDesktop, rightIcon.props.style) : rightIcon.props.style;
+	        rightIconElement = _react2.default.cloneElement(rightIcon, { style: mergedRightIconStyles });
+	      }
+	
+	      // Secondary Text
+	      var secondaryTextElement = void 0;
+	      if (secondaryText) {
+	        var secondaryTextIsAnElement = _react2.default.isValidElement(secondaryText);
+	        var mergedSecondaryTextStyles = secondaryTextIsAnElement ? (0, _simpleAssign2.default)(styles.secondaryText, secondaryText.props.style) : null;
+	
+	        secondaryTextElement = secondaryTextIsAnElement ? _react2.default.cloneElement(secondaryText, { style: mergedSecondaryTextStyles }) : _react2.default.createElement(
+	          'div',
+	          { style: prepareStyles(styles.secondaryText) },
+	          secondaryText
+	        );
+	      }
+	      var childMenuPopover = void 0;
+	      if (menuItems) {
+	        childMenuPopover = _react2.default.createElement(
+	          _Popover2.default,
+	          {
+	            animation: animation,
+	            anchorOrigin: { horizontal: 'right', vertical: 'top' },
+	            anchorEl: this.state.anchorEl,
+	            open: this.state.open,
+	            useLayerForClickAway: false,
+	            onRequestClose: this.handleRequestClose
+	          },
+	          _react2.default.createElement(
+	            _Menu2.default,
+	            { desktop: desktop, disabled: disabled, style: nestedMenuStyle },
+	            _react2.default.Children.map(menuItems, this.cloneMenuItem)
+	          )
+	        );
+	        other.onTouchTap = this.handleTouchTap;
+	      }
+	
+	      return _react2.default.createElement(
+	        _ListItem2.default,
+	        _extends({}, other, {
+	          disabled: disabled,
+	          innerDivStyle: mergedInnerDivStyles,
+	          insetChildren: insetChildren,
+	          leftIcon: leftIconElement,
+	          ref: 'listItem',
+	          rightIcon: rightIconElement,
+	          style: mergedRootStyles
+	        }),
+	        children,
+	        secondaryTextElement,
+	        childMenuPopover
+	      );
+	    }
+	  }]);
+	
+	  return MenuItem;
+	}(_react.Component);
+	
+	MenuItem.muiName = 'MenuItem';
+	MenuItem.propTypes = {
+	  /**
+	   * Override the default animation component used.
+	   */
+	  animation: _react.PropTypes.func,
+	  /**
+	   * If true, a left check mark will be rendered.
+	   */
+	  checked: _react.PropTypes.bool,
+	  /**
+	   * Elements passed as children to the underlying `ListItem`.
+	   */
+	  children: _react.PropTypes.node,
+	  /**
+	   * @ignore
+	   * If true, the menu item will render with compact desktop
+	   * styles.
+	   */
+	  desktop: _react.PropTypes.bool,
+	  /**
+	   * If true, the menu item will be disabled.
+	   */
+	  disabled: _react.PropTypes.bool,
+	  /**
+	   * The focus state of the menu item. This prop is used to set the focus
+	   * state of the underlying `ListItem`.
+	   */
+	  focusState: _react.PropTypes.oneOf(['none', 'focused', 'keyboard-focused']),
+	  /**
+	   * Override the inline-styles of the inner div.
+	   */
+	  innerDivStyle: _react.PropTypes.object,
+	  /**
+	   * If true, the children will be indented.
+	   * This is only needed when there is no `leftIcon`.
+	   */
+	  insetChildren: _react.PropTypes.bool,
+	  /**
+	   * The `SvgIcon` or `FontIcon` to be displayed on the left side.
+	   */
+	  leftIcon: _react.PropTypes.element,
+	  /**
+	   * `MenuItem` elements to nest within the menu item.
+	   */
+	  menuItems: _react.PropTypes.node,
+	  /**
+	   * Callback function fired when the menu item is touch-tapped.
+	   *
+	   * @param {object} event TouchTap event targeting the menu item.
+	   */
+	  onTouchTap: _react.PropTypes.func,
+	  /**
+	   * Can be used to render primary text within the menu item.
+	   */
+	  primaryText: _react.PropTypes.node,
+	  /**
+	   * The `SvgIcon` or `FontIcon` to be displayed on the right side.
+	   */
+	  rightIcon: _react.PropTypes.element,
+	  /**
+	   * Can be used to render secondary text within the menu item.
+	   */
+	  secondaryText: _react.PropTypes.node,
+	  /**
+	   * Override the inline-styles of the root element.
+	   */
+	  style: _react.PropTypes.object,
+	  /**
+	   * The value of the menu item.
+	   */
+	  value: _react.PropTypes.any
+	};
+	MenuItem.defaultProps = {
+	  checked: false,
+	  desktop: false,
+	  disabled: false,
+	  focusState: 'none',
+	  insetChildren: false
+	};
+	MenuItem.contextTypes = {
+	  muiTheme: _react.PropTypes.object.isRequired
+	};
+	exports.default = MenuItem;
+
+/***/ },
+/* 424 */
+/*!*****************************************************!*\
+  !*** ./~/material-ui/svg-icons/navigation/check.js ***!
+  \*****************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _pure = __webpack_require__(/*! recompose/pure */ 252);
+	
+	var _pure2 = _interopRequireDefault(_pure);
+	
+	var _SvgIcon = __webpack_require__(/*! ../../SvgIcon */ 261);
+	
+	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var NavigationCheck = function NavigationCheck(props) {
+	  return _react2.default.createElement(
+	    _SvgIcon2.default,
+	    props,
+	    _react2.default.createElement('path', { d: 'M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z' })
+	  );
+	};
+	NavigationCheck = (0, _pure2.default)(NavigationCheck);
+	NavigationCheck.displayName = 'NavigationCheck';
+	NavigationCheck.muiName = 'SvgIcon';
+	
+	exports.default = NavigationCheck;
+
+/***/ },
+/* 425 */,
+/* 426 */,
+/* 427 */,
+/* 428 */,
+/* 429 */,
+/* 430 */,
+/* 431 */,
+/* 432 */,
+/* 433 */
+/*!*****************************************!*\
+  !*** ./~/material-ui/Snackbar/index.js ***!
+  \*****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = undefined;
+	
+	var _Snackbar = __webpack_require__(/*! ./Snackbar */ 434);
+	
+	var _Snackbar2 = _interopRequireDefault(_Snackbar);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = _Snackbar2.default;
+
+/***/ },
+/* 434 */
+/*!********************************************!*\
+  !*** ./~/material-ui/Snackbar/Snackbar.js ***!
+  \********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _simpleAssign = __webpack_require__(/*! simple-assign */ 185);
+	
+	var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _transitions = __webpack_require__(/*! ../styles/transitions */ 186);
+	
+	var _transitions2 = _interopRequireDefault(_transitions);
+	
+	var _ClickAwayListener = __webpack_require__(/*! ../internal/ClickAwayListener */ 420);
+	
+	var _ClickAwayListener2 = _interopRequireDefault(_ClickAwayListener);
+	
+	var _SnackbarBody = __webpack_require__(/*! ./SnackbarBody */ 435);
+	
+	var _SnackbarBody2 = _interopRequireDefault(_SnackbarBody);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	function getStyles(props, context, state) {
+	  var _context$muiTheme = context.muiTheme;
+	  var desktopSubheaderHeight = _context$muiTheme.baseTheme.spacing.desktopSubheaderHeight;
+	  var zIndex = _context$muiTheme.zIndex;
+	  var open = state.open;
+	
+	
+	  var styles = {
+	    root: {
+	      position: 'fixed',
+	      left: 0,
+	      display: 'flex',
+	      right: 0,
+	      bottom: 0,
+	      zIndex: zIndex.snackbar,
+	      visibility: open ? 'visible' : 'hidden',
+	      transform: open ? 'translate(0, 0)' : 'translate(0, ' + desktopSubheaderHeight + 'px)',
+	      transition: _transitions2.default.easeOut('400ms', 'transform') + ', ' + _transitions2.default.easeOut('400ms', 'visibility')
+	    }
+	  };
+	
+	  return styles;
+	}
+	
+	var Snackbar = function (_Component) {
+	  _inherits(Snackbar, _Component);
+	
+	  function Snackbar() {
+	    var _Object$getPrototypeO;
+	
+	    var _temp, _this, _ret;
+	
+	    _classCallCheck(this, Snackbar);
+	
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+	
+	    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(Snackbar)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.componentClickAway = function () {
+	      if (_this.timerTransitionId) {
+	        // If transitioning, don't close the snackbar.
+	        return;
+	      }
+	
+	      if (_this.props.open !== null && _this.props.onRequestClose) {
+	        _this.props.onRequestClose('clickaway');
+	      } else {
+	        _this.setState({ open: false });
+	      }
+	    }, _temp), _possibleConstructorReturn(_this, _ret);
+	  }
+	
+	  _createClass(Snackbar, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      this.setState({
+	        open: this.props.open,
+	        message: this.props.message,
+	        action: this.props.action
+	      });
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      if (this.state.open) {
+	        this.setAutoHideTimer();
+	        this.setTransitionTimer();
+	      }
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      var _this2 = this;
+	
+	      if (this.props.open && nextProps.open && (nextProps.message !== this.props.message || nextProps.action !== this.props.action)) {
+	        this.setState({
+	          open: false
+	        });
+	
+	        clearTimeout(this.timerOneAtTheTimeId);
+	        this.timerOneAtTheTimeId = setTimeout(function () {
+	          _this2.setState({
+	            message: nextProps.message,
+	            action: nextProps.action,
+	            open: true
+	          });
+	        }, 400);
+	      } else {
+	        var open = nextProps.open;
+	
+	        this.setState({
+	          open: open !== null ? open : this.state.open,
+	          message: nextProps.message,
+	          action: nextProps.action
+	        });
+	      }
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate(prevProps, prevState) {
+	      if (prevState.open !== this.state.open) {
+	        if (this.state.open) {
+	          this.setAutoHideTimer();
+	          this.setTransitionTimer();
+	        } else {
+	          clearTimeout(this.timerAutoHideId);
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      clearTimeout(this.timerAutoHideId);
+	      clearTimeout(this.timerTransitionId);
+	      clearTimeout(this.timerOneAtTheTimeId);
+	    }
+	  }, {
+	    key: 'setAutoHideTimer',
+	
+	
+	    // Timer that controls delay before snackbar auto hides
+	    value: function setAutoHideTimer() {
+	      var _this3 = this;
+	
+	      var autoHideDuration = this.props.autoHideDuration;
+	
+	      if (autoHideDuration > 0) {
+	        clearTimeout(this.timerAutoHideId);
+	        this.timerAutoHideId = setTimeout(function () {
+	          if (_this3.props.open !== null && _this3.props.onRequestClose) {
+	            _this3.props.onRequestClose('timeout');
+	          } else {
+	            _this3.setState({ open: false });
+	          }
+	        }, autoHideDuration);
+	      }
+	    }
+	
+	    // Timer that controls delay before click-away events are captured (based on when animation completes)
+	
+	  }, {
+	    key: 'setTransitionTimer',
+	    value: function setTransitionTimer() {
+	      var _this4 = this;
+	
+	      this.timerTransitionId = setTimeout(function () {
+	        _this4.timerTransitionId = undefined;
+	      }, 400);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props;
+	      var autoHideDuration = _props.autoHideDuration;
+	      var messageProp = _props.message;
+	      var onRequestClose = _props.onRequestClose;
+	      var onActionTouchTap = _props.onActionTouchTap;
+	      var style = _props.style;
+	      var bodyStyle = _props.bodyStyle;
+	
+	      var other = _objectWithoutProperties(_props, ['autoHideDuration', 'message', 'onRequestClose', 'onActionTouchTap', 'style', 'bodyStyle']);
+	
+	      var _state = this.state;
+	      var action = _state.action;
+	      var message = _state.message;
+	      var open = _state.open;
+	      var prepareStyles = this.context.muiTheme.prepareStyles;
+	
+	      var styles = getStyles(this.props, this.context, this.state);
+	
+	      return _react2.default.createElement(
+	        _ClickAwayListener2.default,
+	        { onClickAway: open && this.componentClickAway },
+	        _react2.default.createElement(
+	          'div',
+	          _extends({}, other, { style: prepareStyles((0, _simpleAssign2.default)(styles.root, style)) }),
+	          _react2.default.createElement(_SnackbarBody2.default, {
+	            open: open,
+	            message: message,
+	            action: action,
+	            style: bodyStyle,
+	            onActionTouchTap: onActionTouchTap
+	          })
+	        )
+	      );
+	    }
+	  }]);
+	
+	  return Snackbar;
+	}(_react.Component);
+	
+	Snackbar.propTypes = {
+	  /**
+	   * The label for the action on the snackbar.
+	   */
+	  action: _react.PropTypes.node,
+	  /**
+	   * The number of milliseconds to wait before automatically dismissing.
+	   * If no value is specified the snackbar will dismiss normally.
+	   * If a value is provided the snackbar can still be dismissed normally.
+	   * If a snackbar is dismissed before the timer expires, the timer will be cleared.
+	   */
+	  autoHideDuration: _react.PropTypes.number,
+	  /**
+	   * Override the inline-styles of the body element.
+	   */
+	  bodyStyle: _react.PropTypes.object,
+	  /**
+	   * The css class name of the root element.
+	   */
+	  className: _react.PropTypes.string,
+	  /**
+	   * The message to be displayed.
+	   *
+	   * (Note: If the message is an element or array, and the `Snackbar` may re-render while it is still open,
+	   * ensure that the same object remains as the `message` property if you want to avoid the `Snackbar` hiding and
+	   * showing again)
+	   */
+	  message: _react.PropTypes.node.isRequired,
+	  /**
+	   * Fired when the action button is touchtapped.
+	   *
+	   * @param {object} event Action button event.
+	   */
+	  onActionTouchTap: _react.PropTypes.func,
+	  /**
+	   * Fired when the `Snackbar` is requested to be closed by a click outside the `Snackbar`, or after the
+	   * `autoHideDuration` timer expires.
+	   *
+	   * Typically `onRequestClose` is used to set state in the parent component, which is used to control the `Snackbar`
+	   * `open` prop.
+	   *
+	   * The `reason` parameter can optionally be used to control the response to `onRequestClose`,
+	   * for example ignoring `clickaway`.
+	   *
+	   * @param {string} reason Can be:`"timeout"` (`autoHideDuration` expired) or: `"clickaway"`
+	   */
+	  onRequestClose: _react.PropTypes.func,
+	  /**
+	   * Controls whether the `Snackbar` is opened or not.
+	   */
+	  open: _react.PropTypes.bool.isRequired,
+	  /**
+	   * Override the inline-styles of the root element.
+	   */
+	  style: _react.PropTypes.object
+	};
+	Snackbar.contextTypes = {
+	  muiTheme: _react.PropTypes.object.isRequired
+	};
+	exports.default = Snackbar;
+
+/***/ },
+/* 435 */
+/*!************************************************!*\
+  !*** ./~/material-ui/Snackbar/SnackbarBody.js ***!
+  \************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.SnackbarBody = undefined;
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _simpleAssign = __webpack_require__(/*! simple-assign */ 185);
+	
+	var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _transitions = __webpack_require__(/*! ../styles/transitions */ 186);
+	
+	var _transitions2 = _interopRequireDefault(_transitions);
+	
+	var _withWidth = __webpack_require__(/*! ../utils/withWidth */ 436);
+	
+	var _withWidth2 = _interopRequireDefault(_withWidth);
+	
+	var _FlatButton = __webpack_require__(/*! ../FlatButton */ 183);
+	
+	var _FlatButton2 = _interopRequireDefault(_FlatButton);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+	
+	function getStyles(props, context) {
+	  var open = props.open;
+	  var width = props.width;
+	  var _context$muiTheme = context.muiTheme;
+	  var _context$muiTheme$bas = _context$muiTheme.baseTheme;
+	  var _context$muiTheme$bas2 = _context$muiTheme$bas.spacing;
+	  var desktopGutter = _context$muiTheme$bas2.desktopGutter;
+	  var desktopSubheaderHeight = _context$muiTheme$bas2.desktopSubheaderHeight;
+	  var fontFamily = _context$muiTheme$bas.fontFamily;
+	  var _context$muiTheme$sna = _context$muiTheme.snackbar;
+	  var backgroundColor = _context$muiTheme$sna.backgroundColor;
+	  var textColor = _context$muiTheme$sna.textColor;
+	  var actionColor = _context$muiTheme$sna.actionColor;
+	
+	
+	  var isSmall = width === _withWidth.SMALL;
+	
+	  var styles = {
+	    root: {
+	      fontFamily: fontFamily,
+	      backgroundColor: backgroundColor,
+	      padding: '0 ' + desktopGutter + 'px',
+	      height: desktopSubheaderHeight,
+	      lineHeight: desktopSubheaderHeight + 'px',
+	      borderRadius: isSmall ? 0 : 2,
+	      maxWidth: isSmall ? 'inherit' : 568,
+	      minWidth: isSmall ? 'inherit' : 288,
+	      flexGrow: isSmall ? 1 : 0,
+	      margin: 'auto'
+	    },
+	    content: {
+	      fontSize: 14,
+	      color: textColor,
+	      opacity: open ? 1 : 0,
+	      transition: open ? _transitions2.default.easeOut('500ms', 'opacity', '100ms') : _transitions2.default.easeOut('400ms', 'opacity')
+	    },
+	    action: {
+	      color: actionColor,
+	      float: 'right',
+	      marginTop: 6,
+	      marginRight: -16,
+	      marginLeft: desktopGutter,
+	      backgroundColor: 'transparent'
+	    }
+	  };
+	
+	  return styles;
+	}
+	
+	var SnackbarBody = exports.SnackbarBody = function SnackbarBody(props, context) {
+	  var open = props.open;
+	  var action = props.action;
+	  var message = props.message;
+	  var onActionTouchTap = props.onActionTouchTap;
+	  var style = props.style;
+	
+	  var other = _objectWithoutProperties(props, ['open', 'action', 'message', 'onActionTouchTap', 'style']);
+	
+	  var prepareStyles = context.muiTheme.prepareStyles;
+	
+	  var styles = getStyles(props, context);
+	
+	  var actionButton = action && _react2.default.createElement(_FlatButton2.default, {
+	    style: styles.action,
+	    label: action,
+	    onTouchTap: onActionTouchTap
+	  });
+	
+	  return _react2.default.createElement(
+	    'div',
+	    _extends({}, other, { style: prepareStyles((0, _simpleAssign2.default)(styles.root, style)) }),
+	    _react2.default.createElement(
+	      'div',
+	      { style: prepareStyles(styles.content) },
+	      _react2.default.createElement(
+	        'span',
+	        null,
+	        message
+	      ),
+	      actionButton
+	    )
+	  );
+	};
+	
+	SnackbarBody.propTypes = {
+	  /**
+	   * The label for the action on the snackbar.
+	   */
+	  action: _react.PropTypes.node,
+	  /**
+	   * The message to be displayed.
+	   *
+	   * (Note: If the message is an element or array, and the `Snackbar` may re-render while it is still open,
+	   * ensure that the same object remains as the `message` property if you want to avoid the `Snackbar` hiding and
+	   * showing again)
+	   */
+	  message: _react.PropTypes.node.isRequired,
+	  /**
+	   * Fired when the action button is touchtapped.
+	   *
+	   * @param {object} event Action button event.
+	   */
+	  onActionTouchTap: _react.PropTypes.func,
+	  /**
+	   * @ignore
+	   * Controls whether the `Snackbar` is opened or not.
+	   */
+	  open: _react.PropTypes.bool.isRequired,
+	  /**
+	   * Override the inline-styles of the root element.
+	   */
+	  style: _react.PropTypes.object,
+	  /**
+	   * @ignore
+	   * Width of the screen.
+	   */
+	  width: _react.PropTypes.number.isRequired
+	};
+	
+	SnackbarBody.contextTypes = {
+	  muiTheme: _react.PropTypes.object.isRequired
+	};
+	
+	exports.default = (0, _withWidth2.default)()(SnackbarBody);
+
+/***/ },
+/* 436 */
+/*!******************************************!*\
+  !*** ./~/material-ui/utils/withWidth.js ***!
+  \******************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.LARGE = exports.MEDIUM = exports.SMALL = undefined;
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	exports.default = withWidth;
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactEventListener = __webpack_require__(/*! react-event-listener */ 211);
+	
+	var _reactEventListener2 = _interopRequireDefault(_reactEventListener);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var SMALL = exports.SMALL = 1;
+	var MEDIUM = exports.MEDIUM = 2;
+	var LARGE = exports.LARGE = 3;
+	
+	function withWidth() {
+	  var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var _options$largeWidth = options.largeWidth;
+	  var largeWidth = _options$largeWidth === undefined ? 992 : _options$largeWidth;
+	  var _options$mediumWidth = options.mediumWidth;
+	  var mediumWidth = _options$mediumWidth === undefined ? 768 : _options$mediumWidth;
+	  var _options$resizeInterv = options.resizeInterval;
+	  var resizeInterval = _options$resizeInterv === undefined ? 166 : _options$resizeInterv;
+	
+	
+	  return function (MyComponent) {
+	    return function (_Component) {
+	      _inherits(WithWidth, _Component);
+	
+	      function WithWidth() {
+	        var _Object$getPrototypeO;
+	
+	        var _temp, _this, _ret;
+	
+	        _classCallCheck(this, WithWidth);
+	
+	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	          args[_key] = arguments[_key];
+	        }
+	
+	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_Object$getPrototypeO = Object.getPrototypeOf(WithWidth)).call.apply(_Object$getPrototypeO, [this].concat(args))), _this), _this.state = {
+	          /**
+	           * For the server side rendering,
+	           * let's set the width for the slower environment.
+	           */
+	          width: SMALL
+	        }, _this.handleResize = function () {
+	          clearTimeout(_this.deferTimer);
+	          _this.deferTimer = setTimeout(function () {
+	            _this.updateWidth();
+	          }, resizeInterval);
+	        }, _temp), _possibleConstructorReturn(_this, _ret);
+	      }
+	
+	      _createClass(WithWidth, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	          this.updateWidth();
+	        }
+	      }, {
+	        key: 'componentWillUnmount',
+	        value: function componentWillUnmount() {
+	          clearTimeout(this.deferTimer);
+	        }
+	      }, {
+	        key: 'updateWidth',
+	        value: function updateWidth() {
+	          var innerWidth = window.innerWidth;
+	          var width = void 0;
+	
+	          if (innerWidth >= largeWidth) {
+	            width = LARGE;
+	          } else if (innerWidth >= mediumWidth) {
+	            width = MEDIUM;
+	          } else {
+	            // innerWidth < 768
+	            width = SMALL;
+	          }
+	
+	          if (width !== this.state.width) {
+	            this.setState({
+	              width: width
+	            });
+	          }
+	        }
+	      }, {
+	        key: 'render',
+	        value: function render() {
+	          return _react2.default.createElement(
+	            _reactEventListener2.default,
+	            { target: 'window', onResize: this.handleResize },
+	            _react2.default.createElement(MyComponent, _extends({}, this.props, {
+	              width: this.state.width
+	            }))
+	          );
+	        }
+	      }]);
+	
+	      return WithWidth;
+	    }(_react.Component);
+	  };
+	}
+
+/***/ },
+/* 437 */
+/*!****************************************!*\
+  !*** ./resources/assets/js/states.jsx ***!
+  \****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = undefined;
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _MenuItem = __webpack_require__(/*! material-ui/MenuItem */ 422);
+	
+	var _MenuItem2 = _interopRequireDefault(_MenuItem);
+	
+	var _SelectField = __webpack_require__(/*! material-ui/SelectField */ 438);
+	
+	var _SelectField2 = _interopRequireDefault(_SelectField);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * U.S. State autoselect field for forms
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * ref must be defined for parent components to get the value of States' SelectField
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+	
+	
+	var States = function (_React$Component) {
+	    _inherits(States, _React$Component);
+	
+	    function States(props) {
+	        _classCallCheck(this, States);
+	
+	        var _this = _possibleConstructorReturn(this, (States.__proto__ || Object.getPrototypeOf(States)).call(this, props));
+	
+	        _this.handleChange = function (event, index, value) {
+	            //the SelectField component renders wierdly compared to it's surrounding TextInput components, hence having to dynamically change css
+	            var bottom = _this.props.id == 'user_state' ? '0px' : '9px';
+	            _this.setState({ value: value, style: { bottom: bottom, width: '50px', paddingRight: '10px' } });
+	        };
+	
+	        _this.state = { value: _this.props.defaultValue, style: _this.props.style };
+	        return _this;
+	    }
+	
+	    _createClass(States, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                _SelectField2.default,
+	                {
+	                    value: this.state.value,
+	                    onChange: this.handleChange,
+	                    floatingLabelText: 'State',
+	                    style: this.state.style,
+	                    id: this.props.id
+	                },
+	                _react2.default.createElement(_MenuItem2.default, { value: 'AL', primaryText: 'AL' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'AK', primaryText: 'AK' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'AZ', primaryText: 'AZ' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'AR', primaryText: 'AR' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'CA', primaryText: 'CA' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'CO', primaryText: 'CO' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'CT', primaryText: 'CT' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'DE', primaryText: 'DE' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'FL', primaryText: 'FL' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'GA', primaryText: 'GA' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'HI', primaryText: 'HI' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'ID', primaryText: 'ID' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'IL', primaryText: 'IL' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'IN', primaryText: 'IN' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'IA', primaryText: 'IA' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'KS', primaryText: 'KS' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'KY', primaryText: 'KY' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'LA', primaryText: 'LA' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'ME', primaryText: 'ME' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'MD', primaryText: 'MD' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'MA', primaryText: 'MA' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'MI', primaryText: 'MI' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'MN', primaryText: 'MN' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'MS', primaryText: 'MS' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'MO', primaryText: 'MO' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'MT', primaryText: 'MT' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'NE', primaryText: 'NE' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'NV', primaryText: 'NV' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'NH', primaryText: 'NH' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'NJ', primaryText: 'NJ' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'NM', primaryText: 'NM' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'NY', primaryText: 'NY' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'NC', primaryText: 'NC' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'ND', primaryText: 'ND' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'OH', primaryText: 'OH' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'OK', primaryText: 'OK' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'OR', primaryText: 'OR' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'PA', primaryText: 'PA' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'RI', primaryText: 'RI' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'SC', primaryText: 'SC' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'SD', primaryText: 'SD' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'TN', primaryText: 'TN' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'TX', primaryText: 'TX' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'UT', primaryText: 'UT' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'VT', primaryText: 'VT' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'VA', primaryText: 'VA' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'WA', primaryText: 'WA' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'WV', primaryText: 'WV' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'WI', primaryText: 'WI' }),
+	                _react2.default.createElement(_MenuItem2.default, { value: 'WY', primaryText: 'WY' })
+	            );
+	        }
+	    }]);
+	
+	    return States;
+	}(_react2.default.Component);
+	
+	exports.default = States;
+
+/***/ },
+/* 438 */
 /*!********************************************!*\
   !*** ./~/material-ui/SelectField/index.js ***!
   \********************************************/
@@ -43817,7 +43683,7 @@
 	});
 	exports.default = undefined;
 	
-	var _SelectField = __webpack_require__(/*! ./SelectField */ 427);
+	var _SelectField = __webpack_require__(/*! ./SelectField */ 439);
 	
 	var _SelectField2 = _interopRequireDefault(_SelectField);
 	
@@ -43826,7 +43692,7 @@
 	exports.default = _SelectField2.default;
 
 /***/ },
-/* 427 */
+/* 439 */
 /*!**************************************************!*\
   !*** ./~/material-ui/SelectField/SelectField.js ***!
   \**************************************************/
@@ -43854,7 +43720,7 @@
 	
 	var _TextField2 = _interopRequireDefault(_TextField);
 	
-	var _DropDownMenu = __webpack_require__(/*! ../DropDownMenu */ 428);
+	var _DropDownMenu = __webpack_require__(/*! ../DropDownMenu */ 440);
 	
 	var _DropDownMenu2 = _interopRequireDefault(_DropDownMenu);
 	
@@ -44096,7 +43962,7 @@
 	exports.default = SelectField;
 
 /***/ },
-/* 428 */
+/* 440 */
 /*!*********************************************!*\
   !*** ./~/material-ui/DropDownMenu/index.js ***!
   \*********************************************/
@@ -44109,11 +43975,11 @@
 	});
 	exports.default = exports.MenuItem = exports.DropDownMenu = undefined;
 	
-	var _DropDownMenu2 = __webpack_require__(/*! ./DropDownMenu */ 429);
+	var _DropDownMenu2 = __webpack_require__(/*! ./DropDownMenu */ 441);
 	
 	var _DropDownMenu3 = _interopRequireDefault(_DropDownMenu2);
 	
-	var _MenuItem2 = __webpack_require__(/*! ../MenuItem/MenuItem */ 422);
+	var _MenuItem2 = __webpack_require__(/*! ../MenuItem/MenuItem */ 423);
 	
 	var _MenuItem3 = _interopRequireDefault(_MenuItem2);
 	
@@ -44124,7 +43990,7 @@
 	exports.default = _DropDownMenu3.default;
 
 /***/ },
-/* 429 */
+/* 441 */
 /*!****************************************************!*\
   !*** ./~/material-ui/DropDownMenu/DropDownMenu.js ***!
   \****************************************************/
@@ -44152,15 +44018,15 @@
 	
 	var _transitions2 = _interopRequireDefault(_transitions);
 	
-	var _arrowDropDown = __webpack_require__(/*! ../svg-icons/navigation/arrow-drop-down */ 430);
+	var _arrowDropDown = __webpack_require__(/*! ../svg-icons/navigation/arrow-drop-down */ 442);
 	
 	var _arrowDropDown2 = _interopRequireDefault(_arrowDropDown);
 	
-	var _Menu = __webpack_require__(/*! ../Menu/Menu */ 424);
+	var _Menu = __webpack_require__(/*! ../Menu/Menu */ 419);
 	
 	var _Menu2 = _interopRequireDefault(_Menu);
 	
-	var _ClearFix = __webpack_require__(/*! ../internal/ClearFix */ 431);
+	var _ClearFix = __webpack_require__(/*! ../internal/ClearFix */ 443);
 	
 	var _ClearFix2 = _interopRequireDefault(_ClearFix);
 	
@@ -44533,7 +44399,7 @@
 	exports.default = DropDownMenu;
 
 /***/ },
-/* 430 */
+/* 442 */
 /*!***************************************************************!*\
   !*** ./~/material-ui/svg-icons/navigation/arrow-drop-down.js ***!
   \***************************************************************/
@@ -44573,7 +44439,7 @@
 	exports.default = NavigationArrowDropDown;
 
 /***/ },
-/* 431 */
+/* 443 */
 /*!********************************************!*\
   !*** ./~/material-ui/internal/ClearFix.js ***!
   \********************************************/
@@ -44591,7 +44457,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _BeforeAfterWrapper = __webpack_require__(/*! ./BeforeAfterWrapper */ 432);
+	var _BeforeAfterWrapper = __webpack_require__(/*! ./BeforeAfterWrapper */ 444);
 	
 	var _BeforeAfterWrapper2 = _interopRequireDefault(_BeforeAfterWrapper);
 	
@@ -44641,7 +44507,7 @@
 	exports.default = ClearFix;
 
 /***/ },
-/* 432 */
+/* 444 */
 /*!******************************************************!*\
   !*** ./~/material-ui/internal/BeforeAfterWrapper.js ***!
   \******************************************************/
@@ -44787,6 +44653,97 @@
 	  muiTheme: _react.PropTypes.object.isRequired
 	};
 	exports.default = BeforeAfterWrapper;
+
+/***/ },
+/* 445 */,
+/* 446 */,
+/* 447 */,
+/* 448 */,
+/* 449 */,
+/* 450 */,
+/* 451 */,
+/* 452 */,
+/* 453 */,
+/* 454 */,
+/* 455 */,
+/* 456 */
+/*!*************************************************!*\
+  !*** ./~/material-ui/svg-icons/content/save.js ***!
+  \*************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _pure = __webpack_require__(/*! recompose/pure */ 252);
+	
+	var _pure2 = _interopRequireDefault(_pure);
+	
+	var _SvgIcon = __webpack_require__(/*! ../../SvgIcon */ 261);
+	
+	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var ContentSave = function ContentSave(props) {
+	  return _react2.default.createElement(
+	    _SvgIcon2.default,
+	    props,
+	    _react2.default.createElement('path', { d: 'M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z' })
+	  );
+	};
+	ContentSave = (0, _pure2.default)(ContentSave);
+	ContentSave.displayName = 'ContentSave';
+	ContentSave.muiName = 'SvgIcon';
+	
+	exports.default = ContentSave;
+
+/***/ },
+/* 457 */
+/*!******************************************************!*\
+  !*** ./~/material-ui/svg-icons/navigation/cancel.js ***!
+  \******************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _pure = __webpack_require__(/*! recompose/pure */ 252);
+	
+	var _pure2 = _interopRequireDefault(_pure);
+	
+	var _SvgIcon = __webpack_require__(/*! ../../SvgIcon */ 261);
+	
+	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var NavigationCancel = function NavigationCancel(props) {
+	  return _react2.default.createElement(
+	    _SvgIcon2.default,
+	    props,
+	    _react2.default.createElement('path', { d: 'M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z' })
+	  );
+	};
+	NavigationCancel = (0, _pure2.default)(NavigationCancel);
+	NavigationCancel.displayName = 'NavigationCancel';
+	NavigationCancel.muiName = 'SvgIcon';
+	
+	exports.default = NavigationCancel;
 
 /***/ }
 /******/ ]);

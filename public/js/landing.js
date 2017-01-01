@@ -69,12 +69,12 @@
 	 * Global modules for all pages
 	 */
 	
-	__webpack_require__(/*! landing.css */ 406);
-	var timer = __webpack_require__(/*! ic_av_timer_black_24dp_2x.png */ 408);
-	var cart = __webpack_require__(/*! ic_shopping_cart_black_24dp_2x.png */ 409);
-	var receipt = __webpack_require__(/*! ic_receipt_black_24dp_2x.png */ 410);
-	var send = __webpack_require__(/*! ic_send_black_24dp_2x.png */ 411);
-	var money = __webpack_require__(/*! ic_monetization_on_black_24dp_2x.png */ 412);
+	__webpack_require__(/*! landing.css */ 449);
+	var timer = __webpack_require__(/*! ic_av_timer_black_24dp_2x.png */ 451);
+	var cart = __webpack_require__(/*! ic_shopping_cart_black_24dp_2x.png */ 452);
+	var receipt = __webpack_require__(/*! ic_receipt_black_24dp_2x.png */ 453);
+	var send = __webpack_require__(/*! ic_send_black_24dp_2x.png */ 454);
+	var money = __webpack_require__(/*! ic_monetization_on_black_24dp_2x.png */ 455);
 	
 	(0, _reactTapEventPlugin2.default)();
 	
@@ -22451,10 +22451,6 @@
 	
 	var _ToolbarSeparator2 = _interopRequireDefault(_ToolbarSeparator);
 	
-	var _MuiThemeProvider = __webpack_require__(/*! material-ui/styles/MuiThemeProvider.js */ 272);
-	
-	var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
-	
 	var _getMuiTheme = __webpack_require__(/*! material-ui/styles/getMuiTheme */ 273);
 	
 	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
@@ -22699,10 +22695,10 @@
 	var NavMenu = function NavMenu() {
 	    return _react2.default.createElement(
 	        _List2.default,
-	        { id: 'main_nav' },
-	        _react2.default.createElement(_ListItem2.default, { className: 'main_nav_menu_item', primaryText: 'Transactions', rightIcon: _react2.default.createElement('img', { src: 'https://www.dropbox.com/s/4hw9njfnlkgttmf/clock-1.png?dl=1' }) }),
-	        _react2.default.createElement(_ListItem2.default, { className: 'main_nav_menu_item', primaryText: 'Invoices', rightIcon: _react2.default.createElement('img', { src: 'https://www.dropbox.com/s/1x89klicik0olnk/money.png?dl=1' }) }),
-	        _react2.default.createElement(_ListItem2.default, { className: 'main_nav_menu_item', primaryText: 'Reports', rightIcon: _react2.default.createElement('img', { src: 'https://www.dropbox.com/s/q4fou4u4qvx0z09/business-1.png?dl=1' }) })
+	        { style: { display: 'flex', flexDirection: 'row' } },
+	        _react2.default.createElement(_ListItem2.default, { href: '/', primaryText: 'Transactions', rightIcon: _react2.default.createElement('img', { src: 'https://www.dropbox.com/s/4hw9njfnlkgttmf/clock-1.png?dl=1' }) }),
+	        _react2.default.createElement(_ListItem2.default, { href: '/invoices', primaryText: 'Invoices', rightIcon: _react2.default.createElement('img', { src: 'https://www.dropbox.com/s/1x89klicik0olnk/money.png?dl=1' }) }),
+	        _react2.default.createElement(_ListItem2.default, { href: '/reports', primaryText: 'Reports', rightIcon: _react2.default.createElement('img', { src: 'https://www.dropbox.com/s/q4fou4u4qvx0z09/business-1.png?dl=1' }) })
 	    );
 	};
 	
@@ -22746,22 +22742,21 @@
 	                var name = cur_user.profile.first ? cur_user.profile.first : cur_user.email;
 	                var user = _react2.default.createElement('a', { href: window.location.origin + '/profile' }, "Oh hello, " + name);
 	                loginoutlink = _react2.default.createElement('div', { id: 'logout_link' }, user, logoutlink);
-	                nav = 'NavMenu';
+	                nav = _react2.default.createElement(NavMenu, null);
 	            }
-	            return _react2.default.createElement(
-	                _AppBar2.default,
-	                {
-	                    ref: 'appbar',
-	                    title: _react2.default.createElement(
-	                        'a',
-	                        { href: '/' },
-	                        'InvoiceTrackr'
-	                    ),
-	                    iconElementRight: loginoutlink,
-	                    showMenuIconButton: false
-	                },
-	                nav
-	            );
+	            return _react2.default.createElement(_AppBar2.default, {
+	                ref: 'appbar',
+	                title: _react2.default.createElement(
+	                    'a',
+	                    { href: '/' },
+	                    'InvoiceTrackr'
+	                ),
+	                iconElementRight: logged_in ? nav : loginoutlink,
+	                iconStyleRight: logged_in ? { marginTop: '0px !i', marginLeft: 'auto', marginRight: 'auto' } : {},
+	                showMenuIconButton: false,
+	                children: logged_in ? loginoutlink : '',
+	                titleStyle: { flex: 'initial' }
+	            });
 	        }
 	    }]);
 	
@@ -34900,70 +34895,7 @@
 	exports.default = ToolbarSeparator;
 
 /***/ },
-/* 272 */
-/*!**************************************************!*\
-  !*** ./~/material-ui/styles/MuiThemeProvider.js ***!
-  \**************************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _getMuiTheme = __webpack_require__(/*! ./getMuiTheme */ 273);
-	
-	var _getMuiTheme2 = _interopRequireDefault(_getMuiTheme);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	
-	var MuiThemeProvider = function (_Component) {
-	  _inherits(MuiThemeProvider, _Component);
-	
-	  function MuiThemeProvider() {
-	    _classCallCheck(this, MuiThemeProvider);
-	
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(MuiThemeProvider).apply(this, arguments));
-	  }
-	
-	  _createClass(MuiThemeProvider, [{
-	    key: 'getChildContext',
-	    value: function getChildContext() {
-	      return {
-	        muiTheme: this.props.muiTheme || (0, _getMuiTheme2.default)()
-	      };
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return this.props.children;
-	    }
-	  }]);
-	
-	  return MuiThemeProvider;
-	}(_react.Component);
-	
-	MuiThemeProvider.propTypes = {
-	  children: _react.PropTypes.element,
-	  muiTheme: _react.PropTypes.object
-	};
-	MuiThemeProvider.childContextTypes = {
-	  muiTheme: _react.PropTypes.object.isRequired
-	};
-	exports.default = MuiThemeProvider;
-
-/***/ },
+/* 272 */,
 /* 273 */
 /*!*********************************************!*\
   !*** ./~/material-ui/styles/getMuiTheme.js ***!
@@ -41118,7 +41050,7 @@
 	
 	
 	// module
-	exports.push([module.id, "* {\r\n    padding: 0;\r\n    margin: 0;\r\n    font-family: 'Alegreya Sans', sans-serif;\r\n    text-decoration: none;\r\n    cursor: default;\r\n}\r\n\r\nhtml {\r\n    height: 100%;\r\n}\r\n\r\nbody {\r\n    min-height: 100%;\r\n    min-width: 375px;\r\n    position: relative;\r\n}\r\n\r\na:visited, a {\r\n    color: black;\r\n    cursor: default;\r\n}\r\n\r\nheader {\r\n    width: 100%;\r\n}\r\n\r\nfieldset {\r\n    margin: 5px;\r\n    padding: 20px;\r\n    border: solid 1px #E0DEDE;\r\n    backgroundColor: #F7FAF5;\r\n}\r\n\r\n/**\r\n * Login Menu\r\n */\r\n#logout_link {\r\n    margin: 1vw 0;\r\n    font-size: small;\r\n}\r\n\r\n/**\r\n * Main Content Area\r\n */\r\n#landing_animation {\r\n    position: relative;\r\n    height: 65vh;\r\n    margin: 5vw 0 0 13vw;\r\n}\r\n\r\n\r\n#greeting {\r\n    font-size: 1em;\r\n    text-align: center;\r\n    padding-top: 33vh;\r\n    padding-bottom: 21.5vh;\r\n}\r\n\r\ndiv#content {\r\n    min-height: 100%;\r\n}\r\n\r\ndiv.main_area, div.cards {\r\n    background: #F5F5F5 !important;\r\n    margin: 0 0 4vw 0;\r\n}\r\n\r\ndiv.main_area {\r\n    min-height: 69.4vh;\r\n    margin: 7vw;\r\n    padding: 3vw;\r\n}\r\n\r\n/**\r\n * Profile form\r\n */\r\n#profile {\r\n    position: relative;\r\n    margin: 50px auto;\r\n    max-width: 74vw;\r\n    padding: 50px;\r\n    background-color: #F7FAF5\r\n}\r\n\r\n.profile_field {\r\n    margin-right: 10px;\r\n    padding-right: 10px;\r\n    width: auto !important;\r\n}\r\n\r\n/**\r\n * Trx entry form\r\n */\r\nform#trx_form {\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n}\r\n\r\n/**\r\n * Customer drop-down\r\n */\r\nspan.cust_icons {\r\n    position: relative;\r\n    bottom: 7px;\r\n}\r\n\r\nspan.cust_icons .fa, span.trx_icons .fa {\r\n    font-size: 17px !important;\r\n}\r\n\r\n/**\r\n * Transactions Area\r\n */\r\ntable {\r\n    margin: 0 auto;\r\n}\r\n\r\ntr {\r\n    display: flex;\r\n    justify-content: space-around;\r\n}\r\n\r\ntr:hover {\r\n    background-color: #C5CAE9;\r\n}\r\n\r\nth, td {\r\n    width: 10vw;\r\n    text-align: center;\r\n    margin: 7px;\r\n}\r\n\r\nspan.trx_icons {\r\n    position: relative;\r\n    bottom: 15px;\r\n}\r\n\r\n/**\r\n * Footer Area\r\n */\r\ndiv#loader {\r\n    border: 16px solid #f3f3f3; /* Light grey */\r\n    border-top: 16px solid #3498db; /* Blue */\r\n    border-radius: 50%;\r\n    width: 120px;\r\n    height: 120px;\r\n    animation: spin 2s linear infinite;\r\n    position: absolute;\r\n    top: 40vh;\r\n    left: 42.5vw;\r\n    z-index: 1200;\r\n    display: none;\r\n}\r\n\r\ndiv#overlay {\r\n    background: #b6b2b2;\r\n    display: none;\r\n    position: absolute;\r\n    top: 0;\r\n    right: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    opacity: 0.5;\r\n    z-index: 1100;\r\n}\r\n\r\n@keyframes spin {\r\n    0% { transform: rotate(0deg); }\r\n    100% { transform: rotate(360deg); }\r\n}\r\n\r\nfooter {\r\n    height: 80px;\r\n    width: 100%;\r\n    font-size: small;\r\n}\r\n\r\n/**\r\n * Rules for viewport's with widths < 510 px\r\n */\r\n@media (max-width: 510px) {\r\n    #logout_link {\r\n        font-size: x-small;\r\n    }\r\n    \r\n    #main_area {\r\n        min-height: 70.9vh;\r\n    }\r\n}\r\n\r\n@media (max-width: 768px) {\r\n    div#loader {\r\n        top: 40vh;\r\n        left: 36vw;\r\n    }\r\n}", ""]);
+	exports.push([module.id, "* {\r\n    padding: 0;\r\n    margin: 0;\r\n    font-family: 'Alegreya Sans', sans-serif;\r\n    text-decoration: none;\r\n    cursor: default;\r\n}\r\n\r\nhtml {\r\n    height: 100%;\r\n}\r\n\r\nbody {\r\n    min-height: 100%;\r\n    min-width: 375px;\r\n    position: relative;\r\n}\r\n\r\na:visited, a {\r\n    color: black;\r\n    cursor: default;\r\n}\r\n\r\nheader {\r\n    width: 100%;\r\n}\r\n\r\nfieldset {\r\n    margin: 5px;\r\n    padding: 20px;\r\n    border: solid 1px #E0DEDE;\r\n    backgroundColor: #F7FAF5;\r\n}\r\n\r\n/**\r\n * Login Menu\r\n */\r\n#logout_link {\r\n    margin: 1vw 0;\r\n    font-size: small;\r\n}\r\n\r\n/**\r\n * Main Content Area\r\n */\r\n#landing_animation {\r\n    position: relative;\r\n    height: 65vh;\r\n    margin: 5vw 0 0 13vw;\r\n}\r\n\r\n\r\n#greeting {\r\n    font-size: 1em;\r\n    text-align: center;\r\n    padding-top: 33vh;\r\n    padding-bottom: 21.5vh;\r\n}\r\n\r\ndiv#content {\r\n    min-height: 100%;\r\n}\r\n\r\ndiv.main_area, div.cards {\r\n    background: #F5F5F5 !important;\r\n    margin: 0 0 4vw 0;\r\n}\r\n\r\ndiv.main_area {\r\n    min-height: 69.4vh;\r\n    margin: 7vw;\r\n    padding: 3vw;\r\n}\r\n\r\n/**\r\n * Profile form\r\n */\r\n#profile {\r\n    position: relative;\r\n    margin: 50px auto;\r\n    max-width: 74vw;\r\n    padding: 50px;\r\n    background-color: #F7FAF5\r\n}\r\n\r\n.profile_field {\r\n    margin-right: 10px;\r\n    padding-right: 10px;\r\n    width: auto !important;\r\n}\r\n\r\n/**\r\n * Trx entry form\r\n */\r\nform#trx_form {\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n}\r\n\r\n/**\r\n * Customer drop-down\r\n */\r\nspan.cust_icons {\r\n    position: relative;\r\n    bottom: 7px;\r\n}\r\n\r\nspan.cust_icons .fa, span.trx_icons .fa {\r\n    font-size: 17px !important;\r\n}\r\n\r\n/**\r\n * Transactions Area\r\n */\r\ntable {\r\n    margin: 0 auto;\r\n}\r\n\r\ntr {\r\n    display: flex;\r\n    justify-content: space-around;\r\n}\r\n\r\ntr:hover {\r\n    background-color: #C5CAE9;\r\n}\r\n\r\nth, td {\r\n    width: 10vw;\r\n    text-align: center;\r\n    margin: 7px;\r\n}\r\n\r\nspan.trx_icons {\r\n    position: relative;\r\n    bottom: 15px;\r\n}\r\n\r\n/**\r\n * Invoices and whatnot\r\n */\r\ndiv#customer {\r\n    margin: 10px;\r\n}\r\n\r\ndiv#company {\r\n    margin: 10px;\r\n}\r\n\r\ntable#inv_trx tr {\r\n    display: initial;\r\n}\r\n\r\ntable#inv_trx tr:hover, table#inv_trx th:hover {\r\n    background-color: initial;\r\n}\r\n\r\ntable#inv_trx th, table#inv_trx td {\r\n    width: 250px;\r\n    text-align: center;\r\n    margin: 7px;\r\n}\r\n\r\n/**\r\n * Footer Area\r\n */\r\ndiv#loader {\r\n    border: 16px solid #f3f3f3; /* Light grey */\r\n    border-top: 16px solid #3498db; /* Blue */\r\n    border-radius: 50%;\r\n    width: 120px;\r\n    height: 120px;\r\n    animation: spin 2s linear infinite;\r\n    position: absolute;\r\n    top: 40vh;\r\n    left: 42.5vw;\r\n    z-index: 1200;\r\n    display: none;\r\n}\r\n\r\ndiv#overlay {\r\n    background: #b6b2b2;\r\n    display: none;\r\n    position: absolute;\r\n    top: 0;\r\n    right: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    opacity: 0.5;\r\n    z-index: 1100;\r\n}\r\n\r\n@keyframes spin {\r\n    0% { transform: rotate(0deg); }\r\n    100% { transform: rotate(360deg); }\r\n}\r\n\r\nfooter {\r\n    height: 80px;\r\n    width: 100%;\r\n    font-size: small;\r\n}\r\n\r\n/**\r\n * Rules for viewport's with widths < 510 px\r\n */\r\n@media (max-width: 510px) {\r\n    #logout_link {\r\n        font-size: x-small;\r\n    }\r\n    \r\n    #main_area {\r\n        min-height: 70.9vh;\r\n    }\r\n}\r\n\r\n@media (max-width: 768px) {\r\n    div#loader {\r\n        top: 40vh;\r\n        left: 36vw;\r\n    }\r\n}", ""]);
 	
 	// exports
 
@@ -41438,7 +41370,50 @@
 
 
 /***/ },
-/* 406 */
+/* 406 */,
+/* 407 */,
+/* 408 */,
+/* 409 */,
+/* 410 */,
+/* 411 */,
+/* 412 */,
+/* 413 */,
+/* 414 */,
+/* 415 */,
+/* 416 */,
+/* 417 */,
+/* 418 */,
+/* 419 */,
+/* 420 */,
+/* 421 */,
+/* 422 */,
+/* 423 */,
+/* 424 */,
+/* 425 */,
+/* 426 */,
+/* 427 */,
+/* 428 */,
+/* 429 */,
+/* 430 */,
+/* 431 */,
+/* 432 */,
+/* 433 */,
+/* 434 */,
+/* 435 */,
+/* 436 */,
+/* 437 */,
+/* 438 */,
+/* 439 */,
+/* 440 */,
+/* 441 */,
+/* 442 */,
+/* 443 */,
+/* 444 */,
+/* 445 */,
+/* 446 */,
+/* 447 */,
+/* 448 */,
+/* 449 */
 /*!******************************************!*\
   !*** ./resources/assets/css/landing.css ***!
   \******************************************/
@@ -41447,7 +41422,7 @@
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../../~/css-loader!./landing.css */ 407);
+	var content = __webpack_require__(/*! !./../../../~/css-loader!./landing.css */ 450);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(/*! ./../../../~/style-loader/addStyles.js */ 405)(content, {});
@@ -41467,7 +41442,7 @@
 	}
 
 /***/ },
-/* 407 */
+/* 450 */
 /*!*********************************************************!*\
   !*** ./~/css-loader!./resources/assets/css/landing.css ***!
   \*********************************************************/
@@ -41484,7 +41459,7 @@
 
 
 /***/ },
-/* 408 */
+/* 451 */
 /*!**************************************************************************!*\
   !*** ./resources/assets/landing_animation/ic_av_timer_black_24dp_2x.png ***!
   \**************************************************************************/
@@ -41493,7 +41468,7 @@
 	module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAQAAAD9CzEMAAACQ0lEQVR4Ae2WT0sUYRyAH9zaUTBPm3nTMj106BSuQUpCSZcQOmR/7pV16JLlJerSR0gQyySzz2B4CZescBcjcHPzC7i7CHVTY+ft8uMHL8P7NjOkp33e28zzmwdm9p1ZmjQ5ZAyGfXZYZ5EJTh1IwFqfuEnmwAKyNhklFQFnfAFrzdJGQjpZ5Rd5R+AijylYiSLHSUCOMgYjiWgAAPp5QwO9VfETrazp2G/yzgDAABU9ukYrsZiRAU14AnCMJT0+Qwwui2wnfGT5oO4l/HCEsqjfeRE70cGmmD/I4GVcxD+cBZ6jCQbxMaCP+wZePos2DZAoMae720O3SA26IWGij1C8kzh5IMoyQiRxHjcrYt3DyVtRHkKKxKQ473DyTZRBSJEYEqOEk6ooOeAadWqM+ROW1yXn6zjZFaUFqGMwVIFoYhLB8rJydg8n+6JkgRoGwzZEEk9RLC/4d2BHlBPAGFW2uQrYiWfYiBfvFq2LcoE0DOu3wcl7UR6RhimZXsDJfVE+kgL9xt3FSa8oIadJSj+hzPbEedm9IinzMlnAy2193Z0jCXl91Y3jJUNFxArtKJFda9PBlkxt0AJ+rmBkLXEUC921NlmWdWaEGLxGE7SjOHZ3B3p5polFGyUdqVjPIrq782yp+5WAmHTyU8cazNHn+GHOE6pXJkcCOilidIWs8IQhuggI6GKYKey/jl/IkZA2ZjEx10sCUjFKBYN/bTAC6clwi1XHpUMKXKeF/0AvEyxSos4eu9QossAdemjS5FD4C6S04yETz5HRAAAAAElFTkSuQmCC"
 
 /***/ },
-/* 409 */
+/* 452 */
 /*!*******************************************************************************!*\
   !*** ./resources/assets/landing_animation/ic_shopping_cart_black_24dp_2x.png ***!
   \*******************************************************************************/
@@ -41502,7 +41477,7 @@
 	module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAQAAAD9CzEMAAABPklEQVR4Ae3RL0tDURyH8WcLQzRpMBgVtmsSDBoEX4DJpsUidmFZ8A2IUfAdmNwfHFjFZlGMBkFQRBHdvHMoCl9hLFw4eHfOPRwYuM9Tv/f+wmFADCnRWegDYin0gUboA2KOQM6Rd8+s8qcVhH9PpLhC3j2SYg15VyZFnhvk1S0FUm0hr9bpo8A9ytwFOfoqo8wtY2GMF5SpKpZ2UYa+KWFpnBg5d4CDPeTYO5M4mOITObWDo0Pk0AOjOJrhB1m3ibMJWsiya/I420eWdVjE2TRflj8/ZZ4MjlC3O0YIYAH12iCIBup2SY4gOqjbNoG0Uaas1UMfiGiGPQARNWLk2L8yywkftKkTee0sHrlJ5LszVVGimu/O1EKJYt+dqWl86LUzHaNEFd+dqcgb6vVK0XtnokSNmJgKRY/dQBj6BYNg+TQV6WB2AAAAAElFTkSuQmCC"
 
 /***/ },
-/* 410 */
+/* 453 */
 /*!*************************************************************************!*\
   !*** ./resources/assets/landing_animation/ic_receipt_black_24dp_2x.png ***!
   \*************************************************************************/
@@ -41511,7 +41486,7 @@
 	module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAQAAAD9CzEMAAAAVUlEQVR4Ae2XQQoAIAgEe7o/rwihk0QshsFMl4WEuawHGxTDdpJySPdPm0nJET62xqUcC/SHAMFLwSUIznzYIgTUlD1AQE3ZAwQI8k+o/CMw+YwtBQxF1hBNgVx2kwAAAABJRU5ErkJggg=="
 
 /***/ },
-/* 411 */
+/* 454 */
 /*!**********************************************************************!*\
   !*** ./resources/assets/landing_animation/ic_send_black_24dp_2x.png ***!
   \**********************************************************************/
@@ -41520,7 +41495,7 @@
 	module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAQAAAD9CzEMAAABFElEQVR4Ae2WMTLGUBSFv4L0KtKyBEaiZwk0oWUJdELFEqhR+JfwqxmGJdBKRY2RZ1K8xpjJlZPbvXMW8L33vczNZcSkpNyxQ4Zjvgk0HJN7Arp+csWaHyD2YXxhLeFXG47IPQFRWOkE0IXZAVHYAkKCoZKwYG4UJgJ0YQIgCrukFAGG3rNNpgN0YcyxzCb7nDHlma9BwgrMmWGRdXY54ZpH3nRhY97vlbpPmH6/j06YAlhigz1OmfDE+5+AC1b/p2iFLQ4454aXXkWHzAtn7Hnkiln9jGGIlCDU8t0Io6LyGBVRSoE5uhQdoI0DcaDpP315wrSCFAFgkKKsjjW53/Jrl2IFGHYFDSDt04bcClJck5LyAy4Dee+yuCiTAAAAAElFTkSuQmCC"
 
 /***/ },
-/* 412 */
+/* 455 */
 /*!*********************************************************************************!*\
   !*** ./resources/assets/landing_animation/ic_monetization_on_black_24dp_2x.png ***!
   \*********************************************************************************/
