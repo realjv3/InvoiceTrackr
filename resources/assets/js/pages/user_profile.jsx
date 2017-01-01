@@ -131,7 +131,6 @@ class Profile extends React.Component
                         <TextField
                             floatingLabelText="Email"
                             className="profile_field"
-                            defaultValue={cur_user.email}
                             name="email"
                             id="email"
                             errorText={this.state.formfields.email}

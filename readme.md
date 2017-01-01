@@ -5,7 +5,7 @@ Clone this repository into the project directory.
 Execute "composer install --no-dev" from command line.
 Create a mysql database.
 Create a .env file for Laravel in app root directory.
-Run the database migrations with "php artisan migrate".
+Run the database migrations & seeding with "php artisan migrate" and "php artisan db:seed".
 
 If you want to develop, run "npm install --only=dev" to install webpack, react, mui, etc.
 The React components for the front end are in the /resources/assets/js folder.
