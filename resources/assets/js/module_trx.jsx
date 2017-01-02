@@ -277,6 +277,37 @@ class DeleteBillablesDialog extends React.Component
     }
 }
 
+class DatePickerControlled extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            controlledDate: null,
+        };
+    }
+
+    handleChange = (event, date) => {
+        this.setState({
+            controlledDate: date,
+        });
+    };
+
+    render() {
+        return (
+            <DatePicker
+                value={this.state.controlledDate}
+                onChange={this.handleChange}
+                autoOk={this.props.autoOk}
+                floatingLabelText={this.props.floatingLabelText}
+                style={this.props.style}
+                textFieldStyle={this.props.textFieldStyle}
+                id={this.props.id}
+                errorText={this.props.errorText}
+            />
+        );
+    }
+}
+
 class Qty extends React.Component
 {
     constructor(props) {
@@ -449,7 +480,7 @@ class TrxEntry extends React.Component
             if(response.ok) {
                 response.json().then((json) => {
                     cur_user = JSON.parse(json.cur_user);
-                    this.doesCustExist(document.getElementById('trx_entry_customer').value);
+                    this.doesCustExist(document.getElementById('trx_entry_customer').value); //so billables & trx are updated
                 })
             } else {
                 response.json()
@@ -511,22 +542,21 @@ class TrxEntry extends React.Component
     }
     handleClear = () => {
         this.removeErrors();
-        // Clear TrxEntry foeld
         document.getElementById('trx_entry_trxid').value = '';
-        //this.refs.trx_entry_trxdt.setState({date: {}});
-        //document.getElementById('trx_entry_trxdt').value = '';
+        this.refs.trx_entry_trxdt.setState({controlledDate: {}});
         if(this.refs.trx_entry_customer.state.searchText != '') this.refs.trx_entry_customer.setState({searchText: ''});
         this.refs.trx_entry_qty.setState({val: ''});
         if(this.refs.trx_entry_billable.state.searchText != '') this.refs.trx_entry_billable.setState({searchText: ''});
         this.refs.trx_entry_descr.setState({hasValue: false});
         document.getElementById('trx_entry_descr').value = '';
-        this.setState({amt: '$ 0.00'})
         let selCustId = getSelectedCustomer().id;
         if(selCustId) {
             for(var i = 0; i < cur_user.customer.length; i++)
                 if(cur_user.customer[i].id == selCustId)
                     cur_user.customer[i].selected = false;
         }
+        this.setState({amt: '$ 0.00', trx: []})
+
     }
     showDelCustDialog = (event) => {
         this.refs.del_cust_dialog.handleOpen(event.currentTarget.getAttribute('class'));
@@ -731,7 +761,7 @@ class TrxEntry extends React.Component
                 <DeleteBillablesDialog ref="del_billables_dialog" showDelCustDialog={this.showDelBillableDialog} deleteBillable={this.deleteBillable} />
                 <form id="trx_form" className="trx_form" ref="trx_form" >
                     <input type="hidden" id="trx_entry_trxid" />
-                    <DatePicker
+                    <DatePickerControlled
                         autoOk={true}
                         floatingLabelText="Date"
                         style={{marginRight: '25px'}}
