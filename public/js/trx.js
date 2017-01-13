@@ -46912,8 +46912,8 @@
 	
 	        _this5.time = function () {
 	            if (_this5.stopwatch == undefined) return;
-	            if (/^[0-9]{2}:[0-9]{2}:[0-9]{2}$/.test(_this5.state.time) == false) _this5.state.time = '00:00:00'; //if user inputs wrong format
 	            if (_this5.state.time == '99:59:59') return; //max 100 hours;
+	            if (_this5.state.val != '') _this5.stopwatch._elapsedMS = _this5.strToTime(_this5.state.val);
 	            if (_this5.stopwatch.state) {
 	                //pause timer
 	                _this5.stopwatch.stop();
@@ -46925,12 +46925,32 @@
 	        };
 	
 	        _this5.turnOffTimer = function () {
+	            _this5.setState({ showTimer: false, val: _this5.msToStr(_this5.stopwatch.ms) });
 	            _this5.stopwatch.reset();
-	            _this5.setState({ showTimer: false });
+	        };
+	
+	        _this5.msToStr = function (ms) {
+	            var hrs = parseInt(ms / 1000 / 3600);
+	            var mins = parseInt(ms / 1000 / 60 % 60);
+	            var secs = parseInt(ms / 1000 % 60);
+	            if (hrs.toString().length < 2) hrs = '0' + hrs.toString();
+	            if (mins.toString().length < 2) mins = '0' + mins.toString();
+	            if (secs.toString().length < 2) secs = '0' + secs.toString();
+	            return hrs + ':' + mins + ':' + secs;
+	        };
+	
+	        _this5.strToTime = function (timeStr) {
+	            var timeString = timeStr,
+	                seconds = 0;
+	            if (/^[0-9]{2}:[0-9]{2}:[0-9]{2}$/.test(timeString) == true) return seconds = (parseInt(timeString.substring(0, 2)) * 60 * 60 + parseInt(timeString.substring(3, 5)) * 60 + parseInt(timeString.substring(6, 8))) * 1000;else if (/^[0-9]{2}\.[0-9]{2}$/.test(timeString) == true) return seconds = (parseInt(timeString.substring(0, 2)) * 60 * 60 + parseInt(timeString.substring(3, 5)) / 100 * 60 * 60) * 1000;else if (/^[0-9]{1}\.[0-9]{2}$/.test(timeString) == true) return seconds = (parseInt(timeString.substring(0, 1)) * 60 * 60 + parseInt(timeString.substring(2, 4)) / 100 * 60 * 60) * 1000;else if (/^[0-9]{1}\.[0-9]{1}$/.test(timeString) == true) return seconds = (parseInt(timeString.substring(0, 1)) * 60 * 60 + parseInt(timeString.substring(2)) / 10 * 60 * 60) * 1000;else if (/^[0-9]{1}$/.test(timeString) == true) return seconds = parseInt(timeString.substring(0, 1)) * 60 * 60 * 1000;else return seconds;
 	        };
 	
 	        _this5.handleChange = function (event) {
-	            _this5.setState({ val: event.currentTarget.value });
+	            if (_this5.state.showTimer == true) {
+	                var time = event.currentTarget.value;
+	                _this5.stopwatch._elapsedMS = _this5.strToTime(time);
+	                _this5.setState({ time: time });
+	            } else _this5.setState({ val: event.currentTarget.value });
 	        };
 	
 	        _this5.state = {
@@ -46941,13 +46961,7 @@
 	        _this5.stopwatch = new _timerStopwatch2.default();
 	        _this5.stopwatch.refreshRateMS = 999;
 	        _this5.stopwatch.onTime(function () {
-	            var hrs = parseInt(_this5.stopwatch.ms / 1000 / 3600);
-	            var mins = parseInt(_this5.stopwatch.ms / 1000 / 60 % 60);
-	            var secs = parseInt(_this5.stopwatch.ms / 1000 % 60);
-	            if (hrs.toString().length < 2) hrs = '0' + hrs.toString();
-	            if (mins.toString().length < 2) mins = '0' + mins.toString();
-	            if (secs.toString().length < 2) secs = '0' + secs.toString();
-	            _this5.setState({ time: hrs + ':' + mins + ':' + secs });
+	            _this5.setState({ time: _this5.msToStr(_this5.stopwatch.ms) });
 	            _this5.props.updateTotal();
 	        });
 	        return _this5;
@@ -46966,7 +46980,7 @@
 	                    {
 	                        iconClassName: 'material-icons',
 	                        style: { top: '7px', left: '7px', opacity: '0.5' },
-	                        tooltip: 'Track time',
+	                        tooltip: 'Click start/pause, Dbl click turn off',
 	                        onClick: function onClick() {
 	                            _this6.time();
 	                        },

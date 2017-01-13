@@ -320,21 +320,15 @@ class Qty extends React.Component
         this.stopwatch = new Stopwatch();
         this.stopwatch.refreshRateMS = 999;
         this.stopwatch.onTime(() => {
-            let hrs = parseInt((this.stopwatch.ms/1000) / 3600);
-            let mins = parseInt(((this.stopwatch.ms/1000) / 60) % 60);
-            let secs = parseInt((this.stopwatch.ms/1000) % 60);
-            if(hrs.toString().length < 2) hrs = '0'+ hrs.toString();
-            if(mins.toString().length < 2) mins = '0'+ mins.toString();
-            if(secs.toString().length < 2) secs = '0'+ secs.toString();
-            this.setState({time: hrs+':'+mins+':'+secs});
+            this.setState({time: this.msToStr(this.stopwatch.ms)});
             this.props.updateTotal();
         })
     }
     time = () => {
         if(this.stopwatch == undefined) return;
-        if (/^[0-9]{2}:[0-9]{2}:[0-9]{2}$/.test(this.state.time) == false)
-            this.state.time = '00:00:00'; //if user inputs wrong format
         if(this.state.time == '99:59:59') return; //max 100 hours;
+        if(this.state.val != '')
+            this.stopwatch._elapsedMS = this.strToTime(this.state.val);
         if (this.stopwatch.state) { //pause timer
             this.stopwatch.stop();
         } else {    //resume timer
@@ -343,11 +337,41 @@ class Qty extends React.Component
         }
     }
     turnOffTimer = () => {
+        this.setState({showTimer: false, val: this.msToStr(this.stopwatch.ms)});
         this.stopwatch.reset();
-        this.setState({showTimer: false});
+    }
+    msToStr = (ms) => {
+        let hrs = parseInt((ms/1000) / 3600);
+        let mins = parseInt(((ms/1000) / 60) % 60);
+        let secs = parseInt((ms/1000) % 60);
+        if(hrs.toString().length < 2) hrs = '0'+ hrs.toString();
+        if(mins.toString().length < 2) mins = '0'+ mins.toString();
+        if(secs.toString().length < 2) secs = '0'+ secs.toString();
+        return hrs+':'+mins+':'+secs;
+    }
+    strToTime = (timeStr) => {
+        let timeString = timeStr,
+            seconds = 0;
+        if (/^[0-9]{2}:[0-9]{2}:[0-9]{2}$/.test(timeString) == true)
+            return seconds = ((parseInt(timeString.substring(0, 2)) * 60 * 60) + (parseInt(timeString.substring(3, 5)) * 60) + (parseInt(timeString.substring(6, 8)))) * 1000;
+        else if (/^[0-9]{2}\.[0-9]{2}$/.test(timeString) == true)
+            return seconds = ((parseInt(timeString.substring(0, 2)) * 60 * 60) + ((parseInt(timeString.substring(3, 5)) / 100) * 60 * 60)) * 1000;
+        else if (/^[0-9]{1}\.[0-9]{2}$/.test(timeString) == true)
+            return seconds = ((parseInt(timeString.substring(0, 1)) * 60 * 60) + ((parseInt(timeString.substring(2, 4)) / 100) * 60 * 60)) * 1000;
+        else if (/^[0-9]{1}\.[0-9]{1}$/.test(timeString) == true)
+            return seconds = ((parseInt(timeString.substring(0, 1)) * 60 * 60) + ((parseInt(timeString.substring(2)) / 10) * 60 * 60)) * 1000;
+        else if (/^[0-9]{1}$/.test(timeString) == true)
+            return seconds = ((parseInt(timeString.substring(0, 1)) * 60 * 60)) * 1000;
+        else
+            return seconds;
     }
     handleChange = (event) => {
-        this.setState({val: event.currentTarget.value});
+        if(this.state.showTimer == true) {
+            let time = event.currentTarget.value;
+            this.stopwatch._elapsedMS = this.strToTime(time);
+            this.setState({time: time});
+        } else
+            this.setState({val: event.currentTarget.value});
     }
     render() {
         return (
@@ -355,7 +379,7 @@ class Qty extends React.Component
                 <IconButton
                     iconClassName="material-icons"
                     style={{top: '7px', left: '7px', opacity: '0.5'}}
-                    tooltip="Track time"
+                    tooltip="Click start/pause, Dbl click turn off"
                     onClick={ () => {this.time(); }}
                     onDoubleClick={ () => {this.turnOffTimer(); }}
                 >
