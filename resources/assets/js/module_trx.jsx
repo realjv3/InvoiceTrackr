@@ -776,7 +776,8 @@ class TrxEntry extends React.Component
                         floatingLabelText="Customer"
                         id="trx_entry_customer"
                         ref="trx_entry_customer"
-                        style={{marginRight: '25px'}}
+                        style={{marginRight: '25px', width: '195px'}}
+                        textFieldStyle={{width: '195px'}}
                         filter={(searchText, key) => { return (key.toLowerCase().indexOf(searchText.toLowerCase()) >= 0); }}
                         listStyle={{width: 'auto', minWidth: '400px'}}
                         onNewRequest={this.doesCustExist}
@@ -789,7 +790,8 @@ class TrxEntry extends React.Component
                         floatingLabelText="Billable"
                         id="trx_entry_billable"
                         ref="trx_entry_billable"
-                        style={{marginRight: '25px'}}
+                        style={{marginRight: '25px', width: '105px'}}
+                        textFieldStyle={{width: '105px'}}
                         filter={(searchText, key) => { return (key.toLowerCase().indexOf(searchText.toLowerCase()) >= 0); }}
                         onNewRequest={this.doesBillableExist}
                         disabled={this.state.disableBillables}
@@ -801,7 +803,7 @@ class TrxEntry extends React.Component
                         underlineStyle={{color: '#03A9F4'}}
                         id="trx_entry_descr"
                         ref="trx_entry_descr"
-                        style={{marginRight: '25px', width:'100px'}}
+                        style={{marginRight: '25px', width:'245px'}}
                         errorText={this.state.errors.descr}
                     />
                     <TextField
