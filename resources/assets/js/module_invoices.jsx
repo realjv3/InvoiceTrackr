@@ -76,6 +76,7 @@ class InvoiceModule extends React.Component{
                 <tr key={'trx_th'}>
                     <th>Add to Invoice</th>
                     <th>Trx Date</th>
+                    <th>Status</th>
                     <th>Billable</th>
                     <th>Description</th>
                     <th>Quantity</th>
@@ -84,7 +85,7 @@ class InvoiceModule extends React.Component{
             );
         for(var j = 0; j < cust.custtrx.length; j++) {
             //if trx status not open, move on to next
-            if(cust.custtrx[j].status != 0)
+            if(cust.custtrx[j].status != 'Open')
                 continue;
             //get each transaction's billable's descr and qty
             let billable = getBillable(cust.custtrx[j].item);
@@ -99,6 +100,7 @@ class InvoiceModule extends React.Component{
                 <tr key={'trx_id_' + cust.custtrx[j].id}>
                     <td><Checkbox id={cust.custtrx[j].id} onCheck={this.addToInvoice} style={{marginLeft: '55px'}}  /></td>
                     <td>{cust.custtrx[j].trxdt}</td>
+                    <td>{cust.custtrx[j].status}</td>
                     <td>{billable.descr}</td>
                     <td>{cust.custtrx[j].descr}</td>
                     <td>{qty}</td>

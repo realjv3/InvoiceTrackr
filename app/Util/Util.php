@@ -19,6 +19,24 @@ class Util
             ->filter(function($item) {
                 return $item->email === Auth::user()->email;
             })
+            ->transform(function($item) {
+                foreach($item->customer as $cust) {
+                    foreach($cust->custtrx as $trx) {
+                        switch($trx->status) {
+                            case 0:
+                                $trx->status = 'Open';
+                                break;
+                            case 1:
+                                $trx->status = 'Invoiced';
+                                break;
+                            case 2:
+                                $trx->status = 'Paid';
+                                break;
+                        }
+                    }
+                }
+                return $item;
+            })
             ->first() //so User instance is returned instead of collection
             ->toArray();
             array_splice($user, 2, 4); //don't need the password and timestamp fields

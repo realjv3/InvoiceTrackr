@@ -408,7 +408,7 @@ class Qty extends React.Component
     }
 }
 
-class TrxEntry extends React.Component
+class Trx extends React.Component
 {
     constructor(props) {
         super(props);
@@ -728,6 +728,7 @@ class TrxEntry extends React.Component
             <tr key={'trx_th'}>
                 <th>Edit / Delete</th>
                 <th>Trx Date</th>
+                <th>Status</th>
                 <th>Billable</th>
                 <th>Description</th>
                 <th>Quantity</th>
@@ -736,15 +737,15 @@ class TrxEntry extends React.Component
         ];
         for(var j = 0; j < cust.custtrx.length; j++) {
             //get each transaction's billable's descr and qty
-            let billable = getBillable(cust.custtrx[j].item);
-            let qty = (cust.custtrx[j].amt / billable.price).toFixed(2) + ' x $' + billable.price +'/'+billable.unit;
+            let billable = getBillable(cust.custtrx[j].item),
+                qty = (cust.custtrx[j].amt / billable.price).toFixed(2) + ' x $' + billable.price +'/'+billable.unit,
             //render table row
-            let style = {
+                style = {
                 width: '10px',
                 height: '10px',
                 margin: '2px'
-            };
-            let tmp =
+            },
+                tmp =
                 <tr key={'trx_id_' + cust.custtrx[j].id}>
                     <td>
                         <span className="trx_icons" >
@@ -765,6 +766,7 @@ class TrxEntry extends React.Component
                         </span>
                     </td>
                     <td>{cust.custtrx[j].trxdt}</td>
+                    <td>{cust.custtrx[j].status}</td>
                     <td>{billable.descr}</td>
                     <td>{cust.custtrx[j].descr}</td>
                     <td>{qty}</td>
@@ -783,91 +785,6 @@ class TrxEntry extends React.Component
     }
     render() {
         return (
-            <section>
-                <CustomerEntry ref="cust_entry" updateCustomersDropDown={this.updateCustomers} />
-                <BillableEntry ref="billables_entry" updateBillablesDropDown={this.updateBillables} />
-                <DeleteCustomerDialog ref="del_cust_dialog" showDelCustDialog={this.showDelCustDialog} deleteCustomer={this.deleteCustomer} />
-                <DeleteBillablesDialog ref="del_billables_dialog" showDelCustDialog={this.showDelBillableDialog} deleteBillable={this.deleteBillable} />
-                <form id="trx_form" className="trx_form" ref="trx_form" >
-                    <input type="hidden" id="trx_entry_trxid" />
-                    <DatePickerControlled
-                        autoOk={true}
-                        floatingLabelText="Date"
-                        style={{marginRight: '25px'}}
-                        textFieldStyle={{width:'90px'}}
-                        id="trx_entry_trxdt"
-                        ref="trx_entry_trxdt"
-                        errorText={this.state.errors.trxdt}
-                    />
-                    <AutoComplete
-                        dataSource={this.state.customers}
-                        openOnFocus={true}
-                        floatingLabelText="Customer"
-                        id="trx_entry_customer"
-                        ref="trx_entry_customer"
-                        style={{marginRight: '25px', width: '195px'}}
-                        textFieldStyle={{width: '195px'}}
-                        filter={(searchText, key) => { return (key.toLowerCase().indexOf(searchText.toLowerCase()) >= 0); }}
-                        listStyle={{width: 'auto', minWidth: '400px'}}
-                        onNewRequest={this.doesCustExist}
-                        errorText={this.state.errors.customer}
-                    />
-                    <Qty _id="trx_entry_qty" ref="trx_entry_qty" errorText={this.state.errors.qty} updateTotal={this.updateTotal.bind(this)} />
-                    <AutoComplete
-                        dataSource={this.state.billables}
-                        openOnFocus={true}
-                        floatingLabelText="Billable"
-                        id="trx_entry_billable"
-                        ref="trx_entry_billable"
-                        style={{marginRight: '25px', width: '105px'}}
-                        textFieldStyle={{width: '105px'}}
-                        filter={(searchText, key) => { return (key.toLowerCase().indexOf(searchText.toLowerCase()) >= 0); }}
-                        onNewRequest={this.doesBillableExist}
-                        disabled={this.state.disableBillables}
-                        errorText={this.state.errors.billable}
-                    />
-                    <TextField
-                        floatingLabelText="Description"
-                        underlineDisabledStyle={{color: '#03A9F4'}}
-                        underlineStyle={{color: '#03A9F4'}}
-                        id="trx_entry_descr"
-                        ref="trx_entry_descr"
-                        style={{marginRight: '25px', width:'245px'}}
-                        errorText={this.state.errors.descr}
-                    />
-                    <TextField
-                        floatingLabelText="Amount"
-                        underlineDisabledStyle={{color: '#03A9F4'}}
-                        underlineStyle={{color: '#03A9F4'}}
-                        id="trx_entry_amt"
-                        style={{marginRight: '25px', width:'100px'}}
-                        value={this.state.amt}
-                        disabled={true}
-                        errorText={this.state.errors.amt}
-                    />
-                    <FlatButton label="Save Transaction" onClick={this.handleSave} style={{color: 'green'}} />
-                    <FlatButton label="Clear" onClick={this.handleClear} style={{color: 'red'}} />
-                    <Snackbar open={this.state.snackbarOpen} message={this.state.message} onRequestClose={this.handleClose} autoHideDuration={3000} />
-                </form>
-                <List>
-                    <table>
-                        <tbody>
-                            {this.state.trx}
-                        </tbody>
-                    </table>
-                </List>
-            </section>
-        );
-    }
-}
-
-class Trx extends React.Component
-{
-    constructor(props) {
-        super(props);
-    }
-    render() {
-        return (
             <Card className="cards">
                 <CardHeader
                     title="Transactions"
@@ -876,12 +793,85 @@ class Trx extends React.Component
                     avatar="https://www.dropbox.com/s/4hw9njfnlkgttmf/clock-1.png?dl=1"
                 />
                 <CardText expandable={false} style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        flexWrap: 'nowrap'
-                    }}>
-                    <TrxEntry />
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    flexWrap: 'nowrap'
+                }}>
+                    <section>
+                        <CustomerEntry ref="cust_entry" updateCustomersDropDown={this.updateCustomers} />
+                        <BillableEntry ref="billables_entry" updateBillablesDropDown={this.updateBillables} />
+                        <DeleteCustomerDialog ref="del_cust_dialog" showDelCustDialog={this.showDelCustDialog} deleteCustomer={this.deleteCustomer} />
+                        <DeleteBillablesDialog ref="del_billables_dialog" showDelCustDialog={this.showDelBillableDialog} deleteBillable={this.deleteBillable} />
+                        <form id="trx_form" className="trx_form" ref="trx_form" >
+                            <input type="hidden" id="trx_entry_trxid" />
+                            <DatePickerControlled
+                                autoOk={true}
+                                floatingLabelText="Date"
+                                style={{marginRight: '25px'}}
+                                textFieldStyle={{width:'90px'}}
+                                id="trx_entry_trxdt"
+                                ref="trx_entry_trxdt"
+                                errorText={this.state.errors.trxdt}
+                            />
+                            <AutoComplete
+                                dataSource={this.state.customers}
+                                openOnFocus={true}
+                                floatingLabelText="Customer"
+                                id="trx_entry_customer"
+                                ref="trx_entry_customer"
+                                style={{marginRight: '25px', width: '195px'}}
+                                textFieldStyle={{width: '195px'}}
+                                filter={(searchText, key) => { return (key.toLowerCase().indexOf(searchText.toLowerCase()) >= 0); }}
+                                listStyle={{width: 'auto', minWidth: '400px'}}
+                                onNewRequest={this.doesCustExist}
+                                errorText={this.state.errors.customer}
+                            />
+                            <Qty _id="trx_entry_qty" ref="trx_entry_qty" errorText={this.state.errors.qty} updateTotal={this.updateTotal.bind(this)} />
+                            <AutoComplete
+                                dataSource={this.state.billables}
+                                openOnFocus={true}
+                                floatingLabelText="Billable"
+                                id="trx_entry_billable"
+                                ref="trx_entry_billable"
+                                style={{marginRight: '25px', width: '105px'}}
+                                textFieldStyle={{width: '105px'}}
+                                filter={(searchText, key) => { return (key.toLowerCase().indexOf(searchText.toLowerCase()) >= 0); }}
+                                onNewRequest={this.doesBillableExist}
+                                disabled={this.state.disableBillables}
+                                errorText={this.state.errors.billable}
+                            />
+                            <TextField
+                                floatingLabelText="Description"
+                                underlineDisabledStyle={{color: '#03A9F4'}}
+                                underlineStyle={{color: '#03A9F4'}}
+                                id="trx_entry_descr"
+                                ref="trx_entry_descr"
+                                style={{marginRight: '25px', width:'245px'}}
+                                errorText={this.state.errors.descr}
+                            />
+                            <TextField
+                                floatingLabelText="Amount"
+                                underlineDisabledStyle={{color: '#03A9F4'}}
+                                underlineStyle={{color: '#03A9F4'}}
+                                id="trx_entry_amt"
+                                style={{marginRight: '25px', width:'100px'}}
+                                value={this.state.amt}
+                                disabled={true}
+                                errorText={this.state.errors.amt}
+                            />
+                            <FlatButton label="Save Transaction" onClick={this.handleSave} style={{color: 'green'}} />
+                            <FlatButton label="Clear" onClick={this.handleClear} style={{color: 'red'}} />
+                            <Snackbar open={this.state.snackbarOpen} message={this.state.message} onRequestClose={this.handleClose} autoHideDuration={3000} />
+                        </form>
+                        <List>
+                            <table>
+                                <tbody>
+                                    {this.state.trx}
+                                </tbody>
+                            </table>
+                        </List>
+                    </section>
                 </CardText>
             </Card>
         );
