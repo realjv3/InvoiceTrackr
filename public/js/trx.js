@@ -46917,7 +46917,7 @@
 	                //pause timer
 	                _this5.stopwatch.stop();
 	            } else {
-	                //resume timer
+	                //start/resume timer
 	                _this5.stopwatch.start();
 	                if (!_this5.state.showTimer) _this5.setState({ showTimer: true });
 	            }
@@ -47015,13 +47015,13 @@
 	    return Qty;
 	}(_react2.default.Component);
 	
-	var TrxEntry = function (_React$Component6) {
-	    _inherits(TrxEntry, _React$Component6);
+	var Trx = function (_React$Component6) {
+	    _inherits(Trx, _React$Component6);
 	
-	    function TrxEntry(props) {
-	        _classCallCheck(this, TrxEntry);
+	    function Trx(props) {
+	        _classCallCheck(this, Trx);
 	
-	        var _this7 = _possibleConstructorReturn(this, (TrxEntry.__proto__ || Object.getPrototypeOf(TrxEntry)).call(this, props));
+	        var _this7 = _possibleConstructorReturn(this, (Trx.__proto__ || Object.getPrototypeOf(Trx)).call(this, props));
 	
 	        _this7.initCustomers = function () {
 	            var customers = [];
@@ -47340,6 +47340,11 @@
 	                _react2.default.createElement(
 	                    'th',
 	                    null,
+	                    'Status'
+	                ),
+	                _react2.default.createElement(
+	                    'th',
+	                    null,
 	                    'Billable'
 	                ),
 	                _react2.default.createElement(
@@ -47360,15 +47365,16 @@
 	            )];
 	            for (var j = 0; j < cust.custtrx.length; j++) {
 	                //get each transaction's billable's descr and qty
-	                var billable = (0, _util.getBillable)(cust.custtrx[j].item);
-	                var qty = (cust.custtrx[j].amt / billable.price).toFixed(2) + ' x $' + billable.price + '/' + billable.unit;
+	                var billable = (0, _util.getBillable)(cust.custtrx[j].item),
+	                    qty = (cust.custtrx[j].amt / billable.price).toFixed(2) + ' x $' + billable.price + '/' + billable.unit,
+	
 	                //render table row
-	                var style = {
+	                style = {
 	                    width: '10px',
 	                    height: '10px',
 	                    margin: '2px'
-	                };
-	                var tmp = _react2.default.createElement(
+	                },
+	                    tmp = _react2.default.createElement(
 	                    'tr',
 	                    { key: 'trx_id_' + cust.custtrx[j].id },
 	                    _react2.default.createElement(
@@ -47397,6 +47403,11 @@
 	                        'td',
 	                        null,
 	                        cust.custtrx[j].trxdt
+	                    ),
+	                    _react2.default.createElement(
+	                        'td',
+	                        null,
+	                        cust.custtrx[j].status
 	                    ),
 	                    _react2.default.createElement(
 	                        'td',
@@ -47454,112 +47465,6 @@
 	    // https://github.com/callemall/material-ui/issues/2294 says onBlur is fixed, but it's not
 	
 	
-	    _createClass(TrxEntry, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'section',
-	                null,
-	                _react2.default.createElement(_customer_entry2.default, { ref: 'cust_entry', updateCustomersDropDown: this.updateCustomers }),
-	                _react2.default.createElement(BillableEntry, { ref: 'billables_entry', updateBillablesDropDown: this.updateBillables }),
-	                _react2.default.createElement(DeleteCustomerDialog, { ref: 'del_cust_dialog', showDelCustDialog: this.showDelCustDialog, deleteCustomer: this.deleteCustomer }),
-	                _react2.default.createElement(DeleteBillablesDialog, { ref: 'del_billables_dialog', showDelCustDialog: this.showDelBillableDialog, deleteBillable: this.deleteBillable }),
-	                _react2.default.createElement(
-	                    'form',
-	                    { id: 'trx_form', className: 'trx_form', ref: 'trx_form' },
-	                    _react2.default.createElement('input', { type: 'hidden', id: 'trx_entry_trxid' }),
-	                    _react2.default.createElement(DatePickerControlled, {
-	                        autoOk: true,
-	                        floatingLabelText: 'Date',
-	                        style: { marginRight: '25px' },
-	                        textFieldStyle: { width: '90px' },
-	                        id: 'trx_entry_trxdt',
-	                        ref: 'trx_entry_trxdt',
-	                        errorText: this.state.errors.trxdt
-	                    }),
-	                    _react2.default.createElement(_AutoComplete2.default, {
-	                        dataSource: this.state.customers,
-	                        openOnFocus: true,
-	                        floatingLabelText: 'Customer',
-	                        id: 'trx_entry_customer',
-	                        ref: 'trx_entry_customer',
-	                        style: { marginRight: '25px', width: '195px' },
-	                        textFieldStyle: { width: '195px' },
-	                        filter: function filter(searchText, key) {
-	                            return key.toLowerCase().indexOf(searchText.toLowerCase()) >= 0;
-	                        },
-	                        listStyle: { width: 'auto', minWidth: '400px' },
-	                        onNewRequest: this.doesCustExist,
-	                        errorText: this.state.errors.customer
-	                    }),
-	                    _react2.default.createElement(Qty, { _id: 'trx_entry_qty', ref: 'trx_entry_qty', errorText: this.state.errors.qty, updateTotal: this.updateTotal.bind(this) }),
-	                    _react2.default.createElement(_AutoComplete2.default, {
-	                        dataSource: this.state.billables,
-	                        openOnFocus: true,
-	                        floatingLabelText: 'Billable',
-	                        id: 'trx_entry_billable',
-	                        ref: 'trx_entry_billable',
-	                        style: { marginRight: '25px', width: '105px' },
-	                        textFieldStyle: { width: '105px' },
-	                        filter: function filter(searchText, key) {
-	                            return key.toLowerCase().indexOf(searchText.toLowerCase()) >= 0;
-	                        },
-	                        onNewRequest: this.doesBillableExist,
-	                        disabled: this.state.disableBillables,
-	                        errorText: this.state.errors.billable
-	                    }),
-	                    _react2.default.createElement(_TextField2.default, {
-	                        floatingLabelText: 'Description',
-	                        underlineDisabledStyle: { color: '#03A9F4' },
-	                        underlineStyle: { color: '#03A9F4' },
-	                        id: 'trx_entry_descr',
-	                        ref: 'trx_entry_descr',
-	                        style: { marginRight: '25px', width: '245px' },
-	                        errorText: this.state.errors.descr
-	                    }),
-	                    _react2.default.createElement(_TextField2.default, {
-	                        floatingLabelText: 'Amount',
-	                        underlineDisabledStyle: { color: '#03A9F4' },
-	                        underlineStyle: { color: '#03A9F4' },
-	                        id: 'trx_entry_amt',
-	                        style: { marginRight: '25px', width: '100px' },
-	                        value: this.state.amt,
-	                        disabled: true,
-	                        errorText: this.state.errors.amt
-	                    }),
-	                    _react2.default.createElement(_FlatButton2.default, { label: 'Save Transaction', onClick: this.handleSave, style: { color: 'green' } }),
-	                    _react2.default.createElement(_FlatButton2.default, { label: 'Clear', onClick: this.handleClear, style: { color: 'red' } }),
-	                    _react2.default.createElement(_Snackbar2.default, { open: this.state.snackbarOpen, message: this.state.message, onRequestClose: this.handleClose, autoHideDuration: 3000 })
-	                ),
-	                _react2.default.createElement(
-	                    _List2.default,
-	                    null,
-	                    _react2.default.createElement(
-	                        'table',
-	                        null,
-	                        _react2.default.createElement(
-	                            'tbody',
-	                            null,
-	                            this.state.trx
-	                        )
-	                    )
-	                )
-	            );
-	        }
-	    }]);
-	
-	    return TrxEntry;
-	}(_react2.default.Component);
-	
-	var Trx = function (_React$Component7) {
-	    _inherits(Trx, _React$Component7);
-	
-	    function Trx(props) {
-	        _classCallCheck(this, Trx);
-	
-	        return _possibleConstructorReturn(this, (Trx.__proto__ || Object.getPrototypeOf(Trx)).call(this, props));
-	    }
-	
 	    _createClass(Trx, [{
 	        key: 'render',
 	        value: function render() {
@@ -47580,7 +47485,94 @@
 	                            justifyContent: 'space-between',
 	                            flexWrap: 'nowrap'
 	                        } },
-	                    _react2.default.createElement(TrxEntry, null)
+	                    _react2.default.createElement(
+	                        'section',
+	                        null,
+	                        _react2.default.createElement(_customer_entry2.default, { ref: 'cust_entry', updateCustomersDropDown: this.updateCustomers }),
+	                        _react2.default.createElement(BillableEntry, { ref: 'billables_entry', updateBillablesDropDown: this.updateBillables }),
+	                        _react2.default.createElement(DeleteCustomerDialog, { ref: 'del_cust_dialog', showDelCustDialog: this.showDelCustDialog, deleteCustomer: this.deleteCustomer }),
+	                        _react2.default.createElement(DeleteBillablesDialog, { ref: 'del_billables_dialog', showDelCustDialog: this.showDelBillableDialog, deleteBillable: this.deleteBillable }),
+	                        _react2.default.createElement(
+	                            'form',
+	                            { id: 'trx_form', className: 'trx_form', ref: 'trx_form' },
+	                            _react2.default.createElement('input', { type: 'hidden', id: 'trx_entry_trxid' }),
+	                            _react2.default.createElement(DatePickerControlled, {
+	                                autoOk: true,
+	                                floatingLabelText: 'Date',
+	                                style: { marginRight: '25px' },
+	                                textFieldStyle: { width: '90px' },
+	                                id: 'trx_entry_trxdt',
+	                                ref: 'trx_entry_trxdt',
+	                                errorText: this.state.errors.trxdt
+	                            }),
+	                            _react2.default.createElement(_AutoComplete2.default, {
+	                                dataSource: this.state.customers,
+	                                openOnFocus: true,
+	                                floatingLabelText: 'Customer',
+	                                id: 'trx_entry_customer',
+	                                ref: 'trx_entry_customer',
+	                                style: { marginRight: '25px', width: '195px' },
+	                                textFieldStyle: { width: '195px' },
+	                                filter: function filter(searchText, key) {
+	                                    return key.toLowerCase().indexOf(searchText.toLowerCase()) >= 0;
+	                                },
+	                                listStyle: { width: 'auto', minWidth: '400px' },
+	                                onNewRequest: this.doesCustExist,
+	                                errorText: this.state.errors.customer
+	                            }),
+	                            _react2.default.createElement(Qty, { _id: 'trx_entry_qty', ref: 'trx_entry_qty', errorText: this.state.errors.qty, updateTotal: this.updateTotal.bind(this) }),
+	                            _react2.default.createElement(_AutoComplete2.default, {
+	                                dataSource: this.state.billables,
+	                                openOnFocus: true,
+	                                floatingLabelText: 'Billable',
+	                                id: 'trx_entry_billable',
+	                                ref: 'trx_entry_billable',
+	                                style: { marginRight: '25px', width: '105px' },
+	                                textFieldStyle: { width: '105px' },
+	                                filter: function filter(searchText, key) {
+	                                    return key.toLowerCase().indexOf(searchText.toLowerCase()) >= 0;
+	                                },
+	                                onNewRequest: this.doesBillableExist,
+	                                disabled: this.state.disableBillables,
+	                                errorText: this.state.errors.billable
+	                            }),
+	                            _react2.default.createElement(_TextField2.default, {
+	                                floatingLabelText: 'Description',
+	                                underlineDisabledStyle: { color: '#03A9F4' },
+	                                underlineStyle: { color: '#03A9F4' },
+	                                id: 'trx_entry_descr',
+	                                ref: 'trx_entry_descr',
+	                                style: { marginRight: '25px', width: '245px' },
+	                                errorText: this.state.errors.descr
+	                            }),
+	                            _react2.default.createElement(_TextField2.default, {
+	                                floatingLabelText: 'Amount',
+	                                underlineDisabledStyle: { color: '#03A9F4' },
+	                                underlineStyle: { color: '#03A9F4' },
+	                                id: 'trx_entry_amt',
+	                                style: { marginRight: '25px', width: '100px' },
+	                                value: this.state.amt,
+	                                disabled: true,
+	                                errorText: this.state.errors.amt
+	                            }),
+	                            _react2.default.createElement(_FlatButton2.default, { label: 'Save Transaction', onClick: this.handleSave, style: { color: 'green' } }),
+	                            _react2.default.createElement(_FlatButton2.default, { label: 'Clear', onClick: this.handleClear, style: { color: 'red' } }),
+	                            _react2.default.createElement(_Snackbar2.default, { open: this.state.snackbarOpen, message: this.state.message, onRequestClose: this.handleClose, autoHideDuration: 3000 })
+	                        ),
+	                        _react2.default.createElement(
+	                            _List2.default,
+	                            null,
+	                            _react2.default.createElement(
+	                                'table',
+	                                null,
+	                                _react2.default.createElement(
+	                                    'tbody',
+	                                    null,
+	                                    this.state.trx
+	                                )
+	                            )
+	                        )
+	                    )
 	                )
 	            );
 	        }
