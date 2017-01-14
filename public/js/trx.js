@@ -46912,24 +46912,23 @@
 	
 	        _this5.time = function () {
 	            if (_this5.stopwatch == undefined) return;
-	            if (_this5.state.time == '99:59:59') return; //max 100 hours;
-	            if (_this5.state.val != '') _this5.stopwatch._elapsedMS = _this5.strToTime(_this5.state.val);
+	            if (_this5.state.val != '') _this5.stopwatch._elapsedMS = _this5.timeStrToMs(_this5.state.val);
 	            if (_this5.stopwatch.state) {
 	                //pause timer
 	                _this5.stopwatch.stop();
 	            } else {
 	                //resume timer
 	                _this5.stopwatch.start();
-	                _this5.setState({ showTimer: true });
+	                if (!_this5.state.showTimer) _this5.setState({ showTimer: true });
 	            }
 	        };
 	
 	        _this5.turnOffTimer = function () {
-	            _this5.setState({ showTimer: false, val: _this5.msToStr(_this5.stopwatch.ms) });
+	            _this5.setState({ showTimer: false, val: _this5.msToDecimal(_this5.stopwatch.ms), time: _this5.msToHrsMinsSecs(_this5.stopwatch.ms) });
 	            _this5.stopwatch.reset();
 	        };
 	
-	        _this5.msToStr = function (ms) {
+	        _this5.msToHrsMinsSecs = function (ms) {
 	            var hrs = parseInt(ms / 1000 / 3600);
 	            var mins = parseInt(ms / 1000 / 60 % 60);
 	            var secs = parseInt(ms / 1000 % 60);
@@ -46939,7 +46938,12 @@
 	            return hrs + ':' + mins + ':' + secs;
 	        };
 	
-	        _this5.strToTime = function (timeStr) {
+	        _this5.msToDecimal = function (ms) {
+	            var hrs = parseFloat(ms / 1000 / 60 / 60).toFixed(2);
+	            return hrs;
+	        };
+	
+	        _this5.timeStrToMs = function (timeStr) {
 	            var timeString = timeStr,
 	                seconds = 0;
 	            if (/^[0-9]{2}:[0-9]{2}:[0-9]{2}$/.test(timeString) == true) return seconds = (parseInt(timeString.substring(0, 2)) * 60 * 60 + parseInt(timeString.substring(3, 5)) * 60 + parseInt(timeString.substring(6, 8))) * 1000;else if (/^[0-9]{2}\.[0-9]{2}$/.test(timeString) == true) return seconds = (parseInt(timeString.substring(0, 2)) * 60 * 60 + parseInt(timeString.substring(3, 5)) / 100 * 60 * 60) * 1000;else if (/^[0-9]{1}\.[0-9]{2}$/.test(timeString) == true) return seconds = (parseInt(timeString.substring(0, 1)) * 60 * 60 + parseInt(timeString.substring(2, 4)) / 100 * 60 * 60) * 1000;else if (/^[0-9]{1}\.[0-9]{1}$/.test(timeString) == true) return seconds = (parseInt(timeString.substring(0, 1)) * 60 * 60 + parseInt(timeString.substring(2)) / 10 * 60 * 60) * 1000;else if (/^[0-9]{1}$/.test(timeString) == true) return seconds = parseInt(timeString.substring(0, 1)) * 60 * 60 * 1000;else return seconds;
@@ -46948,8 +46952,9 @@
 	        _this5.handleChange = function (event) {
 	            if (_this5.state.showTimer == true) {
 	                var time = event.currentTarget.value;
-	                _this5.stopwatch._elapsedMS = _this5.strToTime(time);
-	                _this5.setState({ time: time });
+	                _this5.stopwatch._elapsedMS = _this5.timeStrToMs(time);
+	                _this5.stopwatch.ms = _this5.timeStrToMs(time);
+	                _this5.setState({ time: time, val: time });
 	            } else _this5.setState({ val: event.currentTarget.value });
 	        };
 	
@@ -46961,7 +46966,7 @@
 	        _this5.stopwatch = new _timerStopwatch2.default();
 	        _this5.stopwatch.refreshRateMS = 999;
 	        _this5.stopwatch.onTime(function () {
-	            _this5.setState({ time: _this5.msToStr(_this5.stopwatch.ms) });
+	            _this5.setState({ time: _this5.msToHrsMinsSecs(_this5.stopwatch.ms) });
 	            _this5.props.updateTotal();
 	        });
 	        return _this5;
@@ -47168,7 +47173,7 @@
 	            document.getElementById('trx_entry_trxid').value = '';
 	            _this7.refs.trx_entry_trxdt.setState({ controlledDate: {} });
 	            if (_this7.refs.trx_entry_customer.state.searchText != '') _this7.refs.trx_entry_customer.setState({ searchText: '' });
-	            _this7.refs.trx_entry_qty.setState({ val: '' });
+	            _this7.refs.trx_entry_qty.setState({ val: '', time: '', showTimer: false });
 	            if (_this7.refs.trx_entry_billable.state.searchText != '') _this7.refs.trx_entry_billable.setState({ searchText: '' });
 	            _this7.refs.trx_entry_descr.setState({ hasValue: false });
 	            document.getElementById('trx_entry_descr').value = '';

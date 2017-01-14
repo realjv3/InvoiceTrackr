@@ -320,27 +320,27 @@ class Qty extends React.Component
         this.stopwatch = new Stopwatch();
         this.stopwatch.refreshRateMS = 999;
         this.stopwatch.onTime(() => {
-            this.setState({time: this.msToStr(this.stopwatch.ms)});
+            this.setState({time: this.msToHrsMinsSecs(this.stopwatch.ms)});
             this.props.updateTotal();
         })
     }
     time = () => {
         if(this.stopwatch == undefined) return;
-        if(this.state.time == '99:59:59') return; //max 100 hours;
         if(this.state.val != '')
-            this.stopwatch._elapsedMS = this.strToTime(this.state.val);
+            this.stopwatch._elapsedMS = this.timeStrToMs(this.state.val);
         if (this.stopwatch.state) { //pause timer
             this.stopwatch.stop();
-        } else {    //resume timer
+        } else {    //start/resume timer
             this.stopwatch.start();
-            this.setState({showTimer: true});
+            if(!this.state.showTimer)
+                this.setState({showTimer: true});
         }
     }
     turnOffTimer = () => {
-        this.setState({showTimer: false, val: this.msToStr(this.stopwatch.ms)});
+        this.setState({showTimer: false, val: this.msToDecimal(this.stopwatch.ms), time: this.msToHrsMinsSecs(this.stopwatch.ms)});
         this.stopwatch.reset();
     }
-    msToStr = (ms) => {
+    msToHrsMinsSecs = (ms) => {
         let hrs = parseInt((ms/1000) / 3600);
         let mins = parseInt(((ms/1000) / 60) % 60);
         let secs = parseInt((ms/1000) % 60);
@@ -349,7 +349,11 @@ class Qty extends React.Component
         if(secs.toString().length < 2) secs = '0'+ secs.toString();
         return hrs+':'+mins+':'+secs;
     }
-    strToTime = (timeStr) => {
+    msToDecimal = (ms) => {
+        let hrs = parseFloat(((ms/1000) / 60) / 60).toFixed(2);
+        return hrs;
+    }
+    timeStrToMs = (timeStr) => {
         let timeString = timeStr,
             seconds = 0;
         if (/^[0-9]{2}:[0-9]{2}:[0-9]{2}$/.test(timeString) == true)
@@ -368,8 +372,9 @@ class Qty extends React.Component
     handleChange = (event) => {
         if(this.state.showTimer == true) {
             let time = event.currentTarget.value;
-            this.stopwatch._elapsedMS = this.strToTime(time);
-            this.setState({time: time});
+            this.stopwatch._elapsedMS = this.timeStrToMs(time);
+            this.stopwatch.ms = this.timeStrToMs(time);
+            this.setState({time: time, val: time});
         } else
             this.setState({val: event.currentTarget.value});
     }
@@ -569,7 +574,7 @@ class TrxEntry extends React.Component
         document.getElementById('trx_entry_trxid').value = '';
         this.refs.trx_entry_trxdt.setState({controlledDate: {}});
         if(this.refs.trx_entry_customer.state.searchText != '') this.refs.trx_entry_customer.setState({searchText: ''});
-        this.refs.trx_entry_qty.setState({val: ''});
+        this.refs.trx_entry_qty.setState({val: '', time: '', showTimer: false});
         if(this.refs.trx_entry_billable.state.searchText != '') this.refs.trx_entry_billable.setState({searchText: ''});
         this.refs.trx_entry_descr.setState({hasValue: false});
         document.getElementById('trx_entry_descr').value = '';
