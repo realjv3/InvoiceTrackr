@@ -98,7 +98,7 @@ class CustTrxController extends Controller
             }
             $total = count($trxs->flatten());
             $currentPage = 1;
-            $perPage = 3;
+            $perPage = 10;
             $offset = ($currentPage * $perPage) - $perPage;
             $trxs = new LengthAwarePaginator(array_slice($trxs->toArray(), $offset, $perPage), $total, $perPage, $currentPage);
 //            $trxs->path = 'get_trx/'.$custid;
@@ -126,7 +126,7 @@ class CustTrxController extends Controller
                 $trxs->push($custtrx);
             }
             $total = count($trxs->flatten());
-            $perPage = 5;
+            $perPage = 10;
             $trxs = new LengthAwarePaginator(array_flatten($trxs->toArray(), 1), $total, $perPage);
         }
         return $trxs->toJson();
