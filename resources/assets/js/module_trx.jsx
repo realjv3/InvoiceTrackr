@@ -723,58 +723,68 @@ class Trx extends React.Component
     }
     updateTrx = () => {
         let cust = getSelectedCustomer();
-        //Assemble trx rows
-        var trx = [
-            <tr key={'trx_th'}>
-                <th>Edit / Delete</th>
-                <th>Trx Date</th>
-                <th>Status</th>
-                <th>Billable</th>
-                <th>Description</th>
-                <th>Quantity</th>
-                <th>Amount</th>
-            </tr>
-        ];
-        for(var j = 0; j < cust.custtrx.length; j++) {
-            //get each transaction's billable's descr and qty
-            let billable = getBillable(cust.custtrx[j].item),
-                qty = (cust.custtrx[j].amt / billable.price).toFixed(2) + ' x $' + billable.price +'/'+billable.unit,
-            //render table row
-                style = {
-                width: '10px',
-                height: '10px',
-                margin: '2px'
-            },
-                tmp =
-                <tr key={'trx_id_' + cust.custtrx[j].id}>
-                    <td>
-                        <span className="trx_icons" >
-                            <IconButton
-                                className={cust.custtrx[j].custid.toString()}
-                                iconClassName="fa fa-pencil"
-                                onClick={this.handleEdit}
-                                style={style}
-                                id={cust.custtrx[j].id}
-                            />
-                            <IconButton
-                                className={cust.custtrx[j].custid.toString()}
-                                iconClassName="fa fa-trash-o"
-                                onClick={this.handleDelete}
-                                style={style}
-                                id={cust.custtrx[j].id}
-                            />
-                        </span>
-                    </td>
-                    <td>{cust.custtrx[j].trxdt}</td>
-                    <td>{cust.custtrx[j].status}</td>
-                    <td>{billable.descr}</td>
-                    <td>{cust.custtrx[j].descr}</td>
-                    <td>{qty}</td>
-                    <td>$ {cust.custtrx[j].amt}</td>
-                </tr>;
-            trx.push(tmp);
-        }
-        this.setState({trx: trx});
+        let ajaxReq = new XMLHttpRequest();
+        ajaxReq.open("GET", 'get_trx/' + cust.id + '?page=1');
+        ajaxReq.setRequestHeader('X-CSRF-Token', _token);
+        ajaxReq.onload = () => {
+            if(ajaxReq.responseText && ajaxReq.responseText != "") {
+                cust.custtrx = ajaxReq.responseText;
+                cust.custtrx = JSON.parse(cust.custtrx);
+                //Assemble trx rows
+                var trx = [
+                    <tr key={'trx_th'}>
+                        <th>Edit / Delete</th>
+                        <th>Trx Date</th>
+                        <th>Status</th>
+                        <th>Billable</th>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Amount</th>
+                    </tr>
+                ];
+                for(var j = 0; j < cust.custtrx.data.length; j++) {
+                    //get each transaction's billable's descr and qty
+                    let billable = getBillable(cust.custtrx.data[j].item),
+                        qty = (cust.custtrx.data[j].amt / billable.price).toFixed(2) + ' x $' + billable.price +'/'+billable.unit,
+                        //render table row
+                        style = {
+                            width: '10px',
+                            height: '10px',
+                            margin: '2px'
+                        },
+                        tmp =
+                            <tr key={'trx_id_' + cust.custtrx.data[j].id}>
+                                <td>
+                            <span className="trx_icons" >
+                                <IconButton
+                                    className={cust.custtrx.data[j].custid.toString()}
+                                    iconClassName="fa fa-pencil"
+                                    onClick={this.handleEdit}
+                                    style={style}
+                                    id={cust.custtrx.data[j].id}
+                                />
+                                <IconButton
+                                    className={cust.custtrx.data[j].custid.toString()}
+                                    iconClassName="fa fa-trash-o"
+                                    onClick={this.handleDelete}
+                                    style={style}
+                                    id={cust.custtrx.data[j].id}
+                                />
+                            </span>
+                                </td>
+                                <td>{cust.custtrx.data[j].trxdt}</td>
+                                <td>{cust.custtrx.data[j].status}</td>
+                                <td>{billable.descr}</td>
+                                <td>{cust.custtrx.data[j].descr}</td>
+                                <td>{qty}</td>
+                                <td>$ {cust.custtrx.data[j].amt}</td>
+                            </tr>;
+                    trx.push(tmp);
+                }
+                this.setState({trx: trx});
+            }
+        };
+        ajaxReq.send();
     }
     // AutoComplete components aren't emitting onBlur (see mui issue), therefore setting listener after render, old school
     // https://github.com/callemall/material-ui/issues/2294 says onBlur is fixed, but it's not

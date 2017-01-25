@@ -41476,104 +41476,184 @@
 	        };
 	
 	        _this.updateTrx = function () {
-	            var cust = (0, _util.getSelectedCustomer)();
-	            //Assemble trx rows
-	            var trx = [],
-	                header = _react2.default.createElement(
-	                'tr',
-	                { key: 'trx_th' },
-	                _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    'Add to Invoice'
-	                ),
-	                _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    'Trx Date'
-	                ),
-	                _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    'Status'
-	                ),
-	                _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    'Billable'
-	                ),
-	                _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    'Description'
-	                ),
-	                _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    'Quantity'
-	                ),
-	                _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    'Amount'
-	                )
-	            );
-	            for (var j = 0; j < cust.custtrx.length; j++) {
-	                //if trx status not open, move on to next
-	                if (cust.custtrx[j].status != 'Open') continue;
-	                //get each transaction's billable's descr and qty
-	                var billable = (0, _util.getBillable)(cust.custtrx[j].item);
-	                var qty = (cust.custtrx[j].amt / billable.price).toFixed(2) + ' x $' + billable.price + '/' + billable.unit;
-	                //render table row
-	                var style = {
-	                    width: '10px',
-	                    height: '10px',
-	                    margin: '2px'
-	                };
-	                var tmp = _react2.default.createElement(
+	            _this.setState({
+	                trx: [],
+	                selectedTrx: [_react2.default.createElement(
 	                    'tr',
-	                    { key: 'trx_id_' + cust.custtrx[j].id },
+	                    { key: 'trx_th' },
 	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        _react2.default.createElement(_Checkbox2.default, { id: cust.custtrx[j].id, onCheck: _this.addToInvoice, style: { marginLeft: '55px' } })
+	                        'th',
+	                        { style: { width: '200px', textAlign: 'center', margin: '7px' } },
+	                        'Trx Date'
 	                    ),
 	                    _react2.default.createElement(
-	                        'td',
+	                        'th',
 	                        null,
-	                        cust.custtrx[j].trxdt
+	                        'Billable'
 	                    ),
 	                    _react2.default.createElement(
-	                        'td',
+	                        'th',
 	                        null,
-	                        cust.custtrx[j].status
+	                        'Description'
 	                    ),
 	                    _react2.default.createElement(
-	                        'td',
+	                        'th',
 	                        null,
-	                        billable.descr
+	                        'Quantity'
 	                    ),
 	                    _react2.default.createElement(
-	                        'td',
+	                        'th',
 	                        null,
-	                        cust.custtrx[j].descr
+	                        'Amount'
+	                    )
+	                )],
+	                total: 0
+	            });
+	            var cust = (0, _util.getSelectedCustomer)(),
+	                //doing this to save which cust is selected
+	            req = new XMLHttpRequest();
+	            //Get updated trx statuses
+	            req.open('GET', 'cur_user');
+	            req.onload = function () {
+	                cur_user = JSON.parse(JSON.parse(req.responseText));console.log(cur_user);
+	                //reset cur_user.customer[x].selected, since it was reset by fetching update
+	                for (var i = 0; i < cur_user.customer.length; i++) {
+	                    if (cur_user.customer[i].id == cust.id) {
+	                        cur_user.customer[i].selected = true;
+	                        break;
+	                    }
+	                }cust = (0, _util.getSelectedCustomer)();
+	                //Assemble trx rows
+	                var trx = [],
+	                    header = _react2.default.createElement(
+	                    'tr',
+	                    { key: 'trx_th' },
+	                    _react2.default.createElement(
+	                        'th',
+	                        null,
+	                        'Add to Invoice'
 	                    ),
 	                    _react2.default.createElement(
-	                        'td',
+	                        'th',
 	                        null,
-	                        qty
+	                        'Trx Date'
 	                    ),
 	                    _react2.default.createElement(
-	                        'td',
+	                        'th',
 	                        null,
-	                        '$ ',
-	                        cust.custtrx[j].amt
+	                        'Status'
+	                    ),
+	                    _react2.default.createElement(
+	                        'th',
+	                        null,
+	                        'Billable'
+	                    ),
+	                    _react2.default.createElement(
+	                        'th',
+	                        null,
+	                        'Description'
+	                    ),
+	                    _react2.default.createElement(
+	                        'th',
+	                        null,
+	                        'Quantity'
+	                    ),
+	                    _react2.default.createElement(
+	                        'th',
+	                        null,
+	                        'Amount'
 	                    )
 	                );
-	                trx.push(tmp);
-	            }
-	            if (trx.length > 0) trx.unshift(header);
-	            _this.setState({ trx: trx });
+	                for (var j = 0; j < cust.custtrx.length; j++) {
+	                    //if trx status not open, move on to next
+	                    if (cust.custtrx[j].status != 'Open') continue;
+	                    //get each transaction's billable's descr and qty
+	                    var billable = (0, _util.getBillable)(cust.custtrx[j].item);
+	                    var qty = (cust.custtrx[j].amt / billable.price).toFixed(2) + ' x $' + billable.price + '/' + billable.unit;
+	                    //render table row
+	                    var style = {
+	                        width: '10px',
+	                        height: '10px',
+	                        margin: '2px'
+	                    };
+	                    var tmp = _react2.default.createElement(
+	                        'tr',
+	                        { key: 'trx_id_' + cust.custtrx[j].id },
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            _react2.default.createElement(_Checkbox2.default, { id: cust.custtrx[j].id, onCheck: this.addToInvoice, style: { marginLeft: '55px' } })
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            cust.custtrx[j].trxdt
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            cust.custtrx[j].status
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            billable.descr
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            cust.custtrx[j].descr
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            qty
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            '$ ',
+	                            cust.custtrx[j].amt
+	                        )
+	                    );
+	                    trx.push(tmp);
+	                }
+	                if (trx.length > 0) trx.unshift(header);
+	                this.setState({
+	                    trx: trx,
+	                    selectedTrx: [_react2.default.createElement(
+	                        'tr',
+	                        { key: 'trx_th' },
+	                        _react2.default.createElement(
+	                            'th',
+	                            { style: { width: '200px', textAlign: 'center', margin: '7px' } },
+	                            'Trx Date'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Billable'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Description'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Quantity'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Amount'
+	                        )
+	                    )],
+	                    invoices: this.initInvoices()
+	                });
+	            }.bind(_this);
+	            req.send(null);
 	        };
 	
 	        _this.initInvoices = function () {
@@ -41638,10 +41718,6 @@
 	            }
 	            if (invoices.length > 0) invoices.unshift(header);
 	            _this.setState({ invoices: invoices });
-	        };
-	
-	        _this.updateInvoices = function () {
-	            _this.setState({ invoices: _this.initInvoices() });
 	        };
 	
 	        _this.addToInvoice = function (event, isInputChecked) {
@@ -41726,7 +41802,6 @@
 	            }
 	            if (exists) {
 	                _this.updateTrx();
-	                _this.initInvoices();
 	                return true;
 	            } else {
 	                _this.refs.cust_entry.handleOpen(input);
@@ -41822,7 +41897,11 @@
 	                        this.state.trx
 	                    )
 	                ),
-	                _react2.default.createElement(_invoice2.default, { trx: this.state.selectedTrx, total: this.state.total })
+	                _react2.default.createElement(_invoice2.default, {
+	                    trx: this.state.selectedTrx,
+	                    total: this.state.total,
+	                    updateTrx: this.updateTrx
+	                })
 	            );
 	        }
 	    }]);
@@ -46808,6 +46887,7 @@
 	                return e.key;
 	            });
 	            window.open('/create_inv?trx_keys=' + trx_keys + '&total=' + _this.props.total + '&content=' + document.getElementById('invoice').outerHTML);
+	            _this.props.updateTrx();
 	        };
 	
 	        return _this;

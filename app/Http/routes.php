@@ -11,7 +11,6 @@
 |
 */
 
-
 Route::group(['middleware' => ['web']], function () {
 
     // Page routes
@@ -66,7 +65,13 @@ Route::group(['middleware' => ['web']], function () {
     // Trx crud
     Route::post('save_trx', 'CustTrxController@save');
     Route::delete('del_trx/{trx_id}', 'CustTrxController@delete');
+    Route::get('get_trx/{custid?}', 'CustTrxController@read');
 
     // Invoices
     Route::get('create_inv', 'InvoiceController@create');
+
+    // Util
+    Route::get('cur_user', function() {
+        return Response::json(\App\Util\UtilFacade::get_user_data_for_view());
+    });
 });

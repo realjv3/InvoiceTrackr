@@ -47323,117 +47323,127 @@
 	
 	        _this7.updateTrx = function () {
 	            var cust = (0, _util.getSelectedCustomer)();
-	            //Assemble trx rows
-	            var trx = [_react2.default.createElement(
-	                'tr',
-	                { key: 'trx_th' },
-	                _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    'Edit / Delete'
-	                ),
-	                _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    'Trx Date'
-	                ),
-	                _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    'Status'
-	                ),
-	                _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    'Billable'
-	                ),
-	                _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    'Description'
-	                ),
-	                _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    'Quantity'
-	                ),
-	                _react2.default.createElement(
-	                    'th',
-	                    null,
-	                    'Amount'
-	                )
-	            )];
-	            for (var j = 0; j < cust.custtrx.length; j++) {
-	                //get each transaction's billable's descr and qty
-	                var billable = (0, _util.getBillable)(cust.custtrx[j].item),
-	                    qty = (cust.custtrx[j].amt / billable.price).toFixed(2) + ' x $' + billable.price + '/' + billable.unit,
-	
-	                //render table row
-	                style = {
-	                    width: '10px',
-	                    height: '10px',
-	                    margin: '2px'
-	                },
-	                    tmp = _react2.default.createElement(
-	                    'tr',
-	                    { key: 'trx_id_' + cust.custtrx[j].id },
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
+	            var ajaxReq = new XMLHttpRequest();
+	            ajaxReq.open("GET", 'get_trx/' + cust.id + '?page=1');
+	            ajaxReq.setRequestHeader('X-CSRF-Token', _token);
+	            ajaxReq.onload = function () {
+	                if (ajaxReq.responseText && ajaxReq.responseText != "") {
+	                    cust.custtrx = ajaxReq.responseText;
+	                    cust.custtrx = JSON.parse(cust.custtrx);
+	                    //Assemble trx rows
+	                    var trx = [_react2.default.createElement(
+	                        'tr',
+	                        { key: 'trx_th' },
 	                        _react2.default.createElement(
-	                            'span',
-	                            { className: 'trx_icons' },
-	                            _react2.default.createElement(_IconButton2.default, {
-	                                className: cust.custtrx[j].custid.toString(),
-	                                iconClassName: 'fa fa-pencil',
-	                                onClick: _this7.handleEdit,
-	                                style: style,
-	                                id: cust.custtrx[j].id
-	                            }),
-	                            _react2.default.createElement(_IconButton2.default, {
-	                                className: cust.custtrx[j].custid.toString(),
-	                                iconClassName: 'fa fa-trash-o',
-	                                onClick: _this7.handleDelete,
-	                                style: style,
-	                                id: cust.custtrx[j].id
-	                            })
+	                            'th',
+	                            null,
+	                            'Edit / Delete'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Trx Date'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Status'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Billable'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Description'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Quantity'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Amount'
 	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        cust.custtrx[j].trxdt
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        cust.custtrx[j].status
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        billable.descr
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        cust.custtrx[j].descr
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        qty
-	                    ),
-	                    _react2.default.createElement(
-	                        'td',
-	                        null,
-	                        '$ ',
-	                        cust.custtrx[j].amt
-	                    )
-	                );
-	                trx.push(tmp);
-	            }
-	            _this7.setState({ trx: trx });
+	                    )];
+	                    for (var j = 0; j < cust.custtrx.data.length; j++) {
+	                        //get each transaction's billable's descr and qty
+	                        var billable = (0, _util.getBillable)(cust.custtrx.data[j].item),
+	                            qty = (cust.custtrx.data[j].amt / billable.price).toFixed(2) + ' x $' + billable.price + '/' + billable.unit,
+	
+	                        //render table row
+	                        style = {
+	                            width: '10px',
+	                            height: '10px',
+	                            margin: '2px'
+	                        },
+	                            tmp = _react2.default.createElement(
+	                            'tr',
+	                            { key: 'trx_id_' + cust.custtrx.data[j].id },
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                _react2.default.createElement(
+	                                    'span',
+	                                    { className: 'trx_icons' },
+	                                    _react2.default.createElement(_IconButton2.default, {
+	                                        className: cust.custtrx.data[j].custid.toString(),
+	                                        iconClassName: 'fa fa-pencil',
+	                                        onClick: _this7.handleEdit,
+	                                        style: style,
+	                                        id: cust.custtrx.data[j].id
+	                                    }),
+	                                    _react2.default.createElement(_IconButton2.default, {
+	                                        className: cust.custtrx.data[j].custid.toString(),
+	                                        iconClassName: 'fa fa-trash-o',
+	                                        onClick: _this7.handleDelete,
+	                                        style: style,
+	                                        id: cust.custtrx.data[j].id
+	                                    })
+	                                )
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                cust.custtrx.data[j].trxdt
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                cust.custtrx.data[j].status
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                billable.descr
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                cust.custtrx.data[j].descr
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                qty
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                '$ ',
+	                                cust.custtrx.data[j].amt
+	                            )
+	                        );
+	                        trx.push(tmp);
+	                    }
+	                    _this7.setState({ trx: trx });
+	                }
+	            };
+	            ajaxReq.send();
 	        };
 	
 	        _this7.componentDidMount = function () {

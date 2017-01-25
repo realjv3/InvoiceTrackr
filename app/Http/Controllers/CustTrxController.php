@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
 use App\Billable;
 use App\CustTrx;
 use App\Customer;
@@ -61,5 +64,71 @@ class CustTrxController extends Controller
         //sharing Object cur_user, including user's customers and their billables & trx
         $cur_user = UtilFacade::get_user_data_for_view();
         return response()->json(['cur_user' => $cur_user, 201]);
+    }
+
+    /**
+     * Returns all user's transactions or only the passed custid's transactions
+     *
+     * @param int $custid default null
+     * @return Request
+     */
+    public function read($custid = null) {
+        if(isset($custid)) {
+            $user = Auth::user()
+                ->with('customer.custtrx')
+                ->get();
+            foreach($user[0]->customer as $cust) {
+                if($cust->id == $custid) {
+                    $trxs = $cust->custtrx->transform(
+                        function ($trx) {
+                            switch ($trx->status) {
+                                case 0:
+                                    $trx->status = 'Open';
+                                    return $trx;
+                                case 1:
+                                    $trx->status = 'Invoiced';
+                                    return $trx;
+                                case 2:
+                                    $trx->status = 'Paid';
+                                    return $trx;
+                            }
+                        }
+                    )->sortByDesc('trxdt');
+                }
+            }
+            $total = count($trxs->flatten());
+            $currentPage = 1;
+            $perPage = 3;
+            $offset = ($currentPage * $perPage) - $perPage;
+            $trxs = new LengthAwarePaginator(array_slice($trxs->toArray(), $offset, $perPage), $total, $perPage, $currentPage);
+//            $trxs->path = 'get_trx/'.$custid;
+        } else {
+            $user = Auth::user()
+                ->with('customer.custtrx')
+                ->get();
+            $trxs = new Collection();
+            foreach($user[0]->customer as $cust) {
+                $custtrx = $cust->custtrx->transform(
+                    function ($trx) {
+                        switch ($trx->status) {
+                            case 0:
+                                $trx->status = 'Open';
+                                return $trx;
+                            case 1:
+                                $trx->status = 'Invoiced';
+                                return $trx;
+                            case 2:
+                                $trx->status = 'Paid';
+                                return $trx;
+                        }
+                    }
+                )->sortByDesc('trxdt');
+                $trxs->push($custtrx);
+            }
+            $total = count($trxs->flatten());
+            $perPage = 5;
+            $trxs = new LengthAwarePaginator(array_flatten($trxs->toArray(), 1), $total, $perPage);
+        }
+        return $trxs->toJson();
     }
 }
