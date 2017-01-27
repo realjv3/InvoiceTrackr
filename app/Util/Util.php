@@ -2,6 +2,7 @@
 
 namespace App\Util;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\CustTrxController;
 
 class Util
 {
@@ -20,7 +21,14 @@ class Util
             })
             ->first() //so User instance is returned instead of collection
             ->toArray();
+
             array_splice($user, 2, 4); //don't need the password and timestamp fields
+
+            $custCntlr = new CustTrxController;
+            for($i = 0; $i < count($user['customer']); $i++) {
+                $custtrx = $custCntlr->read($user['customer'][$i]['id']);
+                $user['customer'][$i]['custtrx'] = json_decode($custtrx, true);
+            }
             return json_encode($user);
         } else
             return false;

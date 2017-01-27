@@ -730,6 +730,13 @@ class Trx extends React.Component
             if(ajaxReq.responseText && ajaxReq.responseText != "") {
                 cust.custtrx = ajaxReq.responseText;
                 cust.custtrx = JSON.parse(cust.custtrx);
+                //Update cur_user global with the fetched transactions
+                for(let i = 0; i < cur_user.customer.length; i++) {
+                    if(cur_user.customer[i].id == cust.id) {
+                        cur_user.customer[i] = cust;
+                        break;
+                    }
+                }
                 //Assemble trx rows
                 var trx = [
                     <tr key={'trx_th'}>
@@ -846,7 +853,7 @@ class Trx extends React.Component
                                 ref="trx_entry_billable"
                                 style={{marginRight: '25px', width: '105px'}}
                                 textFieldStyle={{width: '105px'}}
-                                filter={(searchText, key) => { return (key.toLowerCase().indexOf(searchText.toLowerCase()) >= 0); }}
+                                filter={(searchText, key) => { if(searchText && key) return (searchText.toLowerCase().indexOf(searchText.toLowerCase()) >= 0); }}
                                 onNewRequest={this.doesBillableExist}
                                 disabled={this.state.disableBillables}
                                 errorText={this.state.errors.billable}

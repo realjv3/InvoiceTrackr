@@ -24495,8 +24495,8 @@
 	
 	var getTrx = exports.getTrx = function getTrx(id) {
 	    for (var i = 0; i < cur_user.customer.length; i++) {
-	        for (var j = 0; j < cur_user.customer[i].custtrx.length; j++) {
-	            if (cur_user.customer[i].custtrx[j].id == id) return cur_user.customer[i].custtrx[j];
+	        for (var j = 0; j < cur_user.customer[i].custtrx.data.length; j++) {
+	            if (cur_user.customer[i].custtrx.data[j].id == id) return cur_user.customer[i].custtrx.data[j];
 	        }
 	    }return false;
 	};

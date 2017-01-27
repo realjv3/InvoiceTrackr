@@ -70,7 +70,7 @@ class CustTrxController extends Controller
      * Returns all user's transactions or only the passed custid's transactions
      *
      * @param int $custid default null
-     * @return Request
+     * @return json string $trx
      */
     public function read($custid = null) {
         if(isset($custid)) {
@@ -96,12 +96,6 @@ class CustTrxController extends Controller
                     )->sortByDesc('trxdt');
                 }
             }
-            $total = count($trxs->flatten());
-            $currentPage = 1;
-            $perPage = 10;
-            $offset = ($currentPage * $perPage) - $perPage;
-            $trxs = new LengthAwarePaginator(array_slice($trxs->toArray(), $offset, $perPage), $total, $perPage, $currentPage);
-//            $trxs->path = 'get_trx/'.$custid;
         } else {
             $user = Auth::user()
                 ->with('customer.custtrx')
@@ -125,10 +119,13 @@ class CustTrxController extends Controller
                 )->sortByDesc('trxdt');
                 $trxs->push($custtrx);
             }
-            $total = count($trxs->flatten());
-            $perPage = 10;
-            $trxs = new LengthAwarePaginator(array_flatten($trxs->toArray(), 1), $total, $perPage);
         }
+        $total = count($trxs->flatten());
+        $currentPage = 1;
+        $perPage = 10;
+        $offset = ($currentPage * $perPage) - $perPage;
+        $trxs = new LengthAwarePaginator(array_slice($trxs->toArray(), $offset, $perPage), $total, $perPage, $currentPage);
+//            $trxs->path = 'get_trx/'.$custid;
         return $trxs->toJson();
     }
 }

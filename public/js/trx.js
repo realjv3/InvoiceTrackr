@@ -24478,8 +24478,8 @@
 	
 	var getTrx = exports.getTrx = function getTrx(id) {
 	    for (var i = 0; i < cur_user.customer.length; i++) {
-	        for (var j = 0; j < cur_user.customer[i].custtrx.length; j++) {
-	            if (cur_user.customer[i].custtrx[j].id == id) return cur_user.customer[i].custtrx[j];
+	        for (var j = 0; j < cur_user.customer[i].custtrx.data.length; j++) {
+	            if (cur_user.customer[i].custtrx.data[j].id == id) return cur_user.customer[i].custtrx.data[j];
 	        }
 	    }return false;
 	};
@@ -47330,6 +47330,13 @@
 	                if (ajaxReq.responseText && ajaxReq.responseText != "") {
 	                    cust.custtrx = ajaxReq.responseText;
 	                    cust.custtrx = JSON.parse(cust.custtrx);
+	                    //Update cur_user global with the fetched transactions
+	                    for (var i = 0; i < cur_user.customer.length; i++) {
+	                        if (cur_user.customer[i].id == cust.id) {
+	                            cur_user.customer[i] = cust;
+	                            break;
+	                        }
+	                    }
 	                    //Assemble trx rows
 	                    var trx = [_react2.default.createElement(
 	                        'tr',
@@ -47540,7 +47547,7 @@
 	                                style: { marginRight: '25px', width: '105px' },
 	                                textFieldStyle: { width: '105px' },
 	                                filter: function filter(searchText, key) {
-	                                    return key.toLowerCase().indexOf(searchText.toLowerCase()) >= 0;
+	                                    if (searchText && key) return searchText.toLowerCase().indexOf(searchText.toLowerCase()) >= 0;
 	                                },
 	                                onNewRequest: this.doesBillableExist,
 	                                disabled: this.state.disableBillables,
