@@ -320,7 +320,10 @@ class Qty extends React.Component
         this.stopwatch = new Stopwatch();
         this.stopwatch.refreshRateMS = 999;
         this.stopwatch.onTime(() => {
-            this.setState({time: this.msToHrsMinsSecs(this.stopwatch.ms)});
+            this.setState({
+                time: this.msToHrsMinsSecs(this.stopwatch.ms),
+                val: this.msToDecimal(this.stopwatch.ms),
+            });
             this.props.updateTotal();
         })
     }
@@ -337,8 +340,13 @@ class Qty extends React.Component
         }
     }
     turnOffTimer = () => {
-        this.setState({showTimer: false, val: this.msToDecimal(this.stopwatch.ms), time: this.msToHrsMinsSecs(this.stopwatch.ms)});
-        this.stopwatch.reset();
+        this.setState({
+            showTimer: false,
+            val: this.msToDecimal(this.stopwatch.ms),
+        });
+        this.stopwatch.stop();
+        this.stopwatch._elapsedMS = 0;
+        this.props.updateTotal();
     }
     msToHrsMinsSecs = (ms) => {
         let hrs = parseInt((ms/1000) / 3600);
@@ -374,7 +382,7 @@ class Qty extends React.Component
             let time = event.currentTarget.value;
             this.stopwatch._elapsedMS = this.timeStrToMs(time);
             this.stopwatch.ms = this.timeStrToMs(time);
-            this.setState({time: time, val: time});
+            this.setState({time: time, val: this.msToHrsMinsSecs(this.stopwatch._elapsedMS)});
         } else
             this.setState({val: event.currentTarget.value});
     }
@@ -384,7 +392,6 @@ class Qty extends React.Component
                 <IconButton
                     iconClassName="material-icons"
                     style={{top: '7px', left: '7px', opacity: '0.5'}}
-                    tooltip="Click start/pause, Dbl click turn off"
                     onClick={ () => {this.time(); }}
                     onDoubleClick={ () => {this.turnOffTimer(); }}
                 >
@@ -711,7 +718,8 @@ class Trx extends React.Component
         this.setState({billables: billables});
     }
     updateTotal = () => {
-        let qty = document.getElementById('trx_entry_qty').value, billable = getSelectedBillable();
+        let qty = document.getElementById('trx_entry_qty').value,
+            billable = getSelectedBillable();
         if (qty == "" || billable == false) return;
         if (/^[0-9]{2}:[0-9]{2}:[0-9]{2}$/.test(qty))
             qty = (this.refs.trx_entry_qty.stopwatch.ms / 1000) / 60 / 60;

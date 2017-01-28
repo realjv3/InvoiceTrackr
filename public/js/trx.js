@@ -46924,8 +46924,13 @@
 	        };
 	
 	        _this5.turnOffTimer = function () {
-	            _this5.setState({ showTimer: false, val: _this5.msToDecimal(_this5.stopwatch.ms), time: _this5.msToHrsMinsSecs(_this5.stopwatch.ms) });
-	            _this5.stopwatch.reset();
+	            _this5.setState({
+	                showTimer: false,
+	                val: _this5.msToDecimal(_this5.stopwatch.ms)
+	            });
+	            _this5.stopwatch.stop();
+	            _this5.stopwatch._elapsedMS = 0;
+	            _this5.props.updateTotal();
 	        };
 	
 	        _this5.msToHrsMinsSecs = function (ms) {
@@ -46954,7 +46959,7 @@
 	                var time = event.currentTarget.value;
 	                _this5.stopwatch._elapsedMS = _this5.timeStrToMs(time);
 	                _this5.stopwatch.ms = _this5.timeStrToMs(time);
-	                _this5.setState({ time: time, val: time });
+	                _this5.setState({ time: time, val: _this5.msToHrsMinsSecs(_this5.stopwatch._elapsedMS) });
 	            } else _this5.setState({ val: event.currentTarget.value });
 	        };
 	
@@ -46966,7 +46971,10 @@
 	        _this5.stopwatch = new _timerStopwatch2.default();
 	        _this5.stopwatch.refreshRateMS = 999;
 	        _this5.stopwatch.onTime(function () {
-	            _this5.setState({ time: _this5.msToHrsMinsSecs(_this5.stopwatch.ms) });
+	            _this5.setState({
+	                time: _this5.msToHrsMinsSecs(_this5.stopwatch.ms),
+	                val: _this5.msToDecimal(_this5.stopwatch.ms)
+	            });
 	            _this5.props.updateTotal();
 	        });
 	        return _this5;
@@ -46985,7 +46993,6 @@
 	                    {
 	                        iconClassName: 'material-icons',
 	                        style: { top: '7px', left: '7px', opacity: '0.5' },
-	                        tooltip: 'Click start/pause, Dbl click turn off',
 	                        onClick: function onClick() {
 	                            _this6.time();
 	                        },
