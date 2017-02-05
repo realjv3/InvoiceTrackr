@@ -729,10 +729,10 @@ class Trx extends React.Component
         if(price && price != NaN && qty && qty != NaN)
             this.setState({amt: '$ ' + (qty * price).toFixed(2)});
     }
-    updateTrx = () => {
+    updateTrx = (page = 1) => {
         let cust = getSelectedCustomer();
         let ajaxReq = new XMLHttpRequest();
-        ajaxReq.open("GET", 'get_trx/' + cust.id + '?page=1');
+        ajaxReq.open("GET", 'get_trx/' + cust.id + '?page=' + page);
         ajaxReq.setRequestHeader('X-CSRF-Token', _token);
         ajaxReq.onload = () => {
             if(ajaxReq.responseText && ajaxReq.responseText != "") {
@@ -746,8 +746,26 @@ class Trx extends React.Component
                     }
                 }
                 //Assemble trx rows
-                var trx = [
-                    <tr key={'trx_th'}>
+                let trx = [
+                    <tr key="trx_nav">
+                        <td>
+                            {(cust.custtrx.prev_page_url != null) ?
+                                <IconButton
+                                    iconClassName="fa fa-backward"
+                                    onClick={() => {this.updateTrx(cust.custtrx.current_page - 1)}}
+                                /> : '' }
+                        </td>
+                        <td>
+                            {(cust.custtrx.next_page_url != null) ?
+                                <IconButton
+                                    iconClassName="fa fa-forward"
+                                    onClick={() => {this.updateTrx(cust.custtrx.current_page + 1)}}
+                                /> : ''}
+                        </td>
+                    </tr>
+                ];
+                trx.push(
+                    <tr key="trx_th">
                         <th>Edit / Delete</th>
                         <th>Trx Date</th>
                         <th>Status</th>
@@ -756,8 +774,8 @@ class Trx extends React.Component
                         <th>Quantity</th>
                         <th>Amount</th>
                     </tr>
-                ];
-                for(var j = 0; j < cust.custtrx.data.length; j++) {
+                );
+                for(let j = 0; j < cust.custtrx.data.length; j++) {
                     //get each transaction's billable's descr and qty
                     let billable = getBillable(cust.custtrx.data[j].item),
                         qty = (cust.custtrx.data[j].amt / billable.price).toFixed(2) + ' x $' + billable.price +'/'+billable.unit,
@@ -772,14 +790,12 @@ class Trx extends React.Component
                                 <td>
                             <span className="trx_icons" >
                                 <IconButton
-                                    className={cust.custtrx.data[j].custid.toString()}
                                     iconClassName="fa fa-pencil"
                                     onClick={this.handleEdit}
                                     style={style}
                                     id={cust.custtrx.data[j].id}
                                 />
                                 <IconButton
-                                    className={cust.custtrx.data[j].custid.toString()}
                                     iconClassName="fa fa-trash-o"
                                     onClick={this.handleDelete}
                                     style={style}

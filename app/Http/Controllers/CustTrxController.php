@@ -77,8 +77,8 @@ class CustTrxController extends Controller
             $user = Auth::user()
                 ->with('customer.custtrx')
                 ->get();
-            foreach($user[0]->customer as $cust) {
-                if($cust->id == $custid) {
+            foreach($user[0]->customer as $cust)
+                if($cust->id == $custid)
                     $trxs = $cust->custtrx->transform(
                         function ($trx) {
                             switch ($trx->status) {
@@ -94,8 +94,6 @@ class CustTrxController extends Controller
                             }
                         }
                     )->sortByDesc('trxdt');
-                }
-            }
         } else {
             $user = Auth::user()
                 ->with('customer.custtrx')
@@ -121,11 +119,10 @@ class CustTrxController extends Controller
             }
         }
         $total = count($trxs->flatten());
-        $currentPage = 1;
+        $currentPage = (isset($_REQUEST['page']) && preg_match('/\d{1}/', $_REQUEST['page'])) ? $_REQUEST['page'] : 1;
         $perPage = 10;
         $offset = ($currentPage * $perPage) - $perPage;
         $trxs = new LengthAwarePaginator(array_slice($trxs->toArray(), $offset, $perPage), $total, $perPage, $currentPage);
-//            $trxs->path = 'get_trx/'.$custid;
         return $trxs->toJson();
     }
 }

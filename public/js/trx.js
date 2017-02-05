@@ -47329,9 +47329,11 @@
 	        };
 	
 	        _this7.updateTrx = function () {
+	            var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+	
 	            var cust = (0, _util.getSelectedCustomer)();
 	            var ajaxReq = new XMLHttpRequest();
-	            ajaxReq.open("GET", 'get_trx/' + cust.id + '?page=1');
+	            ajaxReq.open("GET", 'get_trx/' + cust.id + '?page=' + page);
 	            ajaxReq.setRequestHeader('X-CSRF-Token', _token);
 	            ajaxReq.onload = function () {
 	                if (ajaxReq.responseText && ajaxReq.responseText != "") {
@@ -47346,6 +47348,30 @@
 	                    }
 	                    //Assemble trx rows
 	                    var trx = [_react2.default.createElement(
+	                        'tr',
+	                        { key: 'trx_nav' },
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            cust.custtrx.prev_page_url != null ? _react2.default.createElement(_IconButton2.default, {
+	                                iconClassName: 'fa fa-backward',
+	                                onClick: function onClick() {
+	                                    _this7.updateTrx(cust.custtrx.current_page - 1);
+	                                }
+	                            }) : ''
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            cust.custtrx.next_page_url != null ? _react2.default.createElement(_IconButton2.default, {
+	                                iconClassName: 'fa fa-forward',
+	                                onClick: function onClick() {
+	                                    _this7.updateTrx(cust.custtrx.current_page + 1);
+	                                }
+	                            }) : ''
+	                        )
+	                    )];
+	                    trx.push(_react2.default.createElement(
 	                        'tr',
 	                        { key: 'trx_th' },
 	                        _react2.default.createElement(
@@ -47383,7 +47409,7 @@
 	                            null,
 	                            'Amount'
 	                        )
-	                    )];
+	                    ));
 	                    for (var j = 0; j < cust.custtrx.data.length; j++) {
 	                        //get each transaction's billable's descr and qty
 	                        var billable = (0, _util.getBillable)(cust.custtrx.data[j].item),
@@ -47405,14 +47431,12 @@
 	                                    'span',
 	                                    { className: 'trx_icons' },
 	                                    _react2.default.createElement(_IconButton2.default, {
-	                                        className: cust.custtrx.data[j].custid.toString(),
 	                                        iconClassName: 'fa fa-pencil',
 	                                        onClick: _this7.handleEdit,
 	                                        style: style,
 	                                        id: cust.custtrx.data[j].id
 	                                    }),
 	                                    _react2.default.createElement(_IconButton2.default, {
-	                                        className: cust.custtrx.data[j].custid.toString(),
 	                                        iconClassName: 'fa fa-trash-o',
 	                                        onClick: _this7.handleDelete,
 	                                        style: style,
