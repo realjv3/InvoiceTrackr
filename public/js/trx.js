@@ -47553,9 +47553,7 @@
 	                                ref: 'trx_entry_billable',
 	                                style: { marginRight: '25px', width: '105px' },
 	                                textFieldStyle: { width: '105px' },
-	                                filter: function filter(searchText, key) {
-	                                    if (searchText && key) return searchText.toLowerCase().indexOf(searchText.toLowerCase()) >= 0;
-	                                },
+	                                filter: _AutoComplete2.default.fuzzyFilter,
 	                                onNewRequest: this.doesBillableExist,
 	                                disabled: this.state.disableBillables,
 	                                errorText: this.state.errors.billable
