@@ -729,10 +729,11 @@ class Trx extends React.Component
         if(price && price != NaN && qty && qty != NaN)
             this.setState({amt: '$ ' + (qty * price).toFixed(2)});
     }
-    updateTrx = (page = 1) => {
-        let cust = getSelectedCustomer();
-        let ajaxReq = new XMLHttpRequest();
-        ajaxReq.open("GET", 'get_trx/' + cust.id + '?page=' + page);
+    updateTrx = (page = 1, sort = '', desc = true) => {
+        let cust = getSelectedCustomer(),
+            ajaxReq = new XMLHttpRequest(),
+            descr = (desc) ? '&desc' : '';
+        ajaxReq.open("GET", 'get_trx/' + cust.id + '?page=' + page + '&sort=' + sort + descr );
         ajaxReq.setRequestHeader('X-CSRF-Token', _token);
         ajaxReq.onload = () => {
             if(ajaxReq.responseText && ajaxReq.responseText != "") {
@@ -751,15 +752,29 @@ class Trx extends React.Component
                         <td>
                             {(cust.custtrx.prev_page_url != null) ?
                                 <IconButton
+                                    iconClassName="fa fa-fast-backward"
+                                    onClick={() => {this.updateTrx(1, sort, desc)}}
+                                /> : '' }
+                        </td>
+                        <td>
+                            {(cust.custtrx.prev_page_url != null) ?
+                                <IconButton
                                     iconClassName="fa fa-backward"
-                                    onClick={() => {this.updateTrx(cust.custtrx.current_page - 1)}}
+                                    onClick={() => {this.updateTrx(cust.custtrx.current_page - 1, sort, desc)}}
                                 /> : '' }
                         </td>
                         <td>
                             {(cust.custtrx.next_page_url != null) ?
                                 <IconButton
                                     iconClassName="fa fa-forward"
-                                    onClick={() => {this.updateTrx(cust.custtrx.current_page + 1)}}
+                                    onClick={() => {this.updateTrx(cust.custtrx.current_page + 1, sort, desc)}}
+                                /> : ''}
+                        </td>
+                        <td>
+                            {(cust.custtrx.next_page_url != null) ?
+                                <IconButton
+                                    iconClassName="fa fa-fast-forward"
+                                    onClick={() => {this.updateTrx(cust.custtrx.last_page, sort, desc)}}
                                 /> : ''}
                         </td>
                     </tr>
@@ -767,12 +782,12 @@ class Trx extends React.Component
                 trx.push(
                     <tr key="trx_th">
                         <th>Edit / Delete</th>
-                        <th>Trx Date</th>
-                        <th>Status</th>
-                        <th>Billable</th>
-                        <th>Description</th>
+                        <th id="trxdt" data-sort="desc" onClick={this.sort}>Trx Date</th>
+                        <th id="status" data-sort="" onClick={this.sort}>Status</th>
+                        <th id="item" data-sort="" onClick={this.sort}>Billable</th>
+                        <th id="descr" data-sort="" onClick={this.sort}>Description</th>
                         <th>Quantity</th>
-                        <th>Amount</th>
+                        <th id="amt" data-sort="" onClick={this.sort}>Amount</th>
                     </tr>
                 );
                 for(let j = 0; j < cust.custtrx.data.length; j++) {
@@ -816,6 +831,21 @@ class Trx extends React.Component
             }
         };
         ajaxReq.send();
+    }
+    sort = (event) => {
+        let field = event.currentTarget.id,
+            dir = event.currentTarget.getAttribute('data-sort');
+        //if asc, set to desc
+        if(dir == 'asc')
+            event.currentTarget.setAttribute('data-sort', 'desc');
+        else if(dir == '' || dir == 'desc')
+            event.currentTarget.setAttribute('data-sort', 'asc');
+        //update transactions
+        if(dir == 'asc')
+            dir = false;
+        else if(dir == 'desc')
+            dir = true;
+        this.updateTrx(1, field, dir);
     }
     // AutoComplete components aren't emitting onBlur (see mui issue), therefore setting listener after render, old school
     // https://github.com/callemall/material-ui/issues/2294 says onBlur is fixed, but it's not

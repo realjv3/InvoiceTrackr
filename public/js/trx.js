@@ -47330,10 +47330,13 @@
 	
 	        _this7.updateTrx = function () {
 	            var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+	            var sort = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+	            var desc = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
 	
-	            var cust = (0, _util.getSelectedCustomer)();
-	            var ajaxReq = new XMLHttpRequest();
-	            ajaxReq.open("GET", 'get_trx/' + cust.id + '?page=' + page);
+	            var cust = (0, _util.getSelectedCustomer)(),
+	                ajaxReq = new XMLHttpRequest(),
+	                descr = desc ? '&desc' : '';
+	            ajaxReq.open("GET", 'get_trx/' + cust.id + '?page=' + page + '&sort=' + sort + descr);
 	            ajaxReq.setRequestHeader('X-CSRF-Token', _token);
 	            ajaxReq.onload = function () {
 	                if (ajaxReq.responseText && ajaxReq.responseText != "") {
@@ -47354,9 +47357,19 @@
 	                            'td',
 	                            null,
 	                            cust.custtrx.prev_page_url != null ? _react2.default.createElement(_IconButton2.default, {
+	                                iconClassName: 'fa fa-fast-backward',
+	                                onClick: function onClick() {
+	                                    _this7.updateTrx(1, sort, desc);
+	                                }
+	                            }) : ''
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            cust.custtrx.prev_page_url != null ? _react2.default.createElement(_IconButton2.default, {
 	                                iconClassName: 'fa fa-backward',
 	                                onClick: function onClick() {
-	                                    _this7.updateTrx(cust.custtrx.current_page - 1);
+	                                    _this7.updateTrx(cust.custtrx.current_page - 1, sort, desc);
 	                                }
 	                            }) : ''
 	                        ),
@@ -47366,7 +47379,17 @@
 	                            cust.custtrx.next_page_url != null ? _react2.default.createElement(_IconButton2.default, {
 	                                iconClassName: 'fa fa-forward',
 	                                onClick: function onClick() {
-	                                    _this7.updateTrx(cust.custtrx.current_page + 1);
+	                                    _this7.updateTrx(cust.custtrx.current_page + 1, sort, desc);
+	                                }
+	                            }) : ''
+	                        ),
+	                        _react2.default.createElement(
+	                            'td',
+	                            null,
+	                            cust.custtrx.next_page_url != null ? _react2.default.createElement(_IconButton2.default, {
+	                                iconClassName: 'fa fa-fast-forward',
+	                                onClick: function onClick() {
+	                                    _this7.updateTrx(cust.custtrx.last_page, sort, desc);
 	                                }
 	                            }) : ''
 	                        )
@@ -47381,22 +47404,22 @@
 	                        ),
 	                        _react2.default.createElement(
 	                            'th',
-	                            null,
+	                            { id: 'trxdt', 'data-sort': 'desc', onClick: _this7.sort },
 	                            'Trx Date'
 	                        ),
 	                        _react2.default.createElement(
 	                            'th',
-	                            null,
+	                            { id: 'status', 'data-sort': '', onClick: _this7.sort },
 	                            'Status'
 	                        ),
 	                        _react2.default.createElement(
 	                            'th',
-	                            null,
+	                            { id: 'item', 'data-sort': '', onClick: _this7.sort },
 	                            'Billable'
 	                        ),
 	                        _react2.default.createElement(
 	                            'th',
-	                            null,
+	                            { id: 'descr', 'data-sort': '', onClick: _this7.sort },
 	                            'Description'
 	                        ),
 	                        _react2.default.createElement(
@@ -47406,7 +47429,7 @@
 	                        ),
 	                        _react2.default.createElement(
 	                            'th',
-	                            null,
+	                            { id: 'amt', 'data-sort': '', onClick: _this7.sort },
 	                            'Amount'
 	                        )
 	                    ));
@@ -47482,6 +47505,16 @@
 	                }
 	            };
 	            ajaxReq.send();
+	        };
+	
+	        _this7.sort = function (event) {
+	            var field = event.currentTarget.id,
+	                dir = event.currentTarget.getAttribute('data-sort');
+	            //if asc, set to desc
+	            if (dir == 'asc') event.currentTarget.setAttribute('data-sort', 'desc');else if (dir == '' || dir == 'desc') event.currentTarget.setAttribute('data-sort', 'asc');
+	            //update transactions
+	            if (dir == 'asc') dir = false;else if (dir == 'desc') dir = true;
+	            _this7.updateTrx(1, field, dir);
 	        };
 	
 	        _this7.componentDidMount = function () {
