@@ -24464,7 +24464,7 @@
 	
 	var getTrx = exports.getTrx = function getTrx(id) {
 	    for (var i = 0; i < cur_user.customer.length; i++) {
-	        for (var j = 0; j < cur_user.customer[i].custtrx.data.length; j++) {
+	        if (cur_user.customer[i].custtrx != null) for (var j = 0; j < cur_user.customer[i].custtrx.data.length; j++) {
 	            if (cur_user.customer[i].custtrx.data[j].id == id) return cur_user.customer[i].custtrx.data[j];
 	        }
 	    }return false;
@@ -24472,7 +24472,7 @@
 	
 	var getBillable = exports.getBillable = function getBillable(id) {
 	    for (var i = 0; i < cur_user.customer.length; i++) {
-	        for (var j = 0; j < cur_user.customer[i].billable.length; j++) {
+	        if (cur_user.customer[i].billable != null) for (var j = 0; j < cur_user.customer[i].billable.length; j++) {
 	            if (cur_user.customer[i].billable[j].id == id) return cur_user.customer[i].billable[j];
 	        }
 	    }return false;
@@ -24486,7 +24486,7 @@
 	
 	var getSelectedBillable = exports.getSelectedBillable = function getSelectedBillable() {
 	    var cust = getSelectedCustomer();
-	    if (cust) for (var i = 0; i < cust.billable.length; i++) {
+	    if (cust && cust.billable != null) for (var i = 0; i < cust.billable.length; i++) {
 	        if (cust.billable[i].selected) return cust.billable[i];
 	    }return false;
 	};
