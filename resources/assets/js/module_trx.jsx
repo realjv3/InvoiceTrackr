@@ -729,8 +729,8 @@ class Trx extends React.Component
         if(price && price != NaN && qty && qty != NaN)
             this.setState({amt: '$ ' + (qty * price).toFixed(2)});
     }
-    updateTrx = () => {
-        getSelCustTrxs(1);
+    updateTrx = (page = 1, sort = '', desc = true) => {
+        getSelCustTrxs(page, sort, desc);
         let cust = getSelectedCustomer();
         //Assemble trx rows
         let trx = [

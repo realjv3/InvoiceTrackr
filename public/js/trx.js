@@ -47362,7 +47362,11 @@
 	        };
 	
 	        _this7.updateTrx = function () {
-	            (0, _util.getSelCustTrxs)(1);
+	            var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+	            var sort = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+	            var desc = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+	
+	            (0, _util.getSelCustTrxs)(page, sort, desc);
 	            var cust = (0, _util.getSelectedCustomer)();
 	            //Assemble trx rows
 	            var trx = [_react2.default.createElement(
