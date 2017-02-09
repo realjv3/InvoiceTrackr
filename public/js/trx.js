@@ -24476,6 +24476,39 @@
 	    document.getElementById('overlay').style.display = 'none';
 	};
 	
+	/**
+	 * Gets selected customer's paged & sorted transactions
+	 * and updates cur_user global
+	 * @param page int - page of trxs (page size 10)
+	 * @param sort string - column name to sort by
+	 * @param desc bool - sort dir
+	 */
+	var getSelCustTrxs = exports.getSelCustTrxs = function getSelCustTrxs() {
+	    var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+	    var sort = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+	    var desc = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+	
+	    var cust = getSelectedCustomer(),
+	        ajaxReq = new XMLHttpRequest(),
+	        descr = desc ? '&desc' : '';
+	    ajaxReq.open("GET", 'get_trx/' + cust.id + '?page=' + page + '&sort=' + sort + descr, false);
+	    ajaxReq.setRequestHeader('X-CSRF-Token', _token);
+	    ajaxReq.onload = function () {
+	        if (ajaxReq.responseText && ajaxReq.responseText != "") {
+	            cust.custtrx = ajaxReq.responseText;
+	            cust.custtrx = JSON.parse(cust.custtrx);
+	            //Update cur_user global with the fetched transactions
+	            for (var i = 0; i < cur_user.customer.length; i++) {
+	                if (cur_user.customer[i].id == cust.id) {
+	                    cur_user.customer[i] = cust;
+	                    break;
+	                }
+	            }
+	        }
+	    };
+	    ajaxReq.send();
+	};
+	
 	var getTrx = exports.getTrx = function getTrx(id) {
 	    for (var i = 0; i < cur_user.customer.length; i++) {
 	        if (cur_user.customer[i].custtrx != null) for (var j = 0; j < cur_user.customer[i].custtrx.data.length; j++) {
@@ -47329,182 +47362,161 @@
 	        };
 	
 	        _this7.updateTrx = function () {
-	            var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-	            var sort = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-	            var desc = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-	
-	            var cust = (0, _util.getSelectedCustomer)(),
-	                ajaxReq = new XMLHttpRequest(),
-	                descr = desc ? '&desc' : '';
-	            ajaxReq.open("GET", 'get_trx/' + cust.id + '?page=' + page + '&sort=' + sort + descr);
-	            ajaxReq.setRequestHeader('X-CSRF-Token', _token);
-	            ajaxReq.onload = function () {
-	                if (ajaxReq.responseText && ajaxReq.responseText != "") {
-	                    cust.custtrx = ajaxReq.responseText;
-	                    cust.custtrx = JSON.parse(cust.custtrx);
-	                    //Update cur_user global with the fetched transactions
-	                    for (var i = 0; i < cur_user.customer.length; i++) {
-	                        if (cur_user.customer[i].id == cust.id) {
-	                            cur_user.customer[i] = cust;
-	                            break;
+	            (0, _util.getSelCustTrxs)(1);
+	            var cust = (0, _util.getSelectedCustomer)();
+	            //Assemble trx rows
+	            var trx = [_react2.default.createElement(
+	                'tr',
+	                { key: 'trx_nav' },
+	                _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    cust.custtrx.prev_page_url != null ? _react2.default.createElement(_IconButton2.default, {
+	                        iconClassName: 'fa fa-fast-backward',
+	                        onClick: function onClick() {
+	                            _this7.updateTrx(1, sort, desc);
 	                        }
-	                    }
-	                    //Assemble trx rows
-	                    var trx = [_react2.default.createElement(
-	                        'tr',
-	                        { key: 'trx_nav' },
-	                        _react2.default.createElement(
-	                            'td',
-	                            null,
-	                            cust.custtrx.prev_page_url != null ? _react2.default.createElement(_IconButton2.default, {
-	                                iconClassName: 'fa fa-fast-backward',
-	                                onClick: function onClick() {
-	                                    _this7.updateTrx(1, sort, desc);
-	                                }
-	                            }) : ''
-	                        ),
-	                        _react2.default.createElement(
-	                            'td',
-	                            null,
-	                            cust.custtrx.prev_page_url != null ? _react2.default.createElement(_IconButton2.default, {
-	                                iconClassName: 'fa fa-backward',
-	                                onClick: function onClick() {
-	                                    _this7.updateTrx(cust.custtrx.current_page - 1, sort, desc);
-	                                }
-	                            }) : ''
-	                        ),
-	                        _react2.default.createElement(
-	                            'td',
-	                            null,
-	                            cust.custtrx.next_page_url != null ? _react2.default.createElement(_IconButton2.default, {
-	                                iconClassName: 'fa fa-forward',
-	                                onClick: function onClick() {
-	                                    _this7.updateTrx(cust.custtrx.current_page + 1, sort, desc);
-	                                }
-	                            }) : ''
-	                        ),
-	                        _react2.default.createElement(
-	                            'td',
-	                            null,
-	                            cust.custtrx.next_page_url != null ? _react2.default.createElement(_IconButton2.default, {
-	                                iconClassName: 'fa fa-fast-forward',
-	                                onClick: function onClick() {
-	                                    _this7.updateTrx(cust.custtrx.last_page, sort, desc);
-	                                }
-	                            }) : ''
-	                        )
-	                    )];
-	                    trx.push(_react2.default.createElement(
-	                        'tr',
-	                        { key: 'trx_th' },
-	                        _react2.default.createElement(
-	                            'th',
-	                            null,
-	                            'Edit / Delete'
-	                        ),
-	                        _react2.default.createElement(
-	                            'th',
-	                            { id: 'trxdt', 'data-sort': 'desc', onClick: _this7.sort },
-	                            'Trx Date'
-	                        ),
-	                        _react2.default.createElement(
-	                            'th',
-	                            { id: 'status', 'data-sort': '', onClick: _this7.sort },
-	                            'Status'
-	                        ),
-	                        _react2.default.createElement(
-	                            'th',
-	                            { id: 'item', 'data-sort': '', onClick: _this7.sort },
-	                            'Billable'
-	                        ),
-	                        _react2.default.createElement(
-	                            'th',
-	                            { id: 'descr', 'data-sort': '', onClick: _this7.sort },
-	                            'Description'
-	                        ),
-	                        _react2.default.createElement(
-	                            'th',
-	                            null,
-	                            'Quantity'
-	                        ),
-	                        _react2.default.createElement(
-	                            'th',
-	                            { id: 'amt', 'data-sort': '', onClick: _this7.sort },
-	                            'Amount'
-	                        )
-	                    ));
-	                    for (var j = 0; j < cust.custtrx.data.length; j++) {
-	                        //get each transaction's billable's descr and qty
-	                        var billable = (0, _util.getBillable)(cust.custtrx.data[j].item),
-	                            qty = (cust.custtrx.data[j].amt / billable.price).toFixed(2) + ' x $' + billable.price + '/' + billable.unit,
+	                    }) : ''
+	                ),
+	                _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    cust.custtrx.prev_page_url != null ? _react2.default.createElement(_IconButton2.default, {
+	                        iconClassName: 'fa fa-backward',
+	                        onClick: function onClick() {
+	                            _this7.updateTrx(cust.custtrx.current_page - 1, sort, desc);
+	                        }
+	                    }) : ''
+	                ),
+	                _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    cust.custtrx.next_page_url != null ? _react2.default.createElement(_IconButton2.default, {
+	                        iconClassName: 'fa fa-forward',
+	                        onClick: function onClick() {
+	                            _this7.updateTrx(cust.custtrx.current_page + 1, sort, desc);
+	                        }
+	                    }) : ''
+	                ),
+	                _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    cust.custtrx.next_page_url != null ? _react2.default.createElement(_IconButton2.default, {
+	                        iconClassName: 'fa fa-fast-forward',
+	                        onClick: function onClick() {
+	                            _this7.updateTrx(cust.custtrx.last_page, sort, desc);
+	                        }
+	                    }) : ''
+	                )
+	            )];
+	            trx.push(_react2.default.createElement(
+	                'tr',
+	                { key: 'trx_th' },
+	                _react2.default.createElement(
+	                    'th',
+	                    null,
+	                    'Edit / Delete'
+	                ),
+	                _react2.default.createElement(
+	                    'th',
+	                    { id: 'trxdt', 'data-sort': 'desc', onClick: _this7.sort },
+	                    'Trx Date'
+	                ),
+	                _react2.default.createElement(
+	                    'th',
+	                    { id: 'status', 'data-sort': '', onClick: _this7.sort },
+	                    'Status'
+	                ),
+	                _react2.default.createElement(
+	                    'th',
+	                    { id: 'item', 'data-sort': '', onClick: _this7.sort },
+	                    'Billable'
+	                ),
+	                _react2.default.createElement(
+	                    'th',
+	                    { id: 'descr', 'data-sort': '', onClick: _this7.sort },
+	                    'Description'
+	                ),
+	                _react2.default.createElement(
+	                    'th',
+	                    null,
+	                    'Quantity'
+	                ),
+	                _react2.default.createElement(
+	                    'th',
+	                    { id: 'amt', 'data-sort': '', onClick: _this7.sort },
+	                    'Amount'
+	                )
+	            ));
+	            for (var j = 0; j < cust.custtrx.data.length; j++) {
+	                //get each transaction's billable's descr and qty
+	                var billable = (0, _util.getBillable)(cust.custtrx.data[j].item),
+	                    qty = (cust.custtrx.data[j].amt / billable.price).toFixed(2) + ' x $' + billable.price + '/' + billable.unit,
 	
-	                        //render table row
-	                        style = {
-	                            width: '10px',
-	                            height: '10px',
-	                            margin: '2px'
-	                        },
-	                            tmp = _react2.default.createElement(
-	                            'tr',
-	                            { key: 'trx_id_' + cust.custtrx.data[j].id },
-	                            _react2.default.createElement(
-	                                'td',
-	                                null,
-	                                _react2.default.createElement(
-	                                    'span',
-	                                    { className: 'trx_icons' },
-	                                    _react2.default.createElement(_IconButton2.default, {
-	                                        iconClassName: 'fa fa-pencil',
-	                                        onClick: _this7.handleEdit,
-	                                        style: style,
-	                                        id: cust.custtrx.data[j].id
-	                                    }),
-	                                    _react2.default.createElement(_IconButton2.default, {
-	                                        iconClassName: 'fa fa-trash-o',
-	                                        onClick: _this7.handleDelete,
-	                                        style: style,
-	                                        id: cust.custtrx.data[j].id
-	                                    })
-	                                )
-	                            ),
-	                            _react2.default.createElement(
-	                                'td',
-	                                null,
-	                                cust.custtrx.data[j].trxdt
-	                            ),
-	                            _react2.default.createElement(
-	                                'td',
-	                                null,
-	                                cust.custtrx.data[j].status
-	                            ),
-	                            _react2.default.createElement(
-	                                'td',
-	                                null,
-	                                billable.descr
-	                            ),
-	                            _react2.default.createElement(
-	                                'td',
-	                                null,
-	                                cust.custtrx.data[j].descr
-	                            ),
-	                            _react2.default.createElement(
-	                                'td',
-	                                null,
-	                                qty
-	                            ),
-	                            _react2.default.createElement(
-	                                'td',
-	                                null,
-	                                '$ ',
-	                                cust.custtrx.data[j].amt
-	                            )
-	                        );
-	                        trx.push(tmp);
-	                    }
-	                    _this7.setState({ trx: trx });
-	                }
-	            };
-	            ajaxReq.send();
+	                //render table row
+	                style = {
+	                    width: '10px',
+	                    height: '10px',
+	                    margin: '2px'
+	                },
+	                    tmp = _react2.default.createElement(
+	                    'tr',
+	                    { key: 'trx_id_' + cust.custtrx.data[j].id },
+	                    _react2.default.createElement(
+	                        'td',
+	                        null,
+	                        _react2.default.createElement(
+	                            'span',
+	                            { className: 'trx_icons' },
+	                            _react2.default.createElement(_IconButton2.default, {
+	                                iconClassName: 'fa fa-pencil',
+	                                onClick: _this7.handleEdit,
+	                                style: style,
+	                                id: cust.custtrx.data[j].id
+	                            }),
+	                            _react2.default.createElement(_IconButton2.default, {
+	                                iconClassName: 'fa fa-trash-o',
+	                                onClick: _this7.handleDelete,
+	                                style: style,
+	                                id: cust.custtrx.data[j].id
+	                            })
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'td',
+	                        null,
+	                        cust.custtrx.data[j].trxdt
+	                    ),
+	                    _react2.default.createElement(
+	                        'td',
+	                        null,
+	                        cust.custtrx.data[j].status
+	                    ),
+	                    _react2.default.createElement(
+	                        'td',
+	                        null,
+	                        billable.descr
+	                    ),
+	                    _react2.default.createElement(
+	                        'td',
+	                        null,
+	                        cust.custtrx.data[j].descr
+	                    ),
+	                    _react2.default.createElement(
+	                        'td',
+	                        null,
+	                        qty
+	                    ),
+	                    _react2.default.createElement(
+	                        'td',
+	                        null,
+	                        '$ ',
+	                        cust.custtrx.data[j].amt
+	                    )
+	                );
+	                trx.push(tmp);
+	            }
+	            _this7.setState({ trx: trx });
 	        };
 	
 	        _this7.sort = function (event) {

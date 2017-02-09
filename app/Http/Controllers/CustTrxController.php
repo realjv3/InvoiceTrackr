@@ -42,6 +42,7 @@ class CustTrxController extends Controller
         $trx['item'] = $billable->id;
         unset($trx['customer']);
         unset($trx['billable']);
+        $trx['descr'] = html_entity_decode($trx['descr']);
         $trx['amt'] = substr($trx['amt'], 2);
         if(isset($trx['id']) && $trx['id'] != '') {
             $transaction = CustTrx::find($trx['id']);

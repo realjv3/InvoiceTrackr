@@ -15,7 +15,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 
 import CustomerEntry from 'customer_entry.jsx';
-import {getSelectedCustomer, getBillable, getTrx} from 'util.jsx';
+import {getSelCustTrxs, getSelectedCustomer, getBillable, getTrx} from 'util.jsx';
 import Invoice from 'invoice.jsx';
 
 class InvoiceModule extends React.Component{
@@ -69,6 +69,7 @@ class InvoiceModule extends React.Component{
         this.setState({customers: this.initCustomers()});
     }
     updateTrx = () => {
+        getSelCustTrxs(1);
         let cust = getSelectedCustomer();
         //Assemble trx rows
         let trx = [],
@@ -83,13 +84,13 @@ class InvoiceModule extends React.Component{
                     <th>Amount</th>
                 </tr>
             );
-        for(var j = 0; j < cust.custtrx.length; j++) {
+        for(var j = 0; j < cust.custtrx.data.length; j++) {
             //if trx status not open, move on to next
-            if(cust.custtrx[j].status != 'Open')
+            if(cust.custtrx.data[j].status != 'Open')
                 continue;
             //get each transaction's billable's descr and qty
-            let billable = getBillable(cust.custtrx[j].item);
-            let qty = (cust.custtrx[j].amt / billable.price).toFixed(2) + ' x $' + billable.price +'/'+billable.unit;
+            let billable = getBillable(cust.custtrx.data[j].item);
+            let qty = (cust.custtrx.data[j].amt / billable.price).toFixed(2) + ' x $' + billable.price +'/'+billable.unit;
             //render table row
             let style = {
                 width: '10px',
@@ -97,14 +98,14 @@ class InvoiceModule extends React.Component{
                 margin: '2px'
             };
             let tmp =
-                <tr key={'trx_id_' + cust.custtrx[j].id}>
-                    <td><Checkbox id={cust.custtrx[j].id} onCheck={this.addToInvoice} style={{marginLeft: '55px'}}  /></td>
-                    <td>{cust.custtrx[j].trxdt}</td>
-                    <td>{cust.custtrx[j].status}</td>
+                <tr key={'trx_id_' + cust.custtrx.data[j].id}>
+                    <td><Checkbox id={cust.custtrx.data[j].id} onCheck={this.addToInvoice} style={{marginLeft: '55px'}}  /></td>
+                    <td>{cust.custtrx.data[j].trxdt}</td>
+                    <td>{cust.custtrx.data[j].status}</td>
                     <td>{billable.descr}</td>
-                    <td>{cust.custtrx[j].descr}</td>
+                    <td>{cust.custtrx.data[j].descr}</td>
                     <td>{qty}</td>
-                    <td>$ {cust.custtrx[j].amt}</td>
+                    <td>$ {cust.custtrx.data[j].amt}</td>
                 </tr>;
             trx.push(tmp);
         }
@@ -255,7 +256,7 @@ class InvoiceModule extends React.Component{
                         {this.state.trx}
                     </tbody>
                 </table>
-                <Invoice trx={this.state.selectedTrx} total={this.state.total} />
+                <Invoice trx={this.state.selectedTrx} total={this.state.total} updateTrx={this.updateTrx} />
             </div>
         );
     }

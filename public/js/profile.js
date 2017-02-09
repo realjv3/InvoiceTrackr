@@ -24674,6 +24674,39 @@
 	    document.getElementById('overlay').style.display = 'none';
 	};
 	
+	/**
+	 * Gets selected customer's paged & sorted transactions
+	 * and updates cur_user global
+	 * @param page int - page of trxs (page size 10)
+	 * @param sort string - column name to sort by
+	 * @param desc bool - sort dir
+	 */
+	var getSelCustTrxs = exports.getSelCustTrxs = function getSelCustTrxs() {
+	    var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+	    var sort = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+	    var desc = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+	
+	    var cust = getSelectedCustomer(),
+	        ajaxReq = new XMLHttpRequest(),
+	        descr = desc ? '&desc' : '';
+	    ajaxReq.open("GET", 'get_trx/' + cust.id + '?page=' + page + '&sort=' + sort + descr, false);
+	    ajaxReq.setRequestHeader('X-CSRF-Token', _token);
+	    ajaxReq.onload = function () {
+	        if (ajaxReq.responseText && ajaxReq.responseText != "") {
+	            cust.custtrx = ajaxReq.responseText;
+	            cust.custtrx = JSON.parse(cust.custtrx);
+	            //Update cur_user global with the fetched transactions
+	            for (var i = 0; i < cur_user.customer.length; i++) {
+	                if (cur_user.customer[i].id == cust.id) {
+	                    cur_user.customer[i] = cust;
+	                    break;
+	                }
+	            }
+	        }
+	    };
+	    ajaxReq.send();
+	};
+	
 	var getTrx = exports.getTrx = function getTrx(id) {
 	    for (var i = 0; i < cur_user.customer.length; i++) {
 	        if (cur_user.customer[i].custtrx != null) for (var j = 0; j < cur_user.customer[i].custtrx.data.length; j++) {

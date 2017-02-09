@@ -26,7 +26,7 @@ import List from 'material-ui/List'
 
 import CustomerEntry from 'customer_entry.jsx';
 
-import {getSelectedCustomer, getSelectedBillable, getTrx, getBillable} from 'util.jsx';
+import {getSelCustTrxs, getSelectedCustomer, getSelectedBillable, getTrx, getBillable} from 'util.jsx';
 
 class BillableEntry extends React.Component
 {
@@ -729,80 +729,66 @@ class Trx extends React.Component
         if(price && price != NaN && qty && qty != NaN)
             this.setState({amt: '$ ' + (qty * price).toFixed(2)});
     }
-    updateTrx = (page = 1, sort = '', desc = true) => {
-        let cust = getSelectedCustomer(),
-            ajaxReq = new XMLHttpRequest(),
-            descr = (desc) ? '&desc' : '';
-        ajaxReq.open("GET", 'get_trx/' + cust.id + '?page=' + page + '&sort=' + sort + descr );
-        ajaxReq.setRequestHeader('X-CSRF-Token', _token);
-        ajaxReq.onload = () => {
-            if(ajaxReq.responseText && ajaxReq.responseText != "") {
-                cust.custtrx = ajaxReq.responseText;
-                cust.custtrx = JSON.parse(cust.custtrx);
-                //Update cur_user global with the fetched transactions
-                for(let i = 0; i < cur_user.customer.length; i++) {
-                    if(cur_user.customer[i].id == cust.id) {
-                        cur_user.customer[i] = cust;
-                        break;
-                    }
-                }
-                //Assemble trx rows
-                let trx = [
-                    <tr key="trx_nav">
+    updateTrx = () => {
+        getSelCustTrxs(1);
+        let cust = getSelectedCustomer();
+        //Assemble trx rows
+        let trx = [
+            <tr key="trx_nav">
+                <td>
+                    {(cust.custtrx.prev_page_url != null) ?
+                        <IconButton
+                            iconClassName="fa fa-fast-backward"
+                            onClick={() => {this.updateTrx(1, sort, desc)}}
+                        /> : '' }
+                </td>
+                <td>
+                    {(cust.custtrx.prev_page_url != null) ?
+                        <IconButton
+                            iconClassName="fa fa-backward"
+                            onClick={() => {this.updateTrx(cust.custtrx.current_page - 1, sort, desc)}}
+                        /> : '' }
+                </td>
+                <td>
+                    {(cust.custtrx.next_page_url != null) ?
+                        <IconButton
+                            iconClassName="fa fa-forward"
+                            onClick={() => {this.updateTrx(cust.custtrx.current_page + 1, sort, desc)}}
+                        /> : ''}
+                </td>
+                <td>
+                    {(cust.custtrx.next_page_url != null) ?
+                        <IconButton
+                            iconClassName="fa fa-fast-forward"
+                            onClick={() => {this.updateTrx(cust.custtrx.last_page, sort, desc)}}
+                        /> : ''}
+                </td>
+            </tr>
+        ];
+        trx.push(
+            <tr key="trx_th">
+                <th>Edit / Delete</th>
+                <th id="trxdt" data-sort="desc" onClick={this.sort}>Trx Date</th>
+                <th id="status" data-sort="" onClick={this.sort}>Status</th>
+                <th id="item" data-sort="" onClick={this.sort}>Billable</th>
+                <th id="descr" data-sort="" onClick={this.sort}>Description</th>
+                <th>Quantity</th>
+                <th id="amt" data-sort="" onClick={this.sort}>Amount</th>
+            </tr>
+        );
+        for(let j = 0; j < cust.custtrx.data.length; j++) {
+            //get each transaction's billable's descr and qty
+            let billable = getBillable(cust.custtrx.data[j].item),
+                qty = (cust.custtrx.data[j].amt / billable.price).toFixed(2) + ' x $' + billable.price +'/'+billable.unit,
+                //render table row
+                style = {
+                    width: '10px',
+                    height: '10px',
+                    margin: '2px'
+                },
+                tmp =
+                    <tr key={'trx_id_' + cust.custtrx.data[j].id}>
                         <td>
-                            {(cust.custtrx.prev_page_url != null) ?
-                                <IconButton
-                                    iconClassName="fa fa-fast-backward"
-                                    onClick={() => {this.updateTrx(1, sort, desc)}}
-                                /> : '' }
-                        </td>
-                        <td>
-                            {(cust.custtrx.prev_page_url != null) ?
-                                <IconButton
-                                    iconClassName="fa fa-backward"
-                                    onClick={() => {this.updateTrx(cust.custtrx.current_page - 1, sort, desc)}}
-                                /> : '' }
-                        </td>
-                        <td>
-                            {(cust.custtrx.next_page_url != null) ?
-                                <IconButton
-                                    iconClassName="fa fa-forward"
-                                    onClick={() => {this.updateTrx(cust.custtrx.current_page + 1, sort, desc)}}
-                                /> : ''}
-                        </td>
-                        <td>
-                            {(cust.custtrx.next_page_url != null) ?
-                                <IconButton
-                                    iconClassName="fa fa-fast-forward"
-                                    onClick={() => {this.updateTrx(cust.custtrx.last_page, sort, desc)}}
-                                /> : ''}
-                        </td>
-                    </tr>
-                ];
-                trx.push(
-                    <tr key="trx_th">
-                        <th>Edit / Delete</th>
-                        <th id="trxdt" data-sort="desc" onClick={this.sort}>Trx Date</th>
-                        <th id="status" data-sort="" onClick={this.sort}>Status</th>
-                        <th id="item" data-sort="" onClick={this.sort}>Billable</th>
-                        <th id="descr" data-sort="" onClick={this.sort}>Description</th>
-                        <th>Quantity</th>
-                        <th id="amt" data-sort="" onClick={this.sort}>Amount</th>
-                    </tr>
-                );
-                for(let j = 0; j < cust.custtrx.data.length; j++) {
-                    //get each transaction's billable's descr and qty
-                    let billable = getBillable(cust.custtrx.data[j].item),
-                        qty = (cust.custtrx.data[j].amt / billable.price).toFixed(2) + ' x $' + billable.price +'/'+billable.unit,
-                        //render table row
-                        style = {
-                            width: '10px',
-                            height: '10px',
-                            margin: '2px'
-                        },
-                        tmp =
-                            <tr key={'trx_id_' + cust.custtrx.data[j].id}>
-                                <td>
                             <span className="trx_icons" >
                                 <IconButton
                                     iconClassName="fa fa-pencil"
@@ -817,20 +803,17 @@ class Trx extends React.Component
                                     id={cust.custtrx.data[j].id}
                                 />
                             </span>
-                                </td>
-                                <td>{cust.custtrx.data[j].trxdt}</td>
-                                <td>{cust.custtrx.data[j].status}</td>
-                                <td>{billable.descr}</td>
-                                <td>{cust.custtrx.data[j].descr}</td>
-                                <td>{qty}</td>
-                                <td>$ {cust.custtrx.data[j].amt}</td>
-                            </tr>;
-                    trx.push(tmp);
-                }
-                this.setState({trx: trx});
-            }
-        };
-        ajaxReq.send();
+                        </td>
+                        <td>{cust.custtrx.data[j].trxdt}</td>
+                        <td>{cust.custtrx.data[j].status}</td>
+                        <td>{billable.descr}</td>
+                        <td>{cust.custtrx.data[j].descr}</td>
+                        <td>{qty}</td>
+                        <td>$ {cust.custtrx.data[j].amt}</td>
+                    </tr>;
+            trx.push(tmp);
+        }
+        this.setState({trx: trx});
     }
     sort = (event) => {
         let field = event.currentTarget.id,

@@ -15,6 +15,7 @@ class Invoice extends React.Component {
         let trx_keys = this.props.trx.map(
             (e) => { return e.key; }
         );
+        this.props.updateTrx();
         window.open('/create_inv?trx_keys=' + trx_keys + '&total=' + this.props.total + '&content=' + document.getElementById('invoice').outerHTML);
     }
     render() {
