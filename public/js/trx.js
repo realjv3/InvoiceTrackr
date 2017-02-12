@@ -43763,7 +43763,7 @@
 	                            errorText: this.state.errors.cust_entry_office
 	                        })
 	                    ),
-	                    _react2.default.createElement(_Snackbar2.default, { open: this.state.snackbarOpen, message: this.state.message, onRequestClose: this.handleClose, autoHideDuration: 3000 })
+	                    _react2.default.createElement(_Snackbar2.default, { bodyStyle: { textAlign: 'center' }, open: this.state.snackbarOpen, message: this.state.message, onRequestClose: this.handleClose, autoHideDuration: 3000 })
 	                )
 	            );
 	        }
@@ -46803,7 +46803,7 @@
 	                            })
 	                        )
 	                    ),
-	                    _react2.default.createElement(_Snackbar2.default, { open: this.state.snackbarOpen, message: this.state.message, onRequestClose: this.handleClose, autoHideDuration: 3000 })
+	                    _react2.default.createElement(_Snackbar2.default, { bodyStyle: { textAlign: 'center' }, open: this.state.snackbarOpen, message: this.state.message, onRequestClose: this.handleClose, autoHideDuration: 3000 })
 	                )
 	            );
 	        }
@@ -47149,6 +47149,7 @@
 	                if (response.ok) {
 	                    response.json().then(function (json) {
 	                        cur_user = JSON.parse(json.cur_user);
+	                        _this7.setState({ snackbarOpen: true, message: 'Transaction was saved.' });
 	                        _this7.doesCustExist(document.getElementById('trx_entry_customer').value); //so billables & trx are updated
 	                    });
 	                } else {
@@ -47198,6 +47199,7 @@
 	                if (response.ok) response.json().then(function (json) {
 	                    cur_user = JSON.parse(json.cur_user);
 	                    document.getElementById('trx_entry_trxid').value = null;
+	                    _this7.setState({ snackbarOpen: true, message: 'Transaction was deleted.' });
 	                    _this7.doesCustExist(document.getElementById('trx_entry_customer').value);
 	                });
 	            });
@@ -47543,7 +47545,8 @@
 	            customers: _this7.initCustomers(),
 	            billables: [],
 	            trx: [],
-	            snackbarOpen: false, message: '',
+	            snackbarOpen: false,
+	            message: '',
 	            showDelCustDialog: false,
 	            disableBillables: true,
 	            errors: { 'trx_entry_trxdt': '', 'trx_entry_customer': '', 'trx_entry_qty': '', 'trx_entry_billable': '', 'trx_entry_amt': '' },
@@ -47652,7 +47655,7 @@
 	                            }),
 	                            _react2.default.createElement(_FlatButton2.default, { label: 'Save Transaction', onClick: this.handleSave, style: { color: 'green' } }),
 	                            _react2.default.createElement(_FlatButton2.default, { label: 'Clear', onClick: this.handleClear, style: { color: 'red' } }),
-	                            _react2.default.createElement(_Snackbar2.default, { open: this.state.snackbarOpen, message: this.state.message, onRequestClose: this.handleClose, autoHideDuration: 3000 })
+	                            _react2.default.createElement(_Snackbar2.default, { bodyStyle: { textAlign: 'center' }, open: this.state.snackbarOpen, message: this.state.message, onRequestClose: this.handleClose, autoHideDuration: 3000 })
 	                        ),
 	                        _react2.default.createElement(
 	                            _List2.default,

@@ -206,7 +206,7 @@ class BillableEntry extends React.Component
                             />
                         </div>
                     </fieldset>
-                    <Snackbar open={this.state.snackbarOpen} message={this.state.message} onRequestClose={this.handleClose} autoHideDuration={3000} />
+                    <Snackbar bodyStyle={{textAlign: 'center'}} open={this.state.snackbarOpen} message={this.state.message} onRequestClose={this.handleClose} autoHideDuration={3000} />
                 </form>
             </Dialog>
         );
@@ -423,7 +423,8 @@ class Trx extends React.Component
             customers: this.initCustomers(),
             billables: [],
             trx: [],
-            snackbarOpen: false, message: '',
+            snackbarOpen: false,
+            message: '',
             showDelCustDialog: false,
             disableBillables: true,
             errors: {'trx_entry_trxdt': '', 'trx_entry_customer': '', 'trx_entry_qty': '', 'trx_entry_billable': '', 'trx_entry_amt': ''},
@@ -516,6 +517,7 @@ class Trx extends React.Component
             if(response.ok) {
                 response.json().then((json) => {
                     cur_user = JSON.parse(json.cur_user);
+                    this.setState({snackbarOpen: true, message: 'Transaction was saved.'});
                     this.doesCustExist(document.getElementById('trx_entry_customer').value); //so billables & trx are updated
                 })
             } else {
@@ -568,6 +570,7 @@ class Trx extends React.Component
                 response.json().then((json) => {
                     cur_user = JSON.parse(json.cur_user);
                     document.getElementById('trx_entry_trxid').value = null;
+                    this.setState({snackbarOpen: true, message: 'Transaction was deleted.'});
                     this.doesCustExist(document.getElementById('trx_entry_customer').value);
                 });
         });
@@ -916,7 +919,7 @@ class Trx extends React.Component
                             />
                             <FlatButton label="Save Transaction" onClick={this.handleSave} style={{color: 'green'}} />
                             <FlatButton label="Clear" onClick={this.handleClear} style={{color: 'red'}} />
-                            <Snackbar open={this.state.snackbarOpen} message={this.state.message} onRequestClose={this.handleClose} autoHideDuration={3000} />
+                            <Snackbar bodyStyle={{textAlign: 'center'}} open={this.state.snackbarOpen} message={this.state.message} onRequestClose={this.handleClose} autoHideDuration={3000} />
                         </form>
                         <List>
                             <table>

@@ -198,7 +198,7 @@ class Profile extends React.Component
                     <FlatButton secondary={true} label="Save" icon={<SaveIcon />} type="submit" style={{color:'green'}}/>
                     <FlatButton primary={true} label="Cancel" icon={<CancelIcon />} href="/"  style={{color:'red'}}/>
                 </form>
-                <Snackbar open={this.state.open} message={this.state.message} onRequestClose={this.handleClose} autoHideDuration={3000} />
+                <Snackbar bodyStyle={{textAlign: 'center'}} open={this.state.open} message={this.state.message} onRequestClose={this.handleClose} autoHideDuration={3000} />
             </Paper>
         );
     }

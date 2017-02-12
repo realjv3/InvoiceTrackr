@@ -316,7 +316,7 @@
 	                    _react2.default.createElement(_FlatButton2.default, { secondary: true, label: 'Save', icon: _react2.default.createElement(_save2.default, null), type: 'submit', style: { color: 'green' } }),
 	                    _react2.default.createElement(_FlatButton2.default, { primary: true, label: 'Cancel', icon: _react2.default.createElement(_cancel2.default, null), href: '/', style: { color: 'red' } })
 	                ),
-	                _react2.default.createElement(_Snackbar2.default, { open: this.state.open, message: this.state.message, onRequestClose: this.handleClose, autoHideDuration: 3000 })
+	                _react2.default.createElement(_Snackbar2.default, { bodyStyle: { textAlign: 'center' }, open: this.state.open, message: this.state.message, onRequestClose: this.handleClose, autoHideDuration: 3000 })
 	            );
 	        }
 	    }]);

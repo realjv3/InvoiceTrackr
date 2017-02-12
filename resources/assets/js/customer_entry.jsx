@@ -238,7 +238,7 @@ class CustomerEntry extends React.Component
                             errorText={this.state.errors.cust_entry_office}
                             />
                     </fieldset>
-                    <Snackbar open={this.state.snackbarOpen} message={this.state.message} onRequestClose={this.handleClose} autoHideDuration={3000} />
+                    <Snackbar bodyStyle={{textAlign: 'center'}} open={this.state.snackbarOpen} message={this.state.message} onRequestClose={this.handleClose} autoHideDuration={3000} />
                 </form>
             </Dialog>
         );

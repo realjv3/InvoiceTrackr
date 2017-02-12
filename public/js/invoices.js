@@ -45052,7 +45052,7 @@
 	                            errorText: this.state.errors.cust_entry_office
 	                        })
 	                    ),
-	                    _react2.default.createElement(_Snackbar2.default, { open: this.state.snackbarOpen, message: this.state.message, onRequestClose: this.handleClose, autoHideDuration: 3000 })
+	                    _react2.default.createElement(_Snackbar2.default, { bodyStyle: { textAlign: 'center' }, open: this.state.snackbarOpen, message: this.state.message, onRequestClose: this.handleClose, autoHideDuration: 3000 })
 	                )
 	            );
 	        }
