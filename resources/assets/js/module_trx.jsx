@@ -500,7 +500,7 @@ class Trx extends React.Component
     }
     handleSave = () => {
         this.removeErrors();
-        var form = new FormData(document.querySelector('trx_form'));
+        let form = new FormData(document.querySelector('trx_form'));
         form.append('id', document.getElementById('trx_entry_trxid').value);
         form.append('trxdt', document.getElementById('trx_entry_trxdt').value);
         form.append('customer', document.getElementById('trx_entry_customer').value);
@@ -508,7 +508,11 @@ class Trx extends React.Component
         form.append('billable', document.getElementById('trx_entry_billable').value);
         form.append('descr', document.getElementById('trx_entry_descr').value);
         form.append('amt', this.state.amt);
-        fetch('/save_trx', {
+        let cust = getSelectedCustomer(),
+            page = cust.custtrx.current_page,
+            sort = cust.custtrx.sort,
+            desc = (cust.custtrx.desc) ? '&desc' : '';
+        fetch('/save_trx?page='+page+'&sort='+sort+desc, {
             method: 'POST',
             body: form,
             headers: {'X-CSRF-Token': _token, "Accept": "application/json"},
@@ -517,6 +521,13 @@ class Trx extends React.Component
             if(response.ok) {
                 response.json().then((json) => {
                     cur_user = JSON.parse(json.cur_user);
+                    for(let i = 0; i < cur_user.customer.length; i++) {
+                        if(cur_user.customer[i].id == cust.id) {
+                            cur_user.customer[i].custtrx.sort = sort;
+                            cur_user.customer[i].custtrx.desc = desc;
+                            break;
+                        }
+                    }
                     this.setState({snackbarOpen: true, message: 'Transaction was saved.'});
                     this.doesCustExist(document.getElementById('trx_entry_customer').value); //so billables & trx are updated
                 })
@@ -558,8 +569,12 @@ class Trx extends React.Component
         // Hitting the save button will call this.handleSave()
     }
     handleDelete = (event) => {
+        let cust = getSelectedCustomer(),
+            sort = cust.custtrx.sort,
+            desc = (cust.custtrx.desc) ? '&desc' : '',
+            page = cust.custtrx.current_page;
         fetch(
-            'del_trx/' + event.currentTarget.id,
+            'del_trx/' + event.currentTarget.id+'?page='+page+'&sort='+sort+desc,
             {
                 method: 'DELETE',
                 headers: {'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest'},
@@ -569,6 +584,13 @@ class Trx extends React.Component
             if(response.ok)
                 response.json().then((json) => {
                     cur_user = JSON.parse(json.cur_user);
+                    for(let i = 0; i < cur_user.customer.length; i++) {
+                        if(cur_user.customer[i].id == cust.id) {
+                            cur_user.customer[i].custtrx.sort = sort;
+                            cur_user.customer[i].custtrx.desc = desc;
+                            break;
+                        }
+                    }
                     document.getElementById('trx_entry_trxid').value = null;
                     this.setState({snackbarOpen: true, message: 'Transaction was deleted.'});
                     this.doesCustExist(document.getElementById('trx_entry_customer').value);
@@ -638,14 +660,16 @@ class Trx extends React.Component
             cur_user.customer[i].selected = false;
             if (cur_user.customer[i].company.toLowerCase().trim() == input.toLowerCase().trim()) {
                 cur_user.customer[i].selected = true;
+                var page = cur_user.customer[i].custtrx.current_page;
                 exists = true;
+                break;
             }
         }
         if (exists) {
             this.setState({disableBillables: false});
             this.updateBillables();
-            this.updateTrx();
-            return true;
+            this.updateTrx(page);
+            return true;``
         } else {
             this.refs.cust_entry.handleOpen(input);
             return false;
@@ -732,9 +756,11 @@ class Trx extends React.Component
         if(price && price != NaN && qty && qty != NaN)
             this.setState({amt: '$ ' + (qty * price).toFixed(2)});
     }
-    updateTrx = (page = 1, sort = '', desc = true) => {
+    updateTrx = (page = 1) => {
+        let cust = getSelectedCustomer(),
+            sort = (cust.custtrx.sort) ? cust.custtrx.sort : 'trxdt',
+            desc = cust.custtrx.desc;
         getSelCustTrxs(page, sort, desc);
-        let cust = getSelectedCustomer();
         //Assemble trx rows
         let trx = [
             <tr key="trx_nav">
@@ -742,28 +768,28 @@ class Trx extends React.Component
                     {(cust.custtrx.prev_page_url != null) ?
                         <IconButton
                             iconClassName="fa fa-fast-backward"
-                            onClick={() => {this.updateTrx(1, sort, desc)}}
+                            onClick={() => {this.updateTrx(1)}}
                         /> : '' }
                 </td>
                 <td>
                     {(cust.custtrx.prev_page_url != null) ?
                         <IconButton
                             iconClassName="fa fa-backward"
-                            onClick={() => {this.updateTrx(cust.custtrx.current_page - 1, sort, desc)}}
+                            onClick={() => {this.updateTrx(cust.custtrx.current_page - 1)}}
                         /> : '' }
                 </td>
                 <td>
                     {(cust.custtrx.next_page_url != null) ?
                         <IconButton
                             iconClassName="fa fa-forward"
-                            onClick={() => {this.updateTrx(cust.custtrx.current_page + 1, sort, desc)}}
+                            onClick={() => {this.updateTrx(cust.custtrx.current_page + 1)}}
                         /> : ''}
                 </td>
                 <td>
                     {(cust.custtrx.next_page_url != null) ?
                         <IconButton
                             iconClassName="fa fa-fast-forward"
-                            onClick={() => {this.updateTrx(cust.custtrx.last_page, sort, desc)}}
+                            onClick={() => {this.updateTrx(cust.custtrx.last_page)}}
                         /> : ''}
                 </td>
             </tr>
@@ -818,20 +844,36 @@ class Trx extends React.Component
         }
         this.setState({trx: trx});
     }
+    /**
+     * will set sort and dir in cur_user global
+     * @param event onClick of trx table header
+     */
     sort = (event) => {
         let field = event.currentTarget.id,
             dir = event.currentTarget.getAttribute('data-sort');
         //if asc, set to desc
-        if(dir == 'asc')
+        if(dir == 'asc') {
             event.currentTarget.setAttribute('data-sort', 'desc');
-        else if(dir == '' || dir == 'desc')
+            dir = 'desc';
+        }
+        else if(dir == '' || dir == 'desc') {
             event.currentTarget.setAttribute('data-sort', 'asc');
+            dir = 'asc';
+        }
         //update transactions
         if(dir == 'asc')
             dir = false;
         else if(dir == 'desc')
             dir = true;
-        this.updateTrx(1, field, dir);
+        let cust = getSelectedCustomer();
+        cust.custtrx.sort = field;
+        cust.custtrx.desc = dir;
+        for(let i = 0; i < cur_user.customer.length; i++)
+            if(cur_user.customer[i].id == cust.id) {
+                cur_user.customer[i] = cust;
+                break;
+            }
+        this.updateTrx(1);
     }
     // AutoComplete components aren't emitting onBlur (see mui issue), therefore setting listener after render, old school
     // https://github.com/callemall/material-ui/issues/2294 says onBlur is fixed, but it's not

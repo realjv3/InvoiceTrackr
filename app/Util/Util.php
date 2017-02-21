@@ -27,7 +27,7 @@ class Util
             $custCntlr = new CustTrxController;
             for($i = 0; $i < count($user['customer']); $i++) {
                 $custtrx = $custCntlr->read($user['customer'][$i]['id']);
-                $user['customer'][$i]['custtrx'] = json_decode($custtrx, true);
+                $user['customer'][$i]['custtrx'] = $custtrx;
             }
             return json_encode($user);
         } else

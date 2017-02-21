@@ -104,8 +104,7 @@ class CustTrxController extends Controller
                         }
                     );
             if(isset($trxs))
-                //sort
-                $trxs = call_user_func(array($trxs, 'sortBy'.$desc), $sortby);
+                $trxs = call_user_func(array($trxs, 'sortBy'.$desc), $sortby);  //sort
             else
                 return response('No transactions for this customer', 404);
         } else {    //grab all customers' trxs

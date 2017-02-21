@@ -24514,6 +24514,8 @@
 	        if (ajaxReq.responseText && ajaxReq.responseText != "") {
 	            cust.custtrx = ajaxReq.responseText;
 	            cust.custtrx = JSON.parse(cust.custtrx);
+	            cust.custtrx.sort = sort;
+	            cust.custtrx.desc = desc;
 	            //Update cur_user global with the fetched transactions
 	            for (var i = 0; i < cur_user.customer.length; i++) {
 	                if (cur_user.customer[i].id == cust.id) {

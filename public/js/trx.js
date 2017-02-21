@@ -24497,6 +24497,8 @@
 	        if (ajaxReq.responseText && ajaxReq.responseText != "") {
 	            cust.custtrx = ajaxReq.responseText;
 	            cust.custtrx = JSON.parse(cust.custtrx);
+	            cust.custtrx.sort = sort;
+	            cust.custtrx.desc = desc;
 	            //Update cur_user global with the fetched transactions
 	            for (var i = 0; i < cur_user.customer.length; i++) {
 	                if (cur_user.customer[i].id == cust.id) {
@@ -47140,7 +47142,11 @@
 	            form.append('billable', document.getElementById('trx_entry_billable').value);
 	            form.append('descr', document.getElementById('trx_entry_descr').value);
 	            form.append('amt', _this7.state.amt);
-	            fetch('/save_trx', {
+	            var cust = (0, _util.getSelectedCustomer)(),
+	                page = cust.custtrx.current_page,
+	                sort = cust.custtrx.sort,
+	                desc = cust.custtrx.desc ? '&desc' : '';
+	            fetch('/save_trx?page=' + page + '&sort=' + sort + desc, {
 	                method: 'POST',
 	                body: form,
 	                headers: { 'X-CSRF-Token': _token, "Accept": "application/json" },
@@ -47149,6 +47155,13 @@
 	                if (response.ok) {
 	                    response.json().then(function (json) {
 	                        cur_user = JSON.parse(json.cur_user);
+	                        for (var i = 0; i < cur_user.customer.length; i++) {
+	                            if (cur_user.customer[i].id == cust.id) {
+	                                cur_user.customer[i].custtrx.sort = sort;
+	                                cur_user.customer[i].custtrx.desc = desc;
+	                                break;
+	                            }
+	                        }
 	                        _this7.setState({ snackbarOpen: true, message: 'Transaction was saved.' });
 	                        _this7.doesCustExist(document.getElementById('trx_entry_customer').value); //so billables & trx are updated
 	                    });
@@ -47191,13 +47204,24 @@
 	        };
 	
 	        _this7.handleDelete = function (event) {
-	            fetch('del_trx/' + event.currentTarget.id, {
+	            var cust = (0, _util.getSelectedCustomer)(),
+	                sort = cust.custtrx.sort,
+	                desc = cust.custtrx.desc ? '&desc' : '',
+	                page = cust.custtrx.current_page;
+	            fetch('del_trx/' + event.currentTarget.id + '?page=' + page + '&sort=' + sort + desc, {
 	                method: 'DELETE',
 	                headers: { 'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest' },
 	                credentials: 'same-origin'
 	            }).then(function (response) {
 	                if (response.ok) response.json().then(function (json) {
 	                    cur_user = JSON.parse(json.cur_user);
+	                    for (var i = 0; i < cur_user.customer.length; i++) {
+	                        if (cur_user.customer[i].id == cust.id) {
+	                            cur_user.customer[i].custtrx.sort = sort;
+	                            cur_user.customer[i].custtrx.desc = desc;
+	                            break;
+	                        }
+	                    }
 	                    document.getElementById('trx_entry_trxid').value = null;
 	                    _this7.setState({ snackbarOpen: true, message: 'Transaction was deleted.' });
 	                    _this7.doesCustExist(document.getElementById('trx_entry_customer').value);
@@ -47268,13 +47292,15 @@
 	                cur_user.customer[i].selected = false;
 	                if (cur_user.customer[i].company.toLowerCase().trim() == input.toLowerCase().trim()) {
 	                    cur_user.customer[i].selected = true;
+	                    var page = cur_user.customer[i].custtrx.current_page;
 	                    exists = true;
+	                    break;
 	                }
 	            }
 	            if (exists) {
 	                _this7.setState({ disableBillables: false });
 	                _this7.updateBillables();
-	                _this7.updateTrx();
+	                _this7.updateTrx(page);
 	                return true;
 	            } else {
 	                _this7.refs.cust_entry.handleOpen(input);
@@ -47365,11 +47391,11 @@
 	
 	        _this7.updateTrx = function () {
 	            var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-	            var sort = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-	            var desc = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
 	
+	            var cust = (0, _util.getSelectedCustomer)(),
+	                sort = cust.custtrx.sort ? cust.custtrx.sort : 'trxdt',
+	                desc = cust.custtrx.desc;
 	            (0, _util.getSelCustTrxs)(page, sort, desc);
-	            var cust = (0, _util.getSelectedCustomer)();
 	            //Assemble trx rows
 	            var trx = [_react2.default.createElement(
 	                'tr',
@@ -47380,7 +47406,7 @@
 	                    cust.custtrx.prev_page_url != null ? _react2.default.createElement(_IconButton2.default, {
 	                        iconClassName: 'fa fa-fast-backward',
 	                        onClick: function onClick() {
-	                            _this7.updateTrx(1, sort, desc);
+	                            _this7.updateTrx(1);
 	                        }
 	                    }) : ''
 	                ),
@@ -47390,7 +47416,7 @@
 	                    cust.custtrx.prev_page_url != null ? _react2.default.createElement(_IconButton2.default, {
 	                        iconClassName: 'fa fa-backward',
 	                        onClick: function onClick() {
-	                            _this7.updateTrx(cust.custtrx.current_page - 1, sort, desc);
+	                            _this7.updateTrx(cust.custtrx.current_page - 1);
 	                        }
 	                    }) : ''
 	                ),
@@ -47400,7 +47426,7 @@
 	                    cust.custtrx.next_page_url != null ? _react2.default.createElement(_IconButton2.default, {
 	                        iconClassName: 'fa fa-forward',
 	                        onClick: function onClick() {
-	                            _this7.updateTrx(cust.custtrx.current_page + 1, sort, desc);
+	                            _this7.updateTrx(cust.custtrx.current_page + 1);
 	                        }
 	                    }) : ''
 	                ),
@@ -47410,7 +47436,7 @@
 	                    cust.custtrx.next_page_url != null ? _react2.default.createElement(_IconButton2.default, {
 	                        iconClassName: 'fa fa-fast-forward',
 	                        onClick: function onClick() {
-	                            _this7.updateTrx(cust.custtrx.last_page, sort, desc);
+	                            _this7.updateTrx(cust.custtrx.last_page);
 	                        }
 	                    }) : ''
 	                )
@@ -47529,10 +47555,24 @@
 	            var field = event.currentTarget.id,
 	                dir = event.currentTarget.getAttribute('data-sort');
 	            //if asc, set to desc
-	            if (dir == 'asc') event.currentTarget.setAttribute('data-sort', 'desc');else if (dir == '' || dir == 'desc') event.currentTarget.setAttribute('data-sort', 'asc');
+	            if (dir == 'asc') {
+	                event.currentTarget.setAttribute('data-sort', 'desc');
+	                dir = 'desc';
+	            } else if (dir == '' || dir == 'desc') {
+	                event.currentTarget.setAttribute('data-sort', 'asc');
+	                dir = 'asc';
+	            }
 	            //update transactions
 	            if (dir == 'asc') dir = false;else if (dir == 'desc') dir = true;
-	            _this7.updateTrx(1, field, dir);
+	            var cust = (0, _util.getSelectedCustomer)();
+	            cust.custtrx.sort = field;
+	            cust.custtrx.desc = dir;
+	            for (var i = 0; i < cur_user.customer.length; i++) {
+	                if (cur_user.customer[i].id == cust.id) {
+	                    cur_user.customer[i] = cust;
+	                    break;
+	                }
+	            }_this7.updateTrx(1);
 	        };
 	
 	        _this7.componentDidMount = function () {
@@ -47559,6 +47599,11 @@
 	     * @param object/string chosen - can be a FocusEvent or MenuItem object, or a string, on blur or select
 	     * @return boolean true if customer exists
 	     * @return boolean false if customer doesn't exist & opens CustomerEntry dialog
+	     */
+	
+	    /**
+	     * will set sort and dir in cur_user global
+	     * @param event onClick of trx table header
 	     */
 	
 	    // AutoComplete components aren't emitting onBlur (see mui issue), therefore setting listener after render, old school
