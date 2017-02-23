@@ -41609,7 +41609,39 @@
 	                trx.push(tmp);
 	            }
 	            if (trx.length > 0) trx.unshift(header);
-	            _this.setState({ trx: trx });
+	            _this.setState({
+	                trx: trx,
+	                selectedTrx: [_react2.default.createElement(
+	                    'tr',
+	                    { key: 'trx_th' },
+	                    _react2.default.createElement(
+	                        'th',
+	                        { style: { width: '200px', textAlign: 'center', margin: '7px' } },
+	                        'Trx Date'
+	                    ),
+	                    _react2.default.createElement(
+	                        'th',
+	                        null,
+	                        'Billable'
+	                    ),
+	                    _react2.default.createElement(
+	                        'th',
+	                        null,
+	                        'Description'
+	                    ),
+	                    _react2.default.createElement(
+	                        'th',
+	                        null,
+	                        'Quantity'
+	                    ),
+	                    _react2.default.createElement(
+	                        'th',
+	                        null,
+	                        'Amount'
+	                    )
+	                )],
+	                total: 0
+	            });
 	        };
 	
 	        _this.initInvoices = function () {

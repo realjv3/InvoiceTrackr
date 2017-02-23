@@ -111,7 +111,19 @@ class InvoiceModule extends React.Component{
         }
         if(trx.length > 0)
             trx.unshift(header);
-        this.setState({trx: trx});
+        this.setState({
+            trx: trx,
+            selectedTrx: [
+                <tr key={'trx_th'}>
+                    <th style={{width: '200px', textAlign: 'center', margin: '7px'}}>Trx Date</th>
+                    <th>Billable</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Amount</th>
+                </tr>
+            ],
+            total: 0
+        });
     }
     initInvoices = () => {
         let cust = getSelectedCustomer();
