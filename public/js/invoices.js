@@ -24491,6 +24491,40 @@
 	    ajaxReq.send();
 	};
 	
+	/**
+	 * Gets selected customer's paged & sorted invoices and updates cur_user global
+	 * @param page int - page of invoices (page size 5)
+	 * @param sort string - column name to sort by
+	 * @param desc bool - sort dir
+	 */
+	var getSelCustInvoices = exports.getSelCustInvoices = function getSelCustInvoices() {
+	    var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+	    var sort = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+	    var desc = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+	
+	    var cust = getSelectedCustomer(),
+	        ajaxReq = new XMLHttpRequest(),
+	        descr = desc ? '&desc' : '';
+	    ajaxReq.open("GET", 'get_inv/' + cust.id + '?page=' + page + '&sort=' + sort + descr, false);
+	    ajaxReq.setRequestHeader('X-CSRF-Token', _token);
+	    ajaxReq.onload = function () {
+	        if (ajaxReq.responseText && ajaxReq.responseText != "") {
+	            cust.invoice = ajaxReq.responseText;
+	            cust.invoice = JSON.parse(cust.invoice);
+	            cust.invoice.sort = sort;
+	            cust.invoice.desc = desc;
+	            //Update cur_user global with the fetched transactions
+	            for (var i = 0; i < cur_user.customer.length; i++) {
+	                if (cur_user.customer[i].id == cust.id) {
+	                    cur_user.customer[i] = cust;
+	                    break;
+	                }
+	            }
+	        }
+	    };
+	    ajaxReq.send();
+	};
+	
 	var getTrx = exports.getTrx = function getTrx(id) {
 	    for (var i = 0; i < cur_user.customer.length; i++) {
 	        if (cur_user.customer[i].custtrx != null) for (var j = 0; j < cur_user.customer[i].custtrx.data.length; j++) {
@@ -41449,6 +41483,10 @@
 	
 	var _util = __webpack_require__(/*! util.jsx */ 182);
 	
+	var _paging_nav = __webpack_require__(/*! paging_nav.jsx */ 478);
+	
+	var _paging_nav2 = _interopRequireDefault(_paging_nav);
+	
 	var _invoice = __webpack_require__(/*! invoice.jsx */ 433);
 	
 	var _invoice2 = _interopRequireDefault(_invoice);
@@ -41644,10 +41682,15 @@
 	            });
 	        };
 	
-	        _this.initInvoices = function () {
-	            var cust = (0, _util.getSelectedCustomer)();
+	        _this.updateInvoices = function () {
+	            var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+	
+	            var cust = (0, _util.getSelectedCustomer)(),
+	                sort = cust.invoice.sort ? cust.invoice.sort : 'invdt',
+	                desc = cust.invoice.desc;
+	            (0, _util.getSelCustInvoices)(page, sort, desc);
 	            //Assemble invoice rows
-	            var invoices = [],
+	            var invoices = [_react2.default.createElement(_paging_nav2.default, { refresh: _this.updateInvoices, page: cust.invoice })],
 	                header = _react2.default.createElement(
 	                'tr',
 	                { key: 'invoices_th' },
@@ -41658,16 +41701,16 @@
 	                ),
 	                _react2.default.createElement(
 	                    'th',
-	                    null,
+	                    { id: 'invdt', 'data-sort': 'desc', onClick: _this.sort },
 	                    'Invoice Date'
 	                ),
 	                _react2.default.createElement(
 	                    'th',
-	                    null,
+	                    { id: 'amt', 'data-sort': '', onClick: _this.sort },
 	                    'Invoice Amount'
 	                )
 	            );
-	            for (var i = 0; i < cust.invoice.length; i++) {
+	            for (var i = 0; i < cust.invoice.data.length; i++) {
 	                //render table row
 	                var style = {
 	                    width: '10px',
@@ -41676,7 +41719,7 @@
 	                };
 	                var tmp = _react2.default.createElement(
 	                    'tr',
-	                    { key: 'inv_id_' + cust.invoice[i].id },
+	                    { key: 'inv_id_' + cust.invoice.data[i].id },
 	                    _react2.default.createElement(
 	                        'td',
 	                        null,
@@ -41684,7 +41727,7 @@
 	                            'span',
 	                            { className: 'cust_icons' },
 	                            _react2.default.createElement(_IconButton2.default, {
-	                                className: cust.invoice[i].id.toString(),
+	                                className: cust.invoice.data[i].id.toString(),
 	                                iconClassName: 'fa fa-trash-o',
 	                                tooltip: 'Delete Invoice',
 	                                onClick: _this.deleteInvoice
@@ -41694,22 +41737,18 @@
 	                    _react2.default.createElement(
 	                        'td',
 	                        null,
-	                        cust.invoice[i].invdt
+	                        cust.invoice.data[i].invdt
 	                    ),
 	                    _react2.default.createElement(
 	                        'td',
 	                        null,
-	                        cust.invoice[i].amt
+	                        cust.invoice.data[i].amt
 	                    )
 	                );
 	                invoices.push(tmp);
 	            }
 	            if (invoices.length > 0) invoices.unshift(header);
 	            _this.setState({ invoices: invoices });
-	        };
-	
-	        _this.updateInvoices = function () {
-	            _this.setState({ invoices: _this.initInvoices() });
 	        };
 	
 	        _this.addToInvoice = function (event, isInputChecked) {
@@ -41794,12 +41833,36 @@
 	            }
 	            if (exists) {
 	                _this.updateTrx();
-	                _this.initInvoices();
+	                _this.updateInvoices();
 	                return true;
 	            } else {
 	                _this.refs.cust_entry.handleOpen(input);
 	                return false;
 	            }
+	        };
+	
+	        _this.sort = function (event) {
+	            var field = event.currentTarget.id,
+	                dir = event.currentTarget.getAttribute('data-sort');
+	            //if asc, set to desc
+	            if (dir == 'asc') {
+	                event.currentTarget.setAttribute('data-sort', 'desc');
+	                dir = 'desc';
+	            } else if (dir == '' || dir == 'desc') {
+	                event.currentTarget.setAttribute('data-sort', 'asc');
+	                dir = 'asc';
+	            }
+	            //update transactions
+	            if (dir == 'asc') dir = false;else if (dir == 'desc') dir = true;
+	            var cust = (0, _util.getSelectedCustomer)();
+	            cust.invoice.sort = field;
+	            cust.invoice.desc = dir;
+	            for (var i = 0; i < cur_user.customer.length; i++) {
+	                if (cur_user.customer[i].id == cust.id) {
+	                    cur_user.customer[i] = cust;
+	                    break;
+	                }
+	            }_this.updateInvoices(1);
 	        };
 	
 	        _this.componentDidMount = function () {
@@ -41848,6 +41911,11 @@
 	     * @param object/string chosen - can be a FocusEvent or MenuItem object, or a string, on blur or select
 	     * @return boolean true if customer exists
 	     * @return boolean false if customer doesn't exist & opens CustomerEntry dialog
+	     */
+	
+	    /**
+	     * will set sort and dir in cur_user global
+	     * @param event onClick of trx table header
 	     */
 	
 	
@@ -48442,6 +48510,141 @@
 	  muiTheme: _react.PropTypes.object.isRequired
 	};
 	exports.default = CardActions;
+
+/***/ },
+/* 446 */,
+/* 447 */,
+/* 448 */,
+/* 449 */,
+/* 450 */,
+/* 451 */,
+/* 452 */,
+/* 453 */,
+/* 454 */,
+/* 455 */,
+/* 456 */,
+/* 457 */,
+/* 458 */,
+/* 459 */,
+/* 460 */,
+/* 461 */,
+/* 462 */,
+/* 463 */,
+/* 464 */,
+/* 465 */,
+/* 466 */,
+/* 467 */,
+/* 468 */,
+/* 469 */,
+/* 470 */,
+/* 471 */,
+/* 472 */,
+/* 473 */,
+/* 474 */,
+/* 475 */,
+/* 476 */,
+/* 477 */,
+/* 478 */
+/*!********************************************!*\
+  !*** ./resources/assets/js/paging_nav.jsx ***!
+  \********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = undefined;
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _IconButton = __webpack_require__(/*! material-ui/IconButton */ 246);
+	
+	var _IconButton2 = _interopRequireDefault(_IconButton);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * A React component for paging navigation that works with Laravel's LenthAwarePaginator
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @prop refresh function - method of parent component that refreshes page
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @prop page object - json output of Laravel's LengthAwarePaginator
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by John on 4/2/2017.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+	
+	var Paging_nav = function (_React$Component) {
+	    _inherits(Paging_nav, _React$Component);
+	
+	    function Paging_nav(props) {
+	        _classCallCheck(this, Paging_nav);
+	
+	        return _possibleConstructorReturn(this, (Paging_nav.__proto__ || Object.getPrototypeOf(Paging_nav)).call(this, props));
+	    }
+	
+	    _createClass(Paging_nav, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+	
+	            return _react2.default.createElement(
+	                'tr',
+	                { key: 'paging_nav' },
+	                _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    this.props.page.prev_page_url != null ? _react2.default.createElement(_IconButton2.default, {
+	                        iconClassName: 'fa fa-fast-backward',
+	                        onClick: function onClick() {
+	                            _this2.props.refresh(1);
+	                        }
+	                    }) : ''
+	                ),
+	                _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    this.props.page.prev_page_url != null ? _react2.default.createElement(_IconButton2.default, {
+	                        iconClassName: 'fa fa-backward',
+	                        onClick: function onClick() {
+	                            _this2.props.refresh(_this2.props.page.current_page - 1);
+	                        }
+	                    }) : ''
+	                ),
+	                _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    this.props.page.next_page_url != null ? _react2.default.createElement(_IconButton2.default, {
+	                        iconClassName: 'fa fa-forward',
+	                        onClick: function onClick() {
+	                            _this2.props.refresh(_this2.props.page.current_page + 1);
+	                        }
+	                    }) : ''
+	                ),
+	                _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    this.props.page.next_page_url != null ? _react2.default.createElement(_IconButton2.default, {
+	                        iconClassName: 'fa fa-fast-forward',
+	                        onClick: function onClick() {
+	                            _this2.props.refresh(_this2.props.page.last_page);
+	                        }
+	                    }) : ''
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return Paging_nav;
+	}(_react2.default.Component);
+	
+	exports.default = Paging_nav;
 
 /***/ }
 /******/ ]);

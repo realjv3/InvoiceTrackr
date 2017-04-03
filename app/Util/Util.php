@@ -3,6 +3,7 @@
 namespace App\Util;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CustTrxController;
+use App\Http\Controllers\InvoiceController;
 
 class Util
 {
@@ -25,9 +26,12 @@ class Util
             array_splice($user, 2, 4); //don't need the password and timestamp fields
 
             $custCntlr = new CustTrxController;
+            $invoiceCntlr = new InvoiceController();
             for($i = 0; $i < count($user['customer']); $i++) {
                 $custtrx = $custCntlr->read($user['customer'][$i]['id']);
                 $user['customer'][$i]['custtrx'] = $custtrx;
+                $invoices = $invoiceCntlr->read($user['customer'][$i]['id']);
+                $user['customer'][$i]['invoice'] = $invoices;
             }
             return json_encode($user);
         } else

@@ -27,6 +27,7 @@ import List from 'material-ui/List'
 import CustomerEntry from 'customer_entry.jsx';
 
 import {getSelCustTrxs, getSelectedCustomer, getSelectedBillable, getTrx, getBillable} from 'util.jsx';
+import Paging_nav from 'paging_nav.jsx';
 
 class BillableEntry extends React.Component
 {
@@ -762,38 +763,7 @@ class Trx extends React.Component
             desc = cust.custtrx.desc;
         getSelCustTrxs(page, sort, desc);
         //Assemble trx rows
-        let trx = [
-            <tr key="trx_nav">
-                <td>
-                    {(cust.custtrx.prev_page_url != null) ?
-                        <IconButton
-                            iconClassName="fa fa-fast-backward"
-                            onClick={() => {this.updateTrx(1)}}
-                        /> : '' }
-                </td>
-                <td>
-                    {(cust.custtrx.prev_page_url != null) ?
-                        <IconButton
-                            iconClassName="fa fa-backward"
-                            onClick={() => {this.updateTrx(cust.custtrx.current_page - 1)}}
-                        /> : '' }
-                </td>
-                <td>
-                    {(cust.custtrx.next_page_url != null) ?
-                        <IconButton
-                            iconClassName="fa fa-forward"
-                            onClick={() => {this.updateTrx(cust.custtrx.current_page + 1)}}
-                        /> : ''}
-                </td>
-                <td>
-                    {(cust.custtrx.next_page_url != null) ?
-                        <IconButton
-                            iconClassName="fa fa-fast-forward"
-                            onClick={() => {this.updateTrx(cust.custtrx.last_page)}}
-                        /> : ''}
-                </td>
-            </tr>
-        ];
+        let trx = [ <Paging_nav refresh={this.updateTrx} page={cust.custtrx}/> ];
         trx.push(
             <tr key="trx_th">
                 <th>Edit / Delete</th>
@@ -844,6 +814,7 @@ class Trx extends React.Component
         }
         this.setState({trx: trx});
     }
+
     /**
      * will set sort and dir in cur_user global
      * @param event onClick of trx table header
@@ -875,6 +846,7 @@ class Trx extends React.Component
             }
         this.updateTrx(1);
     }
+
     // AutoComplete components aren't emitting onBlur (see mui issue), therefore setting listener after render, old school
     // https://github.com/callemall/material-ui/issues/2294 says onBlur is fixed, but it's not
     componentDidMount = () => {

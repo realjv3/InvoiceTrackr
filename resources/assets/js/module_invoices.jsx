@@ -15,7 +15,8 @@ import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 
 import CustomerEntry from 'customer_entry.jsx';
-import {getSelCustTrxs, getSelectedCustomer, getBillable, getTrx} from 'util.jsx';
+import {getSelCustTrxs, getSelectedCustomer, getBillable, getTrx, getSelCustInvoices} from 'util.jsx';
+import Paging_nav from 'paging_nav.jsx';
 import Invoice from 'invoice.jsx';
 
 class InvoiceModule extends React.Component{
@@ -125,18 +126,21 @@ class InvoiceModule extends React.Component{
             total: 0
         });
     }
-    initInvoices = () => {
-        let cust = getSelectedCustomer();
+    updateInvoices = (page = 1) => {
+        let cust = getSelectedCustomer(),
+            sort = (cust.invoice.sort) ? cust.invoice.sort : 'invdt',
+            desc = cust.invoice.desc;
+        getSelCustInvoices(page, sort, desc);
         //Assemble invoice rows
-        let invoices = [],
+        let invoices = [ <Paging_nav refresh={this.updateInvoices} page={cust.invoice} /> ],
             header = (
                 <tr key={'invoices_th'}>
                     <th>Delete</th>
-                    <th>Invoice Date</th>
-                    <th>Invoice Amount</th>
+                    <th id="invdt" data-sort="desc" onClick={this.sort}>Invoice Date</th>
+                    <th id="amt" data-sort="" onClick={this.sort}>Invoice Amount</th>
                 </tr>
             );
-        for(let i = 0; i < cust.invoice.length; i++) {
+        for(let i = 0; i < cust.invoice.data.length; i++) {
             //render table row
             let style = {
                 width: '10px',
@@ -144,28 +148,25 @@ class InvoiceModule extends React.Component{
                 margin: '2px'
             };
             let tmp =
-                <tr key={'inv_id_' + cust.invoice[i].id}>
+                <tr key={'inv_id_' + cust.invoice.data[i].id}>
                     <td>
                         <span className="cust_icons" >
                             <IconButton
-                                className={cust.invoice[i].id.toString()}
+                                className={cust.invoice.data[i].id.toString()}
                                 iconClassName="fa fa-trash-o"
                                 tooltip="Delete Invoice"
                                 onClick={this.deleteInvoice}
                             />
                         </span>
                     </td>
-                    <td>{cust.invoice[i].invdt}</td>
-                    <td>{cust.invoice[i].amt}</td>
+                    <td>{cust.invoice.data[i].invdt}</td>
+                    <td>{cust.invoice.data[i].amt}</td>
                 </tr>;
             invoices.push(tmp);
         }
         if(invoices.length > 0)
             invoices.unshift(header);
         this.setState({invoices: invoices});
-    }
-    updateInvoices = () => {
-        this.setState({invoices: this.initInvoices()});
     }
     addToInvoice = (event, isInputChecked) => {
         if(isInputChecked) {
@@ -232,12 +233,43 @@ class InvoiceModule extends React.Component{
         }
         if (exists) {
             this.updateTrx();
-            this.initInvoices();
+            this.updateInvoices();
             return true;
         } else {
             this.refs.cust_entry.handleOpen(input);
             return false;
         }
+    }
+    /**
+     * will set sort and dir in cur_user global
+     * @param event onClick of trx table header
+     */
+    sort = (event) => {
+        let field = event.currentTarget.id,
+            dir = event.currentTarget.getAttribute('data-sort');
+        //if asc, set to desc
+        if(dir == 'asc') {
+            event.currentTarget.setAttribute('data-sort', 'desc');
+            dir = 'desc';
+        }
+        else if(dir == '' || dir == 'desc') {
+            event.currentTarget.setAttribute('data-sort', 'asc');
+            dir = 'asc';
+        }
+        //update transactions
+        if(dir == 'asc')
+            dir = false;
+        else if(dir == 'desc')
+            dir = true;
+        let cust = getSelectedCustomer();
+        cust.invoice.sort = field;
+        cust.invoice.desc = dir;
+        for(let i = 0; i < cur_user.customer.length; i++)
+            if(cur_user.customer[i].id == cust.id) {
+                cur_user.customer[i] = cust;
+                break;
+            }
+        this.updateInvoices(1);
     }
     componentDidMount = () => {
         document.getElementById('trx_entry_customer').addEventListener('blur', this.doesCustExist);

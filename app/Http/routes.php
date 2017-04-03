@@ -69,6 +69,7 @@ Route::group(['middleware' => ['web']], function () {
 
     // Invoices
     Route::get('create_inv', 'InvoiceController@create');
+    Route::get('get_inv/{custid?}', 'InvoiceController@read');
 
     // Util
     Route::get('cur_user', function() {

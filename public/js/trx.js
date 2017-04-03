@@ -24511,6 +24511,40 @@
 	    ajaxReq.send();
 	};
 	
+	/**
+	 * Gets selected customer's paged & sorted invoices and updates cur_user global
+	 * @param page int - page of invoices (page size 5)
+	 * @param sort string - column name to sort by
+	 * @param desc bool - sort dir
+	 */
+	var getSelCustInvoices = exports.getSelCustInvoices = function getSelCustInvoices() {
+	    var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+	    var sort = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+	    var desc = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+	
+	    var cust = getSelectedCustomer(),
+	        ajaxReq = new XMLHttpRequest(),
+	        descr = desc ? '&desc' : '';
+	    ajaxReq.open("GET", 'get_inv/' + cust.id + '?page=' + page + '&sort=' + sort + descr, false);
+	    ajaxReq.setRequestHeader('X-CSRF-Token', _token);
+	    ajaxReq.onload = function () {
+	        if (ajaxReq.responseText && ajaxReq.responseText != "") {
+	            cust.invoice = ajaxReq.responseText;
+	            cust.invoice = JSON.parse(cust.invoice);
+	            cust.invoice.sort = sort;
+	            cust.invoice.desc = desc;
+	            //Update cur_user global with the fetched transactions
+	            for (var i = 0; i < cur_user.customer.length; i++) {
+	                if (cur_user.customer[i].id == cust.id) {
+	                    cur_user.customer[i] = cust;
+	                    break;
+	                }
+	            }
+	        }
+	    };
+	    ajaxReq.send();
+	};
+	
 	var getTrx = exports.getTrx = function getTrx(id) {
 	    for (var i = 0; i < cur_user.customer.length; i++) {
 	        if (cur_user.customer[i].custtrx != null) for (var j = 0; j < cur_user.customer[i].custtrx.data.length; j++) {
@@ -46595,6 +46629,10 @@
 	
 	var _util = __webpack_require__(/*! util.jsx */ 182);
 	
+	var _paging_nav = __webpack_require__(/*! paging_nav.jsx */ 478);
+	
+	var _paging_nav2 = _interopRequireDefault(_paging_nav);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -47301,7 +47339,7 @@
 	                _this7.setState({ disableBillables: false });
 	                _this7.updateBillables();
 	                _this7.updateTrx(page);
-	                return true;
+	                return true;'';
 	            } else {
 	                _this7.refs.cust_entry.handleOpen(input);
 	                return false;
@@ -47397,50 +47435,7 @@
 	                desc = cust.custtrx.desc;
 	            (0, _util.getSelCustTrxs)(page, sort, desc);
 	            //Assemble trx rows
-	            var trx = [_react2.default.createElement(
-	                'tr',
-	                { key: 'trx_nav' },
-	                _react2.default.createElement(
-	                    'td',
-	                    null,
-	                    cust.custtrx.prev_page_url != null ? _react2.default.createElement(_IconButton2.default, {
-	                        iconClassName: 'fa fa-fast-backward',
-	                        onClick: function onClick() {
-	                            _this7.updateTrx(1);
-	                        }
-	                    }) : ''
-	                ),
-	                _react2.default.createElement(
-	                    'td',
-	                    null,
-	                    cust.custtrx.prev_page_url != null ? _react2.default.createElement(_IconButton2.default, {
-	                        iconClassName: 'fa fa-backward',
-	                        onClick: function onClick() {
-	                            _this7.updateTrx(cust.custtrx.current_page - 1);
-	                        }
-	                    }) : ''
-	                ),
-	                _react2.default.createElement(
-	                    'td',
-	                    null,
-	                    cust.custtrx.next_page_url != null ? _react2.default.createElement(_IconButton2.default, {
-	                        iconClassName: 'fa fa-forward',
-	                        onClick: function onClick() {
-	                            _this7.updateTrx(cust.custtrx.current_page + 1);
-	                        }
-	                    }) : ''
-	                ),
-	                _react2.default.createElement(
-	                    'td',
-	                    null,
-	                    cust.custtrx.next_page_url != null ? _react2.default.createElement(_IconButton2.default, {
-	                        iconClassName: 'fa fa-fast-forward',
-	                        onClick: function onClick() {
-	                            _this7.updateTrx(cust.custtrx.last_page);
-	                        }
-	                    }) : ''
-	                )
-	            )];
+	            var trx = [_react2.default.createElement(_paging_nav2.default, { refresh: _this7.updateTrx, page: cust.custtrx })];
 	            trx.push(_react2.default.createElement(
 	                'tr',
 	                { key: 'trx_th' },
@@ -47601,10 +47596,12 @@
 	     * @return boolean false if customer doesn't exist & opens CustomerEntry dialog
 	     */
 	
+	
 	    /**
 	     * will set sort and dir in cur_user global
 	     * @param event onClick of trx table header
 	     */
+	
 	
 	    // AutoComplete components aren't emitting onBlur (see mui issue), therefore setting listener after render, old school
 	    // https://github.com/callemall/material-ui/issues/2294 says onBlur is fixed, but it's not
@@ -58441,6 +58438,109 @@
 	};
 	
 	exports.default = MakeSelectable;
+
+/***/ },
+/* 478 */
+/*!********************************************!*\
+  !*** ./resources/assets/js/paging_nav.jsx ***!
+  \********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = undefined;
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _IconButton = __webpack_require__(/*! material-ui/IconButton */ 246);
+	
+	var _IconButton2 = _interopRequireDefault(_IconButton);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * A React component for paging navigation that works with Laravel's LenthAwarePaginator
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @prop refresh function - method of parent component that refreshes page
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @prop page object - json output of Laravel's LengthAwarePaginator
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by John on 4/2/2017.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+	
+	var Paging_nav = function (_React$Component) {
+	    _inherits(Paging_nav, _React$Component);
+	
+	    function Paging_nav(props) {
+	        _classCallCheck(this, Paging_nav);
+	
+	        return _possibleConstructorReturn(this, (Paging_nav.__proto__ || Object.getPrototypeOf(Paging_nav)).call(this, props));
+	    }
+	
+	    _createClass(Paging_nav, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+	
+	            return _react2.default.createElement(
+	                'tr',
+	                { key: 'paging_nav' },
+	                _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    this.props.page.prev_page_url != null ? _react2.default.createElement(_IconButton2.default, {
+	                        iconClassName: 'fa fa-fast-backward',
+	                        onClick: function onClick() {
+	                            _this2.props.refresh(1);
+	                        }
+	                    }) : ''
+	                ),
+	                _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    this.props.page.prev_page_url != null ? _react2.default.createElement(_IconButton2.default, {
+	                        iconClassName: 'fa fa-backward',
+	                        onClick: function onClick() {
+	                            _this2.props.refresh(_this2.props.page.current_page - 1);
+	                        }
+	                    }) : ''
+	                ),
+	                _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    this.props.page.next_page_url != null ? _react2.default.createElement(_IconButton2.default, {
+	                        iconClassName: 'fa fa-forward',
+	                        onClick: function onClick() {
+	                            _this2.props.refresh(_this2.props.page.current_page + 1);
+	                        }
+	                    }) : ''
+	                ),
+	                _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    this.props.page.next_page_url != null ? _react2.default.createElement(_IconButton2.default, {
+	                        iconClassName: 'fa fa-fast-forward',
+	                        onClick: function onClick() {
+	                            _this2.props.refresh(_this2.props.page.last_page);
+	                        }
+	                    }) : ''
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return Paging_nav;
+	}(_react2.default.Component);
+	
+	exports.default = Paging_nav;
 
 /***/ }
 /******/ ]);

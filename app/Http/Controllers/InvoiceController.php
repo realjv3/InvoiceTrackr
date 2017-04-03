@@ -9,6 +9,7 @@ use App\CustTrx;
 use App\Invoice;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class InvoiceController extends Controller
 {
@@ -40,5 +41,58 @@ class InvoiceController extends Controller
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML($_GET['content']);
         return $pdf->stream();
+    }
+
+    /**
+     * Returns all customer's invoices or only the passed custid's invoices
+     * @param int $custid default null
+     * @return json string $trx
+     */
+    public function read($custid = null) {
+        if(isset($_REQUEST['sort']) && !empty($_REQUEST['sort'])) {
+            $sortby =  filter_var($_REQUEST['sort'], FILTER_SANITIZE_STRING);
+            $desc = (isset($_REQUEST['desc'])) ? 'Desc' : '';
+        } else {
+            $sortby = 'invdt';
+            $desc = 'Desc';
+        }
+
+        if(isset($custid)) {    //grab customer's invoices
+            $user = Auth::user()
+                ->with('customer.invoice')
+                ->get();
+            foreach($user[0]->customer as $cust)
+                if($cust->id == $custid)
+                    $invoices = $cust->invoice;
+            if(isset($invoices))
+                $invoices = call_user_func(array($invoices, 'sortBy'.$desc), $sortby);  //sort
+            else
+                return response('No invoices for this customer', 404);
+        } else {    //grab all customers' invoices
+            $user = Auth::user()
+                ->with('customer.invoices')
+                ->get();
+            $invoices = new Collection();
+            foreach($user[0]->customer as $cust) {
+                $invoices = $cust->invoice;
+                //sort
+                $invoices = call_user_func(array($invoices, 'sortBy'.$desc), $sortby);
+                $invoices->push($invoices);
+            }
+            if($invoices->isEmpty())
+                return response('There are no invoices.', 404);
+        }
+
+        //paginate
+        $total = count($invoices->flatten());
+        $currentPage = (isset($_REQUEST['page']) && preg_match('/\d+/', $_REQUEST['page'])) ? $_REQUEST['page'] : 1;
+        $perPage = 5;
+        $max = ceil($total / $perPage);
+        if($currentPage > $max)
+            $currentPage = $max;
+        $offset = ($currentPage * $perPage) - $perPage;
+        $invoices = new LengthAwarePaginator(array_slice($invoices->toArray(), $offset, $perPage), $total, $perPage, $currentPage);
+
+        return $invoices;
     }
 }
