@@ -69,20 +69,22 @@ class InvoiceModule extends React.Component{
     updateCustomers = () => {
         this.setState({customers: this.initCustomers()});
     }
-    updateTrx = () => {
-        getSelCustTrxs(1);
-        let cust = getSelectedCustomer();
+    updateTrx = (page = 1) => {
+        let cust = getSelectedCustomer(),
+            sort = (cust.custtrx.sort) ? cust.custtrx.sort : 'trxdt',
+            desc = cust.custtrx.desc;
+        getSelCustTrxs(page, sort, desc);
         //Assemble trx rows
-        let trx = [],
+        let trx = [ <Paging_nav key="paging_nav" refresh={this.updateTrx} page={cust.custtrx}/> ],
             header = (
                 <tr key={'trx_th'}>
                     <th>Add to Invoice</th>
-                    <th>Trx Date</th>
-                    <th>Status</th>
-                    <th>Billable</th>
-                    <th>Description</th>
+                    <th className="custtrx" id="trxdt" data-sort="desc" onClick={this.sort}>Trx Date</th>
+                    <th className="custtrx" id="status" data-sort="" onClick={this.sort}>Status</th>
+                    <th className="custtrx" id="item" data-sort="" onClick={this.sort}>Billable</th>
+                    <th className="custtrx" id="descr" data-sort="" onClick={this.sort}>Description</th>
                     <th>Quantity</th>
-                    <th>Amount</th>
+                    <th className="custtrx" id="amt" data-sort="" onClick={this.sort}>Amount</th>
                 </tr>
             );
         for(var j = 0; j < cust.custtrx.data.length; j++) {
@@ -92,6 +94,12 @@ class InvoiceModule extends React.Component{
             //get each transaction's billable's descr and qty
             let billable = getBillable(cust.custtrx.data[j].item);
             let qty = (cust.custtrx.data[j].amt / billable.price).toFixed(2) + ' x $' + billable.price +'/'+billable.unit;
+            //should this trx be selected?
+            let selTrxs = this.state.selectedTrx,
+                selected = false;
+            for(let i = 0; i < selTrxs.length; i++)
+                if(selTrxs[i].key == 'trx_id_'+ cust.custtrx.data[j].id)
+                    selected = true;
             //render table row
             let style = {
                 width: '10px',
@@ -100,7 +108,7 @@ class InvoiceModule extends React.Component{
             };
             let tmp =
                 <tr key={'trx_id_' + cust.custtrx.data[j].id}>
-                    <td><Checkbox id={cust.custtrx.data[j].id} onCheck={this.addToInvoice} style={{marginLeft: '55px'}}  /></td>
+                    <td><Checkbox id={cust.custtrx.data[j].id} onCheck={this.addToInvoice} style={{marginLeft: '55px'}} checked={selected} /></td>
                     <td>{cust.custtrx.data[j].trxdt}</td>
                     <td>{cust.custtrx.data[j].status}</td>
                     <td>{billable.descr}</td>
@@ -114,16 +122,6 @@ class InvoiceModule extends React.Component{
             trx.unshift(header);
         this.setState({
             trx: trx,
-            selectedTrx: [
-                <tr key={'trx_th'}>
-                    <th style={{width: '200px', textAlign: 'center', margin: '7px'}}>Trx Date</th>
-                    <th>Billable</th>
-                    <th>Description</th>
-                    <th>Quantity</th>
-                    <th>Amount</th>
-                </tr>
-            ],
-            total: 0
         });
     }
     updateInvoices = (page = 1) => {
@@ -132,12 +130,12 @@ class InvoiceModule extends React.Component{
             desc = cust.invoice.desc;
         getSelCustInvoices(page, sort, desc);
         //Assemble invoice rows
-        let invoices = [ <Paging_nav refresh={this.updateInvoices} page={cust.invoice} /> ],
+        let invoices = [ <Paging_nav key="paging_nav" refresh={this.updateInvoices} page={cust.invoice} /> ],
             header = (
                 <tr key={'invoices_th'}>
                     <th>Delete</th>
-                    <th id="invdt" data-sort="desc" onClick={this.sort}>Invoice Date</th>
-                    <th id="amt" data-sort="" onClick={this.sort}>Invoice Amount</th>
+                    <th className="invoice" id="invdt" data-sort="desc" onClick={this.sort}>Invoice Date</th>
+                    <th className="invoice" id="amt" data-sort="" onClick={this.sort}>Invoice Amount</th>
                 </tr>
             );
         for(let i = 0; i < cust.invoice.data.length; i++) {
@@ -169,11 +167,19 @@ class InvoiceModule extends React.Component{
         this.setState({invoices: invoices});
     }
     addToInvoice = (event, isInputChecked) => {
+        let trx = getTrx(event.currentTarget.id),
+            trxs = this.state.selectedTrx,
+            total = parseFloat(this.state.total).toFixed(2);
+        //first, unselect & reduce total if already selected
+        for(let i = 0; i < trxs.length; i++)
+            if(trxs[i].key == 'trx_id_'+ event.currentTarget.id) {
+                trxs.splice(i, 1);
+                if(total > 0)
+                    total = total - parseFloat(trx.amt).toFixed(2);
+            }
+        //then select & increase total if we're selecting
         if(isInputChecked) {
-            let trx = getTrx(event.currentTarget.id),
-                total = (parseFloat(this.state.total) + parseFloat(trx.amt)).toFixed(2),
-                trxs = this.state.selectedTrx,
-                billable = getBillable(trx.item),
+            let billable = getBillable(trx.item),
                 qty = (trx.amt / billable.price).toFixed(2) + ' x $' + billable.price +'/'+billable.unit,
                 tmp =
                 <tr key={'trx_id_' + event.currentTarget.id}>
@@ -184,18 +190,9 @@ class InvoiceModule extends React.Component{
                     <td>$ {trx.amt}</td>
                 </tr>;
             trxs.push(tmp);
-            this.setState({selectedTrx: trxs, total: total});
-        } else {
-            let trx = getTrx(event.currentTarget.id),
-                trxs = this.state.selectedTrx,
-                total = parseFloat(this.state.total).toFixed(2);
-            if(total > 0)
-                total = total - parseFloat(trx.amt).toFixed(2);
-            for(let i = 0; i < trxs.length; i++)
-                if(trxs[i].key == 'trx_id_'+ event.currentTarget.id)
-                    trxs.splice(i, 1);
-            this.setState({selectedTrx: trxs, total: total});
+            total = (parseFloat(total) + parseFloat(trx.amt)).toFixed(2)
         }
+        this.setState({selectedTrx: trxs, total: total});
     }
     deleteInvoice = () => {
         console.log('hi');
@@ -245,8 +242,9 @@ class InvoiceModule extends React.Component{
      * @param event onClick of trx table header
      */
     sort = (event) => {
-        let field = event.currentTarget.id,
-            dir = event.currentTarget.getAttribute('data-sort');
+        let subject = event.currentTarget.className, //what are we sorting
+            field = event.currentTarget.id,         //sort field
+            dir = event.currentTarget.getAttribute('data-sort');    //sort direction
         //if asc, set to desc
         if(dir == 'asc') {
             event.currentTarget.setAttribute('data-sort', 'desc');
@@ -262,14 +260,25 @@ class InvoiceModule extends React.Component{
         else if(dir == 'desc')
             dir = true;
         let cust = getSelectedCustomer();
-        cust.invoice.sort = field;
-        cust.invoice.desc = dir;
-        for(let i = 0; i < cur_user.customer.length; i++)
-            if(cur_user.customer[i].id == cust.id) {
-                cur_user.customer[i] = cust;
-                break;
-            }
-        this.updateInvoices(1);
+        if (subject == 'invoice') {
+            cust.invoice.sort = field;
+            cust.invoice.desc = dir;
+            for(let i = 0; i < cur_user.customer.length; i++)
+                if(cur_user.customer[i].id == cust.id) {
+                    cur_user.customer[i] = cust;
+                    break;
+                }
+            this.updateInvoices(1);
+        } else if (subject == 'custtrx') {
+            cust.custtrx.sort = field;
+            cust.custtrx.desc = dir;
+            for(let i = 0; i < cur_user.customer.length; i++)
+                if(cur_user.customer[i].id == cust.id) {
+                    cur_user.customer[i] = cust;
+                    break;
+                }
+            this.updateTrx(1);
+        }
     }
     componentDidMount = () => {
         document.getElementById('trx_entry_customer').addEventListener('blur', this.doesCustExist);

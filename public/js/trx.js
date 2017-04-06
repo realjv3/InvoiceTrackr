@@ -71,23 +71,23 @@
 	
 	var _Paper2 = _interopRequireDefault(_Paper);
 	
-	var _Card = __webpack_require__(/*! material-ui/Card/Card.js */ 435);
+	var _Card = __webpack_require__(/*! material-ui/Card/Card.js */ 436);
 	
 	var _Card2 = _interopRequireDefault(_Card);
 	
-	var _CardHeader = __webpack_require__(/*! material-ui/Card/CardHeader.js */ 439);
+	var _CardHeader = __webpack_require__(/*! material-ui/Card/CardHeader.js */ 440);
 	
 	var _CardHeader2 = _interopRequireDefault(_CardHeader);
 	
-	var _CardText = __webpack_require__(/*! material-ui/Card/CardText.js */ 444);
+	var _CardText = __webpack_require__(/*! material-ui/Card/CardText.js */ 445);
 	
 	var _CardText2 = _interopRequireDefault(_CardText);
 	
-	var _CardActions = __webpack_require__(/*! material-ui/Card/CardActions.js */ 445);
+	var _CardActions = __webpack_require__(/*! material-ui/Card/CardActions.js */ 446);
 	
 	var _CardActions2 = _interopRequireDefault(_CardActions);
 	
-	var _module_trx = __webpack_require__(/*! module_trx.jsx */ 455);
+	var _module_trx = __webpack_require__(/*! module_trx.jsx */ 456);
 	
 	var _module_trx2 = _interopRequireDefault(_module_trx);
 	
@@ -45539,9 +45539,112 @@
 	exports.default = BeforeAfterWrapper;
 
 /***/ },
-/* 433 */,
+/* 433 */
+/*!********************************************!*\
+  !*** ./resources/assets/js/paging_nav.jsx ***!
+  \********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = undefined;
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _IconButton = __webpack_require__(/*! material-ui/IconButton */ 246);
+	
+	var _IconButton2 = _interopRequireDefault(_IconButton);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * A React component for paging navigation that works with Laravel's LenthAwarePaginator
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @prop refresh function - method of parent component that refreshes page
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @prop page object - json output of Laravel's LengthAwarePaginator
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by John on 4/2/2017.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+	
+	var Paging_nav = function (_React$Component) {
+	    _inherits(Paging_nav, _React$Component);
+	
+	    function Paging_nav(props) {
+	        _classCallCheck(this, Paging_nav);
+	
+	        return _possibleConstructorReturn(this, (Paging_nav.__proto__ || Object.getPrototypeOf(Paging_nav)).call(this, props));
+	    }
+	
+	    _createClass(Paging_nav, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+	
+	            return _react2.default.createElement(
+	                'tr',
+	                null,
+	                _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    this.props.page.prev_page_url != null ? _react2.default.createElement(_IconButton2.default, {
+	                        iconClassName: 'fa fa-fast-backward',
+	                        onClick: function onClick() {
+	                            _this2.props.refresh(1);
+	                        }
+	                    }) : ''
+	                ),
+	                _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    this.props.page.prev_page_url != null ? _react2.default.createElement(_IconButton2.default, {
+	                        iconClassName: 'fa fa-backward',
+	                        onClick: function onClick() {
+	                            _this2.props.refresh(_this2.props.page.current_page - 1);
+	                        }
+	                    }) : ''
+	                ),
+	                _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    this.props.page.next_page_url != null ? _react2.default.createElement(_IconButton2.default, {
+	                        iconClassName: 'fa fa-forward',
+	                        onClick: function onClick() {
+	                            _this2.props.refresh(_this2.props.page.current_page + 1);
+	                        }
+	                    }) : ''
+	                ),
+	                _react2.default.createElement(
+	                    'td',
+	                    null,
+	                    this.props.page.next_page_url != null ? _react2.default.createElement(_IconButton2.default, {
+	                        iconClassName: 'fa fa-fast-forward',
+	                        onClick: function onClick() {
+	                            _this2.props.refresh(_this2.props.page.last_page);
+	                        }
+	                    }) : ''
+	                )
+	            );
+	        }
+	    }]);
+	
+	    return Paging_nav;
+	}(_react2.default.Component);
+	
+	exports.default = Paging_nav;
+
+/***/ },
 /* 434 */,
-/* 435 */
+/* 435 */,
+/* 436 */
 /*!************************************!*\
   !*** ./~/material-ui/Card/Card.js ***!
   \************************************/
@@ -45569,7 +45672,7 @@
 	
 	var _Paper2 = _interopRequireDefault(_Paper);
 	
-	var _CardExpandable = __webpack_require__(/*! ./CardExpandable */ 436);
+	var _CardExpandable = __webpack_require__(/*! ./CardExpandable */ 437);
 	
 	var _CardExpandable2 = _interopRequireDefault(_CardExpandable);
 	
@@ -45743,7 +45846,7 @@
 	exports.default = Card;
 
 /***/ },
-/* 436 */
+/* 437 */
 /*!**********************************************!*\
   !*** ./~/material-ui/Card/CardExpandable.js ***!
   \**********************************************/
@@ -45765,11 +45868,11 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _keyboardArrowUp = __webpack_require__(/*! ../svg-icons/hardware/keyboard-arrow-up */ 437);
+	var _keyboardArrowUp = __webpack_require__(/*! ../svg-icons/hardware/keyboard-arrow-up */ 438);
 	
 	var _keyboardArrowUp2 = _interopRequireDefault(_keyboardArrowUp);
 	
-	var _keyboardArrowDown = __webpack_require__(/*! ../svg-icons/hardware/keyboard-arrow-down */ 438);
+	var _keyboardArrowDown = __webpack_require__(/*! ../svg-icons/hardware/keyboard-arrow-down */ 439);
 	
 	var _keyboardArrowDown2 = _interopRequireDefault(_keyboardArrowDown);
 	
@@ -45836,7 +45939,7 @@
 	exports.default = CardExpandable;
 
 /***/ },
-/* 437 */
+/* 438 */
 /*!***************************************************************!*\
   !*** ./~/material-ui/svg-icons/hardware/keyboard-arrow-up.js ***!
   \***************************************************************/
@@ -45876,7 +45979,7 @@
 	exports.default = HardwareKeyboardArrowUp;
 
 /***/ },
-/* 438 */
+/* 439 */
 /*!*****************************************************************!*\
   !*** ./~/material-ui/svg-icons/hardware/keyboard-arrow-down.js ***!
   \*****************************************************************/
@@ -45916,7 +46019,7 @@
 	exports.default = HardwareKeyboardArrowDown;
 
 /***/ },
-/* 439 */
+/* 440 */
 /*!******************************************!*\
   !*** ./~/material-ui/Card/CardHeader.js ***!
   \******************************************/
@@ -45940,7 +46043,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _Avatar = __webpack_require__(/*! ../Avatar */ 440);
+	var _Avatar = __webpack_require__(/*! ../Avatar */ 441);
 	
 	var _Avatar2 = _interopRequireDefault(_Avatar);
 	
@@ -46121,7 +46224,7 @@
 	exports.default = CardHeader;
 
 /***/ },
-/* 440 */
+/* 441 */
 /*!***************************************!*\
   !*** ./~/material-ui/Avatar/index.js ***!
   \***************************************/
@@ -46134,7 +46237,7 @@
 	});
 	exports.default = undefined;
 	
-	var _Avatar = __webpack_require__(/*! ./Avatar */ 441);
+	var _Avatar = __webpack_require__(/*! ./Avatar */ 442);
 	
 	var _Avatar2 = _interopRequireDefault(_Avatar);
 	
@@ -46143,7 +46246,7 @@
 	exports.default = _Avatar2.default;
 
 /***/ },
-/* 441 */
+/* 442 */
 /*!****************************************!*\
   !*** ./~/material-ui/Avatar/Avatar.js ***!
   \****************************************/
@@ -46305,9 +46408,9 @@
 	exports.default = Avatar;
 
 /***/ },
-/* 442 */,
 /* 443 */,
-/* 444 */
+/* 444 */,
+/* 445 */
 /*!****************************************!*\
   !*** ./~/material-ui/Card/CardText.js ***!
   \****************************************/
@@ -46420,7 +46523,7 @@
 	exports.default = CardText;
 
 /***/ },
-/* 445 */
+/* 446 */
 /*!*******************************************!*\
   !*** ./~/material-ui/Card/CardActions.js ***!
   \*******************************************/
@@ -46537,7 +46640,6 @@
 	exports.default = CardActions;
 
 /***/ },
-/* 446 */,
 /* 447 */,
 /* 448 */,
 /* 449 */,
@@ -46546,7 +46648,8 @@
 /* 452 */,
 /* 453 */,
 /* 454 */,
-/* 455 */
+/* 455 */,
+/* 456 */
 /*!********************************************!*\
   !*** ./resources/assets/js/module_trx.jsx ***!
   \********************************************/
@@ -46571,7 +46674,7 @@
 	
 	var _es6Promise2 = _interopRequireDefault(_es6Promise);
 	
-	var _timerStopwatch = __webpack_require__(/*! timer-stopwatch */ 456);
+	var _timerStopwatch = __webpack_require__(/*! timer-stopwatch */ 457);
 	
 	var _timerStopwatch2 = _interopRequireDefault(_timerStopwatch);
 	
@@ -46599,7 +46702,7 @@
 	
 	var _AutoComplete2 = _interopRequireDefault(_AutoComplete);
 	
-	var _DatePicker = __webpack_require__(/*! material-ui/DatePicker */ 460);
+	var _DatePicker = __webpack_require__(/*! material-ui/DatePicker */ 461);
 	
 	var _DatePicker2 = _interopRequireDefault(_DatePicker);
 	
@@ -46607,19 +46710,19 @@
 	
 	var _Snackbar2 = _interopRequireDefault(_Snackbar);
 	
-	var _Card = __webpack_require__(/*! material-ui/Card/Card.js */ 435);
+	var _Card = __webpack_require__(/*! material-ui/Card/Card.js */ 436);
 	
 	var _Card2 = _interopRequireDefault(_Card);
 	
-	var _CardHeader = __webpack_require__(/*! material-ui/Card/CardHeader.js */ 439);
+	var _CardHeader = __webpack_require__(/*! material-ui/Card/CardHeader.js */ 440);
 	
 	var _CardHeader2 = _interopRequireDefault(_CardHeader);
 	
-	var _CardText = __webpack_require__(/*! material-ui/Card/CardText.js */ 444);
+	var _CardText = __webpack_require__(/*! material-ui/Card/CardText.js */ 445);
 	
 	var _CardText2 = _interopRequireDefault(_CardText);
 	
-	var _List = __webpack_require__(/*! material-ui/List */ 476);
+	var _List = __webpack_require__(/*! material-ui/List */ 477);
 	
 	var _List2 = _interopRequireDefault(_List);
 	
@@ -46629,7 +46732,7 @@
 	
 	var _util = __webpack_require__(/*! util.jsx */ 182);
 	
-	var _paging_nav = __webpack_require__(/*! paging_nav.jsx */ 478);
+	var _paging_nav = __webpack_require__(/*! paging_nav.jsx */ 433);
 	
 	var _paging_nav2 = _interopRequireDefault(_paging_nav);
 	
@@ -47435,7 +47538,7 @@
 	                desc = cust.custtrx.desc;
 	            (0, _util.getSelCustTrxs)(page, sort, desc);
 	            //Assemble trx rows
-	            var trx = [_react2.default.createElement(_paging_nav2.default, { refresh: _this7.updateTrx, page: cust.custtrx })];
+	            var trx = [_react2.default.createElement(_paging_nav2.default, { key: 'paging_nav', refresh: _this7.updateTrx, page: cust.custtrx })];
 	            trx.push(_react2.default.createElement(
 	                'tr',
 	                { key: 'trx_th' },
@@ -47724,17 +47827,17 @@
 	exports.default = Trx;
 
 /***/ },
-/* 456 */
+/* 457 */
 /*!************************************!*\
   !*** ./~/timer-stopwatch/index.js ***!
   \************************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	// Export lib/mongule
-	module.exports = __webpack_require__(/*! ./lib/Stopwatch */ 457);
+	module.exports = __webpack_require__(/*! ./lib/Stopwatch */ 458);
 
 /***/ },
-/* 457 */
+/* 458 */
 /*!********************************************!*\
   !*** ./~/timer-stopwatch/lib/Stopwatch.js ***!
   \********************************************/
@@ -47745,8 +47848,8 @@
 	
 	
 	
-	var EventEmitter = __webpack_require__(/*! events */ 458).EventEmitter;
-	var _ = __webpack_require__(/*! lodash */ 459);
+	var EventEmitter = __webpack_require__(/*! events */ 459).EventEmitter;
+	var _ = __webpack_require__(/*! lodash */ 460);
 	
 	
 	
@@ -47978,7 +48081,7 @@
 
 
 /***/ },
-/* 458 */
+/* 459 */
 /*!********************************************************!*\
   !*** (webpack)/~/node-libs-browser/~/events/events.js ***!
   \********************************************************/
@@ -48289,7 +48392,7 @@
 
 
 /***/ },
-/* 459 */
+/* 460 */
 /*!**********************************************************!*\
   !*** ./~/timer-stopwatch/~/lodash/dist/lodash.compat.js ***!
   \**********************************************************/
@@ -55457,7 +55560,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./../../../../webpack/buildin/module.js */ 319)(module), (function() { return this; }())))
 
 /***/ },
-/* 460 */
+/* 461 */
 /*!*******************************************!*\
   !*** ./~/material-ui/DatePicker/index.js ***!
   \*******************************************/
@@ -55470,7 +55573,7 @@
 	});
 	exports.default = undefined;
 	
-	var _DatePicker = __webpack_require__(/*! ./DatePicker */ 461);
+	var _DatePicker = __webpack_require__(/*! ./DatePicker */ 462);
 	
 	var _DatePicker2 = _interopRequireDefault(_DatePicker);
 	
@@ -55479,7 +55582,7 @@
 	exports.default = _DatePicker2.default;
 
 /***/ },
-/* 461 */
+/* 462 */
 /*!************************************************!*\
   !*** ./~/material-ui/DatePicker/DatePicker.js ***!
   \************************************************/
@@ -55503,9 +55606,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 462);
+	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 463);
 	
-	var _DatePickerDialog = __webpack_require__(/*! ./DatePickerDialog */ 463);
+	var _DatePickerDialog = __webpack_require__(/*! ./DatePickerDialog */ 464);
 	
 	var _DatePickerDialog2 = _interopRequireDefault(_DatePickerDialog);
 	
@@ -55872,7 +55975,7 @@
 	exports.default = DatePicker;
 
 /***/ },
-/* 462 */
+/* 463 */
 /*!***********************************************!*\
   !*** ./~/material-ui/DatePicker/dateUtils.js ***!
   \***********************************************/
@@ -56057,7 +56160,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! (webpack)/~/node-libs-browser/~/process/browser.js */ 3)))
 
 /***/ },
-/* 463 */
+/* 464 */
 /*!******************************************************!*\
   !*** ./~/material-ui/DatePicker/DatePickerDialog.js ***!
   \******************************************************/
@@ -56089,7 +56192,7 @@
 	
 	var _keycode2 = _interopRequireDefault(_keycode);
 	
-	var _Calendar = __webpack_require__(/*! ./Calendar */ 464);
+	var _Calendar = __webpack_require__(/*! ./Calendar */ 465);
 	
 	var _Calendar2 = _interopRequireDefault(_Calendar);
 	
@@ -56105,7 +56208,7 @@
 	
 	var _PopoverAnimationVertical2 = _interopRequireDefault(_PopoverAnimationVertical);
 	
-	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 462);
+	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 463);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -56301,7 +56404,7 @@
 	exports.default = DatePickerDialog;
 
 /***/ },
-/* 464 */
+/* 465 */
 /*!**********************************************!*\
   !*** ./~/material-ui/DatePicker/Calendar.js ***!
   \**********************************************/
@@ -56331,31 +56434,31 @@
 	
 	var _transitions2 = _interopRequireDefault(_transitions);
 	
-	var _CalendarActionButtons = __webpack_require__(/*! ./CalendarActionButtons */ 465);
+	var _CalendarActionButtons = __webpack_require__(/*! ./CalendarActionButtons */ 466);
 	
 	var _CalendarActionButtons2 = _interopRequireDefault(_CalendarActionButtons);
 	
-	var _CalendarMonth = __webpack_require__(/*! ./CalendarMonth */ 466);
+	var _CalendarMonth = __webpack_require__(/*! ./CalendarMonth */ 467);
 	
 	var _CalendarMonth2 = _interopRequireDefault(_CalendarMonth);
 	
-	var _CalendarYear = __webpack_require__(/*! ./CalendarYear */ 468);
+	var _CalendarYear = __webpack_require__(/*! ./CalendarYear */ 469);
 	
 	var _CalendarYear2 = _interopRequireDefault(_CalendarYear);
 	
-	var _CalendarToolbar = __webpack_require__(/*! ./CalendarToolbar */ 470);
+	var _CalendarToolbar = __webpack_require__(/*! ./CalendarToolbar */ 471);
 	
 	var _CalendarToolbar2 = _interopRequireDefault(_CalendarToolbar);
 	
-	var _DateDisplay = __webpack_require__(/*! ./DateDisplay */ 475);
+	var _DateDisplay = __webpack_require__(/*! ./DateDisplay */ 476);
 	
 	var _DateDisplay2 = _interopRequireDefault(_DateDisplay);
 	
-	var _SlideIn = __webpack_require__(/*! ../internal/SlideIn */ 473);
+	var _SlideIn = __webpack_require__(/*! ../internal/SlideIn */ 474);
 	
 	var _SlideIn2 = _interopRequireDefault(_SlideIn);
 	
-	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 462);
+	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 463);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -56741,7 +56844,7 @@
 	exports.default = Calendar;
 
 /***/ },
-/* 465 */
+/* 466 */
 /*!***********************************************************!*\
   !*** ./~/material-ui/DatePicker/CalendarActionButtons.js ***!
   \***********************************************************/
@@ -56841,7 +56944,7 @@
 	exports.default = CalendarActionButton;
 
 /***/ },
-/* 466 */
+/* 467 */
 /*!***************************************************!*\
   !*** ./~/material-ui/DatePicker/CalendarMonth.js ***!
   \***************************************************/
@@ -56859,9 +56962,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 462);
+	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 463);
 	
-	var _DayButton = __webpack_require__(/*! ./DayButton */ 467);
+	var _DayButton = __webpack_require__(/*! ./DayButton */ 468);
 	
 	var _DayButton2 = _interopRequireDefault(_DayButton);
 	
@@ -56990,7 +57093,7 @@
 	exports.default = CalendarMonth;
 
 /***/ },
-/* 467 */
+/* 468 */
 /*!***********************************************!*\
   !*** ./~/material-ui/DatePicker/DayButton.js ***!
   \***********************************************/
@@ -57014,7 +57117,7 @@
 	
 	var _transitions2 = _interopRequireDefault(_transitions);
 	
-	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 462);
+	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 463);
 	
 	var _EnhancedButton = __webpack_require__(/*! ../internal/EnhancedButton */ 191);
 	
@@ -57167,7 +57270,7 @@
 	exports.default = DayButton;
 
 /***/ },
-/* 468 */
+/* 469 */
 /*!**************************************************!*\
   !*** ./~/material-ui/DatePicker/CalendarYear.js ***!
   \**************************************************/
@@ -57191,11 +57294,11 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _YearButton = __webpack_require__(/*! ./YearButton */ 469);
+	var _YearButton = __webpack_require__(/*! ./YearButton */ 470);
 	
 	var _YearButton2 = _interopRequireDefault(_YearButton);
 	
-	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 462);
+	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 463);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -57329,7 +57432,7 @@
 	exports.default = CalendarYear;
 
 /***/ },
-/* 469 */
+/* 470 */
 /*!************************************************!*\
   !*** ./~/material-ui/DatePicker/YearButton.js ***!
   \************************************************/
@@ -57474,7 +57577,7 @@
 	exports.default = YearButton;
 
 /***/ },
-/* 470 */
+/* 471 */
 /*!*****************************************************!*\
   !*** ./~/material-ui/DatePicker/CalendarToolbar.js ***!
   \*****************************************************/
@@ -57496,15 +57599,15 @@
 	
 	var _IconButton2 = _interopRequireDefault(_IconButton);
 	
-	var _chevronLeft = __webpack_require__(/*! ../svg-icons/navigation/chevron-left */ 471);
+	var _chevronLeft = __webpack_require__(/*! ../svg-icons/navigation/chevron-left */ 472);
 	
 	var _chevronLeft2 = _interopRequireDefault(_chevronLeft);
 	
-	var _chevronRight = __webpack_require__(/*! ../svg-icons/navigation/chevron-right */ 472);
+	var _chevronRight = __webpack_require__(/*! ../svg-icons/navigation/chevron-right */ 473);
 	
 	var _chevronRight2 = _interopRequireDefault(_chevronRight);
 	
-	var _SlideIn = __webpack_require__(/*! ../internal/SlideIn */ 473);
+	var _SlideIn = __webpack_require__(/*! ../internal/SlideIn */ 474);
 	
 	var _SlideIn2 = _interopRequireDefault(_SlideIn);
 	
@@ -57641,7 +57744,7 @@
 	exports.default = CalendarToolbar;
 
 /***/ },
-/* 471 */
+/* 472 */
 /*!************************************************************!*\
   !*** ./~/material-ui/svg-icons/navigation/chevron-left.js ***!
   \************************************************************/
@@ -57681,7 +57784,7 @@
 	exports.default = NavigationChevronLeft;
 
 /***/ },
-/* 472 */
+/* 473 */
 /*!*************************************************************!*\
   !*** ./~/material-ui/svg-icons/navigation/chevron-right.js ***!
   \*************************************************************/
@@ -57721,7 +57824,7 @@
 	exports.default = NavigationChevronRight;
 
 /***/ },
-/* 473 */
+/* 474 */
 /*!*******************************************!*\
   !*** ./~/material-ui/internal/SlideIn.js ***!
   \*******************************************/
@@ -57749,7 +57852,7 @@
 	
 	var _reactAddonsTransitionGroup2 = _interopRequireDefault(_reactAddonsTransitionGroup);
 	
-	var _SlideInChild = __webpack_require__(/*! ./SlideInChild */ 474);
+	var _SlideInChild = __webpack_require__(/*! ./SlideInChild */ 475);
 	
 	var _SlideInChild2 = _interopRequireDefault(_SlideInChild);
 	
@@ -57850,7 +57953,7 @@
 	exports.default = SlideIn;
 
 /***/ },
-/* 474 */
+/* 475 */
 /*!************************************************!*\
   !*** ./~/material-ui/internal/SlideInChild.js ***!
   \************************************************/
@@ -57994,7 +58097,7 @@
 	exports.default = SlideInChild;
 
 /***/ },
-/* 475 */
+/* 476 */
 /*!*************************************************!*\
   !*** ./~/material-ui/DatePicker/DateDisplay.js ***!
   \*************************************************/
@@ -58018,7 +58121,7 @@
 	
 	var _transitions2 = _interopRequireDefault(_transitions);
 	
-	var _SlideIn = __webpack_require__(/*! ../internal/SlideIn */ 473);
+	var _SlideIn = __webpack_require__(/*! ../internal/SlideIn */ 474);
 	
 	var _SlideIn2 = _interopRequireDefault(_SlideIn);
 	
@@ -58232,7 +58335,7 @@
 	exports.default = DateDisplay;
 
 /***/ },
-/* 476 */
+/* 477 */
 /*!*************************************!*\
   !*** ./~/material-ui/List/index.js ***!
   \*************************************/
@@ -58253,7 +58356,7 @@
 	
 	var _ListItem3 = _interopRequireDefault(_ListItem2);
 	
-	var _MakeSelectable2 = __webpack_require__(/*! ./MakeSelectable */ 477);
+	var _MakeSelectable2 = __webpack_require__(/*! ./MakeSelectable */ 478);
 	
 	var _MakeSelectable3 = _interopRequireDefault(_MakeSelectable2);
 	
@@ -58265,7 +58368,7 @@
 	exports.default = _List3.default;
 
 /***/ },
-/* 477 */
+/* 478 */
 /*!**********************************************!*\
   !*** ./~/material-ui/List/MakeSelectable.js ***!
   \**********************************************/
@@ -58438,109 +58541,6 @@
 	};
 	
 	exports.default = MakeSelectable;
-
-/***/ },
-/* 478 */
-/*!********************************************!*\
-  !*** ./resources/assets/js/paging_nav.jsx ***!
-  \********************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = undefined;
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _IconButton = __webpack_require__(/*! material-ui/IconButton */ 246);
-	
-	var _IconButton2 = _interopRequireDefault(_IconButton);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * A React component for paging navigation that works with Laravel's LenthAwarePaginator
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @prop refresh function - method of parent component that refreshes page
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @prop page object - json output of Laravel's LengthAwarePaginator
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by John on 4/2/2017.
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
-	
-	var Paging_nav = function (_React$Component) {
-	    _inherits(Paging_nav, _React$Component);
-	
-	    function Paging_nav(props) {
-	        _classCallCheck(this, Paging_nav);
-	
-	        return _possibleConstructorReturn(this, (Paging_nav.__proto__ || Object.getPrototypeOf(Paging_nav)).call(this, props));
-	    }
-	
-	    _createClass(Paging_nav, [{
-	        key: 'render',
-	        value: function render() {
-	            var _this2 = this;
-	
-	            return _react2.default.createElement(
-	                'tr',
-	                { key: 'paging_nav' },
-	                _react2.default.createElement(
-	                    'td',
-	                    null,
-	                    this.props.page.prev_page_url != null ? _react2.default.createElement(_IconButton2.default, {
-	                        iconClassName: 'fa fa-fast-backward',
-	                        onClick: function onClick() {
-	                            _this2.props.refresh(1);
-	                        }
-	                    }) : ''
-	                ),
-	                _react2.default.createElement(
-	                    'td',
-	                    null,
-	                    this.props.page.prev_page_url != null ? _react2.default.createElement(_IconButton2.default, {
-	                        iconClassName: 'fa fa-backward',
-	                        onClick: function onClick() {
-	                            _this2.props.refresh(_this2.props.page.current_page - 1);
-	                        }
-	                    }) : ''
-	                ),
-	                _react2.default.createElement(
-	                    'td',
-	                    null,
-	                    this.props.page.next_page_url != null ? _react2.default.createElement(_IconButton2.default, {
-	                        iconClassName: 'fa fa-forward',
-	                        onClick: function onClick() {
-	                            _this2.props.refresh(_this2.props.page.current_page + 1);
-	                        }
-	                    }) : ''
-	                ),
-	                _react2.default.createElement(
-	                    'td',
-	                    null,
-	                    this.props.page.next_page_url != null ? _react2.default.createElement(_IconButton2.default, {
-	                        iconClassName: 'fa fa-fast-forward',
-	                        onClick: function onClick() {
-	                            _this2.props.refresh(_this2.props.page.last_page);
-	                        }
-	                    }) : ''
-	                )
-	            );
-	        }
-	    }]);
-	
-	    return Paging_nav;
-	}(_react2.default.Component);
-	
-	exports.default = Paging_nav;
 
 /***/ }
 /******/ ]);

@@ -16,7 +16,7 @@ class Paging_nav extends React.Component
 
     render() {
         return (
-        <tr key="paging_nav">
+        <tr>
             <td>
                 {(this.props.page.prev_page_url != null) ?
                 <IconButton

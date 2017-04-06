@@ -92,11 +92,11 @@
 	
 	var _Snackbar2 = _interopRequireDefault(_Snackbar);
 	
-	var _save = __webpack_require__(/*! material-ui/svg-icons/content/save */ 453);
+	var _save = __webpack_require__(/*! material-ui/svg-icons/content/save */ 454);
 	
 	var _save2 = _interopRequireDefault(_save);
 	
-	var _cancel = __webpack_require__(/*! material-ui/svg-icons/navigation/cancel */ 454);
+	var _cancel = __webpack_require__(/*! material-ui/svg-icons/navigation/cancel */ 455);
 	
 	var _cancel2 = _interopRequireDefault(_cancel);
 	
@@ -44730,7 +44730,8 @@
 /* 450 */,
 /* 451 */,
 /* 452 */,
-/* 453 */
+/* 453 */,
+/* 454 */
 /*!*************************************************!*\
   !*** ./~/material-ui/svg-icons/content/save.js ***!
   \*************************************************/
@@ -44770,7 +44771,7 @@
 	exports.default = ContentSave;
 
 /***/ },
-/* 454 */
+/* 455 */
 /*!******************************************************!*\
   !*** ./~/material-ui/svg-icons/navigation/cancel.js ***!
   \******************************************************/

@@ -763,7 +763,7 @@ class Trx extends React.Component
             desc = cust.custtrx.desc;
         getSelCustTrxs(page, sort, desc);
         //Assemble trx rows
-        let trx = [ <Paging_nav refresh={this.updateTrx} page={cust.custtrx}/> ];
+        let trx = [ <Paging_nav key="paging_nav" refresh={this.updateTrx} page={cust.custtrx}/> ];
         trx.push(
             <tr key="trx_th">
                 <th>Edit / Delete</th>
