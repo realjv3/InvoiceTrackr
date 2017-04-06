@@ -108,7 +108,7 @@ class InvoiceModule extends React.Component{
             };
             let tmp =
                 <tr key={'trx_id_' + cust.custtrx.data[j].id}>
-                    <td><Checkbox id={cust.custtrx.data[j].id} onCheck={this.addToInvoice} style={{marginLeft: '55px'}} checked={selected} /></td>
+                    <td><Checkbox id={cust.custtrx.data[j].id} onCheck={this.addToInvoice} style={{marginLeft: '55px'}} defaultChecked={selected} /></td>
                     <td>{cust.custtrx.data[j].trxdt}</td>
                     <td>{cust.custtrx.data[j].status}</td>
                     <td>{billable.descr}</td>

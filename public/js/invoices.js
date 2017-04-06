@@ -41619,7 +41619,7 @@
 	                    _react2.default.createElement(
 	                        'td',
 	                        null,
-	                        _react2.default.createElement(_Checkbox2.default, { id: cust.custtrx.data[j].id, onCheck: _this.addToInvoice, style: { marginLeft: '55px' }, checked: selected })
+	                        _react2.default.createElement(_Checkbox2.default, { id: cust.custtrx.data[j].id, onCheck: _this.addToInvoice, style: { marginLeft: '55px' }, defaultChecked: selected })
 	                    ),
 	                    _react2.default.createElement(
 	                        'td',
