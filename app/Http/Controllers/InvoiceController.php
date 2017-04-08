@@ -95,4 +95,56 @@ class InvoiceController extends Controller
 
         return $invoices;
     }
+
+    /**
+     * Returns the passed custid's open transactions
+     * @param int $custid default null
+     * @return json string $trx
+     */
+    public function get_billable_trx($custid = null) {
+        if(!isset($custid))
+            return response('No customer id specified.', 422);
+
+        if(isset($_REQUEST['sort']) && !empty($_REQUEST['sort'])) {
+            $sortby =  filter_var($_REQUEST['sort'], FILTER_SANITIZE_STRING);
+            $desc = (isset($_REQUEST['desc'])) ? 'Desc' : '';
+        } else {
+            $sortby = 'trxdt';
+            $desc = 'Desc';
+        }
+
+        $user = Auth::user()
+            ->with('customer.custtrx')
+            ->get();
+        if(count($user)) {
+            foreach($user[0]->customer as $cust)
+                if($cust->id == $custid)
+                    $trxs = $cust->custtrx
+                    ->filter(function ($trx) { return $trx->status == 0;})
+                    ->transform(
+                        function ($trx) {
+                            if ($trx->status == 0) {
+                                $trx->status = 'Open';
+                                return $trx;
+                            }
+                        }
+                    );
+            if(isset($trxs))
+                $trxs = call_user_func(array($trxs, 'sortBy'.$desc), $sortby);  //sort
+            else
+                return response('No open transactions for this customer', 404);
+        }
+
+        //paginate
+        $total = count($trxs->flatten());
+        $currentPage = (isset($_REQUEST['page']) && preg_match('/\d+/', $_REQUEST['page'])) ? $_REQUEST['page'] : 1;
+        $perPage = 10;
+        $max = ceil($total / $perPage);
+        if($currentPage > $max)
+            $currentPage = $max;
+        $offset = ($currentPage * $perPage) - $perPage;
+        $trxs = new LengthAwarePaginator(array_slice($trxs->toArray(), $offset, $perPage), $total, $perPage, $currentPage);
+
+        return $trxs;
+    }
 }

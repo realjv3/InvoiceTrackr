@@ -46,7 +46,7 @@ Route::group(['middleware' => ['web']], function () {
     );
 
     // Profile page
-    Route::get('profile', ['middleware' => 'auth', 'as' => 'profile', function($id = null) {
+    Route::get('profile', ['as' => 'profile', function($id = null) {
         return view('pages.profile');
     }]);
 
@@ -70,6 +70,7 @@ Route::group(['middleware' => ['web']], function () {
     // Invoices
     Route::get('create_inv', 'InvoiceController@create');
     Route::get('get_inv/{custid?}', 'InvoiceController@read');
+    Route::get('get_billable_trx/{custid}', 'InvoiceController@get_billable_trx');
 
     // Util
     Route::get('cur_user', function() {

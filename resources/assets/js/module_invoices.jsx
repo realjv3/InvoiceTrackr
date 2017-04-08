@@ -72,58 +72,73 @@ class InvoiceModule extends React.Component{
     updateTrx = (page = 1) => {
         let cust = getSelectedCustomer(),
             sort = (cust.custtrx.sort) ? cust.custtrx.sort : 'trxdt',
-            desc = cust.custtrx.desc;
-        getSelCustTrxs(page, sort, desc);
-        //Assemble trx rows
-        let trx = [ <Paging_nav key="paging_nav" refresh={this.updateTrx} page={cust.custtrx}/> ],
-            header = (
-                <tr key={'trx_th'}>
-                    <th>Add to Invoice</th>
-                    <th className="custtrx" id="trxdt" data-sort="desc" onClick={this.sort}>Trx Date</th>
-                    <th className="custtrx" id="status" data-sort="" onClick={this.sort}>Status</th>
-                    <th className="custtrx" id="item" data-sort="" onClick={this.sort}>Billable</th>
-                    <th className="custtrx" id="descr" data-sort="" onClick={this.sort}>Description</th>
-                    <th>Quantity</th>
-                    <th className="custtrx" id="amt" data-sort="" onClick={this.sort}>Amount</th>
-                </tr>
-            );
-        for(var j = 0; j < cust.custtrx.data.length; j++) {
-            //if trx status not open, move on to next
-            if(cust.custtrx.data[j].status != 'Open')
-                continue;
-            //get each transaction's billable's descr and qty
-            let billable = getBillable(cust.custtrx.data[j].item);
-            let qty = (cust.custtrx.data[j].amt / billable.price).toFixed(2) + ' x $' + billable.price +'/'+billable.unit;
-            //should this trx be selected?
-            let selTrxs = this.state.selectedTrx,
-                selected = false;
-            for(let i = 0; i < selTrxs.length; i++)
-                if(selTrxs[i].key == 'trx_id_'+ cust.custtrx.data[j].id)
-                    selected = true;
-            //render table row
-            let style = {
-                width: '10px',
-                height: '10px',
-                margin: '2px'
-            };
-            let tmp =
-                <tr key={'trx_id_' + cust.custtrx.data[j].id}>
-                    <td><Checkbox id={cust.custtrx.data[j].id} onCheck={this.addToInvoice} style={{marginLeft: '55px'}} defaultChecked={selected} /></td>
-                    <td>{cust.custtrx.data[j].trxdt}</td>
-                    <td>{cust.custtrx.data[j].status}</td>
-                    <td>{billable.descr}</td>
-                    <td>{cust.custtrx.data[j].descr}</td>
-                    <td>{qty}</td>
-                    <td>$ {cust.custtrx.data[j].amt}</td>
-                </tr>;
-            trx.push(tmp);
-        }
-        if(trx.length > 0)
-            trx.unshift(header);
-        this.setState({
-            trx: trx,
+            desc = (cust.custtrx.desc) ? '&desc' : '',
+            billable_trx = null;
+        //Get billable trx then render & update the cur_user global
+        fetch('/get_billable_trx/' + cust.id + '?page=' + page + '&sort=' + sort + desc, {headers: {'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'},
+            credentials: 'same-origin'})
+        .then((response) => {if(response.ok) response.json().then(
+            (json) => {
+                billable_trx = json;
+                //Update cur_user global with the fetched transactions
+                for(let i = 0; i < cur_user.customer.length; i++) {
+                    if(cur_user.customer[i].id == cust.id) {
+                        cust.custtrx = billable_trx;
+                        cur_user.customer[i] = cust;
+                        break;
+                    }
+                }
+                //Assemble trx rows
+                let trx = [ <Paging_nav key="paging_nav" refresh={this.updateTrx} page={billable_trx}/> ],
+                    header = (
+                        <tr key={'trx_th'}>
+                            <th>Add to Invoice</th>
+                            <th className="custtrx" id="trxdt" data-sort="desc" onClick={this.sort}>Trx Date</th>
+                            <th className="custtrx" id="status" data-sort="" onClick={this.sort}>Status</th>
+                            <th className="custtrx" id="item" data-sort="" onClick={this.sort}>Billable</th>
+                            <th className="custtrx" id="descr" data-sort="" onClick={this.sort}>Description</th>
+                            <th>Quantity</th>
+                            <th className="custtrx" id="amt" data-sort="" onClick={this.sort}>Amount</th>
+                        </tr>
+                    );
+                for(var j = 0; j < billable_trx.data.length; j++) {
+                    //get each transaction's billable's descr and qty
+                    let billable = getBillable(billable_trx.data[j].item);
+                    let qty = (billable_trx.data[j].amt / billable.price).toFixed(2) + ' x $' + billable.price +'/'+billable.unit;
+                    //should this trx be selected?
+                    let selTrxs = this.state.selectedTrx,
+                        selected = false;
+                    for(let i = 0; i < selTrxs.length; i++)
+                        if(selTrxs[i].key == 'trx_id_'+ billable_trx.data[j].id)
+                            selected = true;
+                    //render table row
+                    let style = {
+                        width: '10px',
+                        height: '10px',
+                        margin: '2px'
+                    };
+                    let tmp =
+                        <tr key={'trx_id_' + billable_trx.data[j].id}>
+                            <td><Checkbox id={billable_trx.data[j].id} onCheck={this.addToInvoice} style={{marginLeft: '55px'}} defaultChecked={selected} /></td>
+                            <td>{billable_trx.data[j].trxdt}</td>
+                            <td>{billable_trx.data[j].status}</td>
+                            <td>{billable.descr}</td>
+                            <td>{billable_trx.data[j].descr}</td>
+                            <td>{qty}</td>
+                            <td>$ {billable_trx.data[j].amt}</td>
+                        </tr>;
+                    trx.push(tmp);
+                }
+                if(trx.length > 0)
+                    trx.unshift(header);
+                this.setState({
+                    trx: trx,
+                });
+            });
         });
+
     }
+
     updateInvoices = (page = 1) => {
         let cust = getSelectedCustomer(),
             sort = (cust.invoice.sort) ? cust.invoice.sort : 'invdt',
