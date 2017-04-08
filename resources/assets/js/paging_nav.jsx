@@ -12,6 +12,8 @@ class Paging_nav extends React.Component
 {
     constructor(props) {
         super(props);
+        this.refresh = React.PropTypes.func.isRequired;
+        this.page = React.PropTypes.object.isRequired;
     }
 
     render() {

@@ -147,6 +147,10 @@ div#company {
     margin: 10px;
 }
 
+div#invoice {
+    margin-top: 25px;
+}
+
 table#inv_trx tr {
     display: initial;
 }

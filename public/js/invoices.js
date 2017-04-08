@@ -41112,7 +41112,7 @@
 	
 	
 	// module
-	exports.push([module.id, "* {\r\n    padding: 0;\r\n    margin: 0;\r\n    font-family: 'Alegreya Sans', sans-serif;\r\n    text-decoration: none;\r\n    cursor: default;\r\n}\r\n\r\nhtml {\r\n    height: 100%;\r\n}\r\n\r\nbody {\r\n    min-height: 100%;\r\n    min-width: 375px;\r\n    position: relative;\r\n}\r\n\r\na:visited, a {\r\n    color: black;\r\n    cursor: default;\r\n}\r\n\r\nheader {\r\n    width: 100%;\r\n}\r\n\r\nfieldset {\r\n    margin: 5px;\r\n    padding: 20px;\r\n    border: solid 1px #E0DEDE;\r\n    backgroundColor: #F7FAF5;\r\n}\r\n\r\n/**\r\n * Login Menu\r\n */\r\n#logout_link {\r\n    margin: 1vw 0;\r\n    font-size: small;\r\n}\r\n\r\n/**\r\n * Main Content Area\r\n */\r\n#landing_animation {\r\n    position: relative;\r\n    height: 65vh;\r\n    margin: 5vw 0 0 13vw;\r\n}\r\n\r\n\r\n#greeting {\r\n    font-size: 1em;\r\n    text-align: center;\r\n    padding-top: 33vh;\r\n    padding-bottom: 21.5vh;\r\n}\r\n\r\ndiv#content {\r\n    min-height: 100%;\r\n}\r\n\r\ndiv.main_area, div.cards {\r\n    background: #F5F5F5 !important;\r\n    margin: 0 0 4vw 0;\r\n}\r\n\r\ndiv.main_area {\r\n    min-height: 69.4vh;\r\n    margin: 7vw;\r\n    padding: 3vw;\r\n}\r\n\r\n/**\r\n * Profile form\r\n */\r\n#profile {\r\n    position: relative;\r\n    margin: 50px auto;\r\n    max-width: 74vw;\r\n    padding: 50px;\r\n    background-color: #F7FAF5\r\n}\r\n\r\n.profile_field {\r\n    margin-right: 10px;\r\n    padding-right: 10px;\r\n    width: auto !important;\r\n}\r\n\r\n/**\r\n * Trx entry form\r\n */\r\nform#trx_form {\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n}\r\n\r\n/**\r\n * Customer drop-down\r\n */\r\nspan.cust_icons {\r\n    position: relative;\r\n    bottom: 7px;\r\n}\r\n\r\nspan.cust_icons .fa, span.trx_icons .fa {\r\n    font-size: 17px !important;\r\n}\r\n\r\n/**\r\n * Transactions Area\r\n */\r\ntable {\r\n    margin: 0 auto;\r\n}\r\n\r\ntr {\r\n    display: flex;\r\n    justify-content: space-around;\r\n}\r\n\r\ntr:hover {\r\n    background-color: #C5CAE9;\r\n}\r\n\r\nth, td {\r\n    width: 10vw;\r\n    text-align: center;\r\n    margin: 7px;\r\n}\r\n\r\nspan.trx_icons {\r\n    position: relative;\r\n    bottom: 15px;\r\n}\r\n\r\n/**\r\n * Invoices and whatnot\r\n */\r\ndiv#customer {\r\n    margin: 10px;\r\n}\r\n\r\ndiv#company {\r\n    margin: 10px;\r\n}\r\n\r\ntable#inv_trx tr {\r\n    display: initial;\r\n}\r\n\r\ntable#inv_trx tr:hover, table#inv_trx th:hover {\r\n    background-color: initial;\r\n}\r\n\r\ntable#inv_trx th, table#inv_trx td {\r\n    width: 250px;\r\n    text-align: center;\r\n    margin: 7px;\r\n}\r\n\r\n/**\r\n * Footer Area\r\n */\r\ndiv#loader {\r\n    border: 16px solid #f3f3f3; /* Light grey */\r\n    border-top: 16px solid #3498db; /* Blue */\r\n    border-radius: 50%;\r\n    width: 120px;\r\n    height: 120px;\r\n    animation: spin 2s linear infinite;\r\n    position: absolute;\r\n    top: 40vh;\r\n    left: 42.5vw;\r\n    z-index: 1200;\r\n    display: none;\r\n}\r\n\r\ndiv#overlay {\r\n    background: #b6b2b2;\r\n    display: none;\r\n    position: absolute;\r\n    top: 0;\r\n    right: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    opacity: 0.5;\r\n    z-index: 1100;\r\n}\r\n\r\n@keyframes spin {\r\n    0% { transform: rotate(0deg); }\r\n    100% { transform: rotate(360deg); }\r\n}\r\n\r\nfooter {\r\n    height: 80px;\r\n    width: 100%;\r\n    font-size: small;\r\n}\r\n\r\n/**\r\n * Rules for viewport's with widths < 510 px\r\n */\r\n@media (max-width: 510px) {\r\n    #logout_link {\r\n        font-size: x-small;\r\n    }\r\n    \r\n    #main_area {\r\n        min-height: 70.9vh;\r\n    }\r\n}\r\n\r\n@media (max-width: 768px) {\r\n    div#loader {\r\n        top: 40vh;\r\n        left: 36vw;\r\n    }\r\n}", ""]);
+	exports.push([module.id, "* {\r\n    padding: 0;\r\n    margin: 0;\r\n    font-family: 'Alegreya Sans', sans-serif;\r\n    text-decoration: none;\r\n    cursor: default;\r\n}\r\n\r\nhtml {\r\n    height: 100%;\r\n}\r\n\r\nbody {\r\n    min-height: 100%;\r\n    min-width: 375px;\r\n    position: relative;\r\n}\r\n\r\na:visited, a {\r\n    color: black;\r\n    cursor: default;\r\n}\r\n\r\nheader {\r\n    width: 100%;\r\n}\r\n\r\nfieldset {\r\n    margin: 5px;\r\n    padding: 20px;\r\n    border: solid 1px #E0DEDE;\r\n    backgroundColor: #F7FAF5;\r\n}\r\n\r\n/**\r\n * Login Menu\r\n */\r\n#logout_link {\r\n    margin: 1vw 0;\r\n    font-size: small;\r\n}\r\n\r\n/**\r\n * Main Content Area\r\n */\r\n#landing_animation {\r\n    position: relative;\r\n    height: 65vh;\r\n    margin: 5vw 0 0 13vw;\r\n}\r\n\r\n\r\n#greeting {\r\n    font-size: 1em;\r\n    text-align: center;\r\n    padding-top: 33vh;\r\n    padding-bottom: 21.5vh;\r\n}\r\n\r\ndiv#content {\r\n    min-height: 100%;\r\n}\r\n\r\ndiv.main_area, div.cards {\r\n    background: #F5F5F5 !important;\r\n    margin: 0 0 4vw 0;\r\n}\r\n\r\ndiv.main_area {\r\n    min-height: 69.4vh;\r\n    margin: 7vw;\r\n    padding: 3vw;\r\n}\r\n\r\n/**\r\n * Profile form\r\n */\r\n#profile {\r\n    position: relative;\r\n    margin: 50px auto;\r\n    max-width: 74vw;\r\n    padding: 50px;\r\n    background-color: #F7FAF5\r\n}\r\n\r\n.profile_field {\r\n    margin-right: 10px;\r\n    padding-right: 10px;\r\n    width: auto !important;\r\n}\r\n\r\n/**\r\n * Trx entry form\r\n */\r\nform#trx_form {\r\n    display: flex;\r\n    flex-wrap: wrap;\r\n}\r\n\r\n/**\r\n * Customer drop-down\r\n */\r\nspan.cust_icons {\r\n    position: relative;\r\n    bottom: 7px;\r\n}\r\n\r\nspan.cust_icons .fa, span.trx_icons .fa {\r\n    font-size: 17px !important;\r\n}\r\n\r\n/**\r\n * Transactions Area\r\n */\r\ntable {\r\n    margin: 0 auto;\r\n}\r\n\r\ntr {\r\n    display: flex;\r\n    justify-content: space-around;\r\n}\r\n\r\ntr:hover {\r\n    background-color: #C5CAE9;\r\n}\r\n\r\nth, td {\r\n    width: 10vw;\r\n    text-align: center;\r\n    margin: 7px;\r\n}\r\n\r\nspan.trx_icons {\r\n    position: relative;\r\n    bottom: 15px;\r\n}\r\n\r\n/**\r\n * Invoices and whatnot\r\n */\r\ndiv#customer {\r\n    margin: 10px;\r\n}\r\n\r\ndiv#company {\r\n    margin: 10px;\r\n}\r\n\r\ndiv#invoice {\r\n    margin-top: 25px;\r\n}\r\n\r\ntable#inv_trx tr {\r\n    display: initial;\r\n}\r\n\r\ntable#inv_trx tr:hover, table#inv_trx th:hover {\r\n    background-color: initial;\r\n}\r\n\r\ntable#inv_trx th, table#inv_trx td {\r\n    width: 250px;\r\n    text-align: center;\r\n    margin: 7px;\r\n}\r\n\r\n/**\r\n * Footer Area\r\n */\r\ndiv#loader {\r\n    border: 16px solid #f3f3f3; /* Light grey */\r\n    border-top: 16px solid #3498db; /* Blue */\r\n    border-radius: 50%;\r\n    width: 120px;\r\n    height: 120px;\r\n    animation: spin 2s linear infinite;\r\n    position: absolute;\r\n    top: 40vh;\r\n    left: 42.5vw;\r\n    z-index: 1200;\r\n    display: none;\r\n}\r\n\r\ndiv#overlay {\r\n    background: #b6b2b2;\r\n    display: none;\r\n    position: absolute;\r\n    top: 0;\r\n    right: 0;\r\n    bottom: 0;\r\n    left: 0;\r\n    opacity: 0.5;\r\n    z-index: 1100;\r\n}\r\n\r\n@keyframes spin {\r\n    0% { transform: rotate(0deg); }\r\n    100% { transform: rotate(360deg); }\r\n}\r\n\r\nfooter {\r\n    height: 80px;\r\n    width: 100%;\r\n    font-size: small;\r\n}\r\n\r\n/**\r\n * Rules for viewport's with widths < 510 px\r\n */\r\n@media (max-width: 510px) {\r\n    #logout_link {\r\n        font-size: x-small;\r\n    }\r\n    \r\n    #main_area {\r\n        min-height: 70.9vh;\r\n    }\r\n}\r\n\r\n@media (max-width: 768px) {\r\n    div#loader {\r\n        top: 40vh;\r\n        left: 36vw;\r\n    }\r\n}", ""]);
 	
 	// exports
 
@@ -41457,6 +41457,8 @@
 	
 	var _es6Promise2 = _interopRequireDefault(_es6Promise);
 	
+	var _Card = __webpack_require__(/*! material-ui/Card */ 435);
+	
 	var _AutoComplete = __webpack_require__(/*! material-ui/AutoComplete */ 406);
 	
 	var _AutoComplete2 = _interopRequireDefault(_AutoComplete);
@@ -41556,7 +41558,7 @@
 	                desc = cust.custtrx.desc ? '&desc' : '',
 	                billable_trx = null;
 	            //Get billable trx then render & update the cur_user global
-	            fetch('/get_billable_trx/' + cust.id + '?page=' + page + '&sort=' + sort + desc, { headers: { 'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' },
+	            fetch('/get_billable_trx/' + cust.id + '?page=' + page + '&sort=' + sort + desc, { headers: { 'X-CSRF-Token': _token, 'Accept': 'application/json' },
 	                credentials: 'same-origin' }).then(function (response) {
 	                if (response.ok) response.json().then(function (json) {
 	                    billable_trx = json;
@@ -41946,22 +41948,40 @@
 	                    onNewRequest: this.doesCustExist
 	                }),
 	                _react2.default.createElement(
-	                    'table',
-	                    null,
+	                    _Card.Card,
+	                    { style: { backgroundColor: '#F7FAF5' } },
+	                    _react2.default.createElement(_Card.CardHeader, { title: 'Invoices', actAsExpander: true, showExpandableButton: true, avatar: 'https://www.dropbox.com/s/1x89klicik0olnk/money.png?dl=1' }),
 	                    _react2.default.createElement(
-	                        'tbody',
-	                        null,
-	                        this.state.invoices
+	                        _Card.CardText,
+	                        { expandable: true },
+	                        _react2.default.createElement(
+	                            'table',
+	                            null,
+	                            _react2.default.createElement(
+	                                'tbody',
+	                                null,
+	                                this.state.invoices
+	                            )
+	                        )
 	                    )
 	                ),
 	                _react2.default.createElement(_Divider2.default, null),
 	                _react2.default.createElement(
-	                    'table',
-	                    null,
+	                    _Card.Card,
+	                    { style: { backgroundColor: '#F7FAF5' } },
+	                    _react2.default.createElement(_Card.CardHeader, { title: 'Billable Transactions', actAsExpander: true, showExpandableButton: true, avatar: 'https://www.dropbox.com/s/4hw9njfnlkgttmf/clock-1.png?dl=1' }),
 	                    _react2.default.createElement(
-	                        'tbody',
-	                        null,
-	                        this.state.trx
+	                        _Card.CardText,
+	                        { expandable: true },
+	                        _react2.default.createElement(
+	                            'table',
+	                            null,
+	                            _react2.default.createElement(
+	                                'tbody',
+	                                null,
+	                                this.state.trx
+	                            )
+	                        )
 	                    )
 	                ),
 	                _react2.default.createElement(_invoice2.default, { trx: this.state.selectedTrx, total: this.state.total, updateTrx: this.updateTrx })
@@ -46942,7 +46962,11 @@
 	    function Paging_nav(props) {
 	        _classCallCheck(this, Paging_nav);
 	
-	        return _possibleConstructorReturn(this, (Paging_nav.__proto__ || Object.getPrototypeOf(Paging_nav)).call(this, props));
+	        var _this = _possibleConstructorReturn(this, (Paging_nav.__proto__ || Object.getPrototypeOf(Paging_nav)).call(this, props));
+	
+	        _this.refresh = _react2.default.PropTypes.func.isRequired;
+	        _this.page = _react2.default.PropTypes.object.isRequired;
+	        return _this;
 	    }
 	
 	    _createClass(Paging_nav, [{

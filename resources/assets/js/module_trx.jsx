@@ -93,7 +93,7 @@ class BillableEntry extends React.Component
         fetch('save_billable?edit=' + this.state.edit , {
             method: 'post',
             body: billable,
-            headers: {'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'},
+            headers: {'X-CSRF-Token': _token, 'Accept': 'application/json'},
             credentials: 'same-origin'
         }).then((response) => {
             if(response.ok) {   //if save went ok, show Snackbar, update global cur_user & update the cust. drop-down
@@ -466,7 +466,7 @@ class Trx extends React.Component
         body.append('cust_id', event.currentTarget.getAttribute('class'));
         fetch(
             'delete_customer',
-            {method: 'POST', headers: {'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'}, credentials: 'same-origin', body: body}
+            {method: 'POST', headers: {'X-CSRF-Token': _token, 'Accept': 'application/json'}, credentials: 'same-origin', body: body}
         ).then((response) => {
                 if(response.ok) //Remove deleted customer from drop-down and show snackbar
                     response.json().then((json) => {
@@ -485,15 +485,15 @@ class Trx extends React.Component
             'delete_billable',
             {method: 'POST', headers: {'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'}, credentials: 'same-origin', body: body}
         ).then((response) => {
-                if(response.ok) //Remove deleted customer from drop-down and show snackbar
-                    response.json().then((json) => {
-                        for(var i = 0; i < cur_user.customer.length; i++)
-                            if(cur_user.customer[i].selected) break;
-                        cur_user = JSON.parse(json.cur_user);
-                        cur_user.customer[i].selected = true;
-                        this.setState({snackbarOpen: true, message: json.message});
-                        this.updateBillables();
-                    });
+            if(response.ok) //Remove deleted customer from drop-down and show snackbar
+                response.json().then((json) => {
+                    for(var i = 0; i < cur_user.customer.length; i++)
+                        if(cur_user.customer[i].selected) break;
+                    cur_user = JSON.parse(json.cur_user);
+                    cur_user.customer[i].selected = true;
+                    this.setState({snackbarOpen: true, message: json.message});
+                    this.updateBillables();
+                });
             });
     }
     removeErrors = () => {

@@ -8,6 +8,7 @@ import 'whatwg-fetch';
 import ES6Promise from 'es6-promise';
 ES6Promise.polyfill();
 
+import {Card, CardHeader, CardText} from 'material-ui/Card';
 import AutoComplete from 'material-ui/AutoComplete';
 import IconButton from 'material-ui/IconButton';
 import Checkbox from 'material-ui/Checkbox';
@@ -15,7 +16,7 @@ import MenuItem from 'material-ui/MenuItem';
 import Divider from 'material-ui/Divider';
 
 import CustomerEntry from 'customer_entry.jsx';
-import {getSelCustTrxs, getSelectedCustomer, getBillable, getTrx, getSelCustInvoices} from 'util.jsx';
+import {getSelectedCustomer, getBillable, getTrx, getSelCustInvoices} from 'util.jsx';
 import Paging_nav from 'paging_nav.jsx';
 import Invoice from 'invoice.jsx';
 
@@ -75,7 +76,7 @@ class InvoiceModule extends React.Component{
             desc = (cust.custtrx.desc) ? '&desc' : '',
             billable_trx = null;
         //Get billable trx then render & update the cur_user global
-        fetch('/get_billable_trx/' + cust.id + '?page=' + page + '&sort=' + sort + desc, {headers: {'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'},
+        fetch('/get_billable_trx/' + cust.id + '?page=' + page + '&sort=' + sort + desc, {headers: {'X-CSRF-Token': _token, 'Accept': 'application/json'},
             credentials: 'same-origin'})
         .then((response) => {if(response.ok) response.json().then(
             (json) => {
@@ -313,17 +314,27 @@ class InvoiceModule extends React.Component{
                     listStyle={{width: 'auto', minWidth: '400px'}}
                     onNewRequest={this.doesCustExist}
                 />
-                <table>
-                    <tbody>
-                        {this.state.invoices}
-                    </tbody>
-                </table>
+                <Card style={{backgroundColor: '#F7FAF5'}}>
+                    <CardHeader title="Invoices" actAsExpander={true} showExpandableButton={true} avatar="https://www.dropbox.com/s/1x89klicik0olnk/money.png?dl=1" />
+                    <CardText expandable={true}>
+                        <table>
+                            <tbody>
+                            {this.state.invoices}
+                            </tbody>
+                        </table>
+                    </CardText>
+                </Card>
                 <Divider />
-                <table>
-                    <tbody>
-                        {this.state.trx}
-                    </tbody>
-                </table>
+                <Card style={{backgroundColor: '#F7FAF5'}}>
+                    <CardHeader title="Billable Transactions" actAsExpander={true} showExpandableButton={true} avatar="https://www.dropbox.com/s/4hw9njfnlkgttmf/clock-1.png?dl=1" />
+                    <CardText expandable={true}>
+                        <table>
+                            <tbody>
+                            {this.state.trx}
+                            </tbody>
+                        </table>
+                    </CardText>
+                </Card>
                 <Invoice trx={this.state.selectedTrx} total={this.state.total} updateTrx={this.updateTrx} />
             </div>
         );
