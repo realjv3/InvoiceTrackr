@@ -47192,6 +47192,7 @@
 	                        cur_user.customer[i].selected = true;
 	                        _this5.setState({ snackbarOpen: true, message: json.message });
 	                        _this5.updateBillables();
+	                        _this5.updateTrx();
 	                    });
 	            });
 	        };

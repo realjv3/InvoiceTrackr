@@ -430,6 +430,7 @@ class Trx extends React.Component
                     cur_user.customer[i].selected = true;
                     this.setState({snackbarOpen: true, message: json.message});
                     this.updateBillables();
+                    this.updateTrx();
                 });
             });
     }
