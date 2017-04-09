@@ -10,6 +10,7 @@ use App\Invoice;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Util\UtilFacade;
 
 class InvoiceController extends Controller
 {
@@ -146,5 +147,25 @@ class InvoiceController extends Controller
         $trxs = new LengthAwarePaginator(array_slice($trxs->toArray(), $offset, $perPage), $total, $perPage, $currentPage);
 
         return $trxs;
+    }
+
+
+    /**
+     * @param int $inv_id
+     * @return Request
+     */
+    public function delete($inv_id) {
+        if(!isset($inv_id)) return response('Invalid invoice id.', 422);
+
+        $trxs = CustTrx::where('inv', $inv_id)->get();
+        foreach ($trxs as $trx) {
+            $trx->inv = 0;
+            $trx->status = 0;
+            $trx->save();
+        }
+        Invoice::destroy($inv_id);
+        //sharing Object cur_user, including user's customers and their billables & trx
+        $cur_user = UtilFacade::get_user_data_for_view();
+        return response()->json(['cur_user' => $cur_user, 201]);
     }
 }

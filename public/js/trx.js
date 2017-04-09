@@ -46685,6 +46685,10 @@
 	
 	var _timerStopwatch2 = _interopRequireDefault(_timerStopwatch);
 	
+	var _Dialog = __webpack_require__(/*! material-ui/Dialog */ 209);
+	
+	var _Dialog2 = _interopRequireDefault(_Dialog);
+	
 	var _FlatButton = __webpack_require__(/*! material-ui/FlatButton */ 183);
 	
 	var _FlatButton2 = _interopRequireDefault(_FlatButton);
@@ -46692,10 +46696,6 @@
 	var _IconButton = __webpack_require__(/*! material-ui/IconButton */ 246);
 	
 	var _IconButton2 = _interopRequireDefault(_IconButton);
-	
-	var _Dialog = __webpack_require__(/*! material-ui/Dialog */ 209);
-	
-	var _Dialog2 = _interopRequireDefault(_Dialog);
 	
 	var _TextField = __webpack_require__(/*! material-ui/TextField */ 219);
 	
@@ -46742,6 +46742,10 @@
 	var _paging_nav = __webpack_require__(/*! paging_nav.jsx */ 445);
 	
 	var _paging_nav2 = _interopRequireDefault(_paging_nav);
+	
+	var _deleteDialog = __webpack_require__(/*! deleteDialog.jsx */ 479);
+	
+	var _deleteDialog2 = _interopRequireDefault(_deleteDialog);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -46962,108 +46966,24 @@
 	    return BillableEntry;
 	}(_react2.default.Component);
 	
-	var DeleteCustomerDialog = function (_React$Component2) {
-	    _inherits(DeleteCustomerDialog, _React$Component2);
-	
-	    function DeleteCustomerDialog(props) {
-	        _classCallCheck(this, DeleteCustomerDialog);
-	
-	        var _this2 = _possibleConstructorReturn(this, (DeleteCustomerDialog.__proto__ || Object.getPrototypeOf(DeleteCustomerDialog)).call(this, props));
-	
-	        _this2.handleOpen = function (id) {
-	            _this2.setState({ open: true, id: id });
-	        };
-	
-	        _this2.handleClose = function () {
-	            _this2.setState({ open: false });
-	        };
-	
-	        _this2.state = { open: false };
-	        return _this2;
-	    }
-	
-	    _createClass(DeleteCustomerDialog, [{
-	        key: 'render',
-	        value: function render() {
-	            var actions = [_react2.default.createElement(_FlatButton2.default, { label: 'Cancel', primary: true, onTouchTap: this.handleClose, style: { color: 'red' } }), _react2.default.createElement(_FlatButton2.default, { label: 'Continue', primary: true, className: this.state.id, onClick: this.props.deleteCustomer, style: { color: 'green' } })];
-	
-	            return _react2.default.createElement(
-	                _Dialog2.default,
-	                {
-	                    title: 'Are you sure you want to do this?',
-	                    actions: actions,
-	                    modal: true,
-	                    open: this.state.open,
-	                    onRequest: this.handleClose
-	                },
-	                'Do you really want to permanently delete this customer and all of their transactions?'
-	            );
-	        }
-	    }]);
-	
-	    return DeleteCustomerDialog;
-	}(_react2.default.Component);
-	
-	var DeleteBillablesDialog = function (_React$Component3) {
-	    _inherits(DeleteBillablesDialog, _React$Component3);
-	
-	    function DeleteBillablesDialog(props) {
-	        _classCallCheck(this, DeleteBillablesDialog);
-	
-	        var _this3 = _possibleConstructorReturn(this, (DeleteBillablesDialog.__proto__ || Object.getPrototypeOf(DeleteBillablesDialog)).call(this, props));
-	
-	        _this3.handleOpen = function (id) {
-	            _this3.setState({ open: true, id: id });
-	        };
-	
-	        _this3.handleClose = function () {
-	            _this3.setState({ open: false });
-	        };
-	
-	        _this3.state = { open: false };
-	        return _this3;
-	    }
-	
-	    _createClass(DeleteBillablesDialog, [{
-	        key: 'render',
-	        value: function render() {
-	            var actions = [_react2.default.createElement(_FlatButton2.default, { label: 'Cancel', primary: true, onTouchTap: this.handleClose, style: { color: 'red' } }), _react2.default.createElement(_FlatButton2.default, { label: 'Continue', primary: true, className: this.state.id, onClick: this.props.deleteBillable, style: { color: 'green' } })];
-	
-	            return _react2.default.createElement(
-	                _Dialog2.default,
-	                {
-	                    title: 'Are you sure you want to do this?',
-	                    actions: actions,
-	                    modal: true,
-	                    open: this.state.open,
-	                    onRequest: this.handleClose
-	                },
-	                'Do you really want to permanently delete this billable item and all of the related transactions?'
-	            );
-	        }
-	    }]);
-	
-	    return DeleteBillablesDialog;
-	}(_react2.default.Component);
-	
-	var DatePickerControlled = function (_React$Component4) {
-	    _inherits(DatePickerControlled, _React$Component4);
+	var DatePickerControlled = function (_React$Component2) {
+	    _inherits(DatePickerControlled, _React$Component2);
 	
 	    function DatePickerControlled(props) {
 	        _classCallCheck(this, DatePickerControlled);
 	
-	        var _this4 = _possibleConstructorReturn(this, (DatePickerControlled.__proto__ || Object.getPrototypeOf(DatePickerControlled)).call(this, props));
+	        var _this2 = _possibleConstructorReturn(this, (DatePickerControlled.__proto__ || Object.getPrototypeOf(DatePickerControlled)).call(this, props));
 	
-	        _this4.handleChange = function (event, date) {
-	            _this4.setState({
+	        _this2.handleChange = function (event, date) {
+	            _this2.setState({
 	                controlledDate: date
 	            });
 	        };
 	
-	        _this4.state = {
+	        _this2.state = {
 	            controlledDate: null
 	        };
-	        return _this4;
+	        return _this2;
 	    }
 	
 	    _createClass(DatePickerControlled, [{
@@ -47085,38 +47005,38 @@
 	    return DatePickerControlled;
 	}(_react2.default.Component);
 	
-	var Qty = function (_React$Component5) {
-	    _inherits(Qty, _React$Component5);
+	var Qty = function (_React$Component3) {
+	    _inherits(Qty, _React$Component3);
 	
 	    function Qty(props) {
 	        _classCallCheck(this, Qty);
 	
-	        var _this5 = _possibleConstructorReturn(this, (Qty.__proto__ || Object.getPrototypeOf(Qty)).call(this, props));
+	        var _this3 = _possibleConstructorReturn(this, (Qty.__proto__ || Object.getPrototypeOf(Qty)).call(this, props));
 	
-	        _this5.time = function () {
-	            if (_this5.stopwatch == undefined) return;
-	            if (_this5.state.val != '') _this5.stopwatch._elapsedMS = _this5.timeStrToMs(_this5.state.val);
-	            if (_this5.stopwatch.state) {
+	        _this3.time = function () {
+	            if (_this3.stopwatch == undefined) return;
+	            if (_this3.state.val != '') _this3.stopwatch._elapsedMS = _this3.timeStrToMs(_this3.state.val);
+	            if (_this3.stopwatch.state) {
 	                //pause timer
-	                _this5.stopwatch.stop();
+	                _this3.stopwatch.stop();
 	            } else {
 	                //start/resume timer
-	                _this5.stopwatch.start();
-	                if (!_this5.state.showTimer) _this5.setState({ showTimer: true });
+	                _this3.stopwatch.start();
+	                if (!_this3.state.showTimer) _this3.setState({ showTimer: true });
 	            }
 	        };
 	
-	        _this5.turnOffTimer = function () {
-	            _this5.setState({
+	        _this3.turnOffTimer = function () {
+	            _this3.setState({
 	                showTimer: false,
-	                val: _this5.msToDecimal(_this5.stopwatch.ms)
+	                val: _this3.msToDecimal(_this3.stopwatch.ms)
 	            });
-	            _this5.stopwatch.stop();
-	            _this5.stopwatch._elapsedMS = 0;
-	            _this5.props.updateTotal();
+	            _this3.stopwatch.stop();
+	            _this3.stopwatch._elapsedMS = 0;
+	            _this3.props.updateTotal();
 	        };
 	
-	        _this5.msToHrsMinsSecs = function (ms) {
+	        _this3.msToHrsMinsSecs = function (ms) {
 	            var hrs = parseInt(ms / 1000 / 3600);
 	            var mins = parseInt(ms / 1000 / 60 % 60);
 	            var secs = parseInt(ms / 1000 % 60);
@@ -47126,47 +47046,47 @@
 	            return hrs + ':' + mins + ':' + secs;
 	        };
 	
-	        _this5.msToDecimal = function (ms) {
+	        _this3.msToDecimal = function (ms) {
 	            var hrs = parseFloat(ms / 1000 / 60 / 60).toFixed(2);
 	            return hrs;
 	        };
 	
-	        _this5.timeStrToMs = function (timeStr) {
+	        _this3.timeStrToMs = function (timeStr) {
 	            var timeString = timeStr,
 	                seconds = 0;
 	            if (/^[0-9]{2}:[0-9]{2}:[0-9]{2}$/.test(timeString) == true) return seconds = (parseInt(timeString.substring(0, 2)) * 60 * 60 + parseInt(timeString.substring(3, 5)) * 60 + parseInt(timeString.substring(6, 8))) * 1000;else if (/^[0-9]{2}\.[0-9]{2}$/.test(timeString) == true) return seconds = (parseInt(timeString.substring(0, 2)) * 60 * 60 + parseInt(timeString.substring(3, 5)) / 100 * 60 * 60) * 1000;else if (/^[0-9]{1}\.[0-9]{2}$/.test(timeString) == true) return seconds = (parseInt(timeString.substring(0, 1)) * 60 * 60 + parseInt(timeString.substring(2, 4)) / 100 * 60 * 60) * 1000;else if (/^[0-9]{1}\.[0-9]{1}$/.test(timeString) == true) return seconds = (parseInt(timeString.substring(0, 1)) * 60 * 60 + parseInt(timeString.substring(2)) / 10 * 60 * 60) * 1000;else if (/^[0-9]{1}$/.test(timeString) == true) return seconds = parseInt(timeString.substring(0, 1)) * 60 * 60 * 1000;else return seconds;
 	        };
 	
-	        _this5.handleChange = function (event) {
-	            if (_this5.state.showTimer == true) {
+	        _this3.handleChange = function (event) {
+	            if (_this3.state.showTimer == true) {
 	                var time = event.currentTarget.value;
-	                _this5.stopwatch._elapsedMS = _this5.timeStrToMs(time);
-	                _this5.stopwatch.ms = _this5.timeStrToMs(time);
-	                _this5.setState({ time: time, val: _this5.msToHrsMinsSecs(_this5.stopwatch._elapsedMS) });
-	            } else _this5.setState({ val: event.currentTarget.value });
+	                _this3.stopwatch._elapsedMS = _this3.timeStrToMs(time);
+	                _this3.stopwatch.ms = _this3.timeStrToMs(time);
+	                _this3.setState({ time: time, val: _this3.msToHrsMinsSecs(_this3.stopwatch._elapsedMS) });
+	            } else _this3.setState({ val: event.currentTarget.value });
 	        };
 	
-	        _this5.state = {
+	        _this3.state = {
 	            showTimer: false,
 	            val: '',
 	            time: '00:00:00'
 	        };
-	        _this5.stopwatch = new _timerStopwatch2.default();
-	        _this5.stopwatch.refreshRateMS = 999;
-	        _this5.stopwatch.onTime(function () {
-	            _this5.setState({
-	                time: _this5.msToHrsMinsSecs(_this5.stopwatch.ms),
-	                val: _this5.msToDecimal(_this5.stopwatch.ms)
+	        _this3.stopwatch = new _timerStopwatch2.default();
+	        _this3.stopwatch.refreshRateMS = 999;
+	        _this3.stopwatch.onTime(function () {
+	            _this3.setState({
+	                time: _this3.msToHrsMinsSecs(_this3.stopwatch.ms),
+	                val: _this3.msToDecimal(_this3.stopwatch.ms)
 	            });
-	            _this5.props.updateTotal();
+	            _this3.props.updateTotal();
 	        });
-	        return _this5;
+	        return _this3;
 	    }
 	
 	    _createClass(Qty, [{
 	        key: 'render',
 	        value: function render() {
-	            var _this6 = this;
+	            var _this4 = this;
 	
 	            return _react2.default.createElement(
 	                'span',
@@ -47177,10 +47097,10 @@
 	                        iconClassName: 'material-icons',
 	                        style: { top: '7px', left: '7px', opacity: '0.5' },
 	                        onClick: function onClick() {
-	                            _this6.time();
+	                            _this4.time();
 	                        },
 	                        onDoubleClick: function onDoubleClick() {
-	                            _this6.turnOffTimer();
+	                            _this4.turnOffTimer();
 	                        }
 	                    },
 	                    'timer'
@@ -47205,15 +47125,15 @@
 	    return Qty;
 	}(_react2.default.Component);
 	
-	var Trx = function (_React$Component6) {
-	    _inherits(Trx, _React$Component6);
+	var Trx = function (_React$Component4) {
+	    _inherits(Trx, _React$Component4);
 	
 	    function Trx(props) {
 	        _classCallCheck(this, Trx);
 	
-	        var _this7 = _possibleConstructorReturn(this, (Trx.__proto__ || Object.getPrototypeOf(Trx)).call(this, props));
+	        var _this5 = _possibleConstructorReturn(this, (Trx.__proto__ || Object.getPrototypeOf(Trx)).call(this, props));
 	
-	        _this7.initCustomers = function () {
+	        _this5.initCustomers = function () {
 	            var customers = [];
 	            for (var i = 0; i < cur_user.customer.length; i++) {
 	                var customer = {
@@ -47228,13 +47148,13 @@
 	                                className: cur_user.customer[i].id.toString(),
 	                                iconClassName: 'fa fa-pencil',
 	                                tooltip: 'Edit Customer',
-	                                onClick: _this7.editCust
+	                                onClick: _this5.editCust
 	                            }),
 	                            _react2.default.createElement(_IconButton2.default, {
 	                                className: cur_user.customer[i].id.toString(),
 	                                iconClassName: 'fa fa-trash-o',
 	                                tooltip: 'Delete Customer',
-	                                onClick: _this7.showDelCustDialog
+	                                onClick: _this5.showDelCustDialog
 	                            })
 	                        )
 	                    )
@@ -47244,25 +47164,25 @@
 	            return customers;
 	        };
 	
-	        _this7.deleteCustomer = function (event) {
-	            _this7.refs.del_cust_dialog.handleClose();
+	        _this5.deleteCustomer = function (cust_id) {
+	            _this5.refs.del_cust_dialog.handleClose();
 	            var body = new FormData();
-	            body.append('cust_id', event.currentTarget.getAttribute('class'));
+	            body.append('cust_id', cust_id);
 	            fetch('delete_customer', { method: 'POST', headers: { 'X-CSRF-Token': _token, 'Accept': 'application/json' }, credentials: 'same-origin', body: body }).then(function (response) {
 	                if (response.ok) //Remove deleted customer from drop-down and show snackbar
 	                    response.json().then(function (json) {
 	                        cur_user = JSON.parse(json.cur_user);
-	                        _this7.setState({ snackbarOpen: true, message: json.message });
-	                        _this7.updateCustomers();
-	                        _this7.handleClear();
+	                        _this5.setState({ snackbarOpen: true, message: json.message });
+	                        _this5.updateCustomers();
+	                        _this5.handleClear();
 	                    });
 	            });
 	        };
 	
-	        _this7.deleteBillable = function (event) {
-	            _this7.refs.del_billables_dialog.handleClose();
+	        _this5.deleteBillable = function (billable_id) {
+	            _this5.refs.del_billables_dialog.handleClose();
 	            var body = new FormData();
-	            body.append('id', parseInt(event.currentTarget.getAttribute('class')));
+	            body.append('id', billable_id);
 	            fetch('delete_billable', { method: 'POST', headers: { 'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }, credentials: 'same-origin', body: body }).then(function (response) {
 	                if (response.ok) //Remove deleted customer from drop-down and show snackbar
 	                    response.json().then(function (json) {
@@ -47270,18 +47190,18 @@
 	                            if (cur_user.customer[i].selected) break;
 	                        }cur_user = JSON.parse(json.cur_user);
 	                        cur_user.customer[i].selected = true;
-	                        _this7.setState({ snackbarOpen: true, message: json.message });
-	                        _this7.updateBillables();
+	                        _this5.setState({ snackbarOpen: true, message: json.message });
+	                        _this5.updateBillables();
 	                    });
 	            });
 	        };
 	
-	        _this7.removeErrors = function () {
-	            _this7.setState({ errors: { 'trxdt': '', 'customer': '', 'qty': '', 'billable': '', 'amt': '' } });
+	        _this5.removeErrors = function () {
+	            _this5.setState({ errors: { 'trxdt': '', 'customer': '', 'qty': '', 'billable': '', 'amt': '' } });
 	        };
 	
-	        _this7.handleSave = function () {
-	            _this7.removeErrors();
+	        _this5.handleSave = function () {
+	            _this5.removeErrors();
 	            var form = new FormData(document.querySelector('trx_form'));
 	            form.append('id', document.getElementById('trx_entry_trxid').value);
 	            form.append('trxdt', document.getElementById('trx_entry_trxdt').value);
@@ -47289,7 +47209,7 @@
 	            form.append('qty', document.getElementById('trx_entry_qty').value);
 	            form.append('billable', document.getElementById('trx_entry_billable').value);
 	            form.append('descr', document.getElementById('trx_entry_descr').value);
-	            form.append('amt', _this7.state.amt);
+	            form.append('amt', _this5.state.amt);
 	            var cust = (0, _util.getSelectedCustomer)(),
 	                page = cust.custtrx.current_page,
 	                sort = cust.custtrx.sort,
@@ -47310,12 +47230,12 @@
 	                                break;
 	                            }
 	                        }
-	                        _this7.setState({ snackbarOpen: true, message: 'Transaction was saved.' });
-	                        _this7.doesCustExist(document.getElementById('trx_entry_customer').value); //so billables & trx are updated
+	                        _this5.setState({ snackbarOpen: true, message: 'Transaction was saved.' });
+	                        _this5.doesCustExist(document.getElementById('trx_entry_customer').value); //so billables & trx are updated
 	                    });
 	                } else {
 	                    response.json().then(function (json) {
-	                        _this7.setState({
+	                        _this5.setState({
 	                            errors: {
 	                                trxdt: json.trxdt,
 	                                customer: json.customer,
@@ -47332,26 +47252,26 @@
 	            });
 	        };
 	
-	        _this7.handleEdit = function (event) {
+	        _this5.handleEdit = function (event) {
 	            //grab selected customer, the trx and it's billable
 	            var cust = (0, _util.getSelectedCustomer)();
 	            var trx = (0, _util.getTrx)(event.currentTarget.id);
 	            var billable = (0, _util.getBillable)(trx.item);
 	            // Populate form with selected trx
 	            document.getElementById('trx_entry_trxid').value = trx.id;
-	            _this7.refs.trx_entry_trxdt.setState({ date: new Date(new Date(trx.trxdt).getUTCFullYear(), new Date(trx.trxdt).getUTCMonth(), new Date(trx.trxdt).getUTCDate()) });
-	            _this7.refs.trx_entry_customer.setState({ searchText: cust.company });
-	            _this7.refs.trx_entry_qty.setState({ val: (trx.amt / billable.price).toFixed(2) });
-	            _this7.refs.trx_entry_billable.setState({ searchText: billable.descr });
+	            _this5.refs.trx_entry_trxdt.setState({ date: new Date(new Date(trx.trxdt).getUTCFullYear(), new Date(trx.trxdt).getUTCMonth(), new Date(trx.trxdt).getUTCDate()) });
+	            _this5.refs.trx_entry_customer.setState({ searchText: cust.company });
+	            _this5.refs.trx_entry_qty.setState({ val: (trx.amt / billable.price).toFixed(2) });
+	            _this5.refs.trx_entry_billable.setState({ searchText: billable.descr });
 	            if (trx.descr) {
-	                _this7.refs.trx_entry_descr.setState({ hasValue: true });
+	                _this5.refs.trx_entry_descr.setState({ hasValue: true });
 	                document.getElementById('trx_entry_descr').value = trx.descr;
 	            }
-	            _this7.setState({ amt: '$ ' + trx.amt });
+	            _this5.setState({ amt: '$ ' + trx.amt });
 	            // Hitting the save button will call this.handleSave()
 	        };
 	
-	        _this7.handleDelete = function (event) {
+	        _this5.handleDelete = function (event) {
 	            var cust = (0, _util.getSelectedCustomer)(),
 	                sort = cust.custtrx.sort,
 	                desc = cust.custtrx.desc ? '&desc' : '',
@@ -47371,25 +47291,25 @@
 	                        }
 	                    }
 	                    document.getElementById('trx_entry_trxid').value = null;
-	                    _this7.setState({ snackbarOpen: true, message: 'Transaction was deleted.' });
-	                    _this7.doesCustExist(document.getElementById('trx_entry_customer').value);
+	                    _this5.setState({ snackbarOpen: true, message: 'Transaction was deleted.' });
+	                    _this5.doesCustExist(document.getElementById('trx_entry_customer').value);
 	                });
 	            });
 	        };
 	
-	        _this7.handleClose = function () {
-	            _this7.removeErrors();
-	            _this7.setState({ snackbarOpen: false });
+	        _this5.handleClose = function () {
+	            _this5.removeErrors();
+	            _this5.setState({ snackbarOpen: false });
 	        };
 	
-	        _this7.handleClear = function () {
-	            _this7.removeErrors();
+	        _this5.handleClear = function () {
+	            _this5.removeErrors();
 	            document.getElementById('trx_entry_trxid').value = '';
-	            _this7.refs.trx_entry_trxdt.setState({ controlledDate: {} });
-	            if (_this7.refs.trx_entry_customer.state.searchText != '') _this7.refs.trx_entry_customer.setState({ searchText: '' });
-	            _this7.refs.trx_entry_qty.setState({ val: '', time: '', showTimer: false });
-	            if (_this7.refs.trx_entry_billable.state.searchText != '') _this7.refs.trx_entry_billable.setState({ searchText: '' });
-	            _this7.refs.trx_entry_descr.setState({ hasValue: false });
+	            _this5.refs.trx_entry_trxdt.setState({ controlledDate: {} });
+	            if (_this5.refs.trx_entry_customer.state.searchText != '') _this5.refs.trx_entry_customer.setState({ searchText: '' });
+	            _this5.refs.trx_entry_qty.setState({ val: '', time: '', showTimer: false });
+	            if (_this5.refs.trx_entry_billable.state.searchText != '') _this5.refs.trx_entry_billable.setState({ searchText: '' });
+	            _this5.refs.trx_entry_descr.setState({ hasValue: false });
 	            document.getElementById('trx_entry_descr').value = '';
 	            var selCustId = (0, _util.getSelectedCustomer)().id;
 	            if (selCustId) {
@@ -47397,29 +47317,29 @@
 	                    if (cur_user.customer[i].id == selCustId) cur_user.customer[i].selected = false;
 	                }
 	            }
-	            _this7.setState({ amt: '$ 0.00', trx: [] });
+	            _this5.setState({ amt: '$ 0.00', trx: [] });
 	        };
 	
-	        _this7.showDelCustDialog = function (event) {
-	            _this7.refs.del_cust_dialog.handleOpen(event.currentTarget.getAttribute('class'));
+	        _this5.showDelCustDialog = function (event) {
+	            _this5.refs.del_cust_dialog.handleOpen(event.currentTarget.getAttribute('class'));
 	        };
 	
-	        _this7.showDelBillableDialog = function (event) {
-	            _this7.refs.del_billables_dialog.handleOpen(event.currentTarget.getAttribute('class'));
+	        _this5.showDelBillableDialog = function (event) {
+	            _this5.refs.del_billables_dialog.handleOpen(event.currentTarget.getAttribute('class'));
 	        };
 	
-	        _this7.editCust = function (event) {
-	            _this7.refs.cust_entry.handleOpen(event.currentTarget.getAttribute('class'), true);
+	        _this5.editCust = function (event) {
+	            _this5.refs.cust_entry.handleOpen(event.currentTarget.getAttribute('class'), true);
 	        };
 	
-	        _this7.editBillable = function (event) {
-	            _this7.refs.billables_entry.handleOpen(event.currentTarget.getAttribute('class'), true);
+	        _this5.editBillable = function (event) {
+	            _this5.refs.billables_entry.handleOpen(event.currentTarget.getAttribute('class'), true);
 	        };
 	
-	        _this7.doesCustExist = function (chosen) {
+	        _this5.doesCustExist = function (chosen) {
 	            var exists = false;
 	            var input = '';
-	            _this7.setState({ disableBillables: true });
+	            _this5.setState({ disableBillables: true });
 	
 	            // Get input customer
 	            if (typeof chosen == 'string') {
@@ -47446,17 +47366,17 @@
 	                }
 	            }
 	            if (exists) {
-	                _this7.setState({ disableBillables: false });
-	                _this7.updateBillables();
-	                _this7.updateTrx(page);
+	                _this5.setState({ disableBillables: false });
+	                _this5.updateBillables();
+	                _this5.updateTrx(page);
 	                return true;'';
 	            } else {
-	                _this7.refs.cust_entry.handleOpen(input);
+	                _this5.refs.cust_entry.handleOpen(input);
 	                return false;
 	            }
 	        };
 	
-	        _this7.doesBillableExist = function (chosen) {
+	        _this5.doesBillableExist = function (chosen) {
 	            var exists = false;
 	            var input = '';
 	
@@ -47484,19 +47404,19 @@
 	                }
 	            }
 	            if (exists) {
-	                _this7.updateTotal();
+	                _this5.updateTotal();
 	                return true;
 	            } else {
-	                _this7.refs.billables_entry.handleOpen(input);
+	                _this5.refs.billables_entry.handleOpen(input);
 	                return false;
 	            }
 	        };
 	
-	        _this7.updateCustomers = function () {
-	            _this7.setState({ customers: _this7.initCustomers() });
+	        _this5.updateCustomers = function () {
+	            _this5.setState({ customers: _this5.initCustomers() });
 	        };
 	
-	        _this7.updateBillables = function () {
+	        _this5.updateBillables = function () {
 	            var billables = [],
 	                cust = (0, _util.getSelectedCustomer)();
 	            if (!cust.billable) return;
@@ -47513,31 +47433,31 @@
 	                                className: billable.id.toString(),
 	                                iconClassName: 'fa fa-pencil',
 	                                tooltip: 'Edit Billable',
-	                                onClick: _this7.editBillable
+	                                onClick: _this5.editBillable
 	                            }),
 	                            _react2.default.createElement(_IconButton2.default, {
 	                                className: billable.id.toString(),
 	                                iconClassName: 'fa fa-trash-o',
 	                                tooltip: 'Delete Billable',
-	                                onClick: _this7.showDelBillableDialog
+	                                onClick: _this5.showDelBillableDialog
 	                            })
 	                        )
 	                    )
 	                };
 	            });
-	            _this7.setState({ billables: billables });
+	            _this5.setState({ billables: billables });
 	        };
 	
-	        _this7.updateTotal = function () {
+	        _this5.updateTotal = function () {
 	            var qty = document.getElementById('trx_entry_qty').value,
 	                billable = (0, _util.getSelectedBillable)();
 	            if (qty == "" || billable == false) return;
-	            if (/^[0-9]{2}:[0-9]{2}:[0-9]{2}$/.test(qty)) qty = _this7.refs.trx_entry_qty.stopwatch.ms / 1000 / 60 / 60;else qty = parseFloat(qty).toFixed(2);
+	            if (/^[0-9]{2}:[0-9]{2}:[0-9]{2}$/.test(qty)) qty = _this5.refs.trx_entry_qty.stopwatch.ms / 1000 / 60 / 60;else qty = parseFloat(qty).toFixed(2);
 	            var price = parseFloat(billable.price);
-	            if (price && price != NaN && qty && qty != NaN) _this7.setState({ amt: '$ ' + (qty * price).toFixed(2) });
+	            if (price && price != NaN && qty && qty != NaN) _this5.setState({ amt: '$ ' + (qty * price).toFixed(2) });
 	        };
 	
-	        _this7.updateTrx = function () {
+	        _this5.updateTrx = function () {
 	            var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
 	
 	            var cust = (0, _util.getSelectedCustomer)(),
@@ -47545,7 +47465,7 @@
 	                desc = cust.custtrx.desc;
 	            (0, _util.getSelCustTrxs)(page, sort, desc);
 	            //Assemble trx rows
-	            var trx = [_react2.default.createElement(_paging_nav2.default, { key: 'paging_nav', refresh: _this7.updateTrx, page: cust.custtrx })];
+	            var trx = [_react2.default.createElement(_paging_nav2.default, { key: 'paging_nav', refresh: _this5.updateTrx, page: cust.custtrx })];
 	            trx.push(_react2.default.createElement(
 	                'tr',
 	                { key: 'trx_th' },
@@ -47556,22 +47476,22 @@
 	                ),
 	                _react2.default.createElement(
 	                    'th',
-	                    { id: 'trxdt', 'data-sort': 'desc', onClick: _this7.sort },
+	                    { id: 'trxdt', 'data-sort': 'desc', onClick: _this5.sort },
 	                    'Trx Date'
 	                ),
 	                _react2.default.createElement(
 	                    'th',
-	                    { id: 'status', 'data-sort': '', onClick: _this7.sort },
+	                    { id: 'status', 'data-sort': '', onClick: _this5.sort },
 	                    'Status'
 	                ),
 	                _react2.default.createElement(
 	                    'th',
-	                    { id: 'item', 'data-sort': '', onClick: _this7.sort },
+	                    { id: 'item', 'data-sort': '', onClick: _this5.sort },
 	                    'Billable'
 	                ),
 	                _react2.default.createElement(
 	                    'th',
-	                    { id: 'descr', 'data-sort': '', onClick: _this7.sort },
+	                    { id: 'descr', 'data-sort': '', onClick: _this5.sort },
 	                    'Description'
 	                ),
 	                _react2.default.createElement(
@@ -47581,7 +47501,7 @@
 	                ),
 	                _react2.default.createElement(
 	                    'th',
-	                    { id: 'amt', 'data-sort': '', onClick: _this7.sort },
+	                    { id: 'amt', 'data-sort': '', onClick: _this5.sort },
 	                    'Amount'
 	                )
 	            ));
@@ -47607,13 +47527,13 @@
 	                            { className: 'trx_icons' },
 	                            _react2.default.createElement(_IconButton2.default, {
 	                                iconClassName: 'fa fa-pencil',
-	                                onClick: _this7.handleEdit,
+	                                onClick: _this5.handleEdit,
 	                                style: style,
 	                                id: cust.custtrx.data[j].id
 	                            }),
 	                            _react2.default.createElement(_IconButton2.default, {
 	                                iconClassName: 'fa fa-trash-o',
-	                                onClick: _this7.handleDelete,
+	                                onClick: _this5.handleDelete,
 	                                style: style,
 	                                id: cust.custtrx.data[j].id
 	                            })
@@ -47653,10 +47573,10 @@
 	                );
 	                trx.push(tmp);
 	            }
-	            _this7.setState({ trx: trx });
+	            _this5.setState({ trx: trx });
 	        };
 	
-	        _this7.sort = function (event) {
+	        _this5.sort = function (event) {
 	            var field = event.currentTarget.id,
 	                dir = event.currentTarget.getAttribute('data-sort');
 	            //if asc, set to desc
@@ -47677,17 +47597,17 @@
 	                    cur_user.customer[i] = cust;
 	                    break;
 	                }
-	            }_this7.updateTrx(1);
+	            }_this5.updateTrx(1);
 	        };
 	
-	        _this7.componentDidMount = function () {
-	            document.getElementById('trx_entry_customer').addEventListener('blur', _this7.doesCustExist);
-	            document.getElementById('trx_entry_billable').addEventListener('blur', _this7.doesBillableExist);
-	            document.getElementById('trx_entry_qty').addEventListener('blur', _this7.updateTotal);
+	        _this5.componentDidMount = function () {
+	            document.getElementById('trx_entry_customer').addEventListener('blur', _this5.doesCustExist);
+	            document.getElementById('trx_entry_billable').addEventListener('blur', _this5.doesBillableExist);
+	            document.getElementById('trx_entry_qty').addEventListener('blur', _this5.updateTotal);
 	        };
 	
-	        _this7.state = {
-	            customers: _this7.initCustomers(),
+	        _this5.state = {
+	            customers: _this5.initCustomers(),
 	            billables: [],
 	            trx: [],
 	            snackbarOpen: false,
@@ -47697,7 +47617,7 @@
 	            errors: { 'trx_entry_trxdt': '', 'trx_entry_customer': '', 'trx_entry_qty': '', 'trx_entry_billable': '', 'trx_entry_amt': '' },
 	            amt: '$ 0.00'
 	        };
-	        return _this7;
+	        return _this5;
 	    }
 	    /**
 	     * Auto-complete selection/onBlur calls this function with cust object when selecting from drop-down
@@ -47742,8 +47662,8 @@
 	                        null,
 	                        _react2.default.createElement(_customer_entry2.default, { ref: 'cust_entry', updateCustomersDropDown: this.updateCustomers }),
 	                        _react2.default.createElement(BillableEntry, { ref: 'billables_entry', updateBillablesDropDown: this.updateBillables }),
-	                        _react2.default.createElement(DeleteCustomerDialog, { ref: 'del_cust_dialog', showDelCustDialog: this.showDelCustDialog, deleteCustomer: this.deleteCustomer }),
-	                        _react2.default.createElement(DeleteBillablesDialog, { ref: 'del_billables_dialog', showDelCustDialog: this.showDelBillableDialog, deleteBillable: this.deleteBillable }),
+	                        _react2.default.createElement(_deleteDialog2.default, { ref: 'del_cust_dialog', text: 'Do you really want to permanently delete this customer and all of their transactions?', handleDelete: this.deleteCustomer }),
+	                        _react2.default.createElement(_deleteDialog2.default, { ref: 'del_billables_dialog', text: 'Do you really want to permanently delete this billable item and all of the related transactions?', handleDelete: this.deleteBillable }),
 	                        _react2.default.createElement(
 	                            'form',
 	                            { id: 'trx_form', className: 'trx_form', ref: 'trx_form' },
@@ -58548,6 +58468,100 @@
 	};
 	
 	exports.default = MakeSelectable;
+
+/***/ },
+/* 479 */
+/*!**********************************************!*\
+  !*** ./resources/assets/js/deleteDialog.jsx ***!
+  \**********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = undefined;
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _Dialog = __webpack_require__(/*! material-ui/Dialog */ 209);
+	
+	var _Dialog2 = _interopRequireDefault(_Dialog);
+	
+	var _FlatButton = __webpack_require__(/*! material-ui/FlatButton */ 183);
+	
+	var _FlatButton2 = _interopRequireDefault(_FlatButton);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by John on 4/9/2017.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * A generic delete 'are you sure?' dialog
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+	
+	
+	var DeleteDialog = function (_React$Component) {
+	    _inherits(DeleteDialog, _React$Component);
+	
+	    function DeleteDialog(props) {
+	        _classCallCheck(this, DeleteDialog);
+	
+	        var _this = _possibleConstructorReturn(this, (DeleteDialog.__proto__ || Object.getPrototypeOf(DeleteDialog)).call(this, props));
+	
+	        _this.handleOpen = function (id) {
+	            _this.setState({ open: true, id: id });
+	        };
+	
+	        _this.handleClose = function () {
+	            _this.setState({ open: false });
+	        };
+	
+	        _this.state = { open: false, id: null };
+	        return _this;
+	    }
+	
+	    _createClass(DeleteDialog, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+	
+	            var actions = [_react2.default.createElement(_FlatButton2.default, { label: 'Cancel', primary: true, onTouchTap: this.handleClose, style: { color: 'red' } }), _react2.default.createElement(_FlatButton2.default, { label: 'Continue', primary: true, className: this.state.id, onClick: function onClick() {
+	                    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _this2.state.id;
+	                    _this2.props.handleDelete(_this2.state.id);
+	                }, style: { color: 'green' } })];
+	
+	            return _react2.default.createElement(
+	                _Dialog2.default,
+	                {
+	                    title: 'Are you sure you want to do this?',
+	                    actions: actions,
+	                    modal: true,
+	                    open: this.state.open,
+	                    onRequest: this.handleClose
+	                },
+	                this.props.text
+	            );
+	        }
+	    }]);
+	
+	    return DeleteDialog;
+	}(_react2.default.Component);
+	
+	DeleteDialog.propTypes = {
+	    handleDelete: _react2.default.PropTypes.func.isRequired,
+	    text: _react2.default.PropTypes.string.isRequired
+	};
+	
+	exports.default = DeleteDialog;
 
 /***/ }
 /******/ ]);

@@ -19,6 +19,7 @@ import CustomerEntry from 'customer_entry.jsx';
 import {getSelectedCustomer, getBillable, getTrx, getSelCustInvoices} from 'util.jsx';
 import Paging_nav from 'paging_nav.jsx';
 import Invoice from 'invoice.jsx';
+import DeleteDialog from 'deleteDialog.jsx';
 
 class InvoiceModule extends React.Component
 {
@@ -74,7 +75,7 @@ class InvoiceModule extends React.Component
     updateTrx = (page = 1) => {
         let cust = getSelectedCustomer();
         if (!cust) {
-            console.log('No customer selected so transactions can\'t be updated.');
+            console.log('No customer selected, so transactions can\'t be updated.');
             return;
         }
         let sort = (cust.custtrx.sort) ? cust.custtrx.sort : 'trxdt',
@@ -142,7 +143,6 @@ class InvoiceModule extends React.Component
         });
 
     }
-
     updateInvoices = (page = 1) => {
         let cust = getSelectedCustomer(),
             sort = (cust.invoice.sort) ? cust.invoice.sort : 'invdt',
@@ -172,7 +172,7 @@ class InvoiceModule extends React.Component
                                 className={cust.invoice.data[i].id.toString()}
                                 iconClassName="fa fa-trash-o"
                                 tooltip="Delete Invoice"
-                                onClick={this.deleteInvoice}
+                                onClick={() => {this.handleDelete(cust.invoice.data[i].id)}}
                             />
                         </span>
                     </td>
@@ -213,8 +213,18 @@ class InvoiceModule extends React.Component
         }
         this.setState({selectedTrx: selTrxs, total: total});
     }
-    deleteInvoice = () => {
-        console.log('hi');
+    handleDelete = (inv_id) => {
+        this.refs.del_inv_dialog.handleOpen(inv_id);
+    }
+    deleteInvoice = (inv_id) => {
+        this.refs.del_inv_dialog.handleClose();
+        if(!inv_id) return 'No invoice id given to delete';
+        fetch('/del_inv/'+inv_id, {method: 'delete', headers: {'X-CSRF-Token': _token}, credentials: 'same-origin'})
+        .then((response)=>{
+            console.log(response);
+            this.updateInvoices();
+            this.updateTrx();
+        });
     }
     /**
      * Auto-complete selection/onBlur calls this function with cust object when selecting from drop-down
@@ -318,6 +328,7 @@ class InvoiceModule extends React.Component
                     onNewRequest={this.doesCustExist}
                 />
                 <Card style={{backgroundColor: '#F7FAF5'}} >
+                    <DeleteDialog ref="del_inv_dialog" handleDelete={this.deleteInvoice} text="Do you really want to permanently delete the selected invoice?" />
                     <CardHeader title="Invoices" actAsExpander={true} showExpandableButton={true} avatar="https://www.dropbox.com/s/1x89klicik0olnk/money.png?dl=1" />
                     <CardText expandable={true}>
                         <table>
@@ -338,7 +349,7 @@ class InvoiceModule extends React.Component
                         </table>
                     </CardText>
                 </Card>
-                <Invoice trx={this.state.selectedTrx} total={this.state.total} updateTrx={this.updateTrx} />
+                <Invoice trx={this.state.selectedTrx} total={this.state.total} updateTrx={this.updateTrx} updateInvoices={this.updateInvoices}/>
             </div>
         );
     }

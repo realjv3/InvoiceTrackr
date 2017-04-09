@@ -11,9 +11,9 @@ ES6Promise.polyfill();
 
 import Stopwatch from 'timer-stopwatch';
 
+import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
-import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/MenuItem';
 import AutoComplete from 'material-ui/AutoComplete';
@@ -28,6 +28,7 @@ import CustomerEntry from 'customer_entry.jsx';
 
 import {getSelCustTrxs, getSelectedCustomer, getSelectedBillable, getTrx, getBillable} from 'util.jsx';
 import Paging_nav from 'paging_nav.jsx';
+import DeleteDialog from 'deleteDialog.jsx';
 
 class BillableEntry extends React.Component
 {
@@ -209,70 +210,6 @@ class BillableEntry extends React.Component
                     </fieldset>
                     <Snackbar bodyStyle={{textAlign: 'center'}} open={this.state.snackbarOpen} message={this.state.message} onRequestClose={this.handleClose} autoHideDuration={3000} />
                 </form>
-            </Dialog>
-        );
-    }
-}
-
-class DeleteCustomerDialog extends React.Component
-{
-    constructor(props) {
-        super(props);
-        this.state = {open: false};
-    }
-    handleOpen = (id) => {
-        this.setState({open: true, id: id});
-    }
-    handleClose = () => {
-        this.setState({open: false});
-    }
-    render() {
-        const actions= [
-            <FlatButton label="Cancel" primary={true} onTouchTap={this.handleClose} style={{color: 'red'}}/>,
-            <FlatButton label="Continue" primary={true} className={this.state.id} onClick={this.props.deleteCustomer} style={{color: 'green'}}/>
-        ];
-
-        return (
-            <Dialog
-                title="Are you sure you want to do this?"
-                actions={actions}
-                modal={true}
-                open={this.state.open}
-                onRequest={this.handleClose}
-                >
-                Do you really want to permanently delete this customer and all of their transactions?
-            </Dialog>
-        );
-    }
-}
-
-class DeleteBillablesDialog extends React.Component
-{
-    constructor(props) {
-        super(props);
-        this.state = {open: false};
-    }
-    handleOpen = (id) => {
-        this.setState({open: true, id: id});
-    }
-    handleClose = () => {
-        this.setState({open: false});
-    }
-    render() {
-        const actions= [
-            <FlatButton label="Cancel" primary={true} onTouchTap={this.handleClose} style={{color: 'red'}}/>,
-            <FlatButton label="Continue" primary={true} className={this.state.id} onClick={this.props.deleteBillable} style={{color: 'green'}}/>
-        ];
-
-        return (
-            <Dialog
-                title="Are you sure you want to do this?"
-                actions={actions}
-                modal={true}
-                open={this.state.open}
-                onRequest={this.handleClose}
-                >
-                Do you really want to permanently delete this billable item and all of the related transactions?
             </Dialog>
         );
     }
@@ -460,10 +397,10 @@ class Trx extends React.Component
         }
         return customers;
     }
-    deleteCustomer = (event) => {
+    deleteCustomer = (cust_id) => {
         this.refs.del_cust_dialog.handleClose();
         var body = new FormData();
-        body.append('cust_id', event.currentTarget.getAttribute('class'));
+        body.append('cust_id', cust_id);
         fetch(
             'delete_customer',
             {method: 'POST', headers: {'X-CSRF-Token': _token, 'Accept': 'application/json'}, credentials: 'same-origin', body: body}
@@ -477,10 +414,10 @@ class Trx extends React.Component
                     });
             });
     }
-    deleteBillable = (event) => {
+    deleteBillable = (billable_id) => {
         this.refs.del_billables_dialog.handleClose();
         var body = new FormData();
-        body.append('id', parseInt(event.currentTarget.getAttribute('class')));
+        body.append('id', billable_id);
         fetch(
             'delete_billable',
             {method: 'POST', headers: {'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'}, credentials: 'same-origin', body: body}
@@ -872,8 +809,8 @@ class Trx extends React.Component
                     <section>
                         <CustomerEntry ref="cust_entry" updateCustomersDropDown={this.updateCustomers} />
                         <BillableEntry ref="billables_entry" updateBillablesDropDown={this.updateBillables} />
-                        <DeleteCustomerDialog ref="del_cust_dialog" showDelCustDialog={this.showDelCustDialog} deleteCustomer={this.deleteCustomer} />
-                        <DeleteBillablesDialog ref="del_billables_dialog" showDelCustDialog={this.showDelBillableDialog} deleteBillable={this.deleteBillable} />
+                        <DeleteDialog ref="del_cust_dialog" text="Do you really want to permanently delete this customer and all of their transactions?" handleDelete={this.deleteCustomer} />
+                        <DeleteDialog ref="del_billables_dialog" text="Do you really want to permanently delete this billable item and all of the related transactions?" handleDelete={this.deleteBillable} />
                         <form id="trx_form" className="trx_form" ref="trx_form" >
                             <input type="hidden" id="trx_entry_trxid" />
                             <DatePickerControlled

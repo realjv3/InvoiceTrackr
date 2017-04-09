@@ -15,8 +15,9 @@ class Invoice extends React.Component {
         let trx_keys = this.props.trx.map(
             (e) => { return e.key; }
         );
-        this.props.updateTrx();
         window.open('/create_inv?trx_keys=' + trx_keys + '&total=' + this.props.total + '&content=' + document.getElementById('invoice').outerHTML);
+        this.props.updateTrx();
+        this.props.updateInvoices();
     }
     render() {
         let cust = getSelectedCustomer(),
@@ -70,5 +71,10 @@ class Invoice extends React.Component {
         );
     }
 }
-Invoice.PropTypes = {trx: React.PropTypes.array}
+Invoice.PropTypes = {
+    trx: React.PropTypes.array,
+    total: React.PropTypes.number,
+    updateTrx: React.PropTypes.func,
+    updateInvoices: React.PropTypes.func
+}
 export default Invoice;

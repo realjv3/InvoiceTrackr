@@ -71,6 +71,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('create_inv', 'InvoiceController@create');
     Route::get('get_inv/{custid?}', 'InvoiceController@read');
     Route::get('get_billable_trx/{custid}', 'InvoiceController@get_billable_trx');
+    Route::delete('del_inv/{inv_id}', 'InvoiceController@delete');
 
     // Util
     Route::get('cur_user', function() {

@@ -41493,6 +41493,10 @@
 	
 	var _invoice2 = _interopRequireDefault(_invoice);
 	
+	var _deleteDialog = __webpack_require__(/*! deleteDialog.jsx */ 479);
+	
+	var _deleteDialog2 = _interopRequireDefault(_deleteDialog);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -41555,7 +41559,7 @@
 	
 	            var cust = (0, _util.getSelectedCustomer)();
 	            if (!cust) {
-	                console.log('No customer selected so transactions can\'t be updated.');
+	                console.log('No customer selected, so transactions can\'t be updated.');
 	                return;
 	            }
 	            var sort = cust.custtrx.sort ? cust.custtrx.sort : 'trxdt',
@@ -41706,7 +41710,8 @@
 	                    'Invoice Amount'
 	                )
 	            );
-	            for (var i = 0; i < cust.invoice.data.length; i++) {
+	
+	            var _loop = function _loop(i) {
 	                //render table row
 	                var style = {
 	                    width: '10px',
@@ -41726,7 +41731,9 @@
 	                                className: cust.invoice.data[i].id.toString(),
 	                                iconClassName: 'fa fa-trash-o',
 	                                tooltip: 'Delete Invoice',
-	                                onClick: _this.deleteInvoice
+	                                onClick: function onClick() {
+	                                    _this.handleDelete(cust.invoice.data[i].id);
+	                                }
 	                            })
 	                        )
 	                    ),
@@ -41742,6 +41749,10 @@
 	                    )
 	                );
 	                invoices.push(tmp);
+	            };
+	
+	            for (var i = 0; i < cust.invoice.data.length; i++) {
+	                _loop(i);
 	            }
 	            if (invoices.length > 0) invoices.unshift(header);
 	            _this.setState({ invoices: invoices });
@@ -41797,8 +41808,18 @@
 	            _this.setState({ selectedTrx: selTrxs, total: total });
 	        };
 	
-	        _this.deleteInvoice = function () {
-	            console.log('hi');
+	        _this.handleDelete = function (inv_id) {
+	            _this.refs.del_inv_dialog.handleOpen(inv_id);
+	        };
+	
+	        _this.deleteInvoice = function (inv_id) {
+	            _this.refs.del_inv_dialog.handleClose();
+	            if (!inv_id) return 'No invoice id given to delete';
+	            fetch('/del_inv/' + inv_id, { method: 'delete', headers: { 'X-CSRF-Token': _token }, credentials: 'same-origin' }).then(function (response) {
+	                console.log(response);
+	                _this.updateInvoices();
+	                _this.updateTrx();
+	            });
 	        };
 	
 	        _this.doesCustExist = function (chosen) {
@@ -41952,6 +41973,7 @@
 	                _react2.default.createElement(
 	                    _Card.Card,
 	                    { style: { backgroundColor: '#F7FAF5' } },
+	                    _react2.default.createElement(_deleteDialog2.default, { ref: 'del_inv_dialog', handleDelete: this.deleteInvoice, text: 'Do you really want to permanently delete the selected invoice?' }),
 	                    _react2.default.createElement(_Card.CardHeader, { title: 'Invoices', actAsExpander: true, showExpandableButton: true, avatar: 'https://www.dropbox.com/s/1x89klicik0olnk/money.png?dl=1' }),
 	                    _react2.default.createElement(
 	                        _Card.CardText,
@@ -41986,7 +42008,7 @@
 	                        )
 	                    )
 	                ),
-	                _react2.default.createElement(_invoice2.default, { trx: this.state.selectedTrx, total: this.state.total, updateTrx: this.updateTrx })
+	                _react2.default.createElement(_invoice2.default, { trx: this.state.selectedTrx, total: this.state.total, updateTrx: this.updateTrx, updateInvoices: this.updateInvoices })
 	            );
 	        }
 	    }]);
@@ -48494,8 +48516,9 @@
 	            var trx_keys = _this.props.trx.map(function (e) {
 	                return e.key;
 	            });
-	            _this.props.updateTrx();
 	            window.open('/create_inv?trx_keys=' + trx_keys + '&total=' + _this.props.total + '&content=' + document.getElementById('invoice').outerHTML);
+	            _this.props.updateTrx();
+	            _this.props.updateInvoices();
 	        };
 	
 	        return _this;
@@ -48646,8 +48669,139 @@
 	    return Invoice;
 	}(_react2.default.Component);
 	
-	Invoice.PropTypes = { trx: _react2.default.PropTypes.array };
+	Invoice.PropTypes = {
+	    trx: _react2.default.PropTypes.array,
+	    total: _react2.default.PropTypes.number,
+	    updateTrx: _react2.default.PropTypes.func,
+	    updateInvoices: _react2.default.PropTypes.func
+	};
 	exports.default = Invoice;
+
+/***/ },
+/* 447 */,
+/* 448 */,
+/* 449 */,
+/* 450 */,
+/* 451 */,
+/* 452 */,
+/* 453 */,
+/* 454 */,
+/* 455 */,
+/* 456 */,
+/* 457 */,
+/* 458 */,
+/* 459 */,
+/* 460 */,
+/* 461 */,
+/* 462 */,
+/* 463 */,
+/* 464 */,
+/* 465 */,
+/* 466 */,
+/* 467 */,
+/* 468 */,
+/* 469 */,
+/* 470 */,
+/* 471 */,
+/* 472 */,
+/* 473 */,
+/* 474 */,
+/* 475 */,
+/* 476 */,
+/* 477 */,
+/* 478 */,
+/* 479 */
+/*!**********************************************!*\
+  !*** ./resources/assets/js/deleteDialog.jsx ***!
+  \**********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = undefined;
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _Dialog = __webpack_require__(/*! material-ui/Dialog */ 209);
+	
+	var _Dialog2 = _interopRequireDefault(_Dialog);
+	
+	var _FlatButton = __webpack_require__(/*! material-ui/FlatButton */ 183);
+	
+	var _FlatButton2 = _interopRequireDefault(_FlatButton);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by John on 4/9/2017.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * A generic delete 'are you sure?' dialog
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+	
+	
+	var DeleteDialog = function (_React$Component) {
+	    _inherits(DeleteDialog, _React$Component);
+	
+	    function DeleteDialog(props) {
+	        _classCallCheck(this, DeleteDialog);
+	
+	        var _this = _possibleConstructorReturn(this, (DeleteDialog.__proto__ || Object.getPrototypeOf(DeleteDialog)).call(this, props));
+	
+	        _this.handleOpen = function (id) {
+	            _this.setState({ open: true, id: id });
+	        };
+	
+	        _this.handleClose = function () {
+	            _this.setState({ open: false });
+	        };
+	
+	        _this.state = { open: false, id: null };
+	        return _this;
+	    }
+	
+	    _createClass(DeleteDialog, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+	
+	            var actions = [_react2.default.createElement(_FlatButton2.default, { label: 'Cancel', primary: true, onTouchTap: this.handleClose, style: { color: 'red' } }), _react2.default.createElement(_FlatButton2.default, { label: 'Continue', primary: true, className: this.state.id, onClick: function onClick() {
+	                    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _this2.state.id;
+	                    _this2.props.handleDelete(_this2.state.id);
+	                }, style: { color: 'green' } })];
+	
+	            return _react2.default.createElement(
+	                _Dialog2.default,
+	                {
+	                    title: 'Are you sure you want to do this?',
+	                    actions: actions,
+	                    modal: true,
+	                    open: this.state.open,
+	                    onRequest: this.handleClose
+	                },
+	                this.props.text
+	            );
+	        }
+	    }]);
+	
+	    return DeleteDialog;
+	}(_react2.default.Component);
+	
+	DeleteDialog.propTypes = {
+	    handleDelete: _react2.default.PropTypes.func.isRequired,
+	    text: _react2.default.PropTypes.string.isRequired
+	};
+	
+	exports.default = DeleteDialog;
 
 /***/ }
 /******/ ]);
