@@ -12,8 +12,6 @@ class Paging_nav extends React.Component
 {
     constructor(props) {
         super(props);
-        this.refresh = React.PropTypes.func.isRequired;
-        this.page = React.PropTypes.object.isRequired;
     }
 
     render() {
@@ -49,6 +47,11 @@ class Paging_nav extends React.Component
             </td>
         </tr>);
     }
+}
+
+Paging_nav.propTypes = {
+    refresh: React.PropTypes.func.isRequired,
+    page: React.PropTypes.object.isRequired
 }
 
 export {Paging_nav as default};

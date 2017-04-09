@@ -20,7 +20,8 @@ import {getSelectedCustomer, getBillable, getTrx, getSelCustInvoices} from 'util
 import Paging_nav from 'paging_nav.jsx';
 import Invoice from 'invoice.jsx';
 
-class InvoiceModule extends React.Component{
+class InvoiceModule extends React.Component
+{
     constructor(props) {
         super(props);
         this.state= {
@@ -71,8 +72,12 @@ class InvoiceModule extends React.Component{
         this.setState({customers: this.initCustomers()});
     }
     updateTrx = (page = 1) => {
-        let cust = getSelectedCustomer(),
-            sort = (cust.custtrx.sort) ? cust.custtrx.sort : 'trxdt',
+        let cust = getSelectedCustomer();
+        if (!cust) {
+            console.log('No customer selected so transactions can\'t be updated.');
+            return;
+        }
+        let sort = (cust.custtrx.sort) ? cust.custtrx.sort : 'trxdt',
             desc = (cust.custtrx.desc) ? '&desc' : '',
             billable_trx = null;
         //Get billable trx then render & update the cur_user global
@@ -132,9 +137,7 @@ class InvoiceModule extends React.Component{
                 }
                 if(trx.length > 0)
                     trx.unshift(header);
-                this.setState({
-                    trx: trx,
-                });
+                this.setState({trx: trx});
             });
         });
 
@@ -184,12 +187,12 @@ class InvoiceModule extends React.Component{
     }
     addToInvoice = (event, isInputChecked) => {
         let trx = getTrx(event.currentTarget.id),
-            trxs = this.state.selectedTrx,
+            selTrxs = this.state.selectedTrx,
             total = parseFloat(this.state.total).toFixed(2);
         //first, unselect & reduce total if already selected
-        for(let i = 0; i < trxs.length; i++)
-            if(trxs[i].key == 'trx_id_'+ event.currentTarget.id) {
-                trxs.splice(i, 1);
+        for(let i = 0; i < selTrxs.length; i++)
+            if(selTrxs[i].key == 'trx_id_'+ event.currentTarget.id) {
+                selTrxs.splice(i, 1);
                 if(total > 0)
                     total = total - parseFloat(trx.amt).toFixed(2);
             }
@@ -205,10 +208,10 @@ class InvoiceModule extends React.Component{
                     <td>{qty}</td>
                     <td>$ {trx.amt}</td>
                 </tr>;
-            trxs.push(tmp);
+            selTrxs.push(tmp);
             total = (parseFloat(total) + parseFloat(trx.amt)).toFixed(2)
         }
-        this.setState({selectedTrx: trxs, total: total});
+        this.setState({selectedTrx: selTrxs, total: total});
     }
     deleteInvoice = () => {
         console.log('hi');
@@ -236,7 +239,7 @@ class InvoiceModule extends React.Component{
             input = chosen.target.value;
         }
 
-        // check if customer exists and get their billables for drop-down store, else open CustomerEntry dialog
+        // check if customer exists and get their invoices & billable trx, else open CustomerEntry dialog
         for (var i = 0; i < cur_user.customer.length; i++) {
             cur_user.customer[i].selected = false;
             if (cur_user.customer[i].company.toLowerCase().trim() == input.toLowerCase().trim()) {
@@ -314,23 +317,23 @@ class InvoiceModule extends React.Component{
                     listStyle={{width: 'auto', minWidth: '400px'}}
                     onNewRequest={this.doesCustExist}
                 />
-                <Card style={{backgroundColor: '#F7FAF5'}}>
+                <Card style={{backgroundColor: '#F7FAF5'}} >
                     <CardHeader title="Invoices" actAsExpander={true} showExpandableButton={true} avatar="https://www.dropbox.com/s/1x89klicik0olnk/money.png?dl=1" />
                     <CardText expandable={true}>
                         <table>
                             <tbody>
-                            {this.state.invoices}
+                                {this.state.invoices}
                             </tbody>
                         </table>
                     </CardText>
                 </Card>
                 <Divider />
-                <Card style={{backgroundColor: '#F7FAF5'}}>
+                <Card style={{backgroundColor: '#F7FAF5'}} onExpandChange={this.updateTrx}>
                     <CardHeader title="Billable Transactions" actAsExpander={true} showExpandableButton={true} avatar="https://www.dropbox.com/s/4hw9njfnlkgttmf/clock-1.png?dl=1" />
                     <CardText expandable={true}>
                         <table>
                             <tbody>
-                            {this.state.trx}
+                                {this.state.trx}
                             </tbody>
                         </table>
                     </CardText>
