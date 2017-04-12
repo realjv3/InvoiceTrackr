@@ -18,12 +18,14 @@ class InvoiceController extends Controller
         //get the transactions being invoiced
         $trx_ids = explode(',', $_GET['trx_keys']);
         array_shift($trx_ids);
-        if(count($trx_ids) < 1) return; //TODO return proper error
+        if(count($trx_ids) < 1) return response('No transactions to invoice.', 422);
         $custid = CustTrx::find(substr($trx_ids[0], 7))->custid;
 
         //save an invoice record to database
         $invoice = new Invoice;
+        $invoice->invno = filter_var($_GET['invno'], FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES);
         $invoice->invdt = date('Y-m-d');
+        $invoice->duedt = date('Y-m-d', strtotime(substr($_GET['duedt'], 0, 16)));
         $invoice->user_id = Auth::user()->id;
         $invoice->custid = $custid;
         $invoice->amt = $_GET['total'];

@@ -221,7 +221,6 @@ class InvoiceModule extends React.Component
         if(!inv_id) return 'No invoice id given to delete';
         fetch('/del_inv/'+inv_id, {method: 'delete', headers: {'X-CSRF-Token': _token}, credentials: 'same-origin'})
         .then((response)=>{
-            console.log(response);
             this.updateInvoices();
             this.updateTrx();
         });
