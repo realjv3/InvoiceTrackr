@@ -41493,7 +41493,7 @@
 	
 	var _invoice2 = _interopRequireDefault(_invoice);
 	
-	var _deleteDialog = __webpack_require__(/*! deleteDialog.jsx */ 447);
+	var _deleteDialog = __webpack_require__(/*! deleteDialog.jsx */ 463);
 	
 	var _deleteDialog2 = _interopRequireDefault(_deleteDialog);
 	
@@ -48494,7 +48494,7 @@
 	
 	var _TextField2 = _interopRequireDefault(_TextField);
 	
-	var _DatePicker = __webpack_require__(/*! material-ui/DatePicker */ 462);
+	var _DatePicker = __webpack_require__(/*! material-ui/DatePicker */ 447);
 	
 	var _DatePicker2 = _interopRequireDefault(_DatePicker);
 	
@@ -48740,114 +48740,6 @@
 
 /***/ },
 /* 447 */
-/*!**********************************************!*\
-  !*** ./resources/assets/js/deleteDialog.jsx ***!
-  \**********************************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = undefined;
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _react = __webpack_require__(/*! react */ 1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _Dialog = __webpack_require__(/*! material-ui/Dialog */ 209);
-	
-	var _Dialog2 = _interopRequireDefault(_Dialog);
-	
-	var _FlatButton = __webpack_require__(/*! material-ui/FlatButton */ 183);
-	
-	var _FlatButton2 = _interopRequireDefault(_FlatButton);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by John on 4/9/2017.
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * A generic delete 'are you sure?' dialog
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
-	
-	
-	var DeleteDialog = function (_React$Component) {
-	    _inherits(DeleteDialog, _React$Component);
-	
-	    function DeleteDialog(props) {
-	        _classCallCheck(this, DeleteDialog);
-	
-	        var _this = _possibleConstructorReturn(this, (DeleteDialog.__proto__ || Object.getPrototypeOf(DeleteDialog)).call(this, props));
-	
-	        _this.handleOpen = function (id) {
-	            _this.setState({ open: true, id: id });
-	        };
-	
-	        _this.handleClose = function () {
-	            _this.setState({ open: false });
-	        };
-	
-	        _this.state = { open: false, id: null };
-	        return _this;
-	    }
-	
-	    _createClass(DeleteDialog, [{
-	        key: 'render',
-	        value: function render() {
-	            var _this2 = this;
-	
-	            var actions = [_react2.default.createElement(_FlatButton2.default, { label: 'Cancel', primary: true, onTouchTap: this.handleClose, style: { color: 'red' } }), _react2.default.createElement(_FlatButton2.default, { label: 'Continue', primary: true, className: this.state.id, onClick: function onClick() {
-	                    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _this2.state.id;
-	                    _this2.props.handleDelete(_this2.state.id);
-	                }, style: { color: 'green' } })];
-	
-	            return _react2.default.createElement(
-	                _Dialog2.default,
-	                {
-	                    title: 'Are you sure you want to do this?',
-	                    actions: actions,
-	                    modal: true,
-	                    open: this.state.open,
-	                    onRequest: this.handleClose
-	                },
-	                this.props.text
-	            );
-	        }
-	    }]);
-	
-	    return DeleteDialog;
-	}(_react2.default.Component);
-	
-	DeleteDialog.propTypes = {
-	    handleDelete: _react2.default.PropTypes.func.isRequired,
-	    text: _react2.default.PropTypes.string.isRequired
-	};
-	
-	exports.default = DeleteDialog;
-
-/***/ },
-/* 448 */,
-/* 449 */,
-/* 450 */,
-/* 451 */,
-/* 452 */,
-/* 453 */,
-/* 454 */,
-/* 455 */,
-/* 456 */,
-/* 457 */,
-/* 458 */,
-/* 459 */,
-/* 460 */,
-/* 461 */,
-/* 462 */
 /*!*******************************************!*\
   !*** ./~/material-ui/DatePicker/index.js ***!
   \*******************************************/
@@ -48860,7 +48752,7 @@
 	});
 	exports.default = undefined;
 	
-	var _DatePicker = __webpack_require__(/*! ./DatePicker */ 463);
+	var _DatePicker = __webpack_require__(/*! ./DatePicker */ 448);
 	
 	var _DatePicker2 = _interopRequireDefault(_DatePicker);
 	
@@ -48869,7 +48761,7 @@
 	exports.default = _DatePicker2.default;
 
 /***/ },
-/* 463 */
+/* 448 */
 /*!************************************************!*\
   !*** ./~/material-ui/DatePicker/DatePicker.js ***!
   \************************************************/
@@ -48893,9 +48785,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 464);
+	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 449);
 	
-	var _DatePickerDialog = __webpack_require__(/*! ./DatePickerDialog */ 465);
+	var _DatePickerDialog = __webpack_require__(/*! ./DatePickerDialog */ 450);
 	
 	var _DatePickerDialog2 = _interopRequireDefault(_DatePickerDialog);
 	
@@ -49262,7 +49154,7 @@
 	exports.default = DatePicker;
 
 /***/ },
-/* 464 */
+/* 449 */
 /*!***********************************************!*\
   !*** ./~/material-ui/DatePicker/dateUtils.js ***!
   \***********************************************/
@@ -49447,7 +49339,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! (webpack)/~/node-libs-browser/~/process/browser.js */ 3)))
 
 /***/ },
-/* 465 */
+/* 450 */
 /*!******************************************************!*\
   !*** ./~/material-ui/DatePicker/DatePickerDialog.js ***!
   \******************************************************/
@@ -49479,7 +49371,7 @@
 	
 	var _keycode2 = _interopRequireDefault(_keycode);
 	
-	var _Calendar = __webpack_require__(/*! ./Calendar */ 466);
+	var _Calendar = __webpack_require__(/*! ./Calendar */ 451);
 	
 	var _Calendar2 = _interopRequireDefault(_Calendar);
 	
@@ -49495,7 +49387,7 @@
 	
 	var _PopoverAnimationVertical2 = _interopRequireDefault(_PopoverAnimationVertical);
 	
-	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 464);
+	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 449);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -49691,7 +49583,7 @@
 	exports.default = DatePickerDialog;
 
 /***/ },
-/* 466 */
+/* 451 */
 /*!**********************************************!*\
   !*** ./~/material-ui/DatePicker/Calendar.js ***!
   \**********************************************/
@@ -49721,31 +49613,31 @@
 	
 	var _transitions2 = _interopRequireDefault(_transitions);
 	
-	var _CalendarActionButtons = __webpack_require__(/*! ./CalendarActionButtons */ 467);
+	var _CalendarActionButtons = __webpack_require__(/*! ./CalendarActionButtons */ 452);
 	
 	var _CalendarActionButtons2 = _interopRequireDefault(_CalendarActionButtons);
 	
-	var _CalendarMonth = __webpack_require__(/*! ./CalendarMonth */ 468);
+	var _CalendarMonth = __webpack_require__(/*! ./CalendarMonth */ 453);
 	
 	var _CalendarMonth2 = _interopRequireDefault(_CalendarMonth);
 	
-	var _CalendarYear = __webpack_require__(/*! ./CalendarYear */ 470);
+	var _CalendarYear = __webpack_require__(/*! ./CalendarYear */ 455);
 	
 	var _CalendarYear2 = _interopRequireDefault(_CalendarYear);
 	
-	var _CalendarToolbar = __webpack_require__(/*! ./CalendarToolbar */ 472);
+	var _CalendarToolbar = __webpack_require__(/*! ./CalendarToolbar */ 457);
 	
 	var _CalendarToolbar2 = _interopRequireDefault(_CalendarToolbar);
 	
-	var _DateDisplay = __webpack_require__(/*! ./DateDisplay */ 477);
+	var _DateDisplay = __webpack_require__(/*! ./DateDisplay */ 462);
 	
 	var _DateDisplay2 = _interopRequireDefault(_DateDisplay);
 	
-	var _SlideIn = __webpack_require__(/*! ../internal/SlideIn */ 475);
+	var _SlideIn = __webpack_require__(/*! ../internal/SlideIn */ 460);
 	
 	var _SlideIn2 = _interopRequireDefault(_SlideIn);
 	
-	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 464);
+	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 449);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -50131,7 +50023,7 @@
 	exports.default = Calendar;
 
 /***/ },
-/* 467 */
+/* 452 */
 /*!***********************************************************!*\
   !*** ./~/material-ui/DatePicker/CalendarActionButtons.js ***!
   \***********************************************************/
@@ -50231,7 +50123,7 @@
 	exports.default = CalendarActionButton;
 
 /***/ },
-/* 468 */
+/* 453 */
 /*!***************************************************!*\
   !*** ./~/material-ui/DatePicker/CalendarMonth.js ***!
   \***************************************************/
@@ -50249,9 +50141,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 464);
+	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 449);
 	
-	var _DayButton = __webpack_require__(/*! ./DayButton */ 469);
+	var _DayButton = __webpack_require__(/*! ./DayButton */ 454);
 	
 	var _DayButton2 = _interopRequireDefault(_DayButton);
 	
@@ -50380,7 +50272,7 @@
 	exports.default = CalendarMonth;
 
 /***/ },
-/* 469 */
+/* 454 */
 /*!***********************************************!*\
   !*** ./~/material-ui/DatePicker/DayButton.js ***!
   \***********************************************/
@@ -50404,7 +50296,7 @@
 	
 	var _transitions2 = _interopRequireDefault(_transitions);
 	
-	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 464);
+	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 449);
 	
 	var _EnhancedButton = __webpack_require__(/*! ../internal/EnhancedButton */ 191);
 	
@@ -50557,7 +50449,7 @@
 	exports.default = DayButton;
 
 /***/ },
-/* 470 */
+/* 455 */
 /*!**************************************************!*\
   !*** ./~/material-ui/DatePicker/CalendarYear.js ***!
   \**************************************************/
@@ -50581,11 +50473,11 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _YearButton = __webpack_require__(/*! ./YearButton */ 471);
+	var _YearButton = __webpack_require__(/*! ./YearButton */ 456);
 	
 	var _YearButton2 = _interopRequireDefault(_YearButton);
 	
-	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 464);
+	var _dateUtils = __webpack_require__(/*! ./dateUtils */ 449);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -50719,7 +50611,7 @@
 	exports.default = CalendarYear;
 
 /***/ },
-/* 471 */
+/* 456 */
 /*!************************************************!*\
   !*** ./~/material-ui/DatePicker/YearButton.js ***!
   \************************************************/
@@ -50864,7 +50756,7 @@
 	exports.default = YearButton;
 
 /***/ },
-/* 472 */
+/* 457 */
 /*!*****************************************************!*\
   !*** ./~/material-ui/DatePicker/CalendarToolbar.js ***!
   \*****************************************************/
@@ -50886,15 +50778,15 @@
 	
 	var _IconButton2 = _interopRequireDefault(_IconButton);
 	
-	var _chevronLeft = __webpack_require__(/*! ../svg-icons/navigation/chevron-left */ 473);
+	var _chevronLeft = __webpack_require__(/*! ../svg-icons/navigation/chevron-left */ 458);
 	
 	var _chevronLeft2 = _interopRequireDefault(_chevronLeft);
 	
-	var _chevronRight = __webpack_require__(/*! ../svg-icons/navigation/chevron-right */ 474);
+	var _chevronRight = __webpack_require__(/*! ../svg-icons/navigation/chevron-right */ 459);
 	
 	var _chevronRight2 = _interopRequireDefault(_chevronRight);
 	
-	var _SlideIn = __webpack_require__(/*! ../internal/SlideIn */ 475);
+	var _SlideIn = __webpack_require__(/*! ../internal/SlideIn */ 460);
 	
 	var _SlideIn2 = _interopRequireDefault(_SlideIn);
 	
@@ -51031,7 +50923,7 @@
 	exports.default = CalendarToolbar;
 
 /***/ },
-/* 473 */
+/* 458 */
 /*!************************************************************!*\
   !*** ./~/material-ui/svg-icons/navigation/chevron-left.js ***!
   \************************************************************/
@@ -51071,7 +50963,7 @@
 	exports.default = NavigationChevronLeft;
 
 /***/ },
-/* 474 */
+/* 459 */
 /*!*************************************************************!*\
   !*** ./~/material-ui/svg-icons/navigation/chevron-right.js ***!
   \*************************************************************/
@@ -51111,7 +51003,7 @@
 	exports.default = NavigationChevronRight;
 
 /***/ },
-/* 475 */
+/* 460 */
 /*!*******************************************!*\
   !*** ./~/material-ui/internal/SlideIn.js ***!
   \*******************************************/
@@ -51139,7 +51031,7 @@
 	
 	var _reactAddonsTransitionGroup2 = _interopRequireDefault(_reactAddonsTransitionGroup);
 	
-	var _SlideInChild = __webpack_require__(/*! ./SlideInChild */ 476);
+	var _SlideInChild = __webpack_require__(/*! ./SlideInChild */ 461);
 	
 	var _SlideInChild2 = _interopRequireDefault(_SlideInChild);
 	
@@ -51240,7 +51132,7 @@
 	exports.default = SlideIn;
 
 /***/ },
-/* 476 */
+/* 461 */
 /*!************************************************!*\
   !*** ./~/material-ui/internal/SlideInChild.js ***!
   \************************************************/
@@ -51384,7 +51276,7 @@
 	exports.default = SlideInChild;
 
 /***/ },
-/* 477 */
+/* 462 */
 /*!*************************************************!*\
   !*** ./~/material-ui/DatePicker/DateDisplay.js ***!
   \*************************************************/
@@ -51408,7 +51300,7 @@
 	
 	var _transitions2 = _interopRequireDefault(_transitions);
 	
-	var _SlideIn = __webpack_require__(/*! ../internal/SlideIn */ 475);
+	var _SlideIn = __webpack_require__(/*! ../internal/SlideIn */ 460);
 	
 	var _SlideIn2 = _interopRequireDefault(_SlideIn);
 	
@@ -51620,6 +51512,100 @@
 	  muiTheme: _react.PropTypes.object.isRequired
 	};
 	exports.default = DateDisplay;
+
+/***/ },
+/* 463 */
+/*!**********************************************!*\
+  !*** ./resources/assets/js/deleteDialog.jsx ***!
+  \**********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = undefined;
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _Dialog = __webpack_require__(/*! material-ui/Dialog */ 209);
+	
+	var _Dialog2 = _interopRequireDefault(_Dialog);
+	
+	var _FlatButton = __webpack_require__(/*! material-ui/FlatButton */ 183);
+	
+	var _FlatButton2 = _interopRequireDefault(_FlatButton);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by John on 4/9/2017.
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * A generic delete 'are you sure?' dialog
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+	
+	
+	var DeleteDialog = function (_React$Component) {
+	    _inherits(DeleteDialog, _React$Component);
+	
+	    function DeleteDialog(props) {
+	        _classCallCheck(this, DeleteDialog);
+	
+	        var _this = _possibleConstructorReturn(this, (DeleteDialog.__proto__ || Object.getPrototypeOf(DeleteDialog)).call(this, props));
+	
+	        _this.handleOpen = function (id) {
+	            _this.setState({ open: true, id: id });
+	        };
+	
+	        _this.handleClose = function () {
+	            _this.setState({ open: false });
+	        };
+	
+	        _this.state = { open: false, id: null };
+	        return _this;
+	    }
+	
+	    _createClass(DeleteDialog, [{
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+	
+	            var actions = [_react2.default.createElement(_FlatButton2.default, { label: 'Cancel', primary: true, onTouchTap: this.handleClose, style: { color: 'red' } }), _react2.default.createElement(_FlatButton2.default, { label: 'Continue', primary: true, className: this.state.id, onClick: function onClick() {
+	                    var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _this2.state.id;
+	                    _this2.props.handleDelete(_this2.state.id);
+	                }, style: { color: 'green' } })];
+	
+	            return _react2.default.createElement(
+	                _Dialog2.default,
+	                {
+	                    title: 'Are you sure you want to do this?',
+	                    actions: actions,
+	                    modal: true,
+	                    open: this.state.open,
+	                    onRequest: this.handleClose
+	                },
+	                this.props.text
+	            );
+	        }
+	    }]);
+	
+	    return DeleteDialog;
+	}(_react2.default.Component);
+	
+	DeleteDialog.propTypes = {
+	    handleDelete: _react2.default.PropTypes.func.isRequired,
+	    text: _react2.default.PropTypes.string.isRequired
+	};
+	
+	exports.default = DeleteDialog;
 
 /***/ }
 /******/ ]);

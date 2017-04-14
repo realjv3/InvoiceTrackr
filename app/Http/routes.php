@@ -55,12 +55,12 @@ Route::group(['middleware' => ['web']], function () {
 
     // Customer crud
     Route::post('save_customer', 'CustomerController@save');
-    Route::post('delete_customer', 'CustomerController@delete');
+    Route::delete('delete_customer/{cust_id}', 'CustomerController@delete');
     Route::get('read_customer', 'CustomerController@read');
 
     // Billable crud
     Route::post('save_billable', 'BillablesController@save');
-    Route::post('delete_billable', 'BillablesController@delete');
+    Route::delete('delete_billable/{billable_id}', 'BillablesController@delete');
 
     // Trx crud
     Route::post('save_trx', 'CustTrxController@save');
@@ -68,7 +68,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('get_trx/{custid?}', 'CustTrxController@read');
 
     // Invoices
-    Route::get('create_inv', 'InvoiceController@create');
+    Route::get('create_inv', 'InvoiceController@create');   //using GET instead of POST b/c dompdf
     Route::get('get_inv/{custid?}', 'InvoiceController@read');
     Route::get('get_billable_trx/{custid}', 'InvoiceController@get_billable_trx');
     Route::delete('del_inv/{inv_id}', 'InvoiceController@delete');

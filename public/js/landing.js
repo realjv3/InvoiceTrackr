@@ -69,12 +69,12 @@
 	 * Global modules for all pages
 	 */
 	
-	__webpack_require__(/*! landing.css */ 448);
-	var timer = __webpack_require__(/*! ic_av_timer_black_24dp_2x.png */ 450);
-	var cart = __webpack_require__(/*! ic_shopping_cart_black_24dp_2x.png */ 451);
-	var receipt = __webpack_require__(/*! ic_receipt_black_24dp_2x.png */ 452);
-	var send = __webpack_require__(/*! ic_send_black_24dp_2x.png */ 453);
-	var money = __webpack_require__(/*! ic_monetization_on_black_24dp_2x.png */ 454);
+	__webpack_require__(/*! landing.css */ 464);
+	var timer = __webpack_require__(/*! ic_av_timer_black_24dp_2x.png */ 466);
+	var cart = __webpack_require__(/*! ic_shopping_cart_black_24dp_2x.png */ 467);
+	var receipt = __webpack_require__(/*! ic_receipt_black_24dp_2x.png */ 468);
+	var send = __webpack_require__(/*! ic_send_black_24dp_2x.png */ 469);
+	var money = __webpack_require__(/*! ic_monetization_on_black_24dp_2x.png */ 470);
 	
 	(0, _reactTapEventPlugin2.default)();
 	
@@ -41481,7 +41481,23 @@
 /* 445 */,
 /* 446 */,
 /* 447 */,
-/* 448 */
+/* 448 */,
+/* 449 */,
+/* 450 */,
+/* 451 */,
+/* 452 */,
+/* 453 */,
+/* 454 */,
+/* 455 */,
+/* 456 */,
+/* 457 */,
+/* 458 */,
+/* 459 */,
+/* 460 */,
+/* 461 */,
+/* 462 */,
+/* 463 */,
+/* 464 */
 /*!******************************************!*\
   !*** ./resources/assets/css/landing.css ***!
   \******************************************/
@@ -41490,7 +41506,7 @@
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(/*! !./../../../~/css-loader!./landing.css */ 449);
+	var content = __webpack_require__(/*! !./../../../~/css-loader!./landing.css */ 465);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(/*! ./../../../~/style-loader/addStyles.js */ 404)(content, {});
@@ -41510,7 +41526,7 @@
 	}
 
 /***/ },
-/* 449 */
+/* 465 */
 /*!*********************************************************!*\
   !*** ./~/css-loader!./resources/assets/css/landing.css ***!
   \*********************************************************/
@@ -41527,7 +41543,7 @@
 
 
 /***/ },
-/* 450 */
+/* 466 */
 /*!**************************************************************************!*\
   !*** ./resources/assets/landing_animation/ic_av_timer_black_24dp_2x.png ***!
   \**************************************************************************/
@@ -41536,7 +41552,7 @@
 	module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAQAAAD9CzEMAAACQ0lEQVR4Ae2WT0sUYRyAH9zaUTBPm3nTMj106BSuQUpCSZcQOmR/7pV16JLlJerSR0gQyySzz2B4CZescBcjcHPzC7i7CHVTY+ft8uMHL8P7NjOkp33e28zzmwdm9p1ZmjQ5ZAyGfXZYZ5EJTh1IwFqfuEnmwAKyNhklFQFnfAFrzdJGQjpZ5Rd5R+AijylYiSLHSUCOMgYjiWgAAPp5QwO9VfETrazp2G/yzgDAABU9ukYrsZiRAU14AnCMJT0+Qwwui2wnfGT5oO4l/HCEsqjfeRE70cGmmD/I4GVcxD+cBZ6jCQbxMaCP+wZePos2DZAoMae720O3SA26IWGij1C8kzh5IMoyQiRxHjcrYt3DyVtRHkKKxKQ473DyTZRBSJEYEqOEk6ooOeAadWqM+ROW1yXn6zjZFaUFqGMwVIFoYhLB8rJydg8n+6JkgRoGwzZEEk9RLC/4d2BHlBPAGFW2uQrYiWfYiBfvFq2LcoE0DOu3wcl7UR6RhimZXsDJfVE+kgL9xt3FSa8oIadJSj+hzPbEedm9IinzMlnAy2193Z0jCXl91Y3jJUNFxArtKJFda9PBlkxt0AJ+rmBkLXEUC921NlmWdWaEGLxGE7SjOHZ3B3p5polFGyUdqVjPIrq782yp+5WAmHTyU8cazNHn+GHOE6pXJkcCOilidIWs8IQhuggI6GKYKey/jl/IkZA2ZjEx10sCUjFKBYN/bTAC6clwi1XHpUMKXKeF/0AvEyxSos4eu9QossAdemjS5FD4C6S04yETz5HRAAAAAElFTkSuQmCC"
 
 /***/ },
-/* 451 */
+/* 467 */
 /*!*******************************************************************************!*\
   !*** ./resources/assets/landing_animation/ic_shopping_cart_black_24dp_2x.png ***!
   \*******************************************************************************/
@@ -41545,7 +41561,7 @@
 	module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAQAAAD9CzEMAAABPklEQVR4Ae3RL0tDURyH8WcLQzRpMBgVtmsSDBoEX4DJpsUidmFZ8A2IUfAdmNwfHFjFZlGMBkFQRBHdvHMoCl9hLFw4eHfOPRwYuM9Tv/f+wmFADCnRWegDYin0gUboA2KOQM6Rd8+s8qcVhH9PpLhC3j2SYg15VyZFnhvk1S0FUm0hr9bpo8A9ytwFOfoqo8wtY2GMF5SpKpZ2UYa+KWFpnBg5d4CDPeTYO5M4mOITObWDo0Pk0AOjOJrhB1m3ibMJWsiya/I420eWdVjE2TRflj8/ZZ4MjlC3O0YIYAH12iCIBup2SY4gOqjbNoG0Uaas1UMfiGiGPQARNWLk2L8yywkftKkTee0sHrlJ5LszVVGimu/O1EKJYt+dqWl86LUzHaNEFd+dqcgb6vVK0XtnokSNmJgKRY/dQBj6BYNg+TQV6WB2AAAAAElFTkSuQmCC"
 
 /***/ },
-/* 452 */
+/* 468 */
 /*!*************************************************************************!*\
   !*** ./resources/assets/landing_animation/ic_receipt_black_24dp_2x.png ***!
   \*************************************************************************/
@@ -41554,7 +41570,7 @@
 	module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAQAAAD9CzEMAAAAVUlEQVR4Ae2XQQoAIAgEe7o/rwihk0QshsFMl4WEuawHGxTDdpJySPdPm0nJET62xqUcC/SHAMFLwSUIznzYIgTUlD1AQE3ZAwQI8k+o/CMw+YwtBQxF1hBNgVx2kwAAAABJRU5ErkJggg=="
 
 /***/ },
-/* 453 */
+/* 469 */
 /*!**********************************************************************!*\
   !*** ./resources/assets/landing_animation/ic_send_black_24dp_2x.png ***!
   \**********************************************************************/
@@ -41563,7 +41579,7 @@
 	module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAQAAAD9CzEMAAABFElEQVR4Ae2WMTLGUBSFv4L0KtKyBEaiZwk0oWUJdELFEqhR+JfwqxmGJdBKRY2RZ1K8xpjJlZPbvXMW8L33vczNZcSkpNyxQ4Zjvgk0HJN7Arp+csWaHyD2YXxhLeFXG47IPQFRWOkE0IXZAVHYAkKCoZKwYG4UJgJ0YQIgCrukFAGG3rNNpgN0YcyxzCb7nDHlma9BwgrMmWGRdXY54ZpH3nRhY97vlbpPmH6/j06YAlhigz1OmfDE+5+AC1b/p2iFLQ4454aXXkWHzAtn7Hnkiln9jGGIlCDU8t0Io6LyGBVRSoE5uhQdoI0DcaDpP315wrSCFAFgkKKsjjW53/Jrl2IFGHYFDSDt04bcClJck5LyAy4Dee+yuCiTAAAAAElFTkSuQmCC"
 
 /***/ },
-/* 454 */
+/* 470 */
 /*!*********************************************************************************!*\
   !*** ./resources/assets/landing_animation/ic_monetization_on_black_24dp_2x.png ***!
   \*********************************************************************************/

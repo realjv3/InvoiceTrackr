@@ -41,10 +41,11 @@ class BillablesController extends Controller
 
     /**
      * Deletes a billable record and all of their transactions
+     * @param int
      * @return \Illuminate\Http\JsonResponse
      */
-    public function delete() {
-        Billable::destroy($_POST['id']);
+    public function delete($billable_id) {
+        Billable::destroy($billable_id);
         //sharing Object cur_user, including user's customers and their billables & trx
         $cur_user = UtilFacade::get_user_data_for_view();
         return response()->json(['message' => 'The billable was deleted.', 'cur_user' => $cur_user, 201]);

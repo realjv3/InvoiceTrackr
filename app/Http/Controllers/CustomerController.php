@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 use App\Customer;
-use App\Cust_profile;
 use App\Util\UtilFacade;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -63,10 +62,11 @@ class CustomerController extends Controller
 
     /**
      * Deletes a customer record and all of their billables and transactions
+     * @param int
      * @return \Illuminate\Http\JsonResponse
      */
-    public function delete() {
-        Customer::destroy($_POST['cust_id']);
+    public function delete($cust_id) {
+        Customer::destroy($cust_id);
         //sharing Object cur_user, including user's customers and their billables & trx
         $cur_user = UtilFacade::get_user_data_for_view();
 

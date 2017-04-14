@@ -400,10 +400,9 @@ class Trx extends React.Component
     deleteCustomer = (cust_id) => {
         this.refs.del_cust_dialog.handleClose();
         var body = new FormData();
-        body.append('cust_id', cust_id);
         fetch(
-            'delete_customer',
-            {method: 'POST', headers: {'X-CSRF-Token': _token, 'Accept': 'application/json'}, credentials: 'same-origin', body: body}
+            'delete_customer/' + cust_id,
+            {method: 'DELETE', headers: {'X-CSRF-Token': _token, 'Accept': 'application/json'}, credentials: 'same-origin'}
         ).then((response) => {
                 if(response.ok) //Remove deleted customer from drop-down and show snackbar
                     response.json().then((json) => {
@@ -417,10 +416,9 @@ class Trx extends React.Component
     deleteBillable = (billable_id) => {
         this.refs.del_billables_dialog.handleClose();
         var body = new FormData();
-        body.append('id', billable_id);
         fetch(
-            'delete_billable',
-            {method: 'POST', headers: {'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'}, credentials: 'same-origin', body: body}
+            'delete_billable/' + billable_id,
+            {method: 'DELETE', headers: {'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'}, credentials: 'same-origin'}
         ).then((response) => {
             if(response.ok) //Remove deleted customer from drop-down and show snackbar
                 response.json().then((json) => {
