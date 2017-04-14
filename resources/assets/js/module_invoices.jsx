@@ -154,6 +154,7 @@ class InvoiceModule extends React.Component
                 <tr key={'invoices_th'}>
                     <th>Delete</th>
                     <th className="invoice" id="invdt" data-sort="desc" onClick={this.sort}>Invoice Date</th>
+                    <th className="invoice" id="invno" data-sort="desc" onClick={this.sort}>Invoice Number</th>
                     <th className="invoice" id="amt" data-sort="" onClick={this.sort}>Invoice Amount</th>
                 </tr>
             );
@@ -177,6 +178,7 @@ class InvoiceModule extends React.Component
                         </span>
                     </td>
                     <td>{cust.invoice.data[i].invdt}</td>
+                    <td>{cust.invoice.data[i].invno}</td>
                     <td>{cust.invoice.data[i].amt}</td>
                 </tr>;
             invoices.push(tmp);

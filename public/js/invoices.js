@@ -41706,6 +41706,11 @@
 	                ),
 	                _react2.default.createElement(
 	                    'th',
+	                    { className: 'invoice', id: 'invno', 'data-sort': 'desc', onClick: _this.sort },
+	                    'Invoice Number'
+	                ),
+	                _react2.default.createElement(
+	                    'th',
 	                    { className: 'invoice', id: 'amt', 'data-sort': '', onClick: _this.sort },
 	                    'Invoice Amount'
 	                )
@@ -41741,6 +41746,11 @@
 	                        'td',
 	                        null,
 	                        cust.invoice.data[i].invdt
+	                    ),
+	                    _react2.default.createElement(
+	                        'td',
+	                        null,
+	                        cust.invoice.data[i].invno
 	                    ),
 	                    _react2.default.createElement(
 	                        'td',
