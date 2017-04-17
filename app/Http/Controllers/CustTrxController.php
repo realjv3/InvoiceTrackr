@@ -69,11 +69,11 @@ class CustTrxController extends Controller
 
     /**
      * Returns all user's transactions or only the passed custid's transactions
-     *
      * @param int $custid default null
+     * @param boolean $paginate default true
      * @return json string $trx
      */
-    public function read($custid = null) {
+    public function read($custid = null, $paginate = true) {
         if(isset($_REQUEST['sort']) && !empty($_REQUEST['sort'])) {
             $sortby =  filter_var($_REQUEST['sort'], FILTER_SANITIZE_STRING);
             $desc = (isset($_REQUEST['desc'])) ? 'Desc' : '';
@@ -136,15 +136,16 @@ class CustTrxController extends Controller
                 return response('There are no transactions', 404);
         }
 
-        //paginate
-        $total = count($trxs->flatten());
-        $currentPage = (isset($_REQUEST['page']) && preg_match('/\d+/', $_REQUEST['page'])) ? $_REQUEST['page'] : 1;
-        $perPage = 10;
-        $max = ceil($total / $perPage);
-        if($currentPage > $max)
-            $currentPage = $max;
-        $offset = ($currentPage * $perPage) - $perPage;
-        $trxs = new LengthAwarePaginator(array_slice($trxs->toArray(), $offset, $perPage), $total, $perPage, $currentPage);
+        if ($paginate === true) {
+            $total = count($trxs->flatten());
+            $currentPage = (isset($_REQUEST['page']) && preg_match('/\d+/', $_REQUEST['page'])) ? $_REQUEST['page'] : 1;
+            $perPage = 10;
+            $max = ceil($total / $perPage);
+            if($currentPage > $max)
+                $currentPage = $max;
+            $offset = ($currentPage * $perPage) - $perPage;
+            $trxs = new LengthAwarePaginator(array_slice($trxs->toArray(), $offset, $perPage), $total, $perPage, $currentPage);
+        }
 
         return $trxs;
     }

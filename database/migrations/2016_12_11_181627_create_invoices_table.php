@@ -17,7 +17,7 @@ class CreateInvoicesTable extends Migration
             $table->date('invdt');
             $table->integer('user_id')->unsigned();
             $table->integer('custid')->unsigned();
-            $table->decimal('amt', 5 , 2);
+            $table->decimal('amt', 20 , 2);
 
             $table->foreign('user_id')->references('id')->on('users');
 //TODO            $table->foreign('custid')->references('id')->on('customers');

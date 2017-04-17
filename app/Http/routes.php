@@ -65,7 +65,7 @@ Route::group(['middleware' => ['web']], function () {
     // Trx crud
     Route::post('save_trx', 'CustTrxController@save');
     Route::delete('del_trx/{trx_id}', 'CustTrxController@delete');
-    Route::get('get_trx/{custid?}', 'CustTrxController@read');
+    Route::get('get_trx/{custid?}/{paginate?}', 'CustTrxController@read');
 
     // Invoices
     Route::get('create_inv', 'InvoiceController@create');   //using GET instead of POST b/c dompdf

@@ -226,7 +226,7 @@ const NavMenu = () => {
         <List style={{display: 'flex', flexDirection: 'row'}}>
             <ListItem href="/" primaryText="Transactions" rightIcon={ <img src="https://www.dropbox.com/s/4hw9njfnlkgttmf/clock-1.png?dl=1"/> } />
             <ListItem href="/invoices" primaryText="Invoices" rightIcon={ <img src="https://www.dropbox.com/s/1x89klicik0olnk/money.png?dl=1"/> } />
-            <ListItem href="/reports" primaryText="Reports" rightIcon={ <img src="https://www.dropbox.com/s/q4fou4u4qvx0z09/business-1.png?dl=1"/> } />
+            <ListItem style={{display: 'none'}} href="/reports" primaryText="Reports" rightIcon={ <img src="https://www.dropbox.com/s/q4fou4u4qvx0z09/business-1.png?dl=1"/> } />
         </List>
     );
 }

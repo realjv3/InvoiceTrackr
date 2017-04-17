@@ -166,7 +166,7 @@ class InvoiceModule extends React.Component
                 margin: '2px'
             };
             let tmp =
-                <tr key={'inv_id_' + cust.invoice.data[i].id}>
+                <tr id={cust.invoice.data[i].id} key={'inv_id_' + cust.invoice.data[i].id} onClick={this.readInvoice}>
                     <td>
                         <span className="cust_icons" >
                             <IconButton
@@ -189,14 +189,14 @@ class InvoiceModule extends React.Component
     }
     addToInvoice = (event, isInputChecked) => {
         let trx = getTrx(event.currentTarget.id),
-            selTrxs = this.state.selectedTrx,
-            total = parseFloat(this.state.total).toFixed(2);
+            selTrxs = (event.currentTarget.type == 'input') ? this.state.selectedTrx : [],
+            total = (event.currentTarget.type == 'input') ? parseFloat(this.state.total).toFixed(2) : 0;
         //first, unselect & reduce total if already selected
         for(let i = 0; i < selTrxs.length; i++)
             if(selTrxs[i].key == 'trx_id_'+ event.currentTarget.id) {
                 selTrxs.splice(i, 1);
                 if(total > 0)
-                    total = total - parseFloat(trx.amt).toFixed(2);
+                    total = (total - parseFloat(trx.amt)).toFixed(2);
             }
         //then select & increase total if we're selecting
         if(isInputChecked) {
@@ -259,6 +259,18 @@ class InvoiceModule extends React.Component
             }
         }
         if (exists) {
+            this.setState({
+                selectedTrx: [
+                    <tr key={'trx_th'}>
+                        <th style={{width: '200px', textAlign: 'center', margin: '7px'}}>Trx Date</th>
+                        <th>Billable</th>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Amount</th>
+                    </tr>
+                ],
+                total: 0
+            })
             this.updateTrx();
             this.updateInvoices();
             return true;
@@ -312,6 +324,47 @@ class InvoiceModule extends React.Component
     }
     componentDidMount = () => {
         document.getElementById('trx_entry_customer').addEventListener('blur', this.doesCustExist);
+    }
+    readInvoice = (event) => {
+        this.setState({selectedTrx: [
+            <tr key={'trx_th'}>
+                <th style={{width: '200px', textAlign: 'center', margin: '7px'}}>Trx Date</th>
+                <th>Billable</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Amount</th>
+            </tr>
+        ], total: 0});
+        let cust = getSelectedCustomer(),
+            total = 0,
+            inv_id = event.currentTarget.id;
+        fetch('get_trx/' + cust.id + '/' + false, {headers: {'X-CSRF-Token': _token}, credentials: 'same-origin'})
+        .then((response) => {
+            if (response.ok) {
+                response.json()
+                .then((json) => {
+                    let trx = json,
+                        selTrxs = [];
+                    for (let i = 0; i < Object.keys(trx).length; i++) {
+                        if (trx[i].inv == inv_id) {
+                            let billable = getBillable(trx[i].item),
+                                qty = (trx[i].amt / billable.price).toFixed(2) + ' x $' + billable.price + '/' + billable.unit,
+                                tmp =
+                                    <tr key={'trx_id_' + trx[i].id}>
+                                        <td>{trx[i].trxdt}</td>
+                                        <td>{billable.descr}</td>
+                                        <td>{trx[i].descr}</td>
+                                        <td>{qty}</td>
+                                        <td>$ {trx[i].amt}</td>
+                                    </tr>;
+                            total = (parseFloat(total) + parseFloat(trx[i].amt)).toFixed(2);
+                            selTrxs.push(tmp);
+                        }
+                    }
+                    this.setState({selectedTrx: selTrxs, total: total});
+                });
+            }
+        });
     }
     render() {
         return (

@@ -22698,7 +22698,7 @@
 	        { style: { display: 'flex', flexDirection: 'row' } },
 	        _react2.default.createElement(_ListItem2.default, { href: '/', primaryText: 'Transactions', rightIcon: _react2.default.createElement('img', { src: 'https://www.dropbox.com/s/4hw9njfnlkgttmf/clock-1.png?dl=1' }) }),
 	        _react2.default.createElement(_ListItem2.default, { href: '/invoices', primaryText: 'Invoices', rightIcon: _react2.default.createElement('img', { src: 'https://www.dropbox.com/s/1x89klicik0olnk/money.png?dl=1' }) }),
-	        _react2.default.createElement(_ListItem2.default, { href: '/reports', primaryText: 'Reports', rightIcon: _react2.default.createElement('img', { src: 'https://www.dropbox.com/s/q4fou4u4qvx0z09/business-1.png?dl=1' }) })
+	        _react2.default.createElement(_ListItem2.default, { style: { display: 'none' }, href: '/reports', primaryText: 'Reports', rightIcon: _react2.default.createElement('img', { src: 'https://www.dropbox.com/s/q4fou4u4qvx0z09/business-1.png?dl=1' }) })
 	    );
 	};
 	

@@ -22692,7 +22692,7 @@
 	        { style: { display: 'flex', flexDirection: 'row' } },
 	        _react2.default.createElement(_ListItem2.default, { href: '/', primaryText: 'Transactions', rightIcon: _react2.default.createElement('img', { src: 'https://www.dropbox.com/s/4hw9njfnlkgttmf/clock-1.png?dl=1' }) }),
 	        _react2.default.createElement(_ListItem2.default, { href: '/invoices', primaryText: 'Invoices', rightIcon: _react2.default.createElement('img', { src: 'https://www.dropbox.com/s/1x89klicik0olnk/money.png?dl=1' }) }),
-	        _react2.default.createElement(_ListItem2.default, { href: '/reports', primaryText: 'Reports', rightIcon: _react2.default.createElement('img', { src: 'https://www.dropbox.com/s/q4fou4u4qvx0z09/business-1.png?dl=1' }) })
+	        _react2.default.createElement(_ListItem2.default, { style: { display: 'none' }, href: '/reports', primaryText: 'Reports', rightIcon: _react2.default.createElement('img', { src: 'https://www.dropbox.com/s/q4fou4u4qvx0z09/business-1.png?dl=1' }) })
 	    );
 	};
 	
@@ -41725,7 +41725,7 @@
 	                };
 	                var tmp = _react2.default.createElement(
 	                    'tr',
-	                    { key: 'inv_id_' + cust.invoice.data[i].id },
+	                    { id: cust.invoice.data[i].id, key: 'inv_id_' + cust.invoice.data[i].id, onClick: _this.readInvoice },
 	                    _react2.default.createElement(
 	                        'td',
 	                        null,
@@ -41770,13 +41770,13 @@
 	
 	        _this.addToInvoice = function (event, isInputChecked) {
 	            var trx = (0, _util.getTrx)(event.currentTarget.id),
-	                selTrxs = _this.state.selectedTrx,
-	                total = parseFloat(_this.state.total).toFixed(2);
+	                selTrxs = event.currentTarget.type == 'input' ? _this.state.selectedTrx : [],
+	                total = event.currentTarget.type == 'input' ? parseFloat(_this.state.total).toFixed(2) : 0;
 	            //first, unselect & reduce total if already selected
 	            for (var i = 0; i < selTrxs.length; i++) {
 	                if (selTrxs[i].key == 'trx_id_' + event.currentTarget.id) {
 	                    selTrxs.splice(i, 1);
-	                    if (total > 0) total = total - parseFloat(trx.amt).toFixed(2);
+	                    if (total > 0) total = (total - parseFloat(trx.amt)).toFixed(2);
 	                }
 	            } //then select & increase total if we're selecting
 	            if (isInputChecked) {
@@ -41858,6 +41858,38 @@
 	                }
 	            }
 	            if (exists) {
+	                _this.setState({
+	                    selectedTrx: [_react2.default.createElement(
+	                        'tr',
+	                        { key: 'trx_th' },
+	                        _react2.default.createElement(
+	                            'th',
+	                            { style: { width: '200px', textAlign: 'center', margin: '7px' } },
+	                            'Trx Date'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Billable'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Description'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Quantity'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Amount'
+	                        )
+	                    )],
+	                    total: 0
+	                });
 	                _this.updateTrx();
 	                _this.updateInvoices();
 	                return true;
@@ -41907,6 +41939,88 @@
 	
 	        _this.componentDidMount = function () {
 	            document.getElementById('trx_entry_customer').addEventListener('blur', _this.doesCustExist);
+	        };
+	
+	        _this.readInvoice = function (event) {
+	            _this.setState({ selectedTrx: [_react2.default.createElement(
+	                    'tr',
+	                    { key: 'trx_th' },
+	                    _react2.default.createElement(
+	                        'th',
+	                        { style: { width: '200px', textAlign: 'center', margin: '7px' } },
+	                        'Trx Date'
+	                    ),
+	                    _react2.default.createElement(
+	                        'th',
+	                        null,
+	                        'Billable'
+	                    ),
+	                    _react2.default.createElement(
+	                        'th',
+	                        null,
+	                        'Description'
+	                    ),
+	                    _react2.default.createElement(
+	                        'th',
+	                        null,
+	                        'Quantity'
+	                    ),
+	                    _react2.default.createElement(
+	                        'th',
+	                        null,
+	                        'Amount'
+	                    )
+	                )], total: 0 });
+	            var cust = (0, _util.getSelectedCustomer)(),
+	                total = 0,
+	                inv_id = event.currentTarget.id;
+	            fetch('get_trx/' + cust.id + '/' + false, { headers: { 'X-CSRF-Token': _token }, credentials: 'same-origin' }).then(function (response) {
+	                if (response.ok) {
+	                    response.json().then(function (json) {
+	                        var trx = json,
+	                            selTrxs = [];
+	                        for (var i = 0; i < Object.keys(trx).length; i++) {
+	                            if (trx[i].inv == inv_id) {
+	                                var billable = (0, _util.getBillable)(trx[i].item),
+	                                    qty = (trx[i].amt / billable.price).toFixed(2) + ' x $' + billable.price + '/' + billable.unit,
+	                                    tmp = _react2.default.createElement(
+	                                    'tr',
+	                                    { key: 'trx_id_' + trx[i].id },
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        trx[i].trxdt
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        billable.descr
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        trx[i].descr
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        qty
+	                                    ),
+	                                    _react2.default.createElement(
+	                                        'td',
+	                                        null,
+	                                        '$ ',
+	                                        trx[i].amt
+	                                    )
+	                                );
+	                                total = (parseFloat(total) + parseFloat(trx[i].amt)).toFixed(2);
+	                                selTrxs.push(tmp);
+	                            }
+	                        }
+	                        _this.setState({ selectedTrx: selTrxs, total: total });
+	                    });
+	                }
+	            });
 	        };
 	
 	        _this.state = {
@@ -48543,7 +48657,7 @@
 	            invnoInput.parentNode.replaceChild(invnoOutput, invnoInput);
 	            duedtOutput.innerText = duedtInput.value;
 	            invnoOutput.innerText = invnoInput.value;
-	            var inv = window.open('/create_inv?duedt=' + duedtInput.value + '&invno=' + invnoInput.value + '&trx_keys=' + trx_keys + '&total=' + _this.props.total + '&content=' + document.getElementById('invoice').outerHTML);
+	            var inv = window.open('/create_inv?duedt=' + duedtInput.value + '&invno=' + invnoInput.value + '&trx_keys=' + trx_keys + '&total=' + _this.props.total + '&content=' + encodeURIComponent(document.getElementById('invoice').outerHTML));
 	            inv.addEventListener('load', function () {
 	                _this.props.updateTrx();
 	                _this.props.updateInvoices();
@@ -48577,7 +48691,7 @@
 	                            null,
 	                            'Amount'
 	                        )
-	                    )], total: '' });
+	                    )] });
 	            }, true);
 	        };
 	

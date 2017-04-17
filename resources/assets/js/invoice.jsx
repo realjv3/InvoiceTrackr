@@ -27,7 +27,7 @@ class Invoice extends React.Component {
         invnoInput.parentNode.replaceChild(invnoOutput, invnoInput);
         duedtOutput.innerText = duedtInput.value;
         invnoOutput.innerText = invnoInput.value;
-        let inv = window.open('/create_inv?duedt=' + duedtInput.value + '&invno=' + invnoInput.value + '&trx_keys=' + trx_keys + '&total=' + this.props.total + '&content=' + document.getElementById('invoice').outerHTML);
+        let inv = window.open('/create_inv?duedt=' + duedtInput.value + '&invno=' + invnoInput.value + '&trx_keys=' + trx_keys + '&total=' + this.props.total + '&content=' + encodeURIComponent(document.getElementById('invoice').outerHTML));
             inv.addEventListener('load', () => {
                 this.props.updateTrx();
                 this.props.updateInvoices();
@@ -41,7 +41,7 @@ class Invoice extends React.Component {
                         <th>Quantity</th>
                         <th>Amount</th>
                     </tr>
-                ], total: ''});
+                ]});
             }, true);
     }
     render() {
