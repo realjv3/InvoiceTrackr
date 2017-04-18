@@ -189,8 +189,8 @@ class InvoiceModule extends React.Component
     }
     addToInvoice = (event, isInputChecked) => {
         let trx = getTrx(event.currentTarget.id),
-            selTrxs = (event.currentTarget.type == 'input') ? this.state.selectedTrx : [],
-            total = (event.currentTarget.type == 'input') ? parseFloat(this.state.total).toFixed(2) : 0;
+            selTrxs = this.state.selectedTrx,
+            total = parseFloat(this.state.total).toFixed(2);
         //first, unselect & reduce total if already selected
         for(let i = 0; i < selTrxs.length; i++)
             if(selTrxs[i].key == 'trx_id_'+ event.currentTarget.id) {
