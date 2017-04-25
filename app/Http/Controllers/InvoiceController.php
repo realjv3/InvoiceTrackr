@@ -151,10 +151,9 @@ class InvoiceController extends Controller
         return $trxs;
     }
 
-
     /**
      * @param int $inv_id
-     * @return Request
+     * @return Response
      */
     public function delete($inv_id) {
         if(!isset($inv_id)) return response('Invalid invoice id.', 422);

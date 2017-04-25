@@ -29,6 +29,7 @@ import CustomerEntry from 'customer_entry.jsx';
 import {getSelCustTrxs, getSelectedCustomer, getSelectedBillable, getTrx, getBillable} from 'util.jsx';
 import Paging_nav from 'paging_nav.jsx';
 import DeleteDialog from 'deleteDialog.jsx';
+import InvoiceReport from 'invoice_report.jsx';
 
 class BillableEntry extends React.Component
 {
@@ -715,16 +716,8 @@ class Trx extends React.Component
             //get each transaction's billable's descr and qty
             let billable = getBillable(cust.custtrx.data[j].item),
                 qty = (cust.custtrx.data[j].amt / billable.price).toFixed(2) + ' x $' + billable.price +'/'+billable.unit,
-                //render table row
-                style = {
-                    width: '10px',
-                    height: '10px',
-                    margin: '2px'
-                },
-                tmp =
-                    <tr key={'trx_id_' + cust.custtrx.data[j].id}>
-                        <td>
-                            <span className="trx_icons" >
+                actions = (cust.custtrx.data[j].status == 'Open') ?
+                    (<span className="trx_icons" >
                                 <IconButton
                                     iconClassName="fa fa-pencil"
                                     onClick={this.handleEdit}
@@ -737,8 +730,18 @@ class Trx extends React.Component
                                     style={style}
                                     id={cust.custtrx.data[j].id}
                                 />
-                            </span>
-                        </td>
+                    </span>)
+                :
+                    <FlatButton label="View Invoice" labelStyle={{fontSize: 'small'}} onTouchTap={() => {this.refs.inv_rpt.handleOpen(cust.custtrx.data[j].inv);}} />,
+                //render table row
+                style = {
+                    width: '10px',
+                    height: '10px',
+                    margin: '2px'
+                },
+                tmp =
+                    <tr key={'trx_id_' + cust.custtrx.data[j].id}>
+                        <td>{actions}</td>
                         <td>{cust.custtrx.data[j].trxdt}</td>
                         <td>{cust.custtrx.data[j].status}</td>
                         <td>{billable.descr}</td>
@@ -810,6 +813,7 @@ class Trx extends React.Component
                         <BillableEntry ref="billables_entry" updateBillablesDropDown={this.updateBillables} />
                         <DeleteDialog ref="del_cust_dialog" text="Do you really want to permanently delete this customer and all of their transactions?" handleDelete={this.deleteCustomer} />
                         <DeleteDialog ref="del_billables_dialog" text="Do you really want to permanently delete this billable item and all of the related transactions?" handleDelete={this.deleteBillable} />
+                        <InvoiceReport ref="inv_rpt"/>
                         <form id="trx_form" className="trx_form" ref="trx_form" >
                             <input type="hidden" id="trx_entry_trxid" />
                             <DatePickerControlled

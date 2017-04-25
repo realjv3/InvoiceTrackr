@@ -77,4 +77,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('cur_user', function() {
         return Response::json(\App\Util\UtilFacade::get_user_data_for_view());
     });
+
+    //Reports
+    Route::get('invoice/{inv_id}', 'ReportsController@invoice');
 });

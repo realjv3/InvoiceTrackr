@@ -20,6 +20,7 @@ import {getSelectedCustomer, getBillable, getTrx, getSelCustInvoices} from 'util
 import Paging_nav from 'paging_nav.jsx';
 import Invoice from 'invoice.jsx';
 import DeleteDialog from 'deleteDialog.jsx';
+import InvoiceReport from 'invoice_report.jsx';
 
 class InvoiceModule extends React.Component
 {
@@ -166,7 +167,7 @@ class InvoiceModule extends React.Component
                 margin: '2px'
             };
             let tmp =
-                <tr id={cust.invoice.data[i].id} key={'inv_id_' + cust.invoice.data[i].id} onClick={this.readInvoice}>
+                <tr id={cust.invoice.data[i].id} key={'inv_id_' + cust.invoice.data[i].id}>
                     <td>
                         <span className="cust_icons" >
                             <IconButton
@@ -177,9 +178,9 @@ class InvoiceModule extends React.Component
                             />
                         </span>
                     </td>
-                    <td>{cust.invoice.data[i].invdt}</td>
-                    <td>{cust.invoice.data[i].invno}</td>
-                    <td>{cust.invoice.data[i].amt}</td>
+                    <td onClick={this.readInvoice} >{cust.invoice.data[i].invdt}</td>
+                    <td onClick={this.readInvoice} >{cust.invoice.data[i].invno}</td>
+                    <td onClick={this.readInvoice} >{cust.invoice.data[i].amt}</td>
                 </tr>;
             invoices.push(tmp);
         }
@@ -326,49 +327,12 @@ class InvoiceModule extends React.Component
         document.getElementById('trx_entry_customer').addEventListener('blur', this.doesCustExist);
     }
     readInvoice = (event) => {
-        this.setState({selectedTrx: [
-            <tr key={'trx_th'}>
-                <th style={{width: '200px', textAlign: 'center', margin: '7px'}}>Trx Date</th>
-                <th>Billable</th>
-                <th>Description</th>
-                <th>Quantity</th>
-                <th>Amount</th>
-            </tr>
-        ], total: 0});
-        let cust = getSelectedCustomer(),
-            total = 0,
-            inv_id = event.currentTarget.id;
-        fetch('get_trx/' + cust.id + '/' + false, {headers: {'X-CSRF-Token': _token}, credentials: 'same-origin'})
-        .then((response) => {
-            if (response.ok) {
-                response.json()
-                .then((json) => {
-                    let trx = json,
-                        selTrxs = [];
-                    for (let i = 0; i < Object.keys(trx).length; i++) {
-                        if (trx[i].inv == inv_id) {
-                            let billable = getBillable(trx[i].item),
-                                qty = (trx[i].amt / billable.price).toFixed(2) + ' x $' + billable.price + '/' + billable.unit,
-                                tmp =
-                                    <tr key={'trx_id_' + trx[i].id}>
-                                        <td>{trx[i].trxdt}</td>
-                                        <td>{billable.descr}</td>
-                                        <td>{trx[i].descr}</td>
-                                        <td>{qty}</td>
-                                        <td>$ {trx[i].amt}</td>
-                                    </tr>;
-                            total = (parseFloat(total) + parseFloat(trx[i].amt)).toFixed(2);
-                            selTrxs.push(tmp);
-                        }
-                    }
-                    this.setState({selectedTrx: selTrxs, total: total});
-                });
-            }
-        });
+        this.refs.inv_rpt.handleOpen(event.currentTarget.parentNode.id);
     }
     render() {
         return (
             <div>
+                <InvoiceReport ref="inv_rpt"/>
                 <CustomerEntry ref="cust_entry" updateCustomersDropDown={this.updateCustomers} />
                 <AutoComplete
                     dataSource={this.state.customers}
