@@ -144,8 +144,8 @@ class Profile extends React.Component
                             className="profile_field"
                             name="addr1"
                             id="addr1"
-                            errorText={this.state.formfields.address1}
-                            defaultValue={cur_user.profile.address1}
+                            errorText={this.state.formfields.addr1}
+                            defaultValue={cur_user.profile.addr1}
                         /><br />
                         <TextField
                             style={{ width: '300px'}}
@@ -153,8 +153,8 @@ class Profile extends React.Component
                             className="profile_field"
                             name="addr2"
                             id="addr2"
-                            errorText={this.state.formfields.address2}
-                            defaultValue={cur_user.profile.address2}
+                            errorText={this.state.formfields.addr2}
+                            defaultValue={cur_user.profile.addr2}
                         /><br />
                     <span style={{display: 'flex', alignItems: 'center', flexWrap: 'wrap'}} >
                         <TextField
