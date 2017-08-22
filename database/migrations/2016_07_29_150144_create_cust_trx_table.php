@@ -20,9 +20,8 @@ class CreateCustTrxTable extends Migration
                 $table->integer('item')->unsigned();
                 $table->text('descr')->nullable();
                 $table->decimal('amt', 5 , 2);
-
-                $table->foreign('custid')->references('id')->on('customers');
-                $table->foreign('item')->references('id')->on('billables');
+                $table->unsignedInteger('status');
+                $table->unsignedInteger('inv');
             });
         });
     }

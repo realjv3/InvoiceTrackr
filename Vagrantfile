@@ -110,9 +110,7 @@ Vagrant.configure("2") do |config|
     sudo mv /etc/php/7.0/cli/php.ini /etc/php/7.0/cli/php.ini.default;
     sudo touch /etc/php/7.0/fpm/php.ini&& sudo chown vagrant:vagrant /etc/php/7.0/fpm/php.ini;
     sudo touch /etc/php/7.0/cli/php.ini && sudo chown vagrant:vagrant /etc/php/7.0/cli/php.ini;
-    sudo apt-get install -y php-mbstring php-xml;
-    sudo sed 's/;extension=php_mbstring.dll/extension=php_mbstring.dll/' </etc/php/7.0/fpm/php.ini.default >/etc/php/7.0/fpm/php.ini
-    sudo sed 's/;extension=php_mbstring.dll/extension=php_mbstring.dll/' </etc/php/7.0/cli/php.ini.default >/etc/php/7.0/cli/php.ini
+    sudo apt-get install -y php7.0-mbstring php7.0-xml;
     sudo service php7.0-fpm start;
 
     echo '#';

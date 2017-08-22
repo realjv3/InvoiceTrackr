@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CustTrxAddCascadeDelete extends Migration
+class CustTrxAddForeignKeys extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CustTrxAddCascadeDelete extends Migration
     public function up()
     {
         Schema::table('cust_trx', function (Blueprint $table) {
-
+            $table->foreign('status')->references('id')->on('trx_status');
+            $table->foreign('inv')->references('id')->on('invoices');
             $table->foreign('custid')->references('id')->on('customers')->onDelete('cascade');
             $table->foreign('item')->references('id')->on('billables')->onDelete('cascade');
         });
@@ -28,6 +29,8 @@ class CustTrxAddCascadeDelete extends Migration
     {
         Schema::table('cust_trx', function (Blueprint $table) {
             $table->dropForeign('cust_trx_custid_foreign');
+            $table->dropForeign('cust_trx_status_foreign');
+            $table->dropForeign('cust_trx_inv_foreign');
             $table->dropForeign('cust_trx_item_foreign');
         });
     }
