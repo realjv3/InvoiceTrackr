@@ -127,8 +127,8 @@ Vagrant.configure("2") do |config|
     echo '#';
     echo '###################### Installing node package manager ######################'
     echo '#';
-    sudo apt-get install -y nodejs npm;
-    sudo ln -s /usr/bin/nodejs /usr/bin/node;
+    sudo curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash;
+    sudo apt-get install -y nodejs;
 
     echo '#';
     echo '###################### Running composer & npm installs ######################'

@@ -1,5 +1,5 @@
-![alt tag](https://www.dropbox.com/s/y1mija5xpu82w2m/invoicetrackr.png?dl=1)
 Invoicing web app made with React + MaterialUI front-end and Laravel backend. 
+![screen shot](http://res.cloudinary.com/realjv3/image/upload/v1503530734/invoicetrackr_vdboz4.png)
 
 If you just want to stand up an instance of the app:
 1. Clone this repository into the project directory.  
@@ -26,5 +26,5 @@ To setup, migrate and seed a mysql database:
 1. create Laravel .env file
 1. run database migrations from command line <pre>php artisan migrate</pre>
 1. Open web page, hit "Login\Register", submit form to register a new user
-1. On transactins page, input a new customer
+1. On transactions page, input a new customer
 1. run database seeding from command line <pre>php artisan db:seed</pre>
