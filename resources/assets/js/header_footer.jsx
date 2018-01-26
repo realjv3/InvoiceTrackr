@@ -25,6 +25,7 @@ import Toolbar from 'material-ui/Toolbar/Toolbar';
 import ToolbarGroup from 'material-ui/Toolbar/ToolbarGroup';
 import ToolbarSeparator from 'material-ui/Toolbar/ToolbarSeparator';
 
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {indigo100} from 'material-ui/styles/colors.js';
 
@@ -224,9 +225,9 @@ class LoginMenu extends React.Component
 const NavMenu = () => {
     return (
         <List style={{display: 'flex', flexDirection: 'row'}}>
-            <ListItem href="/" primaryText="Transactions" rightIcon={ <img src="https://www.dropbox.com/s/4hw9njfnlkgttmf/clock-1.png?dl=1"/> } />
-            <ListItem href="/invoices" primaryText="Invoices" rightIcon={ <img src="https://www.dropbox.com/s/1x89klicik0olnk/money.png?dl=1"/> } />
-            <ListItem style={{display: 'none'}} href="/reports" primaryText="Reports" rightIcon={ <img src="https://www.dropbox.com/s/q4fou4u4qvx0z09/business-1.png?dl=1"/> } />
+            <ListItem href="/" primaryText="Transactions" rightIcon={ <img src="http://res.cloudinary.com/realjv3/image/upload/v1516748943/clock-1_nwisn9.png"/> } />
+            <ListItem href="/invoices" primaryText="Invoices" rightIcon={ <img src="http://res.cloudinary.com/realjv3/image/upload/v1516748941/money_fy1hi1.png"/> } />
+            <ListItem style={{display: 'none'}} href="/reports" primaryText="Reports" rightIcon={ <img src="http://res.cloudinary.com/realjv3/image/upload/v1516748942/business-1_pgeoxj.png"/> } />
         </List>
     );
 }
@@ -237,15 +238,10 @@ class NavBar extends React.Component
         super(props);
     }
 
-    static childContextTypes = {muiTheme: React.PropTypes.object.isRequired};
-    getChildContext = () => {
-        return {
-            muiTheme: getMuiTheme({
-                appBar: {color: indigo100},
-                textField: {hintColor: "rgba(0, 0, 0, 0.67)", disabledTextColor: "rgba(0, 0, 0, 0.4)"}
-            })
-        };
-    }
+    muiTheme = getMuiTheme({
+        appBar: {color: indigo100},
+        textField: {hintColor: "rgba(0, 0, 0, 0.67)", disabledTextColor: "rgba(0, 0, 0, 0.4)"}
+    });
 
     openRegForm = () => {
         this.refs.regform.setState({open: true});
@@ -272,15 +268,17 @@ class NavBar extends React.Component
             nav = <NavMenu />;
         }
         return (
-            <AppBar
-                ref="appbar"
-                title={<a href='/'>InvoiceTrackr</a>}
-                iconElementRight={(logged_in) ? nav : loginoutlink}
-                iconStyleRight={(logged_in) ? {marginTop: '0px !i', marginLeft: 'auto', marginRight: 'auto'} : {}}
-                showMenuIconButton={false}
-                children={(logged_in) ? loginoutlink : ''}
-                titleStyle={{flex: 'initial'}}
-            />
+            <MuiThemeProvider muiTheme={this.muiTheme}>
+                <AppBar
+                    ref="appbar"
+                    title={<a href='/'>InvoiceTrackr</a>}
+                    iconElementRight={(logged_in) ? nav : loginoutlink}
+                    iconStyleRight={(logged_in) ? {marginTop: '0px !i', marginLeft: 'auto', marginRight: 'auto'} : {}}
+                    showMenuIconButton={false}
+                    children={(logged_in) ? loginoutlink : ''}
+                    titleStyle={{flex: 'initial'}}
+                />
+            </MuiThemeProvider>
         );
     }
 }
@@ -291,22 +289,36 @@ class Footer extends React.Component
         super(props);
     }
 
-    static childContextTypes = {muiTheme: React.PropTypes.object.isRequired};
-    getChildContext = () => {
-        return {muiTheme: getMuiTheme({appBar: {color: '#3F51B5'}, textField: {hintColor: '#C5CAE9'}})};
-    }
+    muiTheme = getMuiTheme({
+        appBar: {color: '#3F51B5'},
+        textField: {hintColor: '#C5CAE9'}
+    });
 
     render() {
         return (
-            <Toolbar style={{display: 'flex', justifyContent: 'space-around', height: '10vh'}} >
-                <ToolbarGroup style={{display: 'block'}}>
-                    <span><a href="http://github.com/realjv3" target="_blank">Created by John Verity</a></span>
-                    <img src="https://www.dropbox.com/s/a9dssghwmtbfq8j/NoGodNoMasters_icon.png?dl=1" style={{width: '26px', position: 'relative',top: '6px', margin: '0 -10px 0 5px'}}/>
-                    <ToolbarSeparator style={{float: 'none'}}/>
-                    <img src="https://www.dropbox.com/s/46tmdwda5btqyzv/YellowOnBlackBipCotFlag-NO_QR-Code-small.png?dl=1" style={{width: '45px', position: 'relative',top: '10px', margin: '0 0 0 5px'}}/>
-                    <span><a href="http://bipcot.org/" target="_blank">BipCot NoGov License</a></span>
-                </ToolbarGroup>
-            </Toolbar>
+            <MuiThemeProvider muiTheme={this.muiTheme}>
+                <Toolbar style={{display: 'flex', justifyContent: 'space-around', height: '10vh'}} >
+                    <ToolbarGroup style={{display: 'flex'}}>
+                        <span>
+                            <a href="http://github.com/realjv3" target="_blank">
+                                <img
+                                    src="http://res.cloudinary.com/realjv3/image/upload/v1516748944/YellowOnBlackBipCotFlag-NO_QR-Code-small_hybudv.png"
+                                    style={{width: '48px'}}
+                                />
+                            </a>
+                        </span>
+                        <ToolbarSeparator style={{margin: '0 24px 0 16px'}}/>
+                        <span>
+                            <a href="http://bipcot.org/" target="_blank">
+                                <img
+                                    src="http://res.cloudinary.com/realjv3/image/upload/v1516748942/NoGodNoMasters_icon_wadk8m.png"
+                                    style={{width: '26px'}}
+                                />
+                            </a>
+                        </span>
+                    </ToolbarGroup>
+                </Toolbar>
+            </MuiThemeProvider>
         );
     }
 }

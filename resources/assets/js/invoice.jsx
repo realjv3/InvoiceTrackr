@@ -2,10 +2,9 @@
  * Invoice
  */
 import React from 'react';
+import Proptypes from 'prop-types';
 import {Card, CardHeader, CardActions, CardText} from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
-import TextField from 'material-ui/TextField';
-import DatePicker from 'material-ui/DatePicker';
 
 import {getSelectedCustomer} from  'util.jsx';
 
@@ -14,20 +13,18 @@ class Invoice extends React.Component {
         super(props);
     }
     openInv = () => {
-        let trx_keys = this.props.trx.map(
-            (e) => { return e.key; }
-            ),
-            duedtInput = document.getElementById('duedt'),
-            duedtOutput = document.createElement('h3'),
-            invnoInput = document.getElementById('invno'),
-            invnoOutput = document.createElement('h3');
+        let trx_keys = this.props.trx.map((e) => { return e.key; }),
+        duedtInput = document.getElementById('duedt'),
+        duedtOutput = document.createElement('h3'),
+        invnoInput = document.getElementById('invno'),
+        invnoOutput = document.createElement('h3');
         duedtOutput.id = "duedt";
         invnoOutput.id = "invno";
         duedtInput.parentNode.replaceChild(duedtOutput, duedtInput);
         invnoInput.parentNode.replaceChild(invnoOutput, invnoInput);
         duedtOutput.innerText = duedtInput.value;
         invnoOutput.innerText = invnoInput.value;
-        let inv = window.open('/create_inv?duedt=' + duedtInput.value + '&invno=' + invnoInput.value + '&trx_keys=' + trx_keys + '&total=' + this.props.total + '&content=' + encodeURIComponent(document.getElementById('invoice').outerHTML));
+        let inv = window.open('/create_inv?duedt=' + duedtInput.value + '&invno=' + invnoInput.value + '&trx_keys=' + trx_keys + '&total=' + this.props.total);
             inv.addEventListener('load', () => {
                 this.props.updateTrx();
                 this.props.updateInvoices();
@@ -101,10 +98,10 @@ class Invoice extends React.Component {
         );
     }
 }
-Invoice.PropTypes = {
-    trx: React.PropTypes.array,
-    total: React.PropTypes.number,
-    updateTrx: React.PropTypes.func,
-    updateInvoices: React.PropTypes.func
+Invoice.propTypes = {
+    trx: Proptypes.array,
+    total: Proptypes.number,
+    updateTrx: Proptypes.func,
+    updateInvoices: Proptypes.func
 }
 export default Invoice;

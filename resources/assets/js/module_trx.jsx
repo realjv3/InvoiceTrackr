@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import Proptypes from 'prop-types';
 
 import 'whatwg-fetch';
 import ES6Promise from 'es6-promise';
@@ -44,7 +45,7 @@ class BillableEntry extends React.Component
             billable_entry_unit: '',
             billable_entry_price: ''
         };
-        this.updateBillablesDropDown = React.PropTypes.func.isRequired;
+
         this.state = {
             open: false,
             snackbarOpen: false,
@@ -215,6 +216,9 @@ class BillableEntry extends React.Component
         );
     }
 }
+BillableEntry.propTypes = {
+    updateBillablesDropDown: Proptypes.func.isRequired
+};
 
 class DatePickerControlled extends React.Component {
 
@@ -800,7 +804,7 @@ class Trx extends React.Component
                     title="Transactions"
                     subtitle="Track Time & Expenses"
                     actAsExpander={false}
-                    avatar="https://www.dropbox.com/s/4hw9njfnlkgttmf/clock-1.png?dl=1"
+                    avatar="http://res.cloudinary.com/realjv3/image/upload/v1516748943/clock-1_nwisn9.png"
                 />
                 <CardText expandable={false} style={{
                     display: 'flex',

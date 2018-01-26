@@ -3,6 +3,7 @@
  * A generic delete 'are you sure?' dialog
  */
 import React from 'react';
+import Proptypes from 'prop-types';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
@@ -38,8 +39,8 @@ class DeleteDialog extends React.Component
     }
 }
 DeleteDialog.propTypes = {
-    handleDelete: React.PropTypes.func.isRequired,
-    text: React.PropTypes.string.isRequired
+    handleDelete: Proptypes.func.isRequired,
+    text: Proptypes.string.isRequired
 }
 
 export {DeleteDialog as default};

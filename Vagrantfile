@@ -94,7 +94,7 @@ Vagrant.configure("2") do |config|
     echo '#';
     sudo apt-add-repository -y ppa:ondrej/php
     sudo apt-get update -y;
-    sudo apt-get install -y php7.0-fpm php7.0-mysql php7.0-gd;
+    sudo apt-get install -y php7.2-fpm php7.2-mysql php7.2-gd;
 
     echo '#';
     echo '###################### Configuring nginx ######################'
@@ -105,13 +105,13 @@ Vagrant.configure("2") do |config|
     echo '#';
     echo '###################### Installing php exts, php.ini ######################'
     echo '#';
-    sudo service php7.0-fpm stop;
-    sudo mv /etc/php/7.0/fpm/php.ini /etc/php/7.0/fpm/php.ini.default;
-    sudo mv /etc/php/7.0/cli/php.ini /etc/php/7.0/cli/php.ini.default;
-    sudo touch /etc/php/7.0/fpm/php.ini&& sudo chown vagrant:vagrant /etc/php/7.0/fpm/php.ini;
-    sudo touch /etc/php/7.0/cli/php.ini && sudo chown vagrant:vagrant /etc/php/7.0/cli/php.ini;
-    sudo apt-get install -y php7.0-mbstring php7.0-xml;
-    sudo service php7.0-fpm start;
+    sudo service php7.2-fpm stop;
+    sudo mv /etc/php/7.2/fpm/php.ini /etc/php/7.2/fpm/php.ini.default;
+    sudo mv /etc/php/7.2/cli/php.ini /etc/php/7.2/cli/php.ini.default;
+    sudo touch /etc/php/7.2/fpm/php.ini&& sudo chown vagrant:vagrant /etc/php/7.2/fpm/php.ini;
+    sudo touch /etc/php/7.2/cli/php.ini && sudo chown vagrant:vagrant /etc/php/7.2/cli/php.ini;
+    sudo apt-get install -y php7.2-mbstring php7.2-xml;
+    sudo service php7.2-fpm start;
 
     echo '#';
     echo '###################### Installing composer ######################'
@@ -143,30 +143,30 @@ Vagrant.configure("2") do |config|
     echo '#';
     echo '###################### Installing xdebug ######################'
     echo '#';
-    sudo apt-get install -y php7.0-dev;
-    wget http://xdebug.org/files/xdebug-2.4.1.tgz;
-    tar -xvzf xdebug-2.4.1.tgz;
-    cd xdebug-2.4.1;
+    sudo apt-get install -y php7.2-dev;
+    wget http://xdebug.org/files/xdebug-2.6.0RC2.tgz;
+    tar -xvzf xdebug-2.6.0RC2.tgz;
+    cd xdebug-2.6.0RC2;
     sudo phpize;
     sudo ./configure;
     sudo make;
-    sudo cp modules/xdebug.so /usr/lib/php/20151012;
+    sudo cp modules/xdebug.so /usr/lib/php/20170718;
 
-    sudo echo "zend_extension = /usr/lib/php/20151012/xdebug.so" >> /etc/php/7.0/fpm/php.ini;
-    sudo echo "xdebug.remote_enable = on" >> /etc/php/7.0/fpm/php.ini;
-    sudo echo "xdebug.remote_connect_back = on" >> /etc/php/7.0/fpm/php.ini;
-    sudo echo "xdebug.idekey = 'vagrant'" >> /etc/php/7.0/fpm/php.ini;
+    sudo echo "zend_extension = /usr/lib/php/20170718/xdebug.so" >> /etc/php/7.2/fpm/php.ini;
+    sudo echo "xdebug.remote_enable = on" >> /etc/php/7.2/fpm/php.ini;
+    sudo echo "xdebug.remote_connect_back = on" >> /etc/php/7.2/fpm/php.ini;
+    sudo echo "xdebug.idekey = 'vagrant'" >> /etc/php/7.2/fpm/php.ini;
 
-    sudo echo "zend_extension = /usr/lib/php/20151012/xdebug.so" >> /etc/php/7.0/cli/php.ini;
-    sudo echo "xdebug.remote_enable = on" >> /etc/php/7.0/cli/php.ini;
-    sudo echo "xdebug.remote_connect_back = on" >> /etc/php/7.0/cli/php.ini;
-    sudo echo "xdebug.idekey = 'vagrant'" >> /etc/php/7.0/cli/php.ini;
+    sudo echo "zend_extension = /usr/lib/php/20170718/xdebug.so" >> /etc/php/7.2/cli/php.ini;
+    sudo echo "xdebug.remote_enable = on" >> /etc/php/7.2/cli/php.ini;
+    sudo echo "xdebug.remote_connect_back = on" >> /etc/php/7.2/cli/php.ini;
+    sudo echo "xdebug.idekey = 'vagrant'" >> /etc/php/7.2/cli/php.ini;
 
     sudo rm -fr /var/www/invoicetrackr/xdebug-2.4.1*;
 
     sudo service vsftpd restart;
     sudo service mysql restart;
-    sudo service php7.0-fpm restart;
+    sudo service php7.2-fpm restart;
     sudo service nginx restart;
 
     echo '#';

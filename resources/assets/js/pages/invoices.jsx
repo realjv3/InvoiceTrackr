@@ -18,24 +18,20 @@ ReactDOM.render(<Footer />, document.getElementById('footer'));
 import Paper from 'material-ui/Paper';
 import InvoiceModule from 'module_invoices.jsx';
 
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
-var Main_area = React.createClass({
-    childContextTypes: {muiTheme: React.PropTypes.object.isRequired},
-    getChildContext: function() {
-        return {
-            muiTheme: getMuiTheme({
-                textField: {hintColor: "rgba(0, 0, 0, 0.67)", disabledTextColor: "rgba(0, 0, 0, 0.4)"}
-            })
-        };
-    },
-    render: function() {
-        return (
+function Main_area() {
+    const muiTheme = getMuiTheme({
+        textField: {hintColor: "rgba(0, 0, 0, 0.67)", disabledTextColor: "rgba(0, 0, 0, 0.4)"}
+    });
+    return (
+        <MuiThemeProvider muiTheme={muiTheme}>
             <Paper className="main_area">
                 <InvoiceModule />
             </Paper>
-        );
-    }
-});
+        </MuiThemeProvider>
+    );
+}
 
 ReactDOM.render(<Main_area />, document.getElementById('content'));

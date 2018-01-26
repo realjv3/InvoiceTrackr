@@ -5,9 +5,13 @@
  * Time: 3:40 PM
  */
 namespace App\Http\Controllers;
+use App\Billable;
+use App\Cust_profile;
+use App\Customer;
 use App\CustTrx;
 use App\Invoice;
-use Illuminate\Support\Facades\App;
+use App\Profile;
+use FPDF;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Util\UtilFacade;
@@ -18,7 +22,7 @@ class InvoiceController extends Controller
         //get the transactions being invoiced
         $trx_ids = explode(',', $_GET['trx_keys']);
         array_shift($trx_ids);
-        if(count($trx_ids) < 1) return response('No transactions to invoice.', 422);
+        if (count($trx_ids) < 1) return response('No transactions to invoice.', 422);
         $custid = CustTrx::find(substr($trx_ids[0], 7))->custid;
 
         //save an invoice record to database
@@ -31,19 +35,102 @@ class InvoiceController extends Controller
         $invoice->amt = $_GET['total'];
         $invoice->save();
 
-        //update trx statuses
-        foreach($trx_ids as $trx_id) {
-            $trx_id = substr($trx_id, 7);
+        //make a pdf
+        $pdf = new FPDF('P', 'mm', 'Letter');
+        $pdf->AddPage();
+        /**
+         * Invoice header
+         */
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->Cell(40, 4, 'Invoice number: ' . $invoice->invno, 0, 3);
+        $pdf->Cell(70, 4, 'Invoice Date: ' . $invoice->invdt, 0, 3);
+        $pdf->Cell(70, 4, 'Due Date: ' . $invoice->duedt, 0, 3);
+        $pdf->Ln();
+
+        $pdf->SetFont('Arial', '', 14);
+        $profile = Profile::find(Auth::user()->id);
+        $name = $profile->first . ' ' . $profile->last;
+        $pdf->Cell(200, 8, $name, 0, 3);
+        if ($profile->company != $name) {
+            $pdf->Cell(200, 4, $profile->company, 0, 3);
+        }
+
+        $pdf->SetFont('Arial', '', 8);
+        if (!empty($profile->addr1)) {
+            $pdf->Cell(200, 4, $profile->addr1, 0, 3);
+        }
+        if (!empty($profile->addr2)) {
+            $pdf->Cell(200, 4, $profile->addr2, 0, 3);
+        }
+        if (!empty($profile->city) && !empty($profile->state) && !empty($profile->zip)) {
+            $pdf->Cell(200, 4, $profile->city . ', ' . $profile->state . ' ' . $profile->zip, 0, 3);
+        }
+        if (!empty($profile->office) && $profile->office != $profile->cell) {
+            $pdf->Cell(200, 4, $profile->office, 0, 3);
+        }
+        if (!empty($profile->cell)) {
+            $pdf->Cell(200, 4, $profile->cell, 0, 3);
+        }
+        $pdf->Cell(200, 4, Auth()->user()->email, 0, 3);
+
+        $pdf->SetFont('Arial', '', 14);
+        $pdf->Cell(200, 8, 'Bill to:', 0, 3);
+        $pdf->SetFont('Arial', '', 10);
+        $custProfile = Cust_profile::find($custid);
+        $cust = Customer::find($custid);
+        $pdf->Ln();
+        if ( ! empty($cust->first) && ! empty($cust->last)) {
+            $pdf->Cell(200, 4, $cust->first . ' ' . $cust->last, 0, 3);
+        }
+        if ( ! empty($cust->company)) {
+            $pdf->Cell(200, 4, $cust->company, 0, 3);
+        }
+        $pdf->SetFont('Arial', '', 8);
+        if ( ! empty($custProfile->addr1)) {
+            $pdf->Cell(200, 4, $custProfile->addr1, 0, 3);
+        }
+        if ( ! empty($custProfile->addr2)) {
+            $pdf->Cell(200, 4, $custProfile->addr2, 0, 3);
+        }
+        if ( ! empty($custProfile->city) && ! empty($custProfile->state) && ! empty($custProfile->zip)) {
+            $pdf->Cell(200, 4, $custProfile->city . ', ' . $custProfile->state . ' ' . $custProfile->zip, 0, 3);
+        }
+        if ( ! empty($cust->email)) {
+            $pdf->Cell(200, 4, $cust->email, 0, 3);
+        }
+        /**
+         * Invoice line items
+         */
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->Cell(25, 10, 'Trx Date');
+        $pdf->Cell(35, 10, 'Billable');
+        $pdf->Cell(77, 10, 'Description');
+        $pdf->Cell(35, 10, 'Quantity');
+        $pdf->Cell(13, 10, 'Amount');
+        $pdf->Ln();
+
+        $pdf->SetFont('Arial', '', 10);
+        for ($i = 0; $i < count($trx_ids); $i++) {
+            if ($i > 0 && $i % 20 == 0) {
+                $pdf->AddPage();
+            }
+            $trx_id = substr($trx_ids[$i], 7);
             $trx = CustTrx::find($trx_id);
             $trx->status = 1;
             $trx->inv = $invoice->id;
             $trx->save();
+            $billable = Billable::find($trx->item);
+            $pdf->Cell(25, 8, $trx->trxdt);
+            $pdf->Cell(35, 8, substr($billable->descr, 0, 20));
+            $pdf->Cell(77, 8, substr($trx->descr, 0, 46));
+            $pdf->Cell(35, 8, $trx->amt / $billable->price . ' x $' . $billable->price . '/' . $billable->unit);
+            $pdf->Cell(13, 8, $trx->amt);
+            $pdf->Ln();
         }
-
-        //make a pdf
-        $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML($_GET['content']);
-        return $pdf->stream();
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Ln();
+        $pdf->Cell(80, 12, 'Total $' . $invoice->amt, 1);
+        return response($pdf->Output(), 200, ['Content-Type' => 'application/pdf']);
     }
 
     /**

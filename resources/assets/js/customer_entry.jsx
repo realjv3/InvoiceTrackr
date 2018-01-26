@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import Proptypes from 'prop-types';
 
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
@@ -245,7 +246,7 @@ class CustomerEntry extends React.Component
 CustomerEntry.propTypes = {
     // This component needs a method passed as a prop that will render
     // the contents of the parent component's customer drop-down
-    updateCustomersDropDown: React.PropTypes.func.isRequired
+    updateCustomersDropDown: Proptypes.func.isRequired
 }
 
 export {CustomerEntry as default};

@@ -347,7 +347,7 @@ class InvoiceModule extends React.Component
                 />
                 <Card style={{backgroundColor: '#F7FAF5'}} >
                     <DeleteDialog ref="del_inv_dialog" handleDelete={this.deleteInvoice} text="Do you really want to permanently delete the selected invoice?" />
-                    <CardHeader title="Invoices" actAsExpander={true} showExpandableButton={true} avatar="https://www.dropbox.com/s/1x89klicik0olnk/money.png?dl=1" />
+                    <CardHeader title="Invoices" actAsExpander={true} showExpandableButton={true} avatar="https://res.cloudinary.com/realjv3/image/upload/v1516748941/money_fy1hi1.png" />
                     <CardText expandable={true}>
                         <table>
                             <tbody>
@@ -358,7 +358,7 @@ class InvoiceModule extends React.Component
                 </Card>
                 <Divider />
                 <Card style={{backgroundColor: '#F7FAF5'}} onExpandChange={this.updateTrx}>
-                    <CardHeader title="Billable Transactions" actAsExpander={true} showExpandableButton={true} avatar="https://www.dropbox.com/s/4hw9njfnlkgttmf/clock-1.png?dl=1" />
+                    <CardHeader title="Billable Transactions" actAsExpander={true} showExpandableButton={true} avatar="http://res.cloudinary.com/realjv3/image/upload/v1516748943/clock-1_nwisn9.png" />
                     <CardText expandable={true}>
                         <table>
                             <tbody>

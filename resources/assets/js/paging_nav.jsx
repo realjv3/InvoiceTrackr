@@ -6,6 +6,7 @@
  */
 
 import React from 'react';
+import Proptypes from 'prop-types';
 import IconButton from 'material-ui/IconButton';
 
 class Paging_nav extends React.Component
@@ -50,8 +51,8 @@ class Paging_nav extends React.Component
 }
 
 Paging_nav.propTypes = {
-    refresh: React.PropTypes.func.isRequired,
-    page: React.PropTypes.object.isRequired
+    refresh: Proptypes.func.isRequired,
+    page: Proptypes.object.isRequired
 }
 
 export {Paging_nav as default};
