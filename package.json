@@ -1,5 +1,9 @@
 {
   "private": true,
+  "scripts": {
+    "develop": "webpack -d --watch --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js"
+  },
   "devDependencies": {
     "babel-core": ">=6.26.0",
     "babel-loader": "^7.1.2",
@@ -18,13 +22,13 @@
     "webpack": "^3.10.0",
     "whatwg-fetch": "^2.0.3"
   },
-  "dependencies": {},
+  "dependencies": {
+    "uglifyjs-webpack-plugin": "^1.1.6",
+    "webpack-merge": "^4.1.1"
+  },
   "name": "invoicetrackr",
   "description": "![alt tag](https://googledrive.com/host/0B1f8PNGaySaRVHVtRWdaNkkxWFE)\r Invoicing web app made with React + MaterialUI front-end and Laravel backend.",
   "version": "1.0.0",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/realjv3/invoicetrackr.git"
@@ -35,7 +39,7 @@
     "url": "https://github.com/realjv3/invoicetrackr/issues"
   },
   "homepage": "https://github.com/realjv3/invoicetrackr#readme",
-  "main": "webpack.config.js",
+  "main": "webpack.common.js",
   "directories": {
     "test": "tests"
   }
