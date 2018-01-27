@@ -21,10 +21,10 @@
     "url-loader": "^0.6.2",
     "webpack": "^3.10.0",
     "whatwg-fetch": "^2.0.3"
-  },
-  "dependencies": {
     "uglifyjs-webpack-plugin": "^1.1.6",
     "webpack-merge": "^4.1.1"
+  },
+  "dependencies": {
   },
   "name": "invoicetrackr",
   "description": "![alt tag](https://googledrive.com/host/0B1f8PNGaySaRVHVtRWdaNkkxWFE)\r Invoicing web app made with React + MaterialUI front-end and Laravel backend.",

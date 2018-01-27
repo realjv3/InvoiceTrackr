@@ -40,5 +40,4 @@ On prod server:
 5. run `composer install --optimize-autoloader` so Composer can autoload classes more efficiently
 6. run `php artisan route:cache` which will optimize route loading
 7. run `php artisan config:cache` which will combine all of Laravel's config files into one file
-8. run `php artisan route:cache` which will optimize route loading
 8. run `php artisan up`
