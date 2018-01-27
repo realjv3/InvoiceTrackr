@@ -14,7 +14,7 @@ _If using Vagrant to spin up a dev server, skip ahead to Vagrant section below._
 The React components for the front end are in the /resources/assets/js folder.  
 webpack.common.js is all set to bundle those React components and put them where they need to be (/public/js).
 You will need to use [webpack](https://julienrenaux.fr/2015/03/30/introduction-to-webpack-with-practical-examples/) to transpile and bundle these javascript files.
-When developing, run <code>npm run develop</code> on the dev server. This launch webpack, which will watch the jsx files and re-bundle & output them them to public/js/xyz.js as changes are made to the jsx files.
+When developing, run <code>npm run develop</code> on the dev server. This launches webpack, which will watch the jsx files and re-bundle & output them them to public/js/xyz.js as changes are made to the jsx files.
 
 ##### If you want to use Vagrant:
 1. create an nginx.conf file in proj. root, then edit path to it in the Vagrantfile:102.  
@@ -33,9 +33,10 @@ When developing, run <code>npm run develop</code> on the dev server. This launch
 
 ##### Deploying to production
 1. set <code>APP_ENV=production</code> in .env file
-2. run <code>php artisan route:cache</code> which will optimize route loading
-3. run <code>npm run build</code> from command line. This will set NODE_ENV to 'production' and use UglifyJS to out minified bundled javascript, css and whatnot.
+2. run <code>npm run build</code> from command line. This will set NODE_ENV to 'production' and use UglifyJS to out minified bundled javascript, css and whatnot.
+3. git pull changes to deploy PHP changes, run database migrations & seeding for DDL or DML changes, ftp vendor and node_modules folders
+On prod server:
 4. run <code>composer install --optimize-autoloader</code> so Composer can autoload classes more efficiently
-5. run <code>php artisan config:cache</code> which will combine all of Laravel's config files into one file
-6. run <code>php artisan route:cache</code> which will optimize route loading
-7. git pull changes to deploy PHP changes, run database migrations & seeding for DDL or DML changes, ftp vendor and node_modules folders
+5. run <code>php artisan route:cache</code> which will optimize route loading
+6. run <code>php artisan config:cache</code> which will combine all of Laravel's config files into one file
+7. run <code>php artisan route:cache</code> which will optimize route loading
