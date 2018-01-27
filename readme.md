@@ -35,7 +35,7 @@ When developing, run `npm run develop` on the dev server. This launches webpack,
 1. on prod server, execute `php artisan down`
 2. set `APP_ENV=production` in .env file
 3. run `npm run build` from command line. This will set NODE_ENV to 'production' and use UglifyJS to out minified bundled javascript, css and whatnot.
-4. git pull changes to deploy PHP changes, run database migrations & seeding for DDL or DML changes, ftp vendor and node_modules folders  
+4. git pull changes to deploy PHP changes, run database migrations & seeding for DDL or DML changes, `composer install --no-dev`, then ftp vendor folder to prod server  
 On prod server:
 5. run `composer install --optimize-autoloader` so Composer can autoload classes more efficiently
 6. run `php artisan route:cache` which will optimize route loading
