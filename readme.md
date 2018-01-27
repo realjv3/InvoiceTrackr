@@ -1,5 +1,5 @@
 ### Invoicing web app made with React + MaterialUI front-end and Laravel backend. 
-![screen shot](http://res.cloudinary.com/realjv3/image/upload/v1503530734/invoicetrackr_vdboz4.png)
+![screen shot](http://res.cloudinary.com/realjv3/image/upload/v1517076995/InvoiceTrackr-screenshot_yerdmo.png)
 
 ##### If you just want to stand up an instance of the app:
 1. Clone this repository into the project directory.  
