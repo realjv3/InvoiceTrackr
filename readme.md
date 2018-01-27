@@ -32,11 +32,13 @@ When developing, run <code>npm run develop</code> on the dev server. This launch
 8. run database seeding from command line <code>php artisan db:seed</code>
 
 ##### Deploying to production
-1. set <code>APP_ENV=production</code> in .env file
-2. run <code>npm run build</code> from command line. This will set NODE_ENV to 'production' and use UglifyJS to out minified bundled javascript, css and whatnot.
-3. git pull changes to deploy PHP changes, run database migrations & seeding for DDL or DML changes, ftp vendor and node_modules folders
+1. on prod server, execute <code>php artisan down</code>
+2. set <code>APP_ENV=production</code> in .env file
+3. run <code>npm run build</code> from command line. This will set NODE_ENV to 'production' and use UglifyJS to out minified bundled javascript, css and whatnot.
+4. git pull changes to deploy PHP changes, run database migrations & seeding for DDL or DML changes, ftp vendor and node_modules folders
 On prod server:
-4. run <code>composer install --optimize-autoloader</code> so Composer can autoload classes more efficiently
-5. run <code>php artisan route:cache</code> which will optimize route loading
-6. run <code>php artisan config:cache</code> which will combine all of Laravel's config files into one file
-7. run <code>php artisan route:cache</code> which will optimize route loading
+5. run <code>composer install --optimize-autoloader</code> so Composer can autoload classes more efficiently
+6. run <code>php artisan route:cache</code> which will optimize route loading
+7. run <code>php artisan config:cache</code> which will combine all of Laravel's config files into one file
+8. run <code>php artisan route:cache</code> which will optimize route loading
+8. run <code>php artisan up</code>
