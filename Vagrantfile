@@ -144,13 +144,7 @@ Vagrant.configure("2") do |config|
     echo '###################### Installing xdebug ######################'
     echo '#';
     sudo apt-get install -y php7.2-dev;
-    wget http://xdebug.org/files/xdebug-2.6.0RC2.tgz;
-    tar -xvzf xdebug-2.6.0RC2.tgz;
-    cd xdebug-2.6.0RC2;
-    sudo phpize;
-    sudo ./configure;
-    sudo make;
-    sudo cp modules/xdebug.so /usr/lib/php/20170718;
+    sudo pecl install xdebug;
 
     sudo echo "zend_extension = /usr/lib/php/20170718/xdebug.so" >> /etc/php/7.2/fpm/php.ini;
     sudo echo "xdebug.remote_enable = on" >> /etc/php/7.2/fpm/php.ini;

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Util;
+use App\PdfMaker\InvoiceMaker;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CustTrxController;
 use App\Http\Controllers\InvoiceController;
@@ -26,7 +27,7 @@ class Util
             array_splice($user, 2, 4); //don't need the password and timestamp fields
 
             $custCntlr = new CustTrxController;
-            $invoiceCntlr = new InvoiceController();
+            $invoiceCntlr = new InvoiceController(new InvoiceMaker());
             for($i = 0; $i < count($user['customer']); $i++) {
                 $custtrx = $custCntlr->read($user['customer'][$i]['id']);
                 $user['customer'][$i]['custtrx'] = $custtrx;

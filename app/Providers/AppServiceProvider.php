@@ -45,5 +45,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('App\Util', function($app) {
             return new Util;
         });
+
+        $this->app->bind('App\PdfMaker\PdfMaker', 'App\PdfMaker\InvoiceMaker');
     }
 }

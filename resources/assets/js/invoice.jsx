@@ -30,15 +30,7 @@ class Invoice extends React.Component {
                 this.props.updateInvoices();
                 document.getElementById('duedt').parentNode.replaceChild(duedtInput, document.getElementById('duedt'));
                 document.getElementById('invno').parentNode.replaceChild(invnoInput, document.getElementById('invno'));
-                this.setState({trx: [
-                    <tr key={'trx_th'}>
-                        <th style={{width: '200px', textAlign: 'center', margin: '7px'}}>Trx Date</th>
-                        <th>Billable</th>
-                        <th>Description</th>
-                        <th>Quantity</th>
-                        <th>Amount</th>
-                    </tr>
-                ]});
+                this.props.clearSelTrx();
             }, true);
     }
     render() {
@@ -102,6 +94,7 @@ Invoice.propTypes = {
     trx: Proptypes.array,
     total: Proptypes.number,
     updateTrx: Proptypes.func,
-    updateInvoices: Proptypes.func
+    updateInvoices: Proptypes.func,
+    clearSelTrx: Proptypes.func
 }
 export default Invoice;

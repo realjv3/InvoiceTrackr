@@ -5,132 +5,92 @@
  * Time: 3:40 PM
  */
 namespace App\Http\Controllers;
-use App\Billable;
-use App\Cust_profile;
-use App\Customer;
+
 use App\CustTrx;
 use App\Invoice;
-use App\Profile;
+use App\PdfMaker\PdfMaker;
 use FPDF;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Util\UtilFacade;
 
+/**
+ * @property PdfMaker pdfMaker
+ */
 class InvoiceController extends Controller
 {
-    public function create() {
+    /**
+     * @var PdfMaker
+     */
+    private $pdfMaker;
+
+    /**
+     * InvoiceController constructor.
+     * @param PdfMaker $pdfMaker
+     */
+    public function __construct(PdfMaker $pdfMaker) {
+        $this->pdfMaker = $pdfMaker;
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Symfony\Component\HttpFoundation\Response
+     */
+    public function create(Request $request) {
         //get the transactions being invoiced
-        $trx_ids = explode(',', $_GET['trx_keys']);
+        $trx_ids = explode(',', $request->input('trx_keys'));
         array_shift($trx_ids);
         if (count($trx_ids) < 1) return response('No transactions to invoice.', 422);
-        $custid = CustTrx::find(substr($trx_ids[0], 7))->custid;
 
         //save an invoice record to database
         $invoice = new Invoice;
         $invoice->invno = filter_var($_GET['invno'], FILTER_SANITIZE_FULL_SPECIAL_CHARS, FILTER_FLAG_NO_ENCODE_QUOTES);
         $invoice->invdt = date('Y-m-d');
-        $invoice->duedt = date('Y-m-d', strtotime(substr($_GET['duedt'], 0, 16)));
+        $invoice->duedt = ! empty($request->input('duedt')) ? date('Y-m-d', strtotime(substr($request->input('duedt'), 0, 16))) : null;
         $invoice->user_id = Auth::user()->id;
+        $custid = CustTrx::find(substr($trx_ids[0], 7))->custid;
         $invoice->custid = $custid;
-        $invoice->amt = $_GET['total'];
+        $invoice->amt = $request->input('total');
         $invoice->save();
 
-        //make a pdf
-        $pdf = new FPDF('P', 'mm', 'Letter');
-        $pdf->AddPage();
-        /**
-         * Invoice header
-         */
-        $pdf->SetFont('Arial', '', 10);
-        $pdf->Cell(40, 4, 'Invoice number: ' . $invoice->invno, 0, 3);
-        $pdf->Cell(70, 4, 'Invoice Date: ' . $invoice->invdt, 0, 3);
-        $pdf->Cell(70, 4, 'Due Date: ' . $invoice->duedt, 0, 3);
-        $pdf->Ln();
-
-        $pdf->SetFont('Arial', '', 14);
-        $profile = Profile::find(Auth::user()->id);
-        $name = $profile->first . ' ' . $profile->last;
-        $pdf->Cell(200, 8, $name, 0, 3);
-        if ($profile->company != $name) {
-            $pdf->Cell(200, 4, $profile->company, 0, 3);
-        }
-
-        $pdf->SetFont('Arial', '', 8);
-        if (!empty($profile->addr1)) {
-            $pdf->Cell(200, 4, $profile->addr1, 0, 3);
-        }
-        if (!empty($profile->addr2)) {
-            $pdf->Cell(200, 4, $profile->addr2, 0, 3);
-        }
-        if (!empty($profile->city) && !empty($profile->state) && !empty($profile->zip)) {
-            $pdf->Cell(200, 4, $profile->city . ', ' . $profile->state . ' ' . $profile->zip, 0, 3);
-        }
-        if (!empty($profile->office) && $profile->office != $profile->cell) {
-            $pdf->Cell(200, 4, $profile->office, 0, 3);
-        }
-        if (!empty($profile->cell)) {
-            $pdf->Cell(200, 4, $profile->cell, 0, 3);
-        }
-        $pdf->Cell(200, 4, Auth()->user()->email, 0, 3);
-
-        $pdf->SetFont('Arial', '', 14);
-        $pdf->Cell(200, 8, 'Bill to:', 0, 3);
-        $pdf->SetFont('Arial', '', 10);
-        $custProfile = Cust_profile::find($custid);
-        $cust = Customer::find($custid);
-        $pdf->Ln();
-        if ( ! empty($cust->first) && ! empty($cust->last)) {
-            $pdf->Cell(200, 4, $cust->first . ' ' . $cust->last, 0, 3);
-        }
-        if ( ! empty($cust->company)) {
-            $pdf->Cell(200, 4, $cust->company, 0, 3);
-        }
-        $pdf->SetFont('Arial', '', 8);
-        if ( ! empty($custProfile->addr1)) {
-            $pdf->Cell(200, 4, $custProfile->addr1, 0, 3);
-        }
-        if ( ! empty($custProfile->addr2)) {
-            $pdf->Cell(200, 4, $custProfile->addr2, 0, 3);
-        }
-        if ( ! empty($custProfile->city) && ! empty($custProfile->state) && ! empty($custProfile->zip)) {
-            $pdf->Cell(200, 4, $custProfile->city . ', ' . $custProfile->state . ' ' . $custProfile->zip, 0, 3);
-        }
-        if ( ! empty($cust->email)) {
-            $pdf->Cell(200, 4, $cust->email, 0, 3);
-        }
-        /**
-         * Invoice line items
-         */
-        $pdf->SetFont('Arial', 'B', 10);
-        $pdf->Cell(25, 10, 'Trx Date');
-        $pdf->Cell(35, 10, 'Billable');
-        $pdf->Cell(77, 10, 'Description');
-        $pdf->Cell(35, 10, 'Quantity');
-        $pdf->Cell(13, 10, 'Amount');
-        $pdf->Ln();
-
-        $pdf->SetFont('Arial', '', 10);
+        $trxs = new Collection;
         for ($i = 0; $i < count($trx_ids); $i++) {
-            if ($i > 0 && $i % 20 == 0) {
-                $pdf->AddPage();
-            }
             $trx_id = substr($trx_ids[$i], 7);
             $trx = CustTrx::find($trx_id);
-            $trx->status = 1;
-            $trx->inv = $invoice->id;
-            $trx->save();
-            $billable = Billable::find($trx->item);
-            $pdf->Cell(25, 8, $trx->trxdt);
-            $pdf->Cell(35, 8, substr($billable->descr, 0, 20));
-            $pdf->Cell(77, 8, substr($trx->descr, 0, 46));
-            $pdf->Cell(35, 8, $trx->amt / $billable->price . ' x $' . $billable->price . '/' . $billable->unit);
-            $pdf->Cell(13, 8, $trx->amt);
-            $pdf->Ln();
+            $trxs->push($trx);
         }
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Ln();
-        $pdf->Cell(80, 12, 'Total $' . $invoice->amt, 1);
-        return response($pdf->Output(), 200, ['Content-Type' => 'application/pdf']);
+        $trxs = $this->markTrxsAsInvoiced($trxs, $invoice->id);
+
+        return response($this->makePdf($trxs, $invoice), 200, ['Content-Type' => 'application/pdf']);
+    }
+
+    /**
+     * @param Collection $trxs
+     * @param int $invId
+     * @return Collection
+     */
+    private function markTrxsAsInvoiced(Collection $trxs, int $invId) : Collection {
+        $trxs->each(function($trx) use ($invId) {
+            $trx->status = 1;
+            $trx->inv = $invId;
+            $trx->save();
+        });
+        return $trxs;
+    }
+
+    /**
+     * @param Collection $trxs
+     * @param Invoice $invoice
+     * @return mixed
+     */
+    private function makePdf(Collection $trxs, Invoice $invoice) {
+        return $this->pdfMaker
+            ->setPdfLib(new FPDF('P', 'mm', 'Letter'))
+            ->setTrxs($trxs)
+            ->setInvoice($invoice)
+            ->create();
     }
 
     /**

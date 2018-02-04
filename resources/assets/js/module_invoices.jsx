@@ -193,12 +193,13 @@ class InvoiceModule extends React.Component
             selTrxs = this.state.selectedTrx,
             total = parseFloat(this.state.total).toFixed(2);
         //first, unselect & reduce total if already selected
-        for(let i = 0; i < selTrxs.length; i++)
+        for(let i = 0; i < selTrxs.length; i++) {
             if(selTrxs[i].key == 'trx_id_'+ event.currentTarget.id) {
                 selTrxs.splice(i, 1);
                 if(total > 0)
-                    total = (total - parseFloat(trx.amt)).toFixed(2);
+                    total = Number((total - parseFloat(trx.amt)).toFixed(2));
             }
+        }
         //then select & increase total if we're selecting
         if(isInputChecked) {
             let billable = getBillable(trx.item),
@@ -212,10 +213,25 @@ class InvoiceModule extends React.Component
                     <td>$ {trx.amt}</td>
                 </tr>;
             selTrxs.push(tmp);
-            total = (parseFloat(total) + parseFloat(trx.amt)).toFixed(2)
+            total = (parseFloat(total) + parseFloat(trx.amt));
         }
-        this.setState({selectedTrx: selTrxs, total: total});
+        this.setState({selectedTrx: selTrxs, total: Number(parseFloat(total).toFixed(2))});
     }
+
+    clearSelTrx = () => {
+        this.setState({
+            selectedTrx: [
+                <tr key={'trx_th'}>
+                    <th style={{width: '200px', textAlign: 'center', margin: '7px'}}>Trx Date</th>
+                    <th>Billable</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Amount</th>
+                </tr>
+            ],
+        });
+    }
+
     handleDelete = (inv_id) => {
         this.refs.del_inv_dialog.handleOpen(inv_id);
     }
@@ -367,7 +383,13 @@ class InvoiceModule extends React.Component
                         </table>
                     </CardText>
                 </Card>
-                <Invoice trx={this.state.selectedTrx} total={this.state.total} updateTrx={this.updateTrx} updateInvoices={this.updateInvoices}/>
+                <Invoice
+                    trx={this.state.selectedTrx}
+                    total={this.state.total}
+                    updateTrx={this.updateTrx}
+                    updateInvoices={this.updateInvoices}
+                    clearSelTrx={this.clearSelTrx}
+                />
             </div>
         );
     }
