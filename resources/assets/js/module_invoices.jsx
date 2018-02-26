@@ -374,7 +374,7 @@ class InvoiceModule extends React.Component
                 </Card>
                 <Divider />
                 <Card style={{backgroundColor: '#F7FAF5'}} onExpandChange={this.updateTrx}>
-                    <CardHeader title="Billable Transactions" actAsExpander={true} showExpandableButton={true} avatar="http://res.cloudinary.com/realjv3/image/upload/v1516748943/clock-1_nwisn9.png" />
+                    <CardHeader title="Billable Transactions" actAsExpander={true} showExpandableButton={true} avatar="https://res.cloudinary.com/realjv3/image/upload/v1516748943/clock-1_nwisn9.png" />
                     <CardText expandable={true}>
                         <table>
                             <tbody>

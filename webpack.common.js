@@ -14,17 +14,30 @@ module.exports = {
         filename: '[name].js'
     },
     module: {
-        loaders: [
-            { test: /\.css$/, loader: 'style-loader!css-loader' }, // use ! to chain loaders
-            { test: /\.png$/, loader: "url-loader?limit=100000&mimetype=image/png" },
+        rules: [
+            { test: /\.css$/, use: [{
+                loader: 'style-loader'
+            }, {
+                loader: 'css-loader'
+            }] }, // use ! to chain loaders
+            { test: /\.png$/, use: [{
+                loader: 'url-loader',
+
+                options: {
+                    limit: 100000,
+                    mimetype: 'image/png'
+                }
+            }] },
             {
                 test: [/\.jsx$/],
-                loader: "babel-loader",
-                query: {
-                    cacheDirectory: true,
-                    presets: ['es2015', 'react'],
-                    plugins: ['transform-class-properties'] //fixes babel not compiling arrow functions and static properties
-                }
+                use: [{
+                    loader: 'babel-loader',
+                    options: {
+                        cacheDirectory: true,
+                        presets: ['es2015', 'react'],
+                        plugins: ['transform-class-properties'] //fixes babel not compiling arrow functions and static properties
+                    }
+                }],
             }
         ]
     },

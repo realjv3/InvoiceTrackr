@@ -1,8 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "develop": "webpack -d --watch --config webpack.dev.js",
-    "build": "webpack --config webpack.prod.js"
+    "develop": "webpack-cli -d --watch --config webpack.dev.js",
+    "build": "webpack-cli --config webpack.prod.js"
   },
   "devDependencies": {
     "babel-core": ">=6.26.0",
@@ -19,7 +19,7 @@
     "style-loader": "^0.19.1",
     "timer-stopwatch": ">=0.2.0",
     "url-loader": "^0.6.2",
-    "webpack": "^3.10.0",
+    "webpack": ">=4.0",
     "whatwg-fetch": "^2.0.3",
     "uglifyjs-webpack-plugin": "^1.1.6",
     "webpack-merge": "^4.1.1"

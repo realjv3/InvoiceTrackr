@@ -804,7 +804,7 @@ class Trx extends React.Component
                     title="Transactions"
                     subtitle="Track Time & Expenses"
                     actAsExpander={false}
-                    avatar="http://res.cloudinary.com/realjv3/image/upload/v1516748943/clock-1_nwisn9.png"
+                    avatar="https://res.cloudinary.com/realjv3/image/upload/v1516748943/clock-1_nwisn9.png"
                 />
                 <CardText expandable={false} style={{
                     display: 'flex',

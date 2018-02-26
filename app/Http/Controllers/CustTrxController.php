@@ -36,10 +36,11 @@ class CustTrxController extends Controller
         }
 
         // Save transaction to database
-        $customer = Customer::where('company', $trx['customer'])->firstOrFail();
-        $billable = Billable::where('descr', $trx['billable'])->firstOrFail();
+        $customer = Customer::where('company', $trx['customer'])->with(['Billable' => function($query) use ($trx) {
+            $query->where('descr', '=', $trx['billable']);
+        }])->firstOrFail();
         $trx['custid'] = $customer->id;
-        $trx['item'] = $billable->id;
+        $trx['item'] = $customer->billable->first()->id;
         unset($trx['customer']);
         unset($trx['billable']);
         $trx['descr'] = html_entity_decode($trx['descr']);
@@ -47,9 +48,9 @@ class CustTrxController extends Controller
         if(isset($trx['id']) && $trx['id'] != '') {
             $transaction = CustTrx::find($trx['id']);
             $transaction->update($trx);
-        }
-        else
+        } else {
             CustTrx::create($trx);
+        }
 
         // sharing Object cur_user, including user's customers and their billables & trx
         $cur_user = UtilFacade::get_user_data_for_view();

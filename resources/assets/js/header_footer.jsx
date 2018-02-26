@@ -225,9 +225,9 @@ class LoginMenu extends React.Component
 const NavMenu = () => {
     return (
         <List style={{display: 'flex', flexDirection: 'row'}}>
-            <ListItem href="/" primaryText="Transactions" rightIcon={ <img src="http://res.cloudinary.com/realjv3/image/upload/v1516748943/clock-1_nwisn9.png"/> } />
-            <ListItem href="/invoices" primaryText="Invoices" rightIcon={ <img src="http://res.cloudinary.com/realjv3/image/upload/v1516748941/money_fy1hi1.png"/> } />
-            <ListItem style={{display: 'none'}} href="/reports" primaryText="Reports" rightIcon={ <img src="http://res.cloudinary.com/realjv3/image/upload/v1516748942/business-1_pgeoxj.png"/> } />
+            <ListItem href="/" primaryText="Transactions" rightIcon={ <img src="https://res.cloudinary.com/realjv3/image/upload/v1516748943/clock-1_nwisn9.png"/> } />
+            <ListItem href="/invoices" primaryText="Invoices" rightIcon={ <img src="https://res.cloudinary.com/realjv3/image/upload/v1516748941/money_fy1hi1.png"/> } />
+            <ListItem style={{display: 'none'}} href="/reports" primaryText="Reports" rightIcon={ <img src="https://res.cloudinary.com/realjv3/image/upload/v1516748942/business-1_pgeoxj.png"/> } />
         </List>
     );
 }
@@ -300,18 +300,18 @@ class Footer extends React.Component
                 <Toolbar style={{display: 'flex', justifyContent: 'space-around', height: '10vh'}} >
                     <ToolbarGroup style={{display: 'flex'}}>
                         <span>
-                            <a href="http://github.com/realjv3" target="_blank">
+                            <a href="https://github.com/realjv3" target="_blank">
                                 <img
-                                    src="http://res.cloudinary.com/realjv3/image/upload/v1516748944/YellowOnBlackBipCotFlag-NO_QR-Code-small_hybudv.png"
+                                    src="https://res.cloudinary.com/realjv3/image/upload/v1516748944/YellowOnBlackBipCotFlag-NO_QR-Code-small_hybudv.png"
                                     style={{width: '48px'}}
                                 />
                             </a>
                         </span>
                         <ToolbarSeparator style={{margin: '0 24px 0 16px'}}/>
                         <span>
-                            <a href="http://bipcot.org/" target="_blank">
+                            <a href="https://bipcot.org/" target="_blank">
                                 <img
-                                    src="http://res.cloudinary.com/realjv3/image/upload/v1516748942/NoGodNoMasters_icon_wadk8m.png"
+                                    src="https://res.cloudinary.com/realjv3/image/upload/v1516748942/NoGodNoMasters_icon_wadk8m.png"
                                     style={{width: '26px'}}
                                 />
                             </a>

@@ -39,7 +39,7 @@ function Main_area() {
                         title="Reports"
                         subtitle="Keep an eye on things"
                         actAsExpander={false}
-                        avatar="http://res.cloudinary.com/realjv3/image/upload/v1516748942/business-1_pgeoxj.png"
+                        avatar="https://res.cloudinary.com/realjv3/image/upload/v1516748942/business-1_pgeoxj.png"
                         />
                     <CardText expandable={false} style={{
                         display: 'flex',
