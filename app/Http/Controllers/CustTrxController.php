@@ -38,9 +38,9 @@ class CustTrxController extends Controller
         // Save transaction to database
         $customer = Customer::where('company', $trx['customer'])->with(['Billable' => function($query) use ($trx) {
             $query->where('descr', '=', $trx['billable']);
-        }])->firstOrFail();
-        $trx['custid'] = $customer->id;
-        $trx['item'] = $customer->billable->first()->id;
+        }])->firstOrFail()->toArray();
+        $trx['custid'] = $customer['id'];
+        $trx['item'] = $customer['billable'][0]['id'];
         unset($trx['customer']);
         unset($trx['billable']);
         $trx['descr'] = html_entity_decode($trx['descr']);
