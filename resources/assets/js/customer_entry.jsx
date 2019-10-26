@@ -46,7 +46,7 @@ class CustomerEntry extends React.Component
 
     handleOpen = (chosen, edit = false) => {
         if (edit) { //if editing, chosen is an id, need to pre-fill form with chosen customer's data
-            var customer = getSelectedCustomer();
+            const customer = getSelectedCustomer();
             this.setState({
                 open: true,
                 fields: {
@@ -66,7 +66,7 @@ class CustomerEntry extends React.Component
                 edit: edit
             });
         } else {//else if creating, chosen is a string, company field gets default value of input
-            var tmp = this.state.fields;
+            const tmp = this.state.fields;
             tmp.cust_entry_company = chosen;
             this.setState({open: true, fields: tmp, edit: edit});
         }
@@ -83,10 +83,10 @@ class CustomerEntry extends React.Component
 
     handleSave = () => {
         this.removeErrors();
-        var cust = new FormData();
-        var fields = Object.keys(this.formfields);
+        const cust = new FormData();
+        const fields = Object.keys(this.formfields);
         cust.set('id', this.state.fields.cust_entry_id);
-        for(var i = 0; i < fields.length; i++)
+        for (let i = 0; i < fields.length; i++)
             cust.set(fields[i], document.getElementById(fields[i]).value);
         cust.set('cust_entry_state', this.refs.cust_entry_state.state.value);
         fetch('save_customer?edit=' + this.state.edit , {
@@ -97,10 +97,10 @@ class CustomerEntry extends React.Component
         }).then((response) => {
             if(response.ok) {   //if save went ok, show Snackbar, update global cur_user & update the cust. drop-down
                 response.json().then(
-                    (json) => {
+                    json => {
                         cur_user = JSON.parse(json.cur_user);
                         for(var i = 0; i < cur_user.customer.length; i++)
-                            if(cur_user.customer[i].company == this.state.fields.company) {
+                            if(cur_user.customer[i].company === this.state.fields.cust_entry_company) {
                                 cur_user.customer[i].selected = true;
                                 break;
                             }
@@ -110,9 +110,9 @@ class CustomerEntry extends React.Component
                 );
             } else {    //flash errors into view
                 response.json().then(function(errors) {
-                    var keys = Object.keys(errors);
-                    var fields = {};
-                    for(var i = 0; i < keys.length; i++)
+                    const keys = Object.keys(errors);
+                    const fields = {};
+                    for (let i = 0; i < keys.length; i++)
                         fields[keys[i]] = errors[keys[i]];
                     this.setState({errors: fields});
                 }.bind(this));
@@ -124,12 +124,12 @@ class CustomerEntry extends React.Component
         const actions = [
             <FlatButton
                 label="Save Customer"
-                onTouchTap={this.handleSave}
+                onClick={this.handleSave}
                 style={{color: 'green'}}
                 />,
             <FlatButton
                 label="Cancel"
-                onTouchTap={this.handleClose}
+                onClick={this.handleClose}
                 style={{color: 'red'}}
                 />
         ], style = {width: 'initial', marginRight: '50px'};

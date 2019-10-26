@@ -43,9 +43,9 @@ class InvoiceModule extends React.Component
         }
     }
     initCustomers = () => {
-        var customers = [];
-        for(var i = 0; i < cur_user.customer.length; i++) {
-            var customer = {
+        const customers = [];
+        for(let i = 0; i < cur_user.customer.length; i++) {
+            const customer = {
                 text: cur_user.customer[i].company,
                 value: (
                     <MenuItem primaryText={cur_user.customer[i].company} innerDivStyle={{display: 'flex', marginBottom: '9px'}} >
@@ -86,7 +86,7 @@ class InvoiceModule extends React.Component
         fetch('/get_billable_trx/' + cust.id + '?page=' + page + '&sort=' + sort + desc, {headers: {'X-CSRF-Token': _token, 'Accept': 'application/json'},
             credentials: 'same-origin'})
         .then((response) => {if(response.ok) response.json().then(
-            (json) => {
+            json => {
                 billable_trx = json;
                 //Update cur_user global with the fetched transactions
                 for(let i = 0; i < cur_user.customer.length; i++) {
@@ -109,33 +109,35 @@ class InvoiceModule extends React.Component
                             <th className="custtrx" id="amt" data-sort="" onClick={this.sort}>Amount</th>
                         </tr>
                     );
-                for(var j = 0; j < billable_trx.data.length; j++) {
-                    //get each transaction's billable's descr and qty
-                    let billable = getBillable(billable_trx.data[j].item);
-                    let qty = (billable_trx.data[j].amt / billable.price).toFixed(2) + ' x $' + billable.price +'/'+billable.unit;
-                    //should this trx be selected?
-                    let selTrxs = this.state.selectedTrx,
-                        selected = false;
-                    for(let i = 0; i < selTrxs.length; i++)
-                        if(selTrxs[i].key == 'trx_id_'+ billable_trx.data[j].id)
-                            selected = true;
-                    //render table row
-                    let style = {
-                        width: '10px',
-                        height: '10px',
-                        margin: '2px'
-                    };
-                    let tmp =
-                        <tr key={'trx_id_' + billable_trx.data[j].id}>
-                            <td><Checkbox id={billable_trx.data[j].id} onCheck={this.addToInvoice} style={{marginLeft: '55px'}} defaultChecked={selected} /></td>
-                            <td>{billable_trx.data[j].trxdt}</td>
-                            <td>{billable_trx.data[j].status}</td>
-                            <td>{billable.descr}</td>
-                            <td>{billable_trx.data[j].descr}</td>
-                            <td>{qty}</td>
-                            <td>$ {billable_trx.data[j].amt}</td>
-                        </tr>;
-                    trx.push(tmp);
+                if (billable_trx.data) {
+                    for(var j = 0; j < billable_trx.data.length; j++) {
+                        //get each transaction's billable's descr and qty
+                        let billable = getBillable(billable_trx.data[j].item);
+                        let qty = (billable_trx.data[j].amt / billable.price).toFixed(2) + ' x $' + billable.price +'/'+billable.unit;
+                        //should this trx be selected?
+                        let selTrxs = this.state.selectedTrx,
+                            selected = false;
+                        for(let i = 0; i < selTrxs.length; i++)
+                            if(selTrxs[i].key == 'trx_id_'+ billable_trx.data[j].id)
+                                selected = true;
+                        //render table row
+                        let style = {
+                            width: '10px',
+                            height: '10px',
+                            margin: '2px'
+                        };
+                        let tmp =
+                            <tr key={'trx_id_' + billable_trx.data[j].id}>
+                                <td><Checkbox id={billable_trx.data[j].id} onCheck={this.addToInvoice} style={{marginLeft: '55px'}} defaultChecked={selected} /></td>
+                                <td>{billable_trx.data[j].trxdt}</td>
+                                <td>{billable_trx.data[j].status}</td>
+                                <td>{billable.descr}</td>
+                                <td>{billable_trx.data[j].descr}</td>
+                                <td>{qty}</td>
+                                <td>$ {billable_trx.data[j].amt}</td>
+                            </tr>;
+                        trx.push(tmp);
+                    }
                 }
                 if(trx.length > 0)
                     trx.unshift(header);
@@ -159,16 +161,17 @@ class InvoiceModule extends React.Component
                     <th className="invoice" id="amt" data-sort="" onClick={this.sort}>Invoice Amount</th>
                 </tr>
             );
-        for(let i = 0; i < cust.invoice.data.length; i++) {
-            //render table row
-            let style = {
-                width: '10px',
-                height: '10px',
-                margin: '2px'
-            };
-            let tmp =
-                <tr id={cust.invoice.data[i].id} key={'inv_id_' + cust.invoice.data[i].id}>
-                    <td>
+        if (cust.invoice.data) {
+            for(let i = 0; i < cust.invoice.data.length; i++) {
+                //render table row
+                let style = {
+                    width: '10px',
+                    height: '10px',
+                    margin: '2px'
+                };
+                let tmp =
+                    <tr id={cust.invoice.data[i].id} key={'inv_id_' + cust.invoice.data[i].id}>
+                        <td>
                         <span className="cust_icons" >
                             <IconButton
                                 className={cust.invoice.data[i].id.toString()}
@@ -177,12 +180,13 @@ class InvoiceModule extends React.Component
                                 onClick={() => {this.handleDelete(cust.invoice.data[i].id)}}
                             />
                         </span>
-                    </td>
-                    <td onClick={this.readInvoice} >{cust.invoice.data[i].invdt}</td>
-                    <td onClick={this.readInvoice} >{cust.invoice.data[i].invno}</td>
-                    <td onClick={this.readInvoice} >{cust.invoice.data[i].amt}</td>
-                </tr>;
-            invoices.push(tmp);
+                        </td>
+                        <td onClick={this.readInvoice} >{cust.invoice.data[i].invdt}</td>
+                        <td onClick={this.readInvoice} >{cust.invoice.data[i].invno}</td>
+                        <td onClick={this.readInvoice} >{cust.invoice.data[i].amt}</td>
+                    </tr>;
+                invoices.push(tmp);
+            }
         }
         if(invoices.length > 0)
             invoices.unshift(header);

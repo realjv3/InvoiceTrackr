@@ -27,7 +27,7 @@ export const getSelCustTrxs = (page = 1, sort = '', desc = true) => {
     ajaxReq.open("GET", 'get_trx/' + cust.id + '?page=' + page + '&sort=' + sort + descr, false);
     ajaxReq.setRequestHeader('X-CSRF-Token', _token);
     ajaxReq.onload = () => {
-        if(ajaxReq.responseText && ajaxReq.responseText != "") {
+        if(ajaxReq.status === 200) {
             cust.custtrx = ajaxReq.responseText;
             cust.custtrx = JSON.parse(cust.custtrx);
             cust.custtrx.sort = sort;
@@ -57,7 +57,7 @@ export const getSelCustInvoices = (page = 1, sort = '', desc = true) => {
     ajaxReq.open("GET", 'get_inv/' + cust.id + '?page=' + page + '&sort=' + sort + descr, false);
     ajaxReq.setRequestHeader('X-CSRF-Token', _token);
     ajaxReq.onload = () => {
-        if(ajaxReq.responseText && ajaxReq.responseText != "") {
+        if(ajaxReq.status === 200) {
             cust.invoice = ajaxReq.responseText;
             cust.invoice = JSON.parse(cust.invoice);
             cust.invoice.sort = sort;

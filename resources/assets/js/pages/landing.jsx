@@ -6,14 +6,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 require('landing.css');
-var timer = require('ic_av_timer_black_24dp_2x.png');
-var cart = require('ic_shopping_cart_black_24dp_2x.png');
-var receipt = require('ic_receipt_black_24dp_2x.png');
-var send = require('ic_send_black_24dp_2x.png');
-var money = require('ic_monetization_on_black_24dp_2x.png');
-
-import injectTapEventPlugin from 'react-tap-event-plugin';
-injectTapEventPlugin();
+const timer = require('ic_av_timer_black_24dp_2x.png');
+const cart = require('ic_shopping_cart_black_24dp_2x.png');
+const receipt = require('ic_receipt_black_24dp_2x.png');
+const send = require('ic_send_black_24dp_2x.png');
+const money = require('ic_monetization_on_black_24dp_2x.png');
 
 import {NavBar, Footer} from 'header_footer.jsx';
 ReactDOM.render(<NavBar />, document.getElementById('appbar'));

@@ -64,10 +64,10 @@ class BillableEntry extends React.Component
         //find out which customer is selected
         for(var i = 0; i < cur_user.customer.length; i++)
             if(cur_user.customer[i].selected) break;
-        var customer = cur_user.customer[i];
+        const customer = cur_user.customer[i];
 
         if (edit) { //if editing, chosen is an id, need to pre-fill form with chosen customer's data
-            let billbl = getBillable(chosen), tmp = {};
+            const billbl = getBillable(chosen), tmp = {};
             tmp.customer= customer.company;
             tmp.id = billbl.id;
             tmp.custid = customer.id;
@@ -87,9 +87,9 @@ class BillableEntry extends React.Component
 
     handleSave = () => {
         this.removeErrors();
-        var billable = new FormData();
-        var fields = Object.keys(this.formfields);
-        for(var i = 3; i < fields.length; i++)  //starting at 1 b/c don't want to include 'customer' field in FormData
+        const billable = new FormData();
+        const fields = Object.keys(this.formfields);
+        for (let i = 3; i < fields.length; i++)  //starting at 1 b/c don't want to include 'customer' field in FormData
             billable.set(fields[i], document.getElementById(fields[i]).value);
         billable.set('billable_entry_id', this.state.fields.id);
         billable.set('billable_entry_custid', this.state.fields.custid);
@@ -112,9 +112,9 @@ class BillableEntry extends React.Component
                 );
             } else {    //flash errors into view
                 response.json().then((errors) => {
-                    var keys = Object.keys(errors);
-                    var fields = {};
-                    for(var i = 0; i < keys.length; i++)
+                    const keys = Object.keys(errors);
+                    const fields = {};
+                    for (let i = 0; i < keys.length; i++)
                         fields[keys[i]] = errors[keys[i]];
                     this.setState({errors: fields});
                 });
@@ -132,17 +132,17 @@ class BillableEntry extends React.Component
     }
 
     render() {
-        let title = (this.state.edit) ? "Edit this customer's billable item." : "New billable item. Love it.";
-        var style = {width: '115px', marginRight: '30px', display: 'inline-block'};
+        const title = (this.state.edit) ? "Edit this customer's billable item." : "New billable item. Love it.";
+        const style = {width: '115px', marginRight: '30px', display: 'inline-block'};
         const actions = [
             <FlatButton
                 label="Save Billable"
-                onTouchTap={this.handleSave}
+                onClick={this.handleSave}
                 style={{color: 'green'}}
             />,
             <FlatButton
                 label="Cancel"
-                onTouchTap={this.handleClose}
+                onClick={this.handleClose}
                 style={{color: 'red'}}
             />
         ];
@@ -375,9 +375,9 @@ class Trx extends React.Component
         };
     }
     initCustomers = () => {
-        var customers = [];
-        for(var i = 0; i < cur_user.customer.length; i++) {
-            var customer = {
+        const customers = [];
+        for (let i = 0; i < cur_user.customer.length; i++) {
+            const customer = {
                 text: cur_user.customer[i].company,
                 value: (
                     <MenuItem primaryText={cur_user.customer[i].company} innerDivStyle={{display: 'flex', marginBottom: '9px'}} >
@@ -404,7 +404,6 @@ class Trx extends React.Component
     }
     deleteCustomer = (cust_id) => {
         this.refs.del_cust_dialog.handleClose();
-        var body = new FormData();
         fetch(
             'delete_customer/' + cust_id,
             {method: 'DELETE', headers: {'X-CSRF-Token': _token, 'Accept': 'application/json'}, credentials: 'same-origin'}
@@ -420,7 +419,6 @@ class Trx extends React.Component
     }
     deleteBillable = (billable_id) => {
         this.refs.del_billables_dialog.handleClose();
-        var body = new FormData();
         fetch(
             'delete_billable/' + billable_id,
             {method: 'DELETE', headers: {'X-CSRF-Token': _token, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json'}, credentials: 'same-origin'}
@@ -442,7 +440,7 @@ class Trx extends React.Component
     }
     handleSave = () => {
         this.removeErrors();
-        let form = new FormData(document.querySelector('trx_form'));
+        const form = new FormData();
         form.append('id', document.getElementById('trx_entry_trxid').value);
         form.append('trxdt', document.getElementById('trx_entry_trxdt').value);
         form.append('customer', document.getElementById('trx_entry_customer').value);
@@ -461,7 +459,7 @@ class Trx extends React.Component
             credentials: 'same-origin'
         }).then((response) => {
             if(response.ok) {
-                response.json().then((json) => {
+                response.json().then(json => {
                     cur_user = JSON.parse(json.cur_user);
                     for(let i = 0; i < cur_user.customer.length; i++) {
                         if(cur_user.customer[i].id == cust.id) {
@@ -598,7 +596,7 @@ class Trx extends React.Component
         }
 
         // check if customer exists and get their billables for drop-down store, else open CustomerEntry/BillableEntry dialog
-        for (var i = 0; i < cur_user.customer.length; i++) {
+        for (let i = 0; i < cur_user.customer.length; i++) {
             cur_user.customer[i].selected = false;
             if (cur_user.customer[i].company.toLowerCase().trim() == input.toLowerCase().trim()) {
                 cur_user.customer[i].selected = true;
@@ -635,11 +633,11 @@ class Trx extends React.Component
         }
 
         // check if customer exists and get their billables for drop-down store, else open CustomerEntry/BillableEntry dialog
-        var cust = getSelectedCustomer();
-        if(!cust.billable)
+        const cust = getSelectedCustomer();
+        if( ! cust.billable)
             exists = false;
         else
-            for (var j = 0; j < cust.billable.length; j++) {
+            for (let j = 0; j < cust.billable.length; j++) {
                 cust.billable[j].selected = false;
                 if (cust.billable[j] && cust.billable[j].descr.toLowerCase().trim() == input.toLowerCase().trim()) {
                     exists = true;
@@ -658,7 +656,7 @@ class Trx extends React.Component
         this.setState({customers: this.initCustomers()});
     }
     updateBillables = () => {
-        let billables = [], cust = getSelectedCustomer();
+        let billables, cust = getSelectedCustomer();
         if(!cust.billable)
             return;
         billables = cust.billable.map((billable) => {
@@ -703,25 +701,26 @@ class Trx extends React.Component
             sort = (cust.custtrx.sort) ? cust.custtrx.sort : 'trxdt',
             desc = cust.custtrx.desc;
         getSelCustTrxs(page, sort, desc);
-        //Assemble trx rows
-        let trx = [ <Paging_nav key="paging_nav" refresh={this.updateTrx} page={cust.custtrx}/> ];
-        trx.push(
-            <tr key="trx_th">
-                <th>Edit / Delete</th>
-                <th id="trxdt" data-sort="desc" onClick={this.sort}>Trx Date</th>
-                <th id="status" data-sort="" onClick={this.sort}>Status</th>
-                <th id="item" data-sort="" onClick={this.sort}>Billable</th>
-                <th id="descr" data-sort="" onClick={this.sort}>Description</th>
-                <th>Quantity</th>
-                <th id="amt" data-sort="" onClick={this.sort}>Amount</th>
-            </tr>
-        );
-        for(let j = 0; j < cust.custtrx.data.length; j++) {
-            //get each transaction's billable's descr and qty
-            let billable = getBillable(cust.custtrx.data[j].item),
-                qty = (cust.custtrx.data[j].amt / billable.price).toFixed(2) + ' x $' + billable.price +'/'+billable.unit,
-                actions = (cust.custtrx.data[j].status == 'Open') ?
-                    (<span className="trx_icons" >
+        if (cust.custtrx.data) {
+            //Assemble trx rows
+            let trx = [ <Paging_nav key="paging_nav" refresh={this.updateTrx} page={cust.custtrx}/> ];
+            trx.push(
+                <tr key="trx_th">
+                    <th>Edit / Delete</th>
+                    <th id="trxdt" data-sort="desc" onClick={this.sort}>Trx Date</th>
+                    <th id="status" data-sort="" onClick={this.sort}>Status</th>
+                    <th id="item" data-sort="" onClick={this.sort}>Billable</th>
+                    <th id="descr" data-sort="" onClick={this.sort}>Description</th>
+                    <th>Quantity</th>
+                    <th id="amt" data-sort="" onClick={this.sort}>Amount</th>
+                </tr>
+            );
+            for(let j = 0; j < cust.custtrx.data.length; j++) {
+                //get each transaction's billable's descr and qty
+                let billable = getBillable(cust.custtrx.data[j].item),
+                    qty = (cust.custtrx.data[j].amt / billable.price).toFixed(2) + ' x $' + billable.price +'/'+billable.unit,
+                    actions = (cust.custtrx.data[j].status == 'Open') ?
+                        (<span className="trx_icons" >
                                 <IconButton
                                     iconClassName="fa fa-pencil"
                                     onClick={this.handleEdit}
@@ -735,27 +734,28 @@ class Trx extends React.Component
                                     id={cust.custtrx.data[j].id}
                                 />
                     </span>)
-                :
-                    <FlatButton label="View Invoice" labelStyle={{fontSize: 'small'}} onTouchTap={() => {this.refs.inv_rpt.handleOpen(cust.custtrx.data[j].inv);}} />,
-                //render table row
-                style = {
-                    width: '10px',
-                    height: '10px',
-                    margin: '2px'
-                },
-                tmp =
-                    <tr key={'trx_id_' + cust.custtrx.data[j].id}>
-                        <td>{actions}</td>
-                        <td>{cust.custtrx.data[j].trxdt}</td>
-                        <td>{cust.custtrx.data[j].status}</td>
-                        <td>{billable.descr}</td>
-                        <td>{cust.custtrx.data[j].descr}</td>
-                        <td>{qty}</td>
-                        <td>$ {cust.custtrx.data[j].amt}</td>
-                    </tr>;
-            trx.push(tmp);
+                        :
+                        <FlatButton label="View Invoice" labelStyle={{fontSize: 'small'}} onClick={() => {this.refs.inv_rpt.handleOpen(cust.custtrx.data[j].inv);}} />,
+                    //render table row
+                    style = {
+                        width: '10px',
+                        height: '10px',
+                        margin: '2px'
+                    },
+                    tmp =
+                        <tr key={'trx_id_' + cust.custtrx.data[j].id}>
+                            <td>{actions}</td>
+                            <td>{cust.custtrx.data[j].trxdt}</td>
+                            <td>{cust.custtrx.data[j].status}</td>
+                            <td>{billable.descr}</td>
+                            <td>{cust.custtrx.data[j].descr}</td>
+                            <td>{qty}</td>
+                            <td>$ {cust.custtrx.data[j].amt}</td>
+                        </tr>;
+                trx.push(tmp);
+            }
+            this.setState({trx: trx});
         }
-        this.setState({trx: trx});
     }
 
     /**

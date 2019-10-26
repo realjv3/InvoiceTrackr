@@ -62,7 +62,7 @@
      }
 
      render() {
-         const closeButton = <FlatButton label="Close" onTouchTap={this.handleClose}/>;
+         const closeButton = <FlatButton label="Close" onClick={this.handleClose}/>;
          return (
              <Dialog
                 actions={closeButton}

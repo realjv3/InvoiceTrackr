@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
-use App\Billable;
 use App\CustTrx;
 use App\Customer;
 use Illuminate\Http\Request;
@@ -84,10 +83,8 @@ class CustTrxController extends Controller
         }
 
         if(isset($custid)) {    //grab customer's trxs
-            $user = Auth::user()
-                ->with('customer.custtrx')
-                ->get();
-            foreach($user[0]->customer as $cust)
+            $user = Auth::user();
+            foreach($user->customer as $cust)
                 if($cust->id == $custid)
                     $trxs = $cust->custtrx->transform(
                         function ($trx) {

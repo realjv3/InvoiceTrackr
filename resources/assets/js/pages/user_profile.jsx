@@ -9,9 +9,6 @@ import 'whatwg-fetch';
 import ES6Promise from 'es6-promise';
 ES6Promise.polyfill();
 
-import injectTapEventPlugin from 'react-tap-event-plugin';
-injectTapEventPlugin();
-
 import {NavBar, Footer} from 'header_footer.jsx';
 ReactDOM.render(<NavBar />, document.getElementById('appbar'));
 ReactDOM.render(<Footer />, document.getElementById('footer'));
@@ -67,9 +64,9 @@ class Profile extends React.Component
 
     handleSave = (e) => {
         e.preventDefault();
-        var form = new FormData(document.getElementById('profile-form'));
-        var fields = Object.keys(this.formfields);
-        for(var i = 1; i < fields.length; i++)
+        const form = new FormData();
+        const fields = Object.keys(this.formfields);
+        for(let i = 1; i < fields.length; i++)
             form.set(fields[i], document.getElementById(fields[i]).value);
         form.set('state', this.refs.user_state.state.value);
         fetch('/profile/save', {
@@ -80,9 +77,9 @@ class Profile extends React.Component
         }).then(function(response){
             if(!response.ok) {
                 response.json().then(function(json) {
-                    var newState = {};
-                    for(var field in json) {
-                        var key = field;
+                    const newState = {};
+                    for(const field in json) {
+                        const key = field;
                         newState[key] = json[key];
                     }
                     this.setState({formfields: newState});

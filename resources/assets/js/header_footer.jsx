@@ -62,7 +62,7 @@ class RegisterForm extends React.Component
             passwordErr: '',
             password_confErr: ''
         });
-        var form = new FormData(document.getElementById('reg-form'));
+        const form = new FormData();
         form.append('email', document.getElementById('rEmail').value);
         form.append('password', document.getElementById('rPassword').value);
         form.append('password_confirmation', document.getElementById('rConfPassword').value);
@@ -152,7 +152,7 @@ class LoginMenu extends React.Component
             emailErr: '',
             passwordErr: ''
         });
-        var form = new FormData(document.querySelector('login-form'));
+        const form = new FormData();
         form.append('email', document.getElementById('lEmail').value);
         form.append('password', document.getElementById('lPassword').value);
         fetch('/auth/login', {
@@ -252,7 +252,7 @@ class NavBar extends React.Component
     }
 
     render() {
-        var loginoutlink = '', nav = '';
+        let loginoutlink = '', nav = '';
         if(!logged_in) {
             loginoutlink= React.createElement(
                 'div',
@@ -261,9 +261,9 @@ class NavBar extends React.Component
                 React.createElement(RegisterForm, {ref:"regform"})
             );
         } else {
-            var logoutlink= React.createElement(FlatButton, {onClick: this.logout}, "Logout");
-            var name = (cur_user.profile.first) ? cur_user.profile.first : cur_user.email;
-            var user  = React.createElement('a', {href: window.location.origin + '/profile'}, "Oh hello, " + name);
+            const logoutlink= React.createElement(FlatButton, {onClick: this.logout}, "Logout");
+            const name = (cur_user.profile.first) ? cur_user.profile.first : cur_user.email;
+            const user  = React.createElement('a', {href: window.location.origin + '/profile'}, "Oh hello, " + name);
             loginoutlink = React.createElement('div', {id: 'logout_link'}, user, logoutlink);
             nav = <NavMenu />;
         }
