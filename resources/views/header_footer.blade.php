@@ -19,6 +19,17 @@
         var logged_in = {{$logged_in}};
         var cur_user = {!! $cur_user !!};
     </script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-67521337-2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-67521337-2');
+    </script>
+
 </head>
 <body>
     <header id="appbar"></header>
