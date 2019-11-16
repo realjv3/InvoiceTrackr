@@ -41,15 +41,15 @@ class Invoice extends React.Component {
         if(cust) {
             custinfo = (
                 <div id="customer">
-                    <div>{cust.company}</div>
-                    <div>{cust.cust_profile.addr1}</div>
-                    <div>{cust.cust_profile.addr2}</div>
+                    <div>{cust.company ? cust.company : ''}</div>
+                    <div>{cust.cust_profile.addr1 ? cust.cust_profile.addr1 : ''}</div>
+                    <div>{cust.cust_profile.addr2 ? cust.cust_profile.addr2 : ''}</div>
                     <div>
                         {
-                            cust.cust_profile.city +
+                            (cust.cust_profile.city ? cust.cust_profile.city : '') +
                             (cust.cust_profile.city ? ', ' : '') +
                             (cust.cust_profile.state ? cust.cust_profile.state : '') +
-                            ' ' + cust.cust_profile.zip
+                            ' ' + (cust.cust_profile.zip ? cust.cust_profile.zip : '')
                         }
                     </div>
                     <div><a href={'mailto:'+cust.email} style={{textDecoration: 'underline'}}>{cust.email}</a></div>
@@ -57,7 +57,19 @@ class Invoice extends React.Component {
             );
         } else
             custinfo = 'Select a customer.';
-        return (
+
+        let name = '';
+        if (cur_user.profile.company) {
+        	name = cur_user.profile.company;
+		} else if (cur_user.profile.first && cur_user.profile.last) {
+			name = cur_user.profile.first + ' ' + cur_user.profile.last;
+		} else if (cur_user.profile.first && !cur_user.profile.last) {
+        	name = cur_user.profile.first;
+		} else if (!cur_user.profile.first && cur_user.profile.last) {
+        	name = cur_user.profile.last;
+		}
+
+		return (
             <Card>
                 <CardText id="invoice">
                     <CardHeader>
@@ -67,20 +79,20 @@ class Invoice extends React.Component {
                             <label style={{display: 'inline'}}>Due Date</label>
                             <input type="date" ref="duedt" id="duedt" name="duedt" />
                         </h3>
-                        <h1>{(cur_user.profile.company) ? cur_user.profile.company : cur_user.profile.first + ' ' + cur_user.profile.last}</h1>
+                        <h1>{name}</h1>
                         <div id="company">
-                            <div>{(cur_user.profile.company) ? cur_user.profile.company : cur_user.profile.first + ' ' + cur_user.profile.last}</div>
+                            <div>{name}</div>
                             <div>{cur_user.profile.addr1}</div>
                             <div>{cur_user.profile.addr2}</div>
                             <div>
                                 {
-                                    cur_user.profile.city +
+                                    (cur_user.profile.city ? cur_user.profile.city : '') +
                                     (cur_user.profile.city ? ', ' : '') +
                                     (cur_user.profile.state ? cur_user.profile.state : '') +
-                                    ' ' + cur_user.profile.zip
+                                    ' ' + (cur_user.profile.zip ? cur_user.profile.zip : '')
                                 }
                             </div>
-                            <div>{cur_user.profile.cell}</div>
+                            <div>{cur_user.profile.cell ? cur_user.profile.cell : ''}</div>
                             <div><a href={'mailto:'+cur_user.email} style={{textDecoration: 'underline'}}>{cur_user.email}</a></div>
                         </div>
                         <h2>Bill to:</h2>{custinfo}
