@@ -23,7 +23,6 @@ import Divider from 'material-ui/Divider';
 import AppBar from 'material-ui/AppBar/AppBar';
 import Toolbar from 'material-ui/Toolbar/Toolbar';
 import ToolbarGroup from 'material-ui/Toolbar/ToolbarGroup';
-import ToolbarSeparator from 'material-ui/Toolbar/ToolbarSeparator';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -299,23 +298,7 @@ class Footer extends React.Component
             <MuiThemeProvider muiTheme={this.muiTheme}>
                 <Toolbar style={{display: 'flex', justifyContent: 'space-around', height: '10vh'}} >
                     <ToolbarGroup style={{display: 'flex'}}>
-                        <span>
-                            <a href="https://github.com/realjv3" target="_blank">
-                                <img
-                                    src="https://res.cloudinary.com/realjv3/image/upload/v1516748944/YellowOnBlackBipCotFlag-NO_QR-Code-small_hybudv.png"
-                                    style={{width: '48px'}}
-                                />
-                            </a>
-                        </span>
-                        <ToolbarSeparator style={{margin: '0 24px 0 16px'}}/>
-                        <span>
-                            <a href="https://bipcot.org/" target="_blank">
-                                <img
-                                    src="https://res.cloudinary.com/realjv3/image/upload/v1516748942/NoGodNoMasters_icon_wadk8m.png"
-                                    style={{width: '26px'}}
-                                />
-                            </a>
-                        </span>
+                        <span>&copy; InvoiceTracker</span>
                     </ToolbarGroup>
                 </Toolbar>
             </MuiThemeProvider>

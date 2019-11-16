@@ -60,14 +60,15 @@ class Profile extends React.Component
 
     handleClose = () => {
         this.setState({open: false});
-    }
+    };
 
-    handleSave = (e) => {
+    handleSave = e => {
         e.preventDefault();
         const form = new FormData();
         const fields = Object.keys(this.formfields);
-        for(let i = 1; i < fields.length; i++)
+        for (let i = 0; i < fields.length; i++) {
             form.set(fields[i], document.getElementById(fields[i]).value);
+        }
         form.set('state', this.refs.user_state.state.value);
         fetch('/profile/save', {
             method: 'POST',
@@ -90,7 +91,7 @@ class Profile extends React.Component
                 }.bind(this));
             }
         }.bind(this));
-    }
+    };
 
     render() {
         return (
