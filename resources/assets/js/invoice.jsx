@@ -47,7 +47,7 @@ class Invoice extends React.Component {
                     <div>
                         {
                             cust.cust_profile.city +
-                            (cust.cust_profile.city.length ? ', ' : '') +
+                            (cust.cust_profile.city ? ', ' : '') +
                             (cust.cust_profile.state ? cust.cust_profile.state : '') +
                             ' ' + cust.cust_profile.zip
                         }
@@ -75,7 +75,7 @@ class Invoice extends React.Component {
                             <div>
                                 {
                                     cur_user.profile.city +
-                                    (cur_user.profile.city.length ? ', ' : '') +
+                                    (cur_user.profile.city ? ', ' : '') +
                                     (cur_user.profile.state ? cur_user.profile.state : '') +
                                     ' ' + cur_user.profile.zip
                                 }
