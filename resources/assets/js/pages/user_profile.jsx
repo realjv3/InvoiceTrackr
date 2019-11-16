@@ -69,7 +69,7 @@ class Profile extends React.Component
         for (let i = 0; i < fields.length; i++) {
             form.set(fields[i], document.getElementById(fields[i]).value);
         }
-        form.set('state', this.refs.user_state.state.value);
+        form.set('state', this.refs.user_state.state.value ? this.refs.user_state.state.value : '');
         fetch('/profile/save', {
             method: 'POST',
             body: form,
@@ -160,7 +160,7 @@ class Profile extends React.Component
                                 errorText={this.state.formfields.city}
                                 defaultValue={cur_user.profile.city}
                             />
-                            <States ref="user_state" defaultValue={cur_user.profile.state} style={{width: '50px', paddingRight: '10px'}} />
+                            <States ref="user_state" defaultValue={cur_user.profile.state} style={{width: '87px', paddingRight: '10px'}} />
                             <TextField
                                 style={{width: '100px'}}
                                 floatingLabelText="Zip"

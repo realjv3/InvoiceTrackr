@@ -17,7 +17,7 @@ class States extends React.Component
     handleChange = (event, index, value) => {
         //the SelectField component renders wierdly compared to it's surrounding TextInput components, hence having to dynamically change css
         var bottom = (this.props.id == 'user_state') ? '0px' : '9px';
-        this.setState({value: value, style: {bottom: bottom, width: '50px', paddingRight: '10px'}});
+        this.setState({value: value, style: {bottom: bottom, width: '87px', paddingRight: '10px'}});
     }
 
     render() {

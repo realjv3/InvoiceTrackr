@@ -20,7 +20,7 @@ class CustomerController extends Controller
             'cust_entry_email' => 'required|max:255|email',
             'cust_entry_addr1' => 'max:255',
             'cust_entry_addr2' => 'max:255',
-            'cust_entry_city' => 'alpha_dash|max:255',
+            'cust_entry_city' => 'max:255',
             'cust_entry_state' => 'alpha',
             'cust_entry_zip' => 'max:11',
             'cust_entry_cell' => 'max:14',

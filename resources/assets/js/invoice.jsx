@@ -13,11 +13,12 @@ class Invoice extends React.Component {
         super(props);
     }
     openInv = () => {
-        let trx_keys = this.props.trx.map((e) => { return e.key; }),
-        duedtInput = document.getElementById('duedt'),
-        duedtOutput = document.createElement('h3'),
-        invnoInput = document.getElementById('invno'),
-        invnoOutput = document.createElement('h3');
+        let
+            trx_keys = this.props.trx.map((e) => { return e.key; }),
+            duedtInput = document.getElementById('duedt'),
+            duedtOutput = document.createElement('h3'),
+            invnoInput = document.getElementById('invno'),
+            invnoOutput = document.createElement('h3');
         duedtOutput.id = "duedt";
         invnoOutput.id = "invno";
         duedtInput.parentNode.replaceChild(duedtOutput, duedtInput);
@@ -25,16 +26,17 @@ class Invoice extends React.Component {
         duedtOutput.innerText = duedtInput.value;
         invnoOutput.innerText = invnoInput.value;
         let inv = window.open('/create_inv?duedt=' + duedtInput.value + '&invno=' + invnoInput.value + '&trx_keys=' + trx_keys + '&total=' + this.props.total);
-            inv.addEventListener('load', () => {
-                this.props.updateTrx();
-                this.props.updateInvoices();
-                document.getElementById('duedt').parentNode.replaceChild(duedtInput, document.getElementById('duedt'));
-                document.getElementById('invno').parentNode.replaceChild(invnoInput, document.getElementById('invno'));
-                this.props.clearSelTrx();
-            }, true);
+        inv.addEventListener('load', () => {
+            this.props.updateTrx();
+            this.props.updateInvoices();
+            document.getElementById('duedt').parentNode.replaceChild(duedtInput, document.getElementById('duedt'));
+            document.getElementById('invno').parentNode.replaceChild(invnoInput, document.getElementById('invno'));
+            this.props.clearSelTrx();
+        }, true);
     }
     render() {
-        let cust = getSelectedCustomer(),
+        let
+            cust = getSelectedCustomer(),
             custinfo = '';
         if(cust) {
             custinfo = (
@@ -42,7 +44,14 @@ class Invoice extends React.Component {
                     <div>{cust.company}</div>
                     <div>{cust.cust_profile.addr1}</div>
                     <div>{cust.cust_profile.addr2}</div>
-                    <div>{cust.cust_profile.city + ', ' + cust.cust_profile.state + ' ' + cust.cust_profile.zip}</div>
+                    <div>
+                        {
+                            cust.cust_profile.city +
+                            (cust.cust_profile.city.length ? ', ' : '') +
+                            (cust.cust_profile.state ? cust.cust_profile.state : '') +
+                            ' ' + cust.cust_profile.zip
+                        }
+                    </div>
                     <div><a href={'mailto:'+cust.email} style={{textDecoration: 'underline'}}>{cust.email}</a></div>
                 </div>
             );
@@ -63,7 +72,14 @@ class Invoice extends React.Component {
                             <div>{(cur_user.profile.company) ? cur_user.profile.company : cur_user.profile.first + ' ' + cur_user.profile.last}</div>
                             <div>{cur_user.profile.addr1}</div>
                             <div>{cur_user.profile.addr2}</div>
-                            <div>{cur_user.profile.city + ', ' + cur_user.profile.state + ' ' + cur_user.profile.zip}</div>
+                            <div>
+                                {
+                                    cur_user.profile.city +
+                                    (cur_user.profile.city.length ? ', ' : '') +
+                                    (cur_user.profile.state ? cur_user.profile.state : '') +
+                                    ' ' + cur_user.profile.zip
+                                }
+                            </div>
                             <div>{cur_user.profile.cell}</div>
                             <div><a href={'mailto:'+cur_user.email} style={{textDecoration: 'underline'}}>{cur_user.email}</a></div>
                         </div>

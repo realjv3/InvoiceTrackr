@@ -86,9 +86,10 @@ class CustomerEntry extends React.Component
         const cust = new FormData();
         const fields = Object.keys(this.formfields);
         cust.set('id', this.state.fields.cust_entry_id);
-        for (let i = 0; i < fields.length; i++)
+        for (let i = 0; i < fields.length; i++) {
             cust.set(fields[i], document.getElementById(fields[i]).value);
-        cust.set('cust_entry_state', this.refs.cust_entry_state.state.value);
+        }
+        cust.set('cust_entry_state', this.refs.cust_entry_state.state.value ? this.refs.cust_entry_state.state.value : '');
         fetch('save_customer?edit=' + this.state.edit , {
             method: 'post',
             body: cust,
@@ -207,7 +208,7 @@ class CustomerEntry extends React.Component
                             <States
                                 defaultValue={this.state.fields.cust_entry_state}
                                 className="profile_field"
-                                style={{top: '17px', width: '50px', paddingRight: '10px'}}
+                                style={{top: '17px', width: '87px', paddingRight: '10px'}}
                                 ref="cust_entry_state"
                                 />
                             <TextField
