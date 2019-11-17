@@ -42,6 +42,7 @@ class InvoiceModule extends React.Component
             invoices: []
         }
     }
+
     initCustomers = () => {
         const customers = [];
         for(let i = 0; i < cur_user.customer.length; i++) {
@@ -51,13 +52,13 @@ class InvoiceModule extends React.Component
                     <MenuItem primaryText={cur_user.customer[i].company} innerDivStyle={{display: 'flex', marginBottom: '9px'}} >
                         <span className="cust_icons" >
                             <IconButton
-                                className={cur_user.customer[i].id.toString()}
+                                data-cust-id={cur_user.customer[i].id.toString()}
                                 iconClassName="fa fa-pencil"
                                 tooltip="Edit Customer"
                                 onClick={this.editCust}
                             />
                             <IconButton
-                                className={cur_user.customer[i].id.toString()}
+                                data-cust-id={cur_user.customer[i].id.toString()}
                                 iconClassName="fa fa-trash-o"
                                 tooltip="Delete Customer"
                                 onClick={this.showDelCustDialog}
@@ -69,10 +70,20 @@ class InvoiceModule extends React.Component
             customers.push(customer);
         }
         return customers;
-    }
-    updateCustomers = () => {
-        this.setState({customers: this.initCustomers()});
-    }
+    };
+
+    editCust = event => {
+        const
+            custId = event.currentTarget.dataset.custId,
+            customer = cur_user.customer.find( customer => customer.id === Number(custId));
+        this.doesCustExist(customer.company);
+        this.refs.cust_entry.handleOpen(custId, true);
+    };
+
+    showDelCustDialog = event => this.refs.del_cust_dialog.handleOpen(event.currentTarget.dataset.custId);
+
+    updateCustomers = () => this.setState({customers: this.initCustomers()});
+
     updateTrx = (page = 1) => {
         let cust = getSelectedCustomer();
         if (!cust) {
@@ -145,7 +156,8 @@ class InvoiceModule extends React.Component
             });
         });
 
-    }
+    };
+
     updateInvoices = (page = 1) => {
         let cust = getSelectedCustomer(),
             sort = (cust.invoice.sort) ? cust.invoice.sort : 'invdt',
@@ -191,7 +203,8 @@ class InvoiceModule extends React.Component
         if(invoices.length > 0)
             invoices.unshift(header);
         this.setState({invoices: invoices});
-    }
+    };
+
     addToInvoice = (event, isInputChecked) => {
         let trx = getTrx(event.currentTarget.id),
             selTrxs = this.state.selectedTrx,
@@ -220,7 +233,7 @@ class InvoiceModule extends React.Component
             total = (parseFloat(total) + parseFloat(trx.amt));
         }
         this.setState({selectedTrx: selTrxs, total: Number(parseFloat(total).toFixed(2))});
-    }
+    };
 
     clearSelTrx = () => {
         this.setState({
@@ -234,12 +247,11 @@ class InvoiceModule extends React.Component
                 </tr>
             ],
         });
-    }
+    };
 
-    handleDelete = (inv_id) => {
-        this.refs.del_inv_dialog.handleOpen(inv_id);
-    }
-    deleteInvoice = (inv_id) => {
+    handleDelete = inv_id => this.refs.del_inv_dialog.handleOpen(inv_id);
+
+    deleteInvoice = inv_id => {
         this.refs.del_inv_dialog.handleClose();
         if(!inv_id) return 'No invoice id given to delete';
         fetch('/del_inv/'+inv_id, {method: 'delete', headers: {'X-CSRF-Token': _token}, credentials: 'same-origin'})
@@ -247,14 +259,15 @@ class InvoiceModule extends React.Component
             this.updateInvoices();
             this.updateTrx();
         });
-    }
+    };
+
     /**
      * Auto-complete selection/onBlur calls this function with cust object when selecting from drop-down
-     * @param object/string chosen - can be a FocusEvent or MenuItem object, or a string, on blur or select
+     * @param chosen - Object|String - can be a FocusEvent or MenuItem object, or a string, on blur or select
      * @return boolean true if customer exists
      * @return boolean false if customer doesn't exist & opens CustomerEntry dialog
      */
-    doesCustExist = (chosen) => {
+    doesCustExist = chosen => {
         let exists = false;
         let input = '';
 
@@ -262,9 +275,9 @@ class InvoiceModule extends React.Component
         if (typeof chosen == 'string') { // pressing enter in customer
             if (chosen == '') return false;
             input = chosen;
-        } else if(chosen.value) //selecting from customer drop-down - onNewRequest makes 2nd call
+        } else if(chosen.value) { //selecting from customer drop-down - onNewRequest makes 2nd call
             input = chosen.text;
-        else if (chosen instanceof FocusEvent) { // onBlur of customer/billables field (during select & tab or click out)
+        } else if (chosen instanceof FocusEvent) { // onBlur of customer/billables field (during select & tab or click out)
             if (chosen.target.value.length == 0 || !chosen.relatedTarget) return false;
             if (chosen.relatedTarget.nodeName == 'SPAN') //selecting from customer drop-down - onBLur makes 1st call
                 return true;
@@ -299,12 +312,13 @@ class InvoiceModule extends React.Component
             this.refs.cust_entry.handleOpen(input);
             return false;
         }
-    }
+    };
+
     /**
      * will set sort and dir in cur_user global
      * @param event onClick of trx table header
      */
-    sort = (event) => {
+    sort = event => {
         let subject = event.currentTarget.className, //what are we sorting
             field = event.currentTarget.id,         //sort field
             dir = event.currentTarget.getAttribute('data-sort');    //sort direction
@@ -342,13 +356,12 @@ class InvoiceModule extends React.Component
                 }
             this.updateTrx(1);
         }
-    }
-    componentDidMount = () => {
-        document.getElementById('trx_entry_customer').addEventListener('blur', this.doesCustExist);
-    }
-    readInvoice = (event) => {
-        this.refs.inv_rpt.handleOpen(event.currentTarget.parentNode.id);
-    }
+    };
+
+    componentDidMount = () => document.getElementById('trx_entry_customer').addEventListener('blur', this.doesCustExist);
+
+    readInvoice = event => this.refs.inv_rpt.handleOpen(event.currentTarget.parentNode.id);
+
     render() {
         return (
             <div>

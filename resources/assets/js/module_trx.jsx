@@ -56,9 +56,7 @@ class BillableEntry extends React.Component
         };
     }
 
-    removeErrors = () => {
-        this.setState({errors: JSON.parse(JSON.stringify(this.formfields))})
-    }
+    removeErrors = () => this.setState({errors: JSON.parse(JSON.stringify(this.formfields))});
 
     handleOpen = (chosen, edit = false) => {
         //find out which customer is selected
@@ -83,7 +81,7 @@ class BillableEntry extends React.Component
             tmp.descr = chosen;
             this.setState({open: true, fields: tmp, edit: edit, snackbarOpen: false});
         }
-    }
+    };
 
     handleSave = () => {
         this.removeErrors();
@@ -120,7 +118,7 @@ class BillableEntry extends React.Component
                 });
             }
         });
-    }
+    };
 
     handleClose = () => {
         this.removeErrors();
@@ -129,7 +127,7 @@ class BillableEntry extends React.Component
             snackbarOpen: false,
             fields: JSON.parse(JSON.stringify(this.formfields))
         });
-    }
+    };
 
     render() {
         const title = (this.state.edit) ? "Edit this customer's billable item." : "New billable item. Love it.";
@@ -383,13 +381,13 @@ class Trx extends React.Component
                     <MenuItem primaryText={cur_user.customer[i].company} innerDivStyle={{display: 'flex', marginBottom: '9px'}} >
                         <span className="cust_icons" >
                             <IconButton
-                                className={cur_user.customer[i].id.toString()}
+                                data-cust-id={cur_user.customer[i].id.toString()}
                                 iconClassName="fa fa-pencil"
                                 tooltip="Edit Customer"
                                 onClick={this.editCust}
                             />
                             <IconButton
-                                className={cur_user.customer[i].id.toString()}
+                                data-cust-id={cur_user.customer[i].id.toString()}
                                 iconClassName="fa fa-trash-o"
                                 tooltip="Delete Customer"
                                 onClick={this.showDelCustDialog}
@@ -401,8 +399,9 @@ class Trx extends React.Component
             customers.push(customer);
         }
         return customers;
-    }
-    deleteCustomer = (cust_id) => {
+    };
+
+    deleteCustomer = cust_id => {
         this.refs.del_cust_dialog.handleClose();
         fetch(
             'delete_customer/' + cust_id,
@@ -416,8 +415,9 @@ class Trx extends React.Component
                         this.handleClear();
                     });
             });
-    }
-    deleteBillable = (billable_id) => {
+    };
+
+    deleteBillable = billable_id => {
         this.refs.del_billables_dialog.handleClose();
         fetch(
             'delete_billable/' + billable_id,
@@ -434,10 +434,10 @@ class Trx extends React.Component
                     this.updateTrx();
                 });
             });
-    }
-    removeErrors = () => {
-        this.setState({errors: {'trxdt': '', 'customer': '', 'qty': '', 'billable': '', 'amt': ''}});
-    }
+    };
+
+    removeErrors = () => this.setState({errors: {'trxdt': '', 'customer': '', 'qty': '', 'billable': '', 'amt': ''}});
+
     handleSave = () => {
         this.removeErrors();
         const form = new FormData();
@@ -489,8 +489,9 @@ class Trx extends React.Component
         }).catch(function (errors) {
             console.log(errors);
         });
-    }
-    handleEdit = (event) => {
+    };
+
+    handleEdit = event => {
         //grab selected customer, the trx and it's billable
         let cust = getSelectedCustomer();
         let trx = getTrx(event.currentTarget.id);
@@ -507,8 +508,9 @@ class Trx extends React.Component
         }
         this.setState({amt: '$ ' + trx.amt});
         // Hitting the save button will call this.handleSave()
-    }
-    handleDelete = (event) => {
+    };
+
+    handleDelete = event => {
         let cust = getSelectedCustomer(),
             sort = cust.custtrx.sort,
             desc = (cust.custtrx.desc) ? '&desc' : '',
@@ -536,11 +538,13 @@ class Trx extends React.Component
                     this.doesCustExist(document.getElementById('trx_entry_customer').value);
                 });
         });
-    }
+    };
+
     handleClose = () => {
         this.removeErrors();
         this.setState({snackbarOpen: false});
-    }
+    };
+
     handleClear = () => {
         this.removeErrors();
         document.getElementById('trx_entry_trxid').value = '';
@@ -558,26 +562,29 @@ class Trx extends React.Component
         }
         this.setState({amt: '$ 0.00', trx: []})
 
-    }
-    showDelCustDialog = (event) => {
-        this.refs.del_cust_dialog.handleOpen(event.currentTarget.getAttribute('class'));
-    }
-    showDelBillableDialog = (event) => {
-        this.refs.del_billables_dialog.handleOpen(event.currentTarget.getAttribute('class'));
-    }
-    editCust = (event) => {
-        this.refs.cust_entry.handleOpen(event.currentTarget.getAttribute('class'), true);
-    }
-    editBillable = (event) => {
-        this.refs.billables_entry.handleOpen(event.currentTarget.getAttribute('class'), true);
-    }
+    };
+
+    showDelCustDialog = event => this.refs.del_cust_dialog.handleOpen(event.currentTarget.dataset.custId);
+
+    showDelBillableDialog = event => this.refs.del_billables_dialog.handleOpen(event.currentTarget.getAttribute('class'));
+
+    editCust = event => {
+        const
+            custId = event.currentTarget.dataset.custId,
+            customer = cur_user.customer.find( customer => customer.id === Number(custId));
+        this.doesCustExist(customer.company);
+        this.refs.cust_entry.handleOpen(custId, true);
+    };
+
+    editBillable = event => this.refs.billables_entry.handleOpen(event.currentTarget.getAttribute('class'), true);
+
     /**
      * Auto-complete selection/onBlur calls this function with cust object when selecting from drop-down
-     * @param object/string chosen - can be a FocusEvent or MenuItem object, or a string, on blur or select
+     * @param chosen - Object|String - can be a FocusEvent or MenuItem object, or a string, on blur or select
      * @return boolean true if customer exists
      * @return boolean false if customer doesn't exist & opens CustomerEntry dialog
      */
-    doesCustExist = (chosen) => {
+    doesCustExist = chosen => {
         let exists = false;
         let input = '';
         this.setState({disableBillables: true});
@@ -586,9 +593,9 @@ class Trx extends React.Component
         if (typeof chosen == 'string') { // pressing enter in customer
             if (chosen == '') return false;
             input = chosen;
-        } else if(chosen.value) //selecting from customer drop-down - onNewRequest makes 2nd call
+        } else if(chosen.value) {
             input = chosen.text;
-        else if (chosen instanceof FocusEvent) { // onBlur of customer/billables field (during select & tab or click out)
+        } else if (chosen instanceof FocusEvent) { // onBlur of customer/billables field (during select & tab or click out)
             if (chosen.target.value.length == 0 || !chosen.relatedTarget) return false;
             if (chosen.relatedTarget.nodeName == 'SPAN') //selecting from customer drop-down - onBLur makes 1st call
                 return true;
@@ -609,13 +616,14 @@ class Trx extends React.Component
             this.setState({disableBillables: false});
             this.updateBillables();
             this.updateTrx(page);
-            return true;``
+            return true;
         } else {
             this.refs.cust_entry.handleOpen(input);
             return false;
         }
-    }
-    doesBillableExist = (chosen) => {
+    };
+
+    doesBillableExist = chosen => {
         let exists = false;
         let input = '';
 
@@ -651,10 +659,10 @@ class Trx extends React.Component
             this.refs.billables_entry.handleOpen(input);
             return false;
         }
-    }
-    updateCustomers = () => {
-        this.setState({customers: this.initCustomers()});
-    }
+    };
+
+    updateCustomers = () => this.setState({customers: this.initCustomers()});
+
     updateBillables = () => {
         let billables, cust = getSelectedCustomer();
         if(!cust.billable)
@@ -683,7 +691,8 @@ class Trx extends React.Component
             };
         });
         this.setState({billables: billables});
-    }
+    };
+
     updateTotal = () => {
         let qty = document.getElementById('trx_entry_qty').value,
             billable = getSelectedBillable();
@@ -695,7 +704,8 @@ class Trx extends React.Component
         let price = parseFloat(billable.price);
         if(price && price != NaN && qty && qty != NaN)
             this.setState({amt: '$ ' + (qty * price).toFixed(2)});
-    }
+    };
+
     updateTrx = (page = 1) => {
         let cust = getSelectedCustomer(),
             sort = (cust.custtrx.sort) ? cust.custtrx.sort : 'trxdt',
@@ -735,7 +745,11 @@ class Trx extends React.Component
                                 />
                     </span>)
                         :
-                        <FlatButton label="View Invoice" labelStyle={{fontSize: 'small'}} onClick={() => {this.refs.inv_rpt.handleOpen(cust.custtrx.data[j].inv);}} />,
+                        <FlatButton
+                            label="View Invoice"
+                            labelStyle={{fontSize: 'small'}}
+                            onClick={() => this.refs.inv_rpt.handleOpen(cust.custtrx.data[j].inv)}
+                        />,
                     //render table row
                     style = {
                         width: '10px',
@@ -756,7 +770,7 @@ class Trx extends React.Component
             }
             this.setState({trx: trx});
         }
-    }
+    };
 
     /**
      * will set sort and dir in cur_user global
@@ -770,14 +784,14 @@ class Trx extends React.Component
             event.currentTarget.setAttribute('data-sort', 'desc');
             dir = 'desc';
         }
-        else if(dir == '' || dir == 'desc') {
+        else if(dir === '' || dir === 'desc') {
             event.currentTarget.setAttribute('data-sort', 'asc');
             dir = 'asc';
         }
         //update transactions
-        if(dir == 'asc')
+        if(dir === 'asc')
             dir = false;
-        else if(dir == 'desc')
+        else if(dir === 'desc')
             dir = true;
         let cust = getSelectedCustomer();
         cust.custtrx.sort = field;
@@ -788,7 +802,7 @@ class Trx extends React.Component
                 break;
             }
         this.updateTrx(1);
-    }
+    };
 
     // AutoComplete components aren't emitting onBlur (see mui issue), therefore setting listener after render, old school
     // https://github.com/callemall/material-ui/issues/2294 says onBlur is fixed, but it's not
@@ -796,7 +810,8 @@ class Trx extends React.Component
         document.getElementById('trx_entry_customer').addEventListener('blur', this.doesCustExist);
         document.getElementById('trx_entry_billable').addEventListener('blur', this.doesBillableExist);
         document.getElementById('trx_entry_qty').addEventListener('blur', this.updateTotal);
-    }
+    };
+
     render() {
         return (
             <Card className="cards">

@@ -13,12 +13,11 @@ class DeleteDialog extends React.Component
         super(props);
         this.state = {open: false, id: null};
     }
-    handleOpen = (id) => {
-        this.setState({open: true, id: id});
-    }
-    handleClose = () => {
-        this.setState({open: false});
-    }
+
+    handleOpen = id => this.setState({open: true, id: id});
+
+    handleClose = () => this.setState({open: false});
+
     render() {
         const actions= [
             <FlatButton label="Cancel" primary={true} onClick={this.handleClose} style={{color: 'red'}}/>,

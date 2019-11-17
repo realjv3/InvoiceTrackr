@@ -29,7 +29,8 @@ class CustomerEntry extends React.Component
             cust_entry_zip: '',
             cust_entry_cell: '',
             cust_entry_office: ''
-        }
+        };
+
         this.state = {
             open: false,
             snackbarOpen: false,
@@ -40,9 +41,7 @@ class CustomerEntry extends React.Component
         };
     }
 
-    removeErrors = () => {
-        this.setState({errors: JSON.parse(JSON.stringify(this.formfields))});
-    };
+    removeErrors = () => this.setState({errors: JSON.parse(JSON.stringify(this.formfields))});
 
     handleOpen = (chosen, edit = false) => {
         if (edit) { //if editing, chosen is an id, need to pre-fill form with chosen customer's data

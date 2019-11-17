@@ -81,7 +81,7 @@ export const getTrx = (id) => {
                 if(cur_user.customer[i].custtrx.data[j].id == id)
                     return cur_user.customer[i].custtrx.data[j];
     return false;
-}
+};
 
 export const getBillable = (id) => {
     for(var i = 0; i < cur_user.customer.length; i++)
@@ -90,14 +90,16 @@ export const getBillable = (id) => {
                 if(cur_user.customer[i].billable[j].id == id)
                     return cur_user.customer[i].billable[j];
     return false;
-}
+};
 
 export const getSelectedCustomer = () => {
-    for (var i = 0; i < cur_user.customer.length; i++)
-        if (cur_user.customer[i].selected)
+    for (var i = 0; i < cur_user.customer.length; i++) {
+        if (cur_user.customer[i].selected) {
             return cur_user.customer[i];
+        }
+    }
     return false;
-}
+};
 
 export const getSelectedBillable = () => {
     let cust = getSelectedCustomer();
@@ -106,4 +108,4 @@ export const getSelectedBillable = () => {
             if (cust.billable[i].selected)
                 return cust.billable[i];
     return false;
-}
+};
