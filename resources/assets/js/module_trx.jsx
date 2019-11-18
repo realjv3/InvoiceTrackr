@@ -96,12 +96,15 @@ class BillableEntry extends React.Component
             body: billable,
             headers: {'X-CSRF-Token': _token, 'Accept': 'application/json'},
             credentials: 'same-origin'
-        }).then((response) => {
+        }).then( response => {
             if(response.ok) {   //if save went ok, show Snackbar, update global cur_user & update the cust. drop-down
                 response.json().then(
-                    (json) => {
-                        for(var i = 0; i < cur_user.customer.length; i++)
-                            if(cur_user.customer[i].selected) break;
+                    json => {
+                        for (var i = 0; i < cur_user.customer.length; i++) {
+                            if(cur_user.customer[i].selected) {
+                                break;
+                            }
+                        }
                         cur_user = JSON.parse(json.cur_user);
                         cur_user.customer[i].selected = true;
                         this.setState({message: json.message, snackbarOpen: true});
@@ -109,11 +112,12 @@ class BillableEntry extends React.Component
                     }
                 );
             } else {    //flash errors into view
-                response.json().then((errors) => {
+                response.json().then( errors => {
                     const keys = Object.keys(errors);
                     const fields = {};
-                    for (let i = 0; i < keys.length; i++)
+                    for (let i = 0; i < keys.length; i++) {
                         fields[keys[i]] = errors[keys[i]];
+                    }
                     this.setState({errors: fields});
                 });
             }
@@ -169,7 +173,7 @@ class BillableEntry extends React.Component
                             type="text"
                             id="billable_entry_descr"
                             defaultValue={this.state.fields.descr}
-                            errorText={this.state.errors.descr}
+                            errorText={this.state.errors.billable_entry_descr}
                             style={{display: 'inline-block'}}
                         />
                         <div style={{display: 'flex'}}>
@@ -184,13 +188,13 @@ class BillableEntry extends React.Component
                                 listStyle={style}
                                 style={style}
                                 openOnFocus={true}
-                                errorText={this.state.errors.type}
+                                errorText={this.state.errors.billable_entry_type}
                             />
                             <TextField
                                 floatingLabelText="Unit"
                                 hintText="hourly, pieces, etc."
                                 type="text"
-                                errorText={this.state.errors.unit}
+                                errorText={this.state.errors.billable_entry_unit}
                                 id="billable_entry_unit"
                                 defaultValue={this.state.fields.unit}
                                 style={style}
@@ -201,7 +205,7 @@ class BillableEntry extends React.Component
                                 type="number"
                                 min="0"
                                 step="any"
-                                errorText={this.state.errors.price}
+                                errorText={this.state.errors.billable_entry_price}
                                 id="billable_entry_price"
                                 defaultValue={(this.state.fields.price) ? this.state.fields.price : undefined}
                                 style={style}
