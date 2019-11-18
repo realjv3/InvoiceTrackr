@@ -251,6 +251,22 @@ class InvoiceModule extends React.Component
 
     handleDelete = inv_id => this.refs.del_inv_dialog.handleOpen(inv_id);
 
+    deleteCustomer = cust_id => {
+        this.refs.del_cust_dialog.handleClose();
+        fetch(
+            'delete_customer/' + cust_id,
+            {method: 'DELETE', headers: {'X-CSRF-Token': _token, 'Accept': 'application/json'}, credentials: 'same-origin'}
+        ).then( response  => {
+            if(response.ok) //Remove deleted customer from drop-down and show snackbar
+                response.json().then( json => {
+                    cur_user = JSON.parse(json.cur_user);
+                    this.setState({snackbarOpen: true, message: json.message});
+                    this.updateCustomers();
+                    this.clearSelTrx();
+                });
+        });
+    };
+
     deleteInvoice = inv_id => {
         this.refs.del_inv_dialog.handleClose();
         if(!inv_id) return 'No invoice id given to delete';
@@ -365,6 +381,11 @@ class InvoiceModule extends React.Component
     render() {
         return (
             <div>
+                <DeleteDialog
+                    ref="del_cust_dialog"
+                    text="Do you really want to permanently delete this customer and all of their transactions?"
+                    handleDelete={this.deleteCustomer}
+                />
                 <InvoiceReport ref="inv_rpt"/>
                 <CustomerEntry ref="cust_entry" updateCustomersDropDown={this.updateCustomers} />
                 <AutoComplete
