@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+         $this->call(BillableTypesSeeder::class);
          $this->call(TrxStatusSeeder::class);
          $this->call(FirstInvoiceRecord::class);
     }
