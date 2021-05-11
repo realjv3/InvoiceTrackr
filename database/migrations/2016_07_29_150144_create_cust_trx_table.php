@@ -21,7 +21,7 @@ class CreateCustTrxTable extends Migration
                 $table->text('descr')->nullable();
                 $table->decimal('amt', 5 , 2);
                 $table->unsignedInteger('status');
-                $table->unsignedInteger('inv');
+                $table->unsignedInteger('inv')->nullable();
             });
         });
     }

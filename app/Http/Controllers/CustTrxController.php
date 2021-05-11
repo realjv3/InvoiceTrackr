@@ -14,7 +14,7 @@ class CustTrxController extends Controller
 {
     /**
      * @param Request $request http request
-     * @return Request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function save(Request $request) {
         $this->validate($request, array(
