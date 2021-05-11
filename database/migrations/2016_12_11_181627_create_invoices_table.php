@@ -20,8 +20,8 @@ class CreateInvoicesTable extends Migration
             $table->decimal('amt', 20 , 2);
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('custid')->references('id')->on('customers');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('custid')->references('id')->on('customers')->onDelete('cascade');
         });
     }
 

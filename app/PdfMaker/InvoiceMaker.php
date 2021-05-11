@@ -13,7 +13,7 @@ use App\Customer;
 use App\Invoice;
 use App\Profile;
 use App\User;
-use FPDF;
+use Mpdf\Mpdf;
 use Illuminate\Database\Eloquent\Collection;
 
 class InvoiceMaker implements PdfMaker
@@ -24,7 +24,7 @@ class InvoiceMaker implements PdfMaker
     private $trxs;
 
     /**
-     * @var FPDF - library that makes pdfs
+     * @var Mpdf - library that makes pdfs
      */
     private $pdfLib;
 
@@ -55,99 +55,187 @@ class InvoiceMaker implements PdfMaker
 
     public function create() {
 
-        $this->pdfLib->AddPage();
-        $this->pdfLib->SetFillColor(239, 240, 242);
+        $seller = $this->userProfile->first . ' ' . $this->userProfile->last;
+        $title = ($this->userProfile->company == $seller) ? $this->userProfile->company : ' ' . $seller;
+        $sellerAddr1 = empty($this->userProfile->addr1) ? '' : '<br />' . $this->userProfile->addr1;
+        $sellerAddr2 = empty($this->userProfile->addr2) ? '' : '<br />' . $this->userProfile->addr2;
+        $sellerCity = empty($this->userProfile->city) ? '<br />' : '<br />' . $this->userProfile->city;
+        $sellerState = empty($this->userProfile->state) ? '' : $this->userProfile->state;
+        $sellerZip = $this->userProfile->zip;
+        $sellerCell = empty($this->userProfile->cell) ? '' : $this->userProfile->cell;
+        $buyer = $this->cust->first . ' ' . $this->cust->last;
+        $contact = $this->custProfile->cell . ' ' . $this->cust->email;
+        $buyerCo = $this->cust->company;
+        $addr1 = $this->custProfile->addr1;
+        $addr2 = $this->custProfile->addr2;
+        $city = $this->custProfile->city;
+        $state = $this->custProfile->state;
+        $zip = $this->custProfile->zip;
+        $invno = $this->invoice->invno;
+        $amt = number_format((float)$this->invoice->amt, 2, '.', '');
+        $trxs = '';
 
-        /**
-         * Invoice header
-         */
-        $this->pdfLib->SetFont('Arial', '', 10);
-        $this->pdfLib->Cell(40, 4, 'Invoice number: ' . $this->invoice->invno, 0, 3);
-        $this->pdfLib->Cell(70, 4, 'Invoice Date: ' . $this->invoice->invdt, 0, 3);
-        $this->pdfLib->Cell(70, 4, 'Due Date: ' . $this->invoice->duedt, 0, 3);
-        $this->pdfLib->Ln();
+        foreach ($this->trxs as $trx) {
 
-        $this->pdfLib->SetFont('Arial', '', 14);
-        $name = $this->userProfile->first . ' ' . $this->userProfile->last;
-        $this->pdfLib->Cell(200, 8, $name, 0, 3);
-        if ($this->userProfile->company != $name) {
-            $this->pdfLib->Cell(200, 4, $this->userProfile->company, 0, 3);
-        }
-
-        $this->pdfLib->SetFont('Arial', '', 8);
-        if (!empty($this->userProfile->addr1)) {
-            $this->pdfLib->Cell(200, 4, $this->userProfile->addr1, 0, 3);
-        }
-        if (!empty($this->userProfile->addr2)) {
-            $this->pdfLib->Cell(200, 4, $this->userProfile->addr2, 0, 3);
-        }
-        if (!empty($this->userProfile->city) || !empty($this->userProfile->state) || !empty($this->userProfile->zip)) {
-            $this->pdfLib->Cell(200, 4, $this->userProfile->city . ', ' . $this->userProfile->state . ' ' . $this->userProfile->zip, 0, 3);
-        }
-        if (!empty($this->userProfile->office) && $this->userProfile->office != $this->userProfile->cell) {
-            $this->pdfLib->Cell(200, 4, $this->userProfile->office, 0, 3);
-        }
-        if (!empty($this->userProfile->cell)) {
-            $this->pdfLib->Cell(200, 4, $this->userProfile->cell, 0, 3);
-        }
-        $this->pdfLib->Cell(200, 4, $this->user->email, 0, 3);
-
-        $this->pdfLib->SetFont('Arial', '', 14);
-        $this->pdfLib->Cell(200, 8, 'Bill to:', 0, 3);
-
-        $this->pdfLib->SetFont('Arial', '', 10);
-        if ( ! empty($this->cust->first) && ! empty($this->cust->last)) {
-            $this->pdfLib->Cell(200, 4, $this->cust->first . ' ' . $this->cust->last, 0, 3);
-        }
-        if ( ! empty($this->cust->company)) {
-            $this->pdfLib->Cell(200, 4, $this->cust->company, 0, 3);
-        }
-        $this->pdfLib->SetFont('Arial', '', 8);
-        if ( ! empty($this->custProfile->addr1)) {
-            $this->pdfLib->Cell(200, 4, $this->custProfile->addr1, 0, 3);
-        }
-        if ( ! empty($this->custProfile->addr2)) {
-            $this->pdfLib->Cell(200, 4, $this->custProfile->addr2, 0, 3);
-        }
-        if ( ! empty($this->custProfile->city) || ! empty($this->custProfile->state) || ! empty($this->custProfile->zip)) {
-            $this->pdfLib->Cell(200, 4, $this->custProfile->city . ', ' . $this->custProfile->state . ' ' . $this->custProfile->zip, 0, 3);
-        }
-        if ( ! empty($this->cust->email)) {
-            $this->pdfLib->Cell(200, 4, $this->cust->email, 0, 3);
-        }
-        /**
-         * Invoice line items
-         */
-        $this->pdfLib->Ln();
-        $this->pdfLib->SetFont('Arial', 'B', 10);
-        $this->pdfLib->Cell(25, 10, 'Trx Date', 0, 0, 'L', true);
-        $this->pdfLib->Cell(30, 10, 'Billable', 0, 0, 'L', true);
-        $this->pdfLib->Cell(85, 10, 'Description', 0, 0, 'L', true);
-        $this->pdfLib->Cell(35, 10, 'Quantity', 0, 0, 'L', true);
-        $this->pdfLib->Cell(20, 10, 'Amount', 0, 0, 'C', true);
-        $this->pdfLib->Ln();
-
-        $this->pdfLib->SetFont('Arial', '', 10);
-        $this->trxs->each(function ($trx, $i) {
             $billable = Billable::find($trx->item);
-            $this->pdfLib->Cell(25, 8, $trx->trxdt);
-            $this->pdfLib->Cell(30, 8, substr($billable->descr, 0, 20));
-            $y = $this->pdfLib->GetY();
-            $x = $this->pdfLib->GetX();
-            $this->pdfLib->MultiCell(85, 8, $trx->descr);
-            $lineBroke = ($this->pdfLib->GetY() != $y + 8) ? true : false;
-            $this->pdfLib->SetXY($x + 85, $y);
-            $this->pdfLib->Cell(35, 8, number_format($trx->amt / $billable->price, 2) . ' x $' . $billable->price . '/' . $billable->unit);
-            $this->pdfLib->Cell(20, 8, '$' . $trx->amt, 0, 0, 'C');
-            $this->pdfLib->Ln();
-            if ($lineBroke) {
-                $this->pdfLib->Ln();
-            }
-        });
-        $this->pdfLib->SetFont('Arial', 'B', 12);
-        $this->pdfLib->Ln();
-        $this->pdfLib->Cell(80, 12, 'Total $' . $this->invoice->amt, 1);
-        return $this->pdfLib->Output();
+            $qty = number_format($trx->amt / $billable->price, 2)
+                . ' x $' . $billable->price . '/' . $billable->unit;
+
+            $trxs .= "<tr>
+                    <td align=\"center\">$trx->trxdt</td>
+                    <td align=\"center\">$billable->descr</td>
+                    <td>$trx->descr</td>
+                    <td class=\"cost\">$qty</td>
+                    <td class=\"cost\">$trx->amt</td>
+                </tr>";
+        }
+
+        $html = <<<EOD
+<html>
+<head>
+    <style>
+        body {font-family: sans-serif;
+            font-size: 10pt;
+        }
+        p {	margin: 0pt; }
+        table.items {
+            border: 0.1mm solid #000000;
+        }
+        td { vertical-align: top; }
+        .items td {
+            border-left: 0.1mm solid #000000;
+            border-right: 0.1mm solid #000000;
+        }
+        table thead td { background-color: #EEEEEE;
+            text-align: center;
+            border: 0.1mm solid #000000;
+            font-variant: small-caps;
+        }
+        .items td.blanktotal {
+            background-color: #EEEEEE;
+            border: 0.1mm solid #000000;
+            background-color: #FFFFFF;
+            border: 0mm none #000000;
+            border-top: 0.1mm solid #000000;
+            border-right: 0.1mm solid #000000;
+        }
+        .items td.totals {
+            text-align: right;
+            border: 0.1mm solid #000000;
+        }
+        .items td.cost {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<!--mpdf
+    <htmlpageheader name="myheader">
+        <table width="100%">
+            <tr>
+                <td width="50%" style="color:#0000BB; ">
+                    <span style="font-weight: bold; font-size: 14pt;">$title</span>
+                    $sellerAddr1
+                    $sellerAddr2
+                    $sellerCity $sellerState $sellerZip
+                    <br /><span style="font-family:dejavusanscondensed;">&#9742;</span> $sellerCell
+                </td>
+                <td width="50%" style="text-align: right;">
+                    Invoice No.
+                    <br /><span style="font-weight: bold; font-size: 12pt;">$invno</span>
+                </td>
+            </tr>
+        </table>
+    </htmlpageheader>
+    
+    <htmlpagefooter name="myfooter">
+        <div style="border-top: 1px solid #000000; font-size: 9pt; text-align: center; padding-top: 3mm; ">
+            Page {PAGENO} of {nb}
+        </div>
+    </htmlpagefooter>
+    
+    <sethtmlpageheader name="myheader" value="on" show-this-page="1" />
+    <sethtmlpagefooter name="myfooter" value="on" />
+    mpdf-->
+    
+    <table width="100%" style="font-family: serif;" cellpadding="10">
+        <tr>
+            <td width="45%" style="border: 0.1mm solid #888888; ">
+                <span style="font-size: 7pt; color: #555555; font-family: sans;">To:</span>
+                <br />$buyer
+                <br />$buyerCo
+                <br /><br />$addr1
+                <br />$addr2
+                <br />$city, $state $zip
+                <br />$contact
+            </td>
+        </tr>
+    </table>
+        
+    <br />
+    
+    <table class="items" width="100%" style="font-size: 9pt; border-collapse: collapse; " cellpadding="8">
+        <thead>
+            <tr>
+            <td width="15%">Trx Date</td>
+            <td width="10%">Billable</td>
+            <td width="45%">Description</td>
+            <td width="15%">Quantity</td>
+            <td width="15%">Amount</td>
+            </tr>
+        </thead>
+        
+        <tbody>
+        <!-- ITEMS HERE -->
+        $trxs
+        <!-- END ITEMS HERE -->
+        <tr>
+        <td class="blanktotal" colspan="3" rowspan="6"></td>
+        <td class="totals">Subtotal:</td>
+        <td class="totals cost">$$amt</td>
+        </tr>
+        
+        <tr>
+        <td class="totals">Tax:</td>
+        <td class="totals cost">$0.00</td>
+        </tr>
+        
+        <tr>
+        <td class="totals"><b>TOTAL:</b></td>
+        <td class="totals cost"><b>$$amt</b></td>
+        </tr>
+        
+        <tr>
+        <td class="totals">Deposit:</td>
+        <td class="totals cost">$0.00</td>
+        </tr>
+        
+        <tr>
+        <td class="totals"><b>Balance due:</b></td>
+        <td class="totals cost"><b>$$amt</b></td>
+        </tr>
+        </tbody>
+    </table>
+    
+    <div style="text-align: center; font-style: italic;">Payment terms: payment due in 30 days</div>
+</body>
+</html>
+EOD;
+        $mpdf = $this->pdfLib;
+
+        $mpdf->SetProtection(['print']);
+        $mpdf->SetTitle("$title - Invoice");
+        $mpdf->SetAuthor("$title");
+        $mpdf->SetWatermarkText("Paid");
+//        $mpdf->showWatermarkText = true;
+        $mpdf->watermark_font = 'DejaVuSansCondensed';
+        $mpdf->watermarkTextAlpha = 0.1;
+        $mpdf->SetDisplayMode('fullpage');
+
+        $mpdf->WriteHTML($html);
+
+        return $mpdf->Output();
     }
 
     /**

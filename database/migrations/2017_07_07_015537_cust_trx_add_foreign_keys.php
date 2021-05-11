@@ -13,8 +13,8 @@ class CustTrxAddForeignKeys extends Migration
     public function up()
     {
         Schema::table('cust_trx', function (Blueprint $table) {
-            $table->foreign('status')->references('id')->on('trx_status');
-            $table->foreign('inv')->references('id')->on('invoices');
+            $table->foreign('status')->references('id')->on('trx_status')->onDelete('cascade');
+            $table->foreign('inv')->references('id')->on('invoices')->onDelete('cascade');
             $table->foreign('custid')->references('id')->on('customers')->onDelete('cascade');
             $table->foreign('item')->references('id')->on('billables')->onDelete('cascade');
         });

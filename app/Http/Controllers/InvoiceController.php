@@ -9,16 +9,14 @@ namespace App\Http\Controllers;
 use App\CustTrx;
 use App\Invoice;
 use App\PdfMaker\PdfMaker;
-use FPDF;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Util\UtilFacade;
+use Mpdf\Mpdf;
+use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @property PdfMaker pdfMaker
- */
 class InvoiceController extends Controller
 {
     /**
@@ -87,7 +85,14 @@ class InvoiceController extends Controller
      */
     private function makePdf(Collection $trxs, Invoice $invoice) {
         return $this->pdfMaker
-            ->setPdfLib(new FPDF('P', 'mm', 'Letter'))
+            ->setPdfLib(new Mpdf([
+                'margin_left' => 20,
+                'margin_right' => 15,
+                'margin_top' => 48,
+                'margin_bottom' => 25,
+                'margin_header' => 10,
+                'margin_footer' => 10
+            ]))
             ->setTrxs($trxs)
             ->setInvoice($invoice)
             ->create();
@@ -96,7 +101,7 @@ class InvoiceController extends Controller
     /**
      * Returns all customer's invoices or only the passed custid's invoices
      * @param int $custid default null
-     * @return json string $trx
+     * @return Response|LengthAwarePaginator
      */
     public function read($custid = null) {
         if(isset($_REQUEST['sort']) && !empty($_REQUEST['sort'])) {
@@ -149,7 +154,7 @@ class InvoiceController extends Controller
     /**
      * Returns the passed custid's open transactions
      * @param int $custid default null
-     * @return json string $trx
+     * @return Response|LengthAwarePaginator
      */
     public function get_billable_trx($custid = null) {
         if(!isset($custid))
@@ -207,7 +212,7 @@ class InvoiceController extends Controller
 
         $trxs = CustTrx::where('inv', $inv_id)->get();
         foreach ($trxs as $trx) {
-            $trx->inv = 0;
+            $trx->inv = null;
             $trx->status = 0;
             $trx->save();
         }
