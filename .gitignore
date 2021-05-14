@@ -11,3 +11,4 @@ npm-debug.log
 invoice_this.sql
 nginx.conf
 .vagrant
+/composer.lock
